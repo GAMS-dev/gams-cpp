@@ -1,6 +1,6 @@
 # gams-cpp #
 
-gams-cpp is a C++ API for GAMS (General Algebraic Modeling System). For further information about GAMS please visit [GAMS](https://www.gams.com) or the [GAMS documentation](https://www.gams.com/latest/docs/).
+gams-cpp is a C++ API for the General Algebraic Modeling System (GAMS). For further information about GAMS please visit [GAMS](https://www.gams.com) or the [GAMS documentation](https://www.gams.com/latest/docs/).
 
 gams-cpp uses [Qt](https://www.qt.io/) which is licensed under [LGPL](https://www.gnu.org/licenses/lgpl-3.0.en.html). 
 
