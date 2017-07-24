@@ -49,18 +49,6 @@ using namespace std;
 
 namespace gams {
 
-// ----------------------------------------------------------------------------------------------------
-//   static members
-
-//const std::string GAMSWorkspaceImpl::mApiVersion = GAMSVersion::api();
-//const int GAMSWorkspaceImpl::mApiRelease = GAMSVersion::apiMajor();
-//const int GAMSWorkspaceImpl::mApiSubRel  = GAMSVersion::apiMinor();
-//const int GAMSWorkspaceImpl::mApiGoldRel = GAMSVersion::apiBuild();
-
-
-// ----------------------------------------------------------------------------------------------------
-//   GAMSWorkspaceImpl
-
 const static double CSpecValues[] = { GMS_SV_UNDEF, numeric_limits<double>::quiet_NaN(), numeric_limits<double>::infinity()
                                       , -numeric_limits<double>::infinity(), numeric_limits<double>::min() };
 
@@ -374,7 +362,7 @@ void GAMSWorkspaceImpl::setScratchFilePrefix(const string& scratchFilePrefix)
 
 string GAMSWorkspaceImpl::registerDatabase(const string databaseName)
 {
-    std::lock_guard<std::mutex> lck(mDatabaseLock);
+    std::lock_guard<std::mutex> lck(mRegisterDatabaseLock);
     string name;
     if (databaseName == "")
         name = nextDatabaseName();
@@ -388,7 +376,7 @@ string GAMSWorkspaceImpl::registerDatabase(const string databaseName)
 
 string GAMSWorkspaceImpl::nextDatabaseName()
 {
-    std::lock_guard<std::mutex> lck(mDatabaseLock);
+    std::lock_guard<std::mutex> lck(mNextDatabaseNameLock);
     string name = mScratchFilePrefix + mDefDBNameStem + to_string(mDefDBNameCnt);
     while (mGamsDatabases.find(name) != mGamsDatabases.end())
         name = mScratchFilePrefix + mDefDBNameStem + to_string(++mDefDBNameCnt);
