@@ -388,6 +388,7 @@ string GAMSWorkspaceImpl::registerDatabase(const string databaseName)
 
 string GAMSWorkspaceImpl::nextDatabaseName()
 {
+    std::lock_guard<std::mutex> lck(mDatabaseLock);
     string name = mScratchFilePrefix + mDefDBNameStem + to_string(mDefDBNameCnt);
     while (mGamsDatabases.find(name) != mGamsDatabases.end())
         name = mScratchFilePrefix + mDefDBNameStem + to_string(++mDefDBNameCnt);
