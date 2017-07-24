@@ -162,7 +162,8 @@ private:
     std::set<std::string> mGamsModelInstances;
 
     std::mutex mCheckpointLock;
-    std::mutex mDatabaseLock;
+    std::mutex mRegisterDatabaseLock;
+    std::mutex mNextDatabaseNameLock;
     std::mutex mJobLock;
     std::mutex mModelInstanceLock;
     std::mutex mDebugLock;

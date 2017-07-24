@@ -26,7 +26,6 @@
 
 #include "gamspath.h"
 #include <QDir>
-#include <QDebug>
 #include <QRegularExpression>
 #include <QTemporaryFile>
 #include <QTemporaryDir>
@@ -168,8 +167,7 @@ bool GAMSPath::rmDirRecurse()
 {
     if (!isDir()) return !QFileInfo::exists();
     QDir dir(*this);
-    dir.removeRecursively();
-    return !exists();
+    return dir.removeRecursively();
 }
 
 void GAMSPath::pack()
@@ -240,9 +238,9 @@ const char *GAMSPath::c_str()
 
 GAMSPath GAMSPath::tempDir(const QString &templatePath)
 {
-    QString mask = (templatePath=="") ? absoluteFilePath() : templatePath;
+    QString mask = templatePath.isEmpty() ? absoluteFilePath() : templatePath;
     if (!QDir(mask).exists()) QDir(mask).mkpath(mask);
-    QTemporaryDir temp(mask+ "/gamsTempXXXXXX");
+    QTemporaryDir temp(mask + "/gams-cpp");
     temp.setAutoRemove(false);
     if (!temp.isValid())
         return GAMSPath("");
@@ -257,7 +255,6 @@ GAMSPath GAMSPath::tempFile(const QString &templateName)
         return GAMSPath("");
     temp.close();
     return GAMSPath(temp.fileName());
-
 }
 
 GAMSPath GAMSPath::tempFile(const std::string &templateName)

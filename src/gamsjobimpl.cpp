@@ -34,7 +34,6 @@
 #include "gamsexceptionexecution.h"
 
 #include <sstream>
-#include <iostream>
 #include <fstream>
 #include <QProcess>
 #include <QDebug>
