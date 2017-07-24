@@ -144,7 +144,7 @@ GAMSWorkspaceImpl::~GAMSWorkspaceImpl()
 {
     DEB << "---- Entering GAMSWorkspaceImpl destructor ----";
     GAMSWorkspacePool::unregisterWorkspacePath(mWorkingDir.toStdString());
-    if ((mDebug < GAMSEnum::DebugLevel::KeepFiles) && mUsingTmpWorkingDir) {
+    if ((mDebug != GAMSEnum::DebugLevel::KeepFiles) && mUsingTmpWorkingDir) {
         if (!mWorkingDir.rmDirRecurse()) {
             DEB << "Error on cleaning workspace.";
         }

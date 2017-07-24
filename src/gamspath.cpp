@@ -167,8 +167,7 @@ bool GAMSPath::rmDirRecurse()
 {
     if (!isDir()) return !QFileInfo::exists();
     QDir dir(*this);
-    dir.removeRecursively();
-    return !exists();
+    return dir.removeRecursively();
 }
 
 void GAMSPath::pack()
