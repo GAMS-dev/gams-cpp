@@ -23,134 +23,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 #include <iostream>
 #include <fstream>
 #include <mutex>
 #include <thread>
-#include "warehouse.h"
 #include "gams.h"
 
 using namespace gams;
 using namespace std;
 
-string Warehouse::statusString;
-int Warehouse::status;
+static int status;
+static string statusString;
 
-/// This example demonstrates how to solve a simple GAMS model to assign
-/// stores to warehouses for different data sets in parallel. The model has
-/// been parameterized. The data can be derived from a few numbers namely
-/// the number of warehouses, stores, and some fixed cost scalar. The
-/// results of the model are written into a single result database that is
-/// protected across the parallel threads via a mutex.
-int Warehouse::becomes_main(int argc, char* argv[])
-{
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
-
-    // create a GAMSDatabase for the results
-    GAMSDatabase resultDB = ws.addDatabase();
-    GAMSParameter objrep = resultDB.addParameter("objrep", 1, "Objective value");
-
-    resultDB.addSet("supplyMap", 3, "Supply connection with level");
-
-    try{
-        // run multiple parallel jobs
-        mutex dbMutex;
-        vector<thread> v;
-        for(int nrWarehouses=10; nrWarehouses<22; nrWarehouses++)
-        {
-            v.emplace_back([&ws, nrWarehouses, &resultDB, &dbMutex]{solveWarehouse(&ws, nrWarehouses, &resultDB, &dbMutex);});
-        }
-        for (auto& t : v)
-            t.join();
-        if (status > 0)
-        {
-            //TODO(CW): cast to GAMSExitCode to get string describtion of error status?
-            throw GAMSExceptionExecution("Error when running GAMS: " + to_string(status) + " " + statusString, status);
-        }
-        else if (status == -1)
-            throw GAMSException("Error in GAMS API");
-        else if (status == -2)
-            throw exception();
-        // export the result database to a GDX file
-        //TODO(CW): doExport vs. export
-        resultDB.doExport("C:\\tmp\\resultCpp.gdx");
-    }catch (GAMSException ex)
-    {
-        cout << "GAMSException occured: " << ex.what() << endl;
-    }catch (exception ex)
-    {
-        cout << ex.what() << endl;
-    }
-    //finally
-    //{
-        //TODO(CW): do we need an GAMSDatabase.dispoose() in C++ ?
-        //resultDB.Dispose();
-    //}
-    //TODO(CW)
-    //Environment.ExitCode = status;
-    return status;
-}
-
-void Warehouse::solveWarehouse(GAMSWorkspace* ws, int numberOfWarehouses, GAMSDatabase* resultDB, mutex* dbMutex)
-{
-    GAMSJob gmsJ = ws->addJobFromString(getModelText());
-    try{
-        // instantiate GAMSOptions and define some scalars
-        GAMSOptions gmsOpt = ws->addOptions();
-        gmsOpt.setAllModelTypes("cplex");
-        gmsOpt.setDefine("Warehouse", to_string(numberOfWarehouses));
-        gmsOpt.setDefine("Store", "65");
-        gmsOpt.setDefine("fixed", "22");
-        gmsOpt.setDefine("disaggregate", "0");
-        gmsOpt.setOptCR(0.0);
-
-        // create a GAMSJob from string and write results to the result database
-        gmsJ.run(gmsOpt);
-
-        // need to lock database write operations
-        {
-            lock_guard<mutex> dbLock(*dbMutex);
-            resultDB->getParameter("objrep").addRecord(to_string(numberOfWarehouses)).setValue(gmsJ.outDB().getVariable("obj").findRecord().level());
-        }
-
-        for(GAMSVariableRecord supplyRec : gmsJ.outDB().getVariable("supply"))
-        {
-            if (supplyRec.level() > 0.5)
-            {
-                lock_guard<mutex> dbLock(*dbMutex);
-                resultDB->getSet("supplyMap").addRecord(to_string(numberOfWarehouses), supplyRec.key(0), supplyRec.key(1));
-            }
-        }
-    }catch(GAMSExceptionExecution e){
-        //TODO(CW): change enums according to C# ? GAMSExitCode.ExecutionError vs. GAMSEnum::ExecutionError
-        // Check if we see a User triggered abort and look for the user defined result
-        if(e.rc() == GAMSEnum::ExecutionError)
-        {
-            lock_guard<mutex> dbLock(*dbMutex);
-            statusString = gmsJ.outDB().getSet("res").findRecord(gmsJ.outDB().getSet("ares").firstRecord().key(0)).text();
-        }
-        {
-            lock_guard<mutex> dbLock(*dbMutex);
-            status = e.rc();
-        }
-    }catch (GAMSException e)
-    {
-        cout << e.what() << endl;
-        lock_guard<mutex> dbLock(*dbMutex);
-        status = -1;
-    }catch (exception e)
-    {
-        cout << e.what() << endl;
-        lock_guard<mutex> dbLock(*dbMutex);
-        status = -2;
-    }
-}
-
-string Warehouse::getModelText()
+string getModelText()
 {
     return "$title Warehouse.gms                                                                    \n"
            "                                                                                        \n"
@@ -220,4 +105,119 @@ string Warehouse::getModelText()
            "  abort 'No solution';                                                                  \n"
            ");                                                                                      \n"
            "setResult('0');                                                                         \n";
+}
+
+void solveWarehouse(GAMSWorkspace* ws, int numberOfWarehouses, GAMSDatabase* resultDB, mutex* dbMutex)
+{
+    GAMSJob gmsJ = ws->addJobFromString(getModelText());
+    try{
+        // instantiate GAMSOptions and define some scalars
+        GAMSOptions gmsOpt = ws->addOptions();
+        gmsOpt.setAllModelTypes("cplex");
+        gmsOpt.setDefine("Warehouse", to_string(numberOfWarehouses));
+        gmsOpt.setDefine("Store", "65");
+        gmsOpt.setDefine("fixed", "22");
+        gmsOpt.setDefine("disaggregate", "0");
+        gmsOpt.setOptCR(0.0);
+
+        // create a GAMSJob from string and write results to the result database
+        gmsJ.run(gmsOpt);
+
+        // need to lock database write operations
+        {
+            lock_guard<mutex> dbLock(*dbMutex);
+            resultDB->getParameter("objrep").addRecord(to_string(numberOfWarehouses)).setValue(gmsJ.outDB().getVariable("obj").findRecord().level());
+        }
+
+        for(GAMSVariableRecord supplyRec : gmsJ.outDB().getVariable("supply"))
+        {
+            if (supplyRec.level() > 0.5)
+            {
+                lock_guard<mutex> dbLock(*dbMutex);
+                resultDB->getSet("supplyMap").addRecord(to_string(numberOfWarehouses), supplyRec.key(0), supplyRec.key(1));
+            }
+        }
+    }catch(GAMSExceptionExecution e){
+        //TODO(CW): change enums according to C# ? GAMSExitCode.ExecutionError vs. GAMSEnum::ExecutionError
+        // Check if we see a User triggered abort and look for the user defined result
+        if(e.rc() == GAMSEnum::ExecutionError)
+        {
+            lock_guard<mutex> dbLock(*dbMutex);
+            statusString = gmsJ.outDB().getSet("res").findRecord(gmsJ.outDB().getSet("ares").firstRecord().key(0)).text();
+        }
+        {
+            lock_guard<mutex> dbLock(*dbMutex);
+            status = e.rc();
+        }
+    }catch (GAMSException e)
+    {
+        cout << e.what() << endl;
+        lock_guard<mutex> dbLock(*dbMutex);
+        status = -1;
+    }catch (exception e)
+    {
+        cout << e.what() << endl;
+        lock_guard<mutex> dbLock(*dbMutex);
+        status = -2;
+    }
+}
+
+/// This example demonstrates how to solve a simple GAMS model to assign
+/// stores to warehouses for different data sets in parallel. The model has
+/// been parameterized. The data can be derived from a few numbers namely
+/// the number of warehouses, stores, and some fixed cost scalar. The
+/// results of the model are written into a single result database that is
+/// protected across the parallel threads via a mutex.
+int main(int argc, char* argv[])
+{
+    cout << "---------- Warehouse --------------" << endl;
+
+    GAMSWorkspaceInfo wsInfo;
+    if (argc > 1)
+        wsInfo.setSystemDirectory(argv[1]);
+    GAMSWorkspace ws(wsInfo);
+
+    // create a GAMSDatabase for the results
+    GAMSDatabase resultDB = ws.addDatabase();
+    GAMSParameter objrep = resultDB.addParameter("objrep", 1, "Objective value");
+
+    resultDB.addSet("supplyMap", 3, "Supply connection with level");
+
+    try{
+        // run multiple parallel jobs
+        mutex dbMutex;
+        vector<thread> v;
+        for(int nrWarehouses=10; nrWarehouses<22; nrWarehouses++)
+        {
+            v.emplace_back([&ws, nrWarehouses, &resultDB, &dbMutex]{solveWarehouse(&ws, nrWarehouses, &resultDB, &dbMutex);});
+        }
+        for (auto& t : v)
+            t.join();
+        if (status > 0)
+        {
+            //TODO(CW): cast to GAMSExitCode to get string describtion of error status?
+            throw GAMSExceptionExecution("Error when running GAMS: " + to_string(status) + " " + statusString, status);
+        }
+        else if (status == -1)
+            throw GAMSException("Error in GAMS API");
+        else if (status == -2)
+            throw exception();
+        // export the result database to a GDX file
+        //TODO(CW): doExport vs. export
+        resultDB.doExport("C:\\tmp\\resultCpp.gdx");
+    }catch (GAMSException ex)
+    {
+        cout << "GAMSException occured: " << ex.what() << endl;
+    }catch (exception ex)
+    {
+        cout << ex.what() << endl;
+    }
+    //finally
+    //{
+        //TODO(CW): do we need an GAMSDatabase.dispoose() in C++ ?
+        //resultDB.Dispose();
+    //}
+    //TODO(CW)
+    //Environment.ExitCode = status;
+    return status;
 }
