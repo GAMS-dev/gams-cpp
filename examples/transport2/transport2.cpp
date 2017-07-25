@@ -23,8 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-#include "transport2.h"
 #include "gams.h"
 #include <iostream>
 #include <fstream>
@@ -32,30 +30,7 @@
 using namespace gams;
 using namespace std;
 
-/// This is the 2nd model in a series of tutorial examples. Here we show:
-///   - How to use include files to separate model and data
-void Transport2::becomes_main(int argc, char* argv[])
-{
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
-
-    // write an include file containing data with GAMS syntax
-    ofstream tdata(ws.workingDirectory() + cPathSep + "tdata.gms");
-    tdata << getDataText();
-    tdata.close();
-
-    // run a job using an instance of GAMSOptions that defines the data include file
-    GAMSOptions opt = ws.addOptions();
-    GAMSJob t2 = ws.addJobFromString(getModelText());
-    opt.setDefine("incname", "tdata");
-    t2.run(opt);
-    for (GAMSVariableRecord rec : t2.outDB().getVariable("x"))
-        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal=" << rec.marginal() << endl;
-}
-
-string Transport2::getDataText()
+string getDataText()
 {
     return "Sets                                                           \n"
            "  i   canning plants   / seattle, san-diego /                  \n"
@@ -79,7 +54,7 @@ string Transport2::getDataText()
            "Scalar f  freight in dollars per case per thousand miles  /90/;\n";
 }
 
-string Transport2::getModelText()
+string getModelText()
 {
     return "Sets                                                                    \n"
            "      i   canning plants                                                \n"
@@ -121,4 +96,32 @@ string Transport2::getModelText()
            " Solve transport using lp minimizing z ;                                \n"
            "                                                                        \n"
            "Display x.l, x.m ;                                                      \n";
+}
+
+/// This is the 2nd model in a series of tutorial examples. Here we show:
+///   - How to use include files to separate model and data
+int main(int argc, char* argv[])
+{
+    cout << "---------- Transport 2 --------------" << endl;
+
+    GAMSWorkspaceInfo wsInfo;
+    if (argc > 1)
+        wsInfo.setSystemDirectory(argv[1]);
+    GAMSWorkspace ws(wsInfo);
+
+    // write an include file containing data with GAMS syntax
+    ofstream tdata(ws.workingDirectory() + cPathSep + "tdata.gms");
+    tdata << getDataText();
+    tdata.close();
+
+    // run a job using an instance of GAMSOptions that defines the data include file
+    GAMSOptions opt = ws.addOptions();
+    GAMSJob t2 = ws.addJobFromString(getModelText());
+    opt.setDefine("incname", "tdata");
+    t2.run(opt);
+    for (GAMSVariableRecord rec : t2.outDB().getVariable("x"))
+        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
+             << rec.marginal() << endl;
+
+    return 0;
 }
