@@ -1,4 +1,3 @@
 TEMPLATE = subdirs
 
-SUBDIRS += testrunner \
-    testgmdperformance
+SUBDIRS += testrunner
