@@ -3,7 +3,7 @@
  * GAMS - General Algebraic Modeling System C++ API
  *
  * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>s
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,35 +23,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+#include "optimizer.h"
 
-#ifndef TRANSPORT14_H
-#define TRANSPORT14_H
+#include <iostream>
+#include <thread>
 
-#include "gams.h"
+using namespace gams;
+using namespace std;
 
-#include <string>
-
-class Optimizer
+void run(Optimizer optim, double bmult)
 {
-public:
-    Optimizer(int argc, char *argv[]);
+    cout << "Scenario bmult=" << bmult << ", Obj:" << optim.solve(bmult) << endl;
+}
 
-    double solve(double mult);
-
-private:
-    std::string getModelText();
-
-private:
-    gams::GAMSWorkspace ws;
-};
-
-/// This is the 14th model in a series of tutorial examples. Here we show:
-///   - How to run multiple GAMSJobs in parallel each using different scenario data
-class Transport14
+int main(int argc, char* argv[])
 {
-public:
-    static int becomes_main(int argc, char* argv[]);
-    static void run(Optimizer optim, double bmult);
-};
+    cout << "---------- Transport 14 --------------" << endl;
 
-#endif // TRANSPORT14_H
+    vector<double> bmultlist { 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3 };
+    const Optimizer &optim = Optimizer(argc, argv);
+
+    vector<thread> threads;
+    for (auto bmult : bmultlist)
+        threads.push_back(thread(run, optim, bmult));
+
+    for (auto& t : threads)
+        t.join();
+
+    return 0;
+}

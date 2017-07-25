@@ -19,6 +19,7 @@ SUBDIRS += transport10
 SUBDIRS += transport11
 SUBDIRS += transport12
 SUBDIRS += transport13
+SUBDIRS += transport14
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
