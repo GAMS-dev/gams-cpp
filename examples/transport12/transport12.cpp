@@ -25,8 +25,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-#include "transport12.h"
 #include "gams.h"
 
 #include <algorithm>
@@ -35,73 +33,66 @@
 using namespace gams;
 using namespace std;
 
-void Transport12::becomes_main(int argc, char* argv[])
+string getModelText()
 {
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
-    GAMSCheckpoint cp = ws.addCheckpoint();
-
-    // initialize a GAMSCheckpoint by running a GAMSJob
-    GAMSJob t12 = ws.addJobFromString(getModelText());
-    t12.run(cp);
-
-    // create a GAMSModelInstance and solve it multiple times with different scalar bmult
-    GAMSModelInstance mi = cp.addModelInstance();
-
-    double bmultlist[] { 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3 };
-
-    GAMSDatabase db = ws.addDatabase();
-
-    GAMSSet scen = db.addSet("scen", 1, "");
-    GAMSParameter bmult = db.addParameter("bmultlist", "", scen);
-    GAMSParameter zscen = db.addParameter("zscen", "", scen);
-
-    int i = 0;
-    for (double b : bmultlist) {
-        bmult.addRecord("s" + to_string(i)).setValue(b);
-        scen.addRecord("s" + to_string(i++));
-    }
-
-    GAMSSet dict = db.addSet("dict",3,"");
-    dict.addRecord(scen.name(), "scenario", "");
-    dict.addRecord("bmult", "param", bmult.name());
-    dict.addRecord("z", "level", zscen.name());
-
-
-    GUSSCall(dict, mi, "transport use lp min z");
-
-    for (GAMSParameterRecord rec : db.getParameter(zscen.name()))
-        cout << rec.key(0) << " obj: " << rec.value() << endl;
-
-    GAMSModelInstance mi2 = cp.addModelInstance();
-    GAMSDatabase db2 = ws.addDatabase();
-
-    GAMSSet scen2 = db2.addSet("scen", 1, "");
-    GAMSParameter zscen2 = db2.addParameter("zscen", "", scen2);
-    GAMSParameter xup = db2.addParameter("xup", 3);
-
-    for (int j = 0; j < 4; j++) {
-        for (GAMSSetRecord irec : t12.outDB().getSet("i"))
-            for (GAMSSetRecord jrec : t12.outDB().getSet("j"))
-                xup.addRecord("s" + to_string(j), irec.key(0), jrec.key(0)).setValue(j+1);
-        scen2.addRecord("s" + to_string(j));
-    }
-
-
-    GAMSSet dict2 = db2.addSet("dict", 3, "");
-    dict2.addRecord(scen2.name(), "scenario", "");
-    dict2.addRecord("x", "lower", xup.name());
-    dict2.addRecord("z", "level", zscen2.name());
-
-    GUSSCall(dict2, mi2, "transport use lp min z");
-
-    for (GAMSParameterRecord rec : db2.getParameter(zscen2.name()))
-        cout << rec.key(0) << " obj: " << rec.value() << endl;
+    return "  Sets                                                                     \n"
+           "       i   canning plants   / seattle, san-diego /                         \n"
+           "       j   markets          / new-york, chicago, topeka / ;                \n"
+           "                                                                           \n"
+           "  Parameters                                                               \n"
+           "                                                                           \n"
+           "       a(i)  capacity of plant i in cases                                  \n"
+           "         /    seattle     350                                              \n"
+           "              san-diego   600  /                                           \n"
+           "                                                                           \n"
+           "       b(j)  demand at market j in cases                                   \n"
+           "         /    new-york    325                                              \n"
+           "              chicago     300                                              \n"
+           "              topeka      275  / ;                                         \n"
+           "                                                                           \n"
+           "  Table d(i,j)  distance in thousands of miles                             \n"
+           "                    new-york       chicago      topeka                     \n"
+           "      seattle          2.5           1.7          1.8                      \n"
+           "      san-diego        2.5           1.8          1.4  ;                   \n"
+           "                                                                           \n"
+           "  Scalar f      freight in dollars per case per thousand miles  /90/ ;     \n"
+           "  Scalar bmult  demand multiplier /1/;                                     \n"
+           "                                                                           \n"
+           "  Parameter c(i,j)  transport cost in thousands of dollars per case ;      \n"
+           "                                                                           \n"
+           "            c(i,j) = f * d(i,j) / 1000 ;                                   \n"
+           "                                                                           \n"
+           "  Variables                                                                \n"
+           "       x(i,j)  shipment quantities in cases                                \n"
+           "       z       total transportation costs in thousands of dollars ;        \n"
+           "                                                                           \n"
+           "  Positive Variable x ;                                                    \n"
+           "                                                                           \n"
+           "  Equations                                                                \n"
+           "       cost        define objective function                               \n"
+           "       supply(i)   observe supply limit at plant i                         \n"
+           "       demand(j)   satisfy demand at market j ;                            \n"
+           "                                                                           \n"
+           "  cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;                       \n"
+           "                                                                           \n"
+           "  supply(i) ..   sum(j, x(i,j))  =l=  a(i) ;                               \n"
+           "                                                                           \n"
+           "  demand(j) ..   sum(i, x(i,j))  =g=  bmult*b(j) ;                         \n"
+           "                                                                           \n"
+           "  Model transport /all/ ;                                                  \n";
 }
 
-void Transport12::GUSSCall(GAMSSet dict, GAMSModelInstance mi, string solveStatement, GAMSOptions* opt, GAMSModelInstanceOpt miOpt, std::ostream* output)
+string toLower(const string &str)
+{
+    string lstr(str);
+    transform(lstr.begin(), lstr.end(), lstr.begin(), ::tolower);
+    return lstr;
+}
+
+void GUSSCall(GAMSSet dict, GAMSModelInstance mi, string solveStatement
+              , gams::GAMSOptions* opt = nullptr
+              , gams::GAMSModelInstanceOpt miOpt = gams::GAMSModelInstanceOpt()
+              , std::ostream* output = nullptr)
 {
     vector< tuple<GAMSModifier, GAMSParameter> > modifierList;
 
@@ -254,59 +245,71 @@ void Transport12::GUSSCall(GAMSSet dict, GAMSModelInstance mi, string solveState
     }
 }
 
-string Transport12::getModelText()
+int main(int argc, char* argv[])
 {
-    return "  Sets                                                                     \n"
-           "       i   canning plants   / seattle, san-diego /                         \n"
-           "       j   markets          / new-york, chicago, topeka / ;                \n"
-           "                                                                           \n"
-           "  Parameters                                                               \n"
-           "                                                                           \n"
-           "       a(i)  capacity of plant i in cases                                  \n"
-           "         /    seattle     350                                              \n"
-           "              san-diego   600  /                                           \n"
-           "                                                                           \n"
-           "       b(j)  demand at market j in cases                                   \n"
-           "         /    new-york    325                                              \n"
-           "              chicago     300                                              \n"
-           "              topeka      275  / ;                                         \n"
-           "                                                                           \n"
-           "  Table d(i,j)  distance in thousands of miles                             \n"
-           "                    new-york       chicago      topeka                     \n"
-           "      seattle          2.5           1.7          1.8                      \n"
-           "      san-diego        2.5           1.8          1.4  ;                   \n"
-           "                                                                           \n"
-           "  Scalar f      freight in dollars per case per thousand miles  /90/ ;     \n"
-           "  Scalar bmult  demand multiplier /1/;                                     \n"
-           "                                                                           \n"
-           "  Parameter c(i,j)  transport cost in thousands of dollars per case ;      \n"
-           "                                                                           \n"
-           "            c(i,j) = f * d(i,j) / 1000 ;                                   \n"
-           "                                                                           \n"
-           "  Variables                                                                \n"
-           "       x(i,j)  shipment quantities in cases                                \n"
-           "       z       total transportation costs in thousands of dollars ;        \n"
-           "                                                                           \n"
-           "  Positive Variable x ;                                                    \n"
-           "                                                                           \n"
-           "  Equations                                                                \n"
-           "       cost        define objective function                               \n"
-           "       supply(i)   observe supply limit at plant i                         \n"
-           "       demand(j)   satisfy demand at market j ;                            \n"
-           "                                                                           \n"
-           "  cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;                       \n"
-           "                                                                           \n"
-           "  supply(i) ..   sum(j, x(i,j))  =l=  a(i) ;                               \n"
-           "                                                                           \n"
-           "  demand(j) ..   sum(i, x(i,j))  =g=  bmult*b(j) ;                         \n"
-           "                                                                           \n"
-           "  Model transport /all/ ;                                                  \n";
-}
+    cout << "---------- Transport 12 --------------" << endl;
 
-string Transport12::toLower(const string &str)
-{
-    string lstr(str);
-    transform(lstr.begin(), lstr.end(), lstr.begin(), ::tolower);
-    return lstr;
-}
+    GAMSWorkspaceInfo wsInfo;
+    if (argc > 1)
+        wsInfo.setSystemDirectory(argv[1]);
+    GAMSWorkspace ws(wsInfo);
+    GAMSCheckpoint cp = ws.addCheckpoint();
 
+    // initialize a GAMSCheckpoint by running a GAMSJob
+    GAMSJob t12 = ws.addJobFromString(getModelText());
+    t12.run(cp);
+
+    // create a GAMSModelInstance and solve it multiple times with different scalar bmult
+    GAMSModelInstance mi = cp.addModelInstance();
+
+    double bmultlist[] { 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3 };
+
+    GAMSDatabase db = ws.addDatabase();
+
+    GAMSSet scen = db.addSet("scen", 1, "");
+    GAMSParameter bmult = db.addParameter("bmultlist", "", scen);
+    GAMSParameter zscen = db.addParameter("zscen", "", scen);
+
+    int i = 0;
+    for (double b : bmultlist) {
+        bmult.addRecord("s" + to_string(i)).setValue(b);
+        scen.addRecord("s" + to_string(i++));
+    }
+
+    GAMSSet dict = db.addSet("dict",3,"");
+    dict.addRecord(scen.name(), "scenario", "");
+    dict.addRecord("bmult", "param", bmult.name());
+    dict.addRecord("z", "level", zscen.name());
+
+
+    GUSSCall(dict, mi, "transport use lp min z");
+
+    for (GAMSParameterRecord rec : db.getParameter(zscen.name()))
+        cout << rec.key(0) << " obj: " << rec.value() << endl;
+
+    GAMSModelInstance mi2 = cp.addModelInstance();
+    GAMSDatabase db2 = ws.addDatabase();
+
+    GAMSSet scen2 = db2.addSet("scen", 1, "");
+    GAMSParameter zscen2 = db2.addParameter("zscen", "", scen2);
+    GAMSParameter xup = db2.addParameter("xup", 3);
+
+    for (int j = 0; j < 4; j++) {
+        for (GAMSSetRecord irec : t12.outDB().getSet("i"))
+            for (GAMSSetRecord jrec : t12.outDB().getSet("j"))
+                xup.addRecord("s" + to_string(j), irec.key(0), jrec.key(0)).setValue(j+1);
+        scen2.addRecord("s" + to_string(j));
+    }
+
+    GAMSSet dict2 = db2.addSet("dict", 3, "");
+    dict2.addRecord(scen2.name(), "scenario", "");
+    dict2.addRecord("x", "lower", xup.name());
+    dict2.addRecord("z", "level", zscen2.name());
+
+    GUSSCall(dict2, mi2, "transport use lp min z");
+
+    for (GAMSParameterRecord rec : db2.getParameter(zscen2.name()))
+        cout << rec.key(0) << " obj: " << rec.value() << endl;
+
+    return 0;
+}
