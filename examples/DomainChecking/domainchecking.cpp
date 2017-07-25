@@ -36,9 +36,6 @@ using namespace std;
 
 int DomainChecking::becomes_main(int argc, char* argv[])
 {
-//    cout << "DomainChecking is not implemented yet" << endl;
-//    return 1;
-
     // define some data by using C++ data structures
     vector<string> plants { "Seattle", "San-Diego" };
     vector<string> markets { "New-York", "Chicago", "Topeka" };
@@ -185,7 +182,7 @@ int DomainChecking::becomes_main(int argc, char* argv[])
         for (GAMSSymbolDomainViolation sdv: DDV.violRecs()) {
             cout << "   ";
             for (bool vi: sdv.violInd()) {
-                cout << vi + " ";
+                cout << vi << " ";
                 if (vi)
                     dvCnt++;
             }
@@ -196,7 +193,7 @@ int DomainChecking::becomes_main(int argc, char* argv[])
         }
     }
     if (dvCnt != 5) {
-        cout << "*** Number of domain violations for db should be 5 but saw " + dvCnt << endl;
+        cout << "*** Number of domain violations for db should be 5 but saw " << dvCnt << endl;
         return 1;
     }
 
@@ -208,7 +205,7 @@ int DomainChecking::becomes_main(int argc, char* argv[])
         for (GAMSSymbolDomainViolation sdv: DDV.violRecs()) {
             cout << "   ";
             for (bool vi: sdv.violInd())
-                cout << vi + " ";
+                cout << vi << " ";
             cout << "<> ";
             for (string k: sdv.violRec().keys())
                 cout << k << " ";
@@ -217,7 +214,7 @@ int DomainChecking::becomes_main(int argc, char* argv[])
         }
     }
     if (dvCnt != 3) {
-        cout << "*** Number of domain violations for db should be 3 but saw " + dvCnt << endl;
+        cout << "*** Number of domain violations for db should be 3 but saw " << dvCnt << endl;
         return 1;
     }
     // now we limit the amount of violated records reported to 1 per symbol
@@ -228,7 +225,7 @@ int DomainChecking::becomes_main(int argc, char* argv[])
         for (GAMSSymbolDomainViolation sdv: DDV.violRecs()) {
             cout << "   ";
             for (bool vi: sdv.violInd())
-                cout << vi + " ";
+                cout << vi << " ";
             cout << "<> ";
             for (string k: sdv.violRec().keys())
                 cout << k << " ";
@@ -237,7 +234,7 @@ int DomainChecking::becomes_main(int argc, char* argv[])
         }
     }
     if (dvCnt != 2) {
-        cout << "*** Number of domain violations for db should be 2 but saw " + dvCnt << endl;
+        cout << "*** Number of domain violations for db should be 2 but saw " << dvCnt << endl;
         return 1;
     }
 
@@ -306,12 +303,12 @@ int DomainChecking::becomes_main(int argc, char* argv[])
     // Try adding empty UEL
     testSet.addRecord("");
     cout << "Elements of test Set after adding empty UEL:" << endl;
-    cout << " > " + testSet.numberRecords() << endl;
+    cout << " > " << testSet.numberRecords() << endl;
 
     // GAMS strips pending blanks while leading blanks are relevant
     testSet.addRecord(" a ").setText("a");
     cout << "Record ' a ' should be the same as ' a':" << endl;
-    cout << " > " + testSet.findRecord(" a").text() << endl;
+    cout << " > " << testSet.findRecord(" a").text() << endl;
 
     // GAMS cannot handle UELs with more than 63 characters
     // This should be OK ...
