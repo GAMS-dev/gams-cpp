@@ -23,10 +23,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-#include "transport13.h"
-#include "transport.h"
 #include "gams.h"
+#include "transport.h"
 
 #include <iostream>
 #include <map>
@@ -37,8 +35,9 @@
 using namespace gams;
 using namespace std;
 
-int Transport13::becomes_main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
+    cout << "---------- Transport 13 --------------" << endl;
     cout << "Transport13: not implementet yet." << endl;
     return 0;
 
