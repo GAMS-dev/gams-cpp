@@ -9,6 +9,7 @@ TEMPLATE = subdirs
 SUBDIRS += transport1
 SUBDIRS += transport2
 SUBDIRS += transport3
+SUBDIRS += transport4
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
