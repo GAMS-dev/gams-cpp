@@ -23,42 +23,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-#include "transport8.h"
 #include "gams.h"
 #include <vector>
+#include <mutex>
 #include <thread>
 #include <iostream>
 
 using namespace gams;
 using namespace std;
 
-/// This is the 8th model in a series of tutorial examples. Here we show:
-///   - How to use a vector to solve multiple GAMSModelInstances in parallel
-void Transport8::becomes_main(int argc, char* argv[])
-{
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
-    GAMSCheckpoint cp = ws.addCheckpoint();
-
-    // initialize a GAMSCheckpoint by running a GAMSJob
-    ws.addJobFromString(getModelText()).run(cp);
-
-    vector<double> bmultVector = { 1.3, 1.2, 1.1, 1.0, 0.9, 0.8, 0.7, 0.6 };
-    int nrThreads = 2;
-    // solve multiple model instances in parallel
-    std::mutex vectorMutex;
-    std::mutex ioMutex;
-    vector<thread> v;
-    for (int i = 0; i < nrThreads; i++)
-        v.emplace_back([&ws, &cp, &bmultVector, &vectorMutex, &ioMutex] {scenSolve(&ws, &cp, &bmultVector, &vectorMutex, &ioMutex);});
-    for (auto& t : v)
-        t.join();
-}
-
-void Transport8::scenSolve(GAMSWorkspace* ws, GAMSCheckpoint* cp, vector<double>* bmultVector, std::mutex* vectorMutex, std::mutex* ioMutex)
+void scenSolve(GAMSWorkspace* ws, GAMSCheckpoint* cp, vector<double>* bmultVector, std::mutex* vectorMutex, std::mutex* ioMutex)
 {
     unique_lock<mutex> vectorLock(*vectorMutex);
     GAMSModelInstance mi = cp->addModelInstance();
@@ -96,7 +70,7 @@ void Transport8::scenSolve(GAMSWorkspace* ws, GAMSCheckpoint* cp, vector<double>
     }
 }
 
-string Transport8::getModelText()
+string getModelText()
 {
     return "Sets                                                                  \n"
            "   i   canning plants / seattle, san-diego /                          \n"
@@ -144,3 +118,33 @@ string Transport8::getModelText()
            "                                                                      \n"
            "Model transport / all / ;                                             \n";
 }
+
+/// This is the 8th model in a series of tutorial examples. Here we show:
+///   - How to use a vector to solve multiple GAMSModelInstances in parallel
+int main(int argc, char* argv[])
+{
+    cout << "---------- Transport 8 --------------" << endl;
+
+    GAMSWorkspaceInfo wsInfo;
+    if (argc > 1)
+        wsInfo.setSystemDirectory(argv[1]);
+    GAMSWorkspace ws(wsInfo);
+    GAMSCheckpoint cp = ws.addCheckpoint();
+
+    // initialize a GAMSCheckpoint by running a GAMSJob
+    ws.addJobFromString(getModelText()).run(cp);
+
+    vector<double> bmultVector = { 1.3, 1.2, 1.1, 1.0, 0.9, 0.8, 0.7, 0.6 };
+    int nrThreads = 2;
+    // solve multiple model instances in parallel
+    std::mutex vectorMutex;
+    std::mutex ioMutex;
+    vector<thread> v;
+    for (int i = 0; i < nrThreads; i++)
+        v.emplace_back([&ws, &cp, &bmultVector, &vectorMutex, &ioMutex] {scenSolve(&ws, &cp, &bmultVector, &vectorMutex, &ioMutex);});
+    for (auto& t : v)
+        t.join();
+
+    return 0;
+}
+
