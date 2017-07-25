@@ -163,11 +163,11 @@ void TestGAMSWorkspace::testConstructor_DebugLevel() {
            /* TODO QEXPECT_FAIL("", "More tests to be implemented ", Abort); QVERIFY(false); */
            break;
       case 2: // ShowLog
-           QVERIFY( QDir(dir).exists() );
+           QVERIFY( ! QDir(dir).exists() );
            /* TODO QEXPECT_FAIL("", "More tests to be implemented ", Abort); QVERIFY(false); */
            break;
       case 3: // Verbose
-           QVERIFY( QDir(dir).exists() );
+           QVERIFY( ! QDir(dir).exists() );
            /* TODO QEXPECT_FAIL("", "More tests to be implemented ", Abort); QVERIFY(false); */
            break;
       default:
