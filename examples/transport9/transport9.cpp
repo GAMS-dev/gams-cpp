@@ -23,8 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-#include "transport9.h"
 #include <vector>
 #include "gams.h"
 #include <iostream>
@@ -82,8 +80,54 @@ void TestQOdbc() {
 //    cout << endl;
 //}
 
-void Transport9::becomes_main(int argc, char* argv[])
+string getModelText()
 {
+    return " Sets                                                                       \n"
+           "     i   canning plants                                                     \n"
+           "     j   markets                                                            \n"
+           "                                                                            \n"
+           "Parameters                                                                  \n"
+           "     a(i)   capacity of plant i in cases                                    \n"
+           "     b(j)   demand at market j in cases                                     \n"
+           "     d(i,j) distance in thousands of miles                                  \n"
+           "Scalar f  freight in dollars per case per thousand miles /90/;              \n"
+           "                                                                            \n"
+           "$if not set gdxincname $abort 'no include file name for data file provided' \n"
+           "$gdxin %gdxincname%                                                         \n"
+           "$load i j a b d                                                             \n"
+           "$gdxin                                                                      \n"
+           "                                                                            \n"
+           "Parameter c(i,j)  transport cost in thousands of dollars per case ;         \n"
+           "                                                                            \n"
+           "            c(i,j) = f * d(i,j) / 1000 ;                                    \n"
+           "                                                                            \n"
+           "Variables                                                                   \n"
+           "     x(i,j)  shipment quantities in cases                                   \n"
+           "     z       total transportation costs in thousands of dollars ;           \n"
+           "                                                                            \n"
+           "Positive Variable x ;                                                       \n"
+           "                                                                            \n"
+           "Equations                                                                   \n"
+           "     cost        define objective function                                  \n"
+           "     supply(i)   observe supply limit at plant i                            \n"
+           "     demand(j)   satisfy demand at market j ;                               \n"
+           "                                                                            \n"
+           "cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;                          \n"
+           "                                                                            \n"
+           "supply(i) ..   sum(j, x(i,j))  =l=  a(i) ;                                  \n"
+           "                                                                            \n"
+           "demand(j) ..   sum(i, x(i,j))  =g=  bmult*b(j) ;                            \n"
+           "                                                                            \n"
+           "Model transport /all/ ;                                                     \n"
+           "                                                                            \n"
+           "Solve transport using lp minimizing z ;                                     \n"
+           "                                                                            \n"
+           "Display x.l, x.m ;                                                          \n";
+}
+
+int main(int argc, char* argv[])
+{
+    cout << "---------- Transport 9 --------------" << endl;
     cout << "Transport9: not implementet yet." << endl;
     // TestOdbc();
 
@@ -108,6 +152,7 @@ void Transport9::becomes_main(int argc, char* argv[])
     //// write results into Access file
     //WriteToAccess(ws, t9.getOutDB());
 
+    return 0;
 }
 
 //void Transport9::ReadSet(CSession session, GAMSDatabase db, string strAccessSelect, string setName, int setDim, string setExp)
@@ -319,48 +364,3 @@ void Transport9::becomes_main(int argc, char* argv[])
 //    WriteVariable(session, db, "x", domains);
 
 //}
-
-string Transport9::getModelText()
-{
-    return " Sets                                                                       \n"
-           "     i   canning plants                                                     \n"
-           "     j   markets                                                            \n"
-           "                                                                            \n"
-           "Parameters                                                                  \n"
-           "     a(i)   capacity of plant i in cases                                    \n"
-           "     b(j)   demand at market j in cases                                     \n"
-           "     d(i,j) distance in thousands of miles                                  \n"
-           "Scalar f  freight in dollars per case per thousand miles /90/;              \n"
-           "                                                                            \n"
-           "$if not set gdxincname $abort 'no include file name for data file provided' \n"
-           "$gdxin %gdxincname%                                                         \n"
-           "$load i j a b d                                                             \n"
-           "$gdxin                                                                      \n"
-           "                                                                            \n"
-           "Parameter c(i,j)  transport cost in thousands of dollars per case ;         \n"
-           "                                                                            \n"
-           "            c(i,j) = f * d(i,j) / 1000 ;                                    \n"
-           "                                                                            \n"
-           "Variables                                                                   \n"
-           "     x(i,j)  shipment quantities in cases                                   \n"
-           "     z       total transportation costs in thousands of dollars ;           \n"
-           "                                                                            \n"
-           "Positive Variable x ;                                                       \n"
-           "                                                                            \n"
-           "Equations                                                                   \n"
-           "     cost        define objective function                                  \n"
-           "     supply(i)   observe supply limit at plant i                            \n"
-           "     demand(j)   satisfy demand at market j ;                               \n"
-           "                                                                            \n"
-           "cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;                          \n"
-           "                                                                            \n"
-           "supply(i) ..   sum(j, x(i,j))  =l=  a(i) ;                                  \n"
-           "                                                                            \n"
-           "demand(j) ..   sum(i, x(i,j))  =g=  bmult*b(j) ;                            \n"
-           "                                                                            \n"
-           "Model transport /all/ ;                                                     \n"
-           "                                                                            \n"
-           "Solve transport using lp minimizing z ;                                     \n"
-           "                                                                            \n"
-           "Display x.l, x.m ;                                                          \n";
-}
