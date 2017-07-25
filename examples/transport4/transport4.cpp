@@ -146,5 +146,8 @@ int main(int argc, char* argv[])
     t4.run(opt, db);
 
     for (GAMSVariableRecord rec : t4.outDB().getVariable("x"))
-        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal=" << rec.marginal() << endl;
+        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
+             << rec.marginal() << endl;
+
+    return 0;
 }
