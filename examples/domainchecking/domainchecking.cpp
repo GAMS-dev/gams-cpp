@@ -23,8 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-#include "domainchecking.h"
 #include "gams.h"
 #include <map>
 #include <vector>
@@ -34,8 +32,18 @@
 using namespace gams;
 using namespace std;
 
-int DomainChecking::becomes_main(int argc, char* argv[])
+std::string getDataText()
 {
+    return "Sets                                             \n"
+           "i   canning plants   / seattle, san-diego /;     \n"
+           "                                                 \n"
+           "Alias (i,ii);                                    \n";
+}
+
+int main(int argc, char* argv[])
+{
+    cout << "---------- Domain Checking --------------" << endl;
+
     // define some data by using C++ data structures
     vector<string> plants { "Seattle", "San-Diego" };
     vector<string> markets { "New-York", "Chicago", "Topeka" };
@@ -366,12 +374,4 @@ int DomainChecking::becomes_main(int argc, char* argv[])
 
     testDB.doExport("test.gdx");
     return 0;
-}
-
-std::string DomainChecking::getDataText()
-{
-    return "Sets                                             \n"
-           "i   canning plants   / seattle, san-diego /;     \n"
-           "                                                 \n"
-           "Alias (i,ii);                                    \n";
 }

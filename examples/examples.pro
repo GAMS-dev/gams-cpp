@@ -20,6 +20,7 @@ SUBDIRS += transport11
 SUBDIRS += transport12
 SUBDIRS += transport13
 SUBDIRS += transport14
+SUBDIRS += domainchecking
 SUBDIRS += warehouse
 
 # The following define makes your compiler emit warnings if you use
