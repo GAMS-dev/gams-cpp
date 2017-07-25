@@ -23,8 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-#include "transport5.h"
 #include "gams.h"
 #include <vector>
 #include <iostream>
@@ -32,35 +30,7 @@
 using namespace gams;
 using namespace std;
 
-/// This is the 5th model in a series of tutorial examples. Here we show:
-///   - How to initialize a GAMSCheckpoint by running a GAMSJob
-///   - How to initialize a GAMSJob from a GAMSCheckpoint
-void Transport5::becomes_main(int argc, char* argv[])
-{
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
-    GAMSCheckpoint cp = ws.addCheckpoint();
-
-    // initialize a GAMSCheckpoint by running a GAMSJob
-    ws.addJobFromString(getModelText()).run(cp);
-
-    vector<double> bmultlist = { 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3 };
-
-    // create a new GAMSJob that is initialized from the GAMSCheckpoint
-    for (double b : bmultlist)
-    {
-        GAMSJob t5 = ws.addJobFromString("bmult=" + to_string(b) + "; solve transport min z use lp; ms=transport.modelstat; ss=transport.solvestat;", cp);
-        t5.run();
-        cout << "Scenario bmult=" << b << ":" << endl;
-        cout << "  Modelstatus: " << t5.outDB().getParameter("ms").findRecord().value() << endl;
-        cout << "  Solvestatus: " << t5.outDB().getParameter("ss").findRecord().value() << endl;
-        cout << "  Obj: " << t5.outDB().getVariable("z").findRecord().level() << endl;
-    }
-}
-
-string Transport5::getModelText()
+string getModelText()
 {
     return " Sets                                                               \n"
            "     i   canning plants   / seattle, san-diego /                    \n"
@@ -107,4 +77,36 @@ string Transport5::getModelText()
            "                                                                    \n"
            "Model transport /all/ ;                                             \n"
            "Scalar ms 'model status', ss 'solve status';                        \n";
+}
+
+/// This is the 5th model in a series of tutorial examples. Here we show:
+///   - How to initialize a GAMSCheckpoint by running a GAMSJob
+///   - How to initialize a GAMSJob from a GAMSCheckpoint
+int main(int argc, char* argv[])
+{
+    cout << "---------- Transport 5 --------------" << endl;
+
+    GAMSWorkspaceInfo wsInfo;
+    if (argc > 1)
+        wsInfo.setSystemDirectory(argv[1]);
+    GAMSWorkspace ws(wsInfo);
+    GAMSCheckpoint cp = ws.addCheckpoint();
+
+    // initialize a GAMSCheckpoint by running a GAMSJob
+    ws.addJobFromString(getModelText()).run(cp);
+
+    vector<double> bmultlist = { 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3 };
+
+    // create a new GAMSJob that is initialized from the GAMSCheckpoint
+    for (double b : bmultlist)
+    {
+        GAMSJob t5 = ws.addJobFromString("bmult=" + to_string(b) + "; solve transport min z use lp; ms=transport.modelstat; ss=transport.solvestat;", cp);
+        t5.run();
+        cout << "Scenario bmult=" << b << ":" << endl;
+        cout << "  Modelstatus: " << t5.outDB().getParameter("ms").findRecord().value() << endl;
+        cout << "  Solvestatus: " << t5.outDB().getParameter("ss").findRecord().value() << endl;
+        cout << "  Obj: " << t5.outDB().getVariable("z").findRecord().level() << endl;
+    }
+
+    return 0;
 }
