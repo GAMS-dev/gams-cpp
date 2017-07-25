@@ -23,8 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-#include "transport3.h"
 #include "gams.h"
 #include <iostream>
 #include <fstream>
@@ -32,44 +30,7 @@
 using namespace gams;
 using namespace std;
 
-/// This is the 3rd model in a series of tutorial examples. Here we show:
-///   - How to read data from string and export to GDX
-///   - How to run a job using data from GDX
-///   - How to run a job using implicit database communication
-void Transport3::becomes_main(int argc, char* argv[])
-{
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
-
-    // data from a string with GAMS syntax with explicit export to GDX file
-    GAMSJob t3 = ws.addJobFromString(getDataText());
-    t3.run();
-    //TODO: change doExport to export?
-    t3.outDB().doExport(ws.workingDirectory() + cPathSep + "tdata.gdx");
-
-    // run a job using an instance of GAMSOptions that defines the data include file
-    t3 = ws.addJobFromString(getModelText());
-    GAMSOptions opt = ws.addOptions();
-    opt.setDefine("gdxincname", "tdata");
-    opt.setAllModelTypes("xpress");
-    t3.run(opt);
-    for (GAMSVariableRecord rec : t3.outDB().getVariable("x"))
-        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal=" << rec.marginal() << endl;
-
-    // same but with implicit database communication
-    GAMSJob t3a = ws.addJobFromString(getDataText());
-    GAMSJob t3b = ws.addJobFromString(getModelText());
-    t3a.run();
-    opt.setDefine("gdxincname", t3a.outDB().name());
-
-    t3b.run(opt, t3a.outDB());
-    for (GAMSVariableRecord rec : t3.outDB().getVariable("x"))
-        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal=" << rec.marginal() << endl;
-}
-
-string Transport3::getDataText()
+string getDataText()
 {
     return "Sets                                                           \n"
            "  i   canning plants   / seattle, san-diego /                  \n"
@@ -93,7 +54,7 @@ string Transport3::getDataText()
            "Scalar f  freight in dollars per case per thousand miles  /90/;\n";
 }
 
-string Transport3::getModelText()
+string getModelText()
 {
     return "Sets                                                                       \n"
            "      i   canning plants                                                   \n"
@@ -137,4 +98,47 @@ string Transport3::getModelText()
            " Solve transport using lp minimizing z ;                                   \n"
            "                                                                           \n"
            "Display x.l, x.m ;                                                         \n";
+}
+
+/// This is the 3rd model in a series of tutorial examples. Here we show:
+///   - How to read data from string and export to GDX
+///   - How to run a job using data from GDX
+///   - How to run a job using implicit database communication
+int main(int argc, char* argv[])
+{
+    cout << "---------- Transport 3 --------------" << endl;
+
+    GAMSWorkspaceInfo wsInfo;
+    if (argc > 1)
+        wsInfo.setSystemDirectory(argv[1]);
+    GAMSWorkspace ws(wsInfo);
+
+    // data from a string with GAMS syntax with explicit export to GDX file
+    GAMSJob t3 = ws.addJobFromString(getDataText());
+    t3.run();
+    //TODO: change doExport to export?
+    t3.outDB().doExport(ws.workingDirectory() + cPathSep + "tdata.gdx");
+
+    // run a job using an instance of GAMSOptions that defines the data include file
+    t3 = ws.addJobFromString(getModelText());
+    GAMSOptions opt = ws.addOptions();
+    opt.setDefine("gdxincname", "tdata");
+    opt.setAllModelTypes("xpress");
+    t3.run(opt);
+    for (GAMSVariableRecord rec : t3.outDB().getVariable("x"))
+        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
+             << rec.marginal() << endl;
+
+    // same but with implicit database communication
+    GAMSJob t3a = ws.addJobFromString(getDataText());
+    GAMSJob t3b = ws.addJobFromString(getModelText());
+    t3a.run();
+    opt.setDefine("gdxincname", t3a.outDB().name());
+
+    t3b.run(opt, t3a.outDB());
+    for (GAMSVariableRecord rec : t3.outDB().getVariable("x"))
+        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
+             << rec.marginal() << endl;
+
+    return 0;
 }
