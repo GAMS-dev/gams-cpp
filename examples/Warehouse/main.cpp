@@ -25,7 +25,6 @@
  */
 
 #include <iostream>
-#include <cstdlib>
 
 #include "warehouse.h"
 
@@ -34,6 +33,5 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     cout << "---------- Warehouse --------------" << endl;
-    Warehouse::becomes_main(argc, argv);
-    return EXIT_SUCCESS;
+    return Warehouse::becomes_main(argc, argv);
 }

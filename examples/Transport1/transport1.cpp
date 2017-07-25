@@ -52,7 +52,8 @@ void Transport1::becomes_main(int argc, char* argv[])
     t1.run();
     cout << "Ran with Defaults:" << endl;
     for (GAMSVariableRecord rec : t1.outDB().getVariable("x"))
-        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal=" << rec.marginal() << endl;
+        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
+             << rec.marginal() << endl;
 
     // Run the job again with another solver
     GAMSOptions opt = ws.addOptions();
@@ -60,7 +61,8 @@ void Transport1::becomes_main(int argc, char* argv[])
     t1.run(opt);
     cout << "Ran with XPRESS:" << endl;
     for (GAMSVariableRecord rec : t1.outDB().getVariable("x"))
-        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal=" << rec.marginal() << endl;
+        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
+             << rec.marginal() << endl;
 
     // Run the job with a solver option file
     ofstream xpressopt(ws.workingDirectory() + cPathSep + "xpress.opt");

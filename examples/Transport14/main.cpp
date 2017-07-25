@@ -25,7 +25,6 @@
  */
 
 #include <iostream>
-#include <cstdlib>
 
 #include "transport14.h"
 
@@ -34,6 +33,5 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     cout << "---------- Transport 14 --------------" << endl;
-    Transport14::becomes_main(argc, argv);
-    return EXIT_SUCCESS;
+    return Transport14::becomes_main(argc, argv);
 }
