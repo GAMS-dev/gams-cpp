@@ -23,8 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-#include "transport6.h"
 #include "gams.h"
 #include <vector>
 #include <iostream>
@@ -34,31 +32,7 @@
 using namespace gams;
 using namespace std;
 
-/// This is the 6th model in a series of tutorial examples. Here we show:
-///   - How to run multiple GAMSJobs in parallel using a GAMSCheckpoint
-void Transport6::becomes_main(int argc, char* argv[])
-{
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
-    GAMSCheckpoint cp = ws.addCheckpoint();
-
-    // initialize a GAMSCheckpoint by running a GAMSJob
-    ws.addJobFromString(getModelText()).run(cp);
-
-    vector<double> bmultlist = { 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3 };
-
-    // run multiple parallel jobs using the created GAMSCheckpoint
-    mutex ioMutex;
-    vector<thread> v;
-    for(double b : bmultlist)
-        v.emplace_back([&ws, cp, &ioMutex, b]{runScenario(&ws, cp,&ioMutex,b);});
-    for (auto& t : v)
-        t.join();
-}
-
-void Transport6::runScenario(GAMSWorkspace* ws, const GAMSCheckpoint& cp, mutex* ioMutex, double b)
+void runScenario(GAMSWorkspace* ws, const GAMSCheckpoint& cp, mutex* ioMutex, double b)
 {
     auto t6 = ws->addJobFromString("bmult=" + to_string(b) + "; solve transport min z use lp; ms=transport.modelstat; ss=transport.solvestat;", cp);
     t6.run();
@@ -71,7 +45,7 @@ void Transport6::runScenario(GAMSWorkspace* ws, const GAMSCheckpoint& cp, mutex*
     cout << "  Obj: " << t6.outDB().getVariable("z").findRecord().level() << endl;
 }
 
-string Transport6::getModelText()
+string getModelText()
 {
     return "Sets                                                                       \n"
            "   i   canning plants / seattle, san-diego /                               \n"
@@ -119,4 +93,33 @@ string Transport6::getModelText()
            "                                                                           \n"
            "Model transport / all / ;                                                  \n"
            "Scalar ms 'model status', ss 'solve status'                                \n";
+}
+
+
+/// This is the 6th model in a series of tutorial examples. Here we show:
+///   - How to run multiple GAMSJobs in parallel using a GAMSCheckpoint
+int main(int argc, char* argv[])
+{
+    cout << "---------- Transport 6 --------------" << endl;
+
+    GAMSWorkspaceInfo wsInfo;
+    if (argc > 1)
+        wsInfo.setSystemDirectory(argv[1]);
+    GAMSWorkspace ws(wsInfo);
+    GAMSCheckpoint cp = ws.addCheckpoint();
+
+    // initialize a GAMSCheckpoint by running a GAMSJob
+    ws.addJobFromString(getModelText()).run(cp);
+
+    vector<double> bmultlist = { 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3 };
+
+    // run multiple parallel jobs using the created GAMSCheckpoint
+    mutex ioMutex;
+    vector<thread> v;
+    for(double b : bmultlist)
+        v.emplace_back([&ws, cp, &ioMutex, b]{runScenario(&ws, cp,&ioMutex,b);});
+    for (auto& t : v)
+        t.join();
+
+    return 0;
 }
