@@ -23,8 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-#include "transport1.h"
 #include "gams.h"
 #include <iostream>
 #include <fstream>
@@ -32,13 +30,14 @@
 using namespace gams;
 using namespace std;
 
-
 /// This is the 1st model in a series of tutorial examples. Here we show:
 ///   - How to run a GAMSJob from file
 ///   - How to specify the solver
 ///   - How to run a job with a solver option file
-void Transport1::becomes_main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
+    cout << "---------- Transport 1 --------------" << endl;
+
     GAMSWorkspaceInfo wsInfo;
     if (argc > 1)
         wsInfo.setSystemDirectory(argv[1]);
@@ -73,5 +72,8 @@ void Transport1::becomes_main(int argc, char* argv[])
     t1.run(opt);
     cout << "Ran with XPRESS with non-default option:" << endl;
     for (GAMSVariableRecord rec : t1.outDB().getVariable("x"))
-        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal=" << rec.marginal() << endl;
+        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
+             << rec.marginal() << endl;
+
+    return 0;
 }

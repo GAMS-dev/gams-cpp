@@ -1,12 +1,12 @@
-# ---------------------------- Versions ------------------------------
-#VERSION = 0.1.1
-#GAMS_MIN_VER = 24.8.0
-#CLIB_MIN_VER = 3.1.0
-# --------------------------------------------------------------------
+CONFIG += console c++11
+CONFIG -= app_bundle
+DESTDIR = ../../bin
 
-TEMPLATE = subdirs
+unix : LIBS += -ldl -L../../bin -lgamscpp
+win32: LIBS += -L../../bin/ -lgamscpp0
 
-SUBDIRS += transport1
+INCLUDEPATH +=  ../../src/     \
+                transport
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
