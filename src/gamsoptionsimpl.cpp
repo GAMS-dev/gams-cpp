@@ -41,7 +41,7 @@ const char* GAMSOptionsImpl::cGamsBuild = __DATE__ " " __TIME__;
 #if LOCAL_BUILD
 const char* GAMSOptionsImpl::cGamsVersion = "0.0.0";
 #else
-const char* GAMSOptionsImpl::cGamsVersion = "24.9.0";
+const char* GAMSOptionsImpl::cGamsVersion = "25.0.0";
 #endif
 
 GAMSOptionsImpl::GAMSOptionsImpl(GAMSWorkspace& workspace, GAMSOptionsImpl* optFrom)
@@ -1960,6 +1960,7 @@ string GAMSOptionsImpl::getSolver(const string& modelType)
     int procSelect = cfgModelTypeNumber (this->mCFG, modelType.c_str());
     if (!procSelect)
         throw GAMSException("Unknown model type " + modelType);
+
     optGetStrStr(mOPT, modelType.c_str(), buf);
     return buf;
 }
