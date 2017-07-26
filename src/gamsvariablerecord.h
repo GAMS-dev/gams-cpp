@@ -1,5 +1,4 @@
-/**
- *
+/*
  * GAMS - General Algebraic Modeling System C++ API
  *
  * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
