@@ -5,12 +5,6 @@ DESTDIR = ../bin
 
 TARGET = gamscpp
 
-# ---------------------------- Versions ------------------------------
-VERSION = 0.2.1
-GAMS_MIN_VER = 24.8.0
-CLIB_MIN_VER = 3.1.0
-# --------------------------------------------------------------------
-
 include(gamscpp.pri)
 include(../dependency.pri)
 
