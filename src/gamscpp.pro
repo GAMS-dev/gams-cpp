@@ -5,8 +5,8 @@ DESTDIR = ../bin
 
 TARGET = gamscpp
 
-include(gamscpp.pri)
 include(../dependency.pri)
+include(gamscpp.pri)
 
 CONFIG += console c++11
 CONFIG -= app_bundle
