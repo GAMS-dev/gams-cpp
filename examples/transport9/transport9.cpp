@@ -24,11 +24,7 @@
  * SOFTWARE.
  */
 
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlRecord>
-#include <QSqlError>
-#include <QVariant>
+#include <QtSql>
 #include <vector>
 #include "gams.h"
 #include <iostream>
