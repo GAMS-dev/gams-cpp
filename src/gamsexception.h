@@ -32,16 +32,16 @@
 
 namespace gams {
 
-/// Exception class thrown for GAMS exceptions
+/// Exception class thrown for GAMS exceptions.
 class LIBSPEC GAMSException : public std::runtime_error
 {
 public:
-    /// Constructor
-    /// \param what_arg Exception message
+    /// Constructor.
+    /// \param what Exception message.
     GAMSException(const std::string& what);
 
-    /// Constructor
-    /// \param what_arg Exception message
+    /// Constructor.
+    /// \param what Exception message.
     GAMSException(const char* what);
 };
 
