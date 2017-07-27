@@ -34,12 +34,14 @@ namespace gams {
 class LIBSPEC GAMSVersion
 {
 public:
-    /// Get full API information, i.e. API version, build time.
-    /// \return Returns a full API information.
+    /// Get the full API version information, including major and
+    /// minor version number, build number as well as the build time stamp.
+    /// \return Returns full API information.
     static const char* apiDetail();
 
-    /// Get the full API version string.
-    /// \return Returns the full API version string.
+    /// Get the API version string, including major and
+    /// minor version number and build number.
+    /// \return Returns the API version string.
     static const char* api();
 
     /// Get the API major version number.
@@ -54,11 +56,13 @@ public:
     /// \return The API build number.
     static int apiBuild();
 
-    /// Get the API build time.
-    /// \return The API build time.
+    /// Get the API build time stamp.
+    /// \return The API build time stamp.
     static const char* apiBuildTime();
 
     /// Get the required GAMS version number.
+    /// \remark This number can be used to check the compatibilty
+    /// of the API with the GAMS distribution.
     /// \return Returns the required GAMS version number.
     static const char* minGams();
 
@@ -80,6 +84,8 @@ public:
     static bool checkGamsVersion(const char* currentGamsVersion);
 
     /// Get the required CLib version number.
+    /// \remark This number can be used to check the compatibilty
+    /// of the API with the CLib distribution.
     /// \return Returns the required CLib version number.
     static const char* minCLib();
 
@@ -95,8 +101,8 @@ public:
     /// \return Returns the required CLib build number.
     static int minCLibBuild();
 
-    /// Check the GAMS version number.
-    /// \param currentGamsVersion GAMS version number to check.
+    /// Check the CLib version number.
+    /// \param currentClibVersion CLib version number to check.
     /// \return Returns <c>true</c> if the version is equal; otherwise <c>false</c>.
     static bool checkCLibVersion(const char* currentClibVersion);
 
