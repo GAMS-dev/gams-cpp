@@ -39,14 +39,14 @@ GAMSDatabaseIter::GAMSDatabaseIter(shared_ptr<GAMSDatabaseImpl> database, int po
     if (!mDatabase) throw GAMSException("GAMSDatabaseIter: The database has not been initialized.");
 }
 
-bool GAMSDatabaseIter::operator==(const GAMSDatabaseIter& b)
+bool GAMSDatabaseIter::operator==(const GAMSDatabaseIter& other)
 {
-    return (mDatabase == b.mDatabase) && (pos == b.pos);
+    return (mDatabase == other.mDatabase) && (pos == other.pos);
 }
 
-bool GAMSDatabaseIter::operator!=(const GAMSDatabaseIter& b)
+bool GAMSDatabaseIter::operator!=(const GAMSDatabaseIter& other)
 {
-    return (mDatabase != b.mDatabase) || (pos != b.pos);
+    return (mDatabase != other.mDatabase) || (pos != other.pos);
 }
 
 GAMSSymbol GAMSDatabaseIter::operator*()

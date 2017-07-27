@@ -47,12 +47,12 @@ public:
     /// Compares two GAMSDatabaseIter<T> objects.
     /// \param other Another GAMSDatabaseIter<T> to compare to.
     /// \return Returns <c>true</c> if the two GAMSDatabaseIter<T> are equal; otherwise <c>false</c>.
-    bool operator==(const GAMSDatabaseIter& b);
+    bool operator==(const GAMSDatabaseIter& other);
 
     /// Compares two GAMSDatabaseIter<T>.
     /// \param other Another GAMSDatabaseIter<T> to compare to.
     /// \return Returns <c>true</c> if the two GAMSDatabaseIter<T> are different; otherwise <c>false</c>.
-    bool operator!=(const GAMSDatabaseIter& b);
+    bool operator!=(const GAMSDatabaseIter& other);
 
     /// Dereferences the iterator.
     /// \return Returns the actual object.
