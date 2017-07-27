@@ -30,18 +30,18 @@
 
 namespace gams {
 
-/// Exception class thrown for GAMS execution exceptions
+/// Exception class thrown for GAMS execution exceptions.
 class LIBSPEC GAMSExceptionExecution : public GAMSException
 {
 public:
-    /// Constructor
-    /// \param what_arg Exception message
-    /// \param exitCode Exit Code
+    /// Constructor.
+    /// \param what Exception message.
+    /// \param exitCode Exit Code.
     GAMSExceptionExecution(const std::string& what, int exitCode);
 
-    /// Constructor
-    /// \param what_arg Exception message
-    /// \param exitCode Exit Code
+    /// Constructor.
+    /// \param what Exception message.
+    /// \param exitCode Exit Code.
     GAMSExceptionExecution(const char* what, int exitCode);
 
     /// Get the return code.
