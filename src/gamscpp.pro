@@ -1,5 +1,3 @@
-!contains(DEFINES, GAMSTEST) {
-
 TEMPLATE = lib
 DESTDIR = ../bin
 
@@ -20,10 +18,6 @@ CONFIG += lib
 QT -= gui
 DEFINES += GAMS_CPP_LIB
 DEFINES += MAKELIB
-
-} else {
-VPATH += ../src
-}
 
 SOURCES += \
     gamscheckpoint.cpp \
