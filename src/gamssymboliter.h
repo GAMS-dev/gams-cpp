@@ -49,13 +49,12 @@ public:
     /// Compares two GAMSSymbolIter<T> objects.
     /// \param other Another GAMSSymbolIter<T> to compare to.
     /// \return Returns <c>true</c> if the two GAMSSymbolIter<T> are equal; otherwise <c>false</c>.
-    bool operator==(const GAMSSymbolIter<T>& b) const;
+    bool operator==(const GAMSSymbolIter<T>& other) const;
 
     /// Compares two GAMSSymbolIter<T>.
     /// \param other Another GAMSSymbolIter<T> to compare to.
     /// \return Returns <c>true</c> if the two GAMSSymbolIter<T> are different; otherwise <c>false</c>.
-    bool operator!=(const GAMSSymbolIter<T>& b) const;
-
+    bool operator!=(const GAMSSymbolIter<T>& other) const;
 
     /// Dereferences the iterator.
     /// \return Returns the actual object.

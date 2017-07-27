@@ -66,15 +66,15 @@ GAMSSymbolIter<T>::~GAMSSymbolIter()
 }
 
 template<class T>
-bool GAMSSymbolIter<T>::operator==(const GAMSSymbolIter<T>& b) const
+bool GAMSSymbolIter<T>::operator==(const GAMSSymbolIter<T>& other) const
 {
-    return !(operator !=(b));
+    return !(operator !=(other));
 }
 
 template<class T>
-bool GAMSSymbolIter<T>::operator!=(const GAMSSymbolIter<T>& b) const
+bool GAMSSymbolIter<T>::operator!=(const GAMSSymbolIter<T>& other) const
 {
-    return (mSymbol.mImpl->symPtr() != b.mSymbol.mImpl->symPtr()) || (mPos != b.mPos);
+    return (mSymbol.mImpl->symPtr() != other.mSymbol.mImpl->symPtr()) || (mPos != other.mPos);
 }
 
 template<class T>
@@ -104,6 +104,5 @@ template
 class GAMSSymbolIter < GAMSEquation >;
 template
 class GAMSSymbolIter < GAMSSymbol >;
-
 
 } // namespace gams
