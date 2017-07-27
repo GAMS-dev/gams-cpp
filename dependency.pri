@@ -1,5 +1,5 @@
-unix:GAMS_DISTRIB = $$(HOME)/gams/gams24.9_linux_x64_64_sfx/apifiles/C/api
-win32:GAMS_DISTRIB = C:\GAMS\win64\24.9\apifiles\C\api
+unix:GAMS_DISTRIB = $$(HOME)/gams/gams24.8_linux_x64_64_sfx/apifiles/C/api
+win32:GAMS_DISTRIB = D:\home\jmonki\vs8_alpha\src\apiexamples\C\api
 
 INCLUDEPATH += $$GAMS_DISTRIB
 
