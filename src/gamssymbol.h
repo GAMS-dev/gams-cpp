@@ -43,7 +43,7 @@ class GAMSSymbolImpl;
 class GAMSSymbolDomainViolation;
 
 /// This is the representation of a symbol in GAMS. It exists in a
-/// GAMSDatabase and contains GAMSSymbolRecords which one can iterate through.
+/// GAMSDatabase and contains GAMSSymbolRecords which can be iterated through.
 /// Derived classes are GAMSEquation, GAMSParameter, GAMSSet and GAMSVariable.
 class LIBSPEC GAMSSymbol
 {
@@ -54,7 +54,7 @@ public:
     GAMSSymbol();
 
     /// Shallow copy constructor that creates a new frame pointing to an existing GAMSSymbol
-    /// /// \param symbol Another GAMSSymbol used as data source.
+    /// \param symbol Another GAMSSymbol used as data source.
     GAMSSymbol(const GAMSSymbol &symbol);
 
     /// Destructor.
@@ -67,7 +67,7 @@ public:
 
     /// Compares two GAMSSymbol objects.
     /// \param other Another GAMSSymbol to compare to.
-    /// \return Returns <c>true</c> if the two GAMSSymbol are different; otherwise <c>false</c>.
+    /// \return Returns <c>true</c> if the two GAMSSymbol objects are different; otherwise <c>false</c>.
     bool operator!=(const GAMSSymbol& other) const;
 
     /// Compares two GAMSSymbol objects.
@@ -114,158 +114,156 @@ public:
     /// \returns Instance of GAMSSymbolRecord
     GAMSSymbolRecord addRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Delete GAMSSymbol record
+    /// Delete GAMSSymbol record.
     /// \param keys List of keys
-    /// \returns True if everything worked, else (record does not exist) false
+    /// \returns Returns <c>true</c> on success; otherwise <c>false</c>.
     void deleteRecord(const std::vector<std::string>& keys);
 
     // TODO(JM) missing overloads for ::deleteRecord
 
     /// Clear symbol
-    /// \returns True if everything worked, else false
+    /// \returns Returns <c>true</c> on success; otherwise <c>false</c>
     bool clear();
 
-    /// Domains of Symbol, each element is either a GAMSSet (real domain) or a string (relaxed domain)
+    /// Get domains of a Symbol.
+    /// \remark Each element is either a GAMSSet (real domain) or a string (relaxed domain).
     std::vector<GAMSDomain> domains();
 
-    /// Check if all records are within the specified domain of the symbol
-    /// \returns true: Everything is correct, False: There is a domain violation
+    /// Check for domain violations.
+    /// \returns Returns <c>true</c> if there is any domain violation; <c>false</c>.
     bool checkDomains();
 
-    /// Return all GAMSSymbolDomainViolations
-    /// \param MaxViol The maximum number of domain violations which should be stored (0 for no limit)
-    /// \returns List of GAMSSymbolDomainViolations
+    /// Get all <c>GAMSSymbolDomainViolations</c>.
+    /// \param maxViol The maximum number of domain violations which should be stored (0 for no limit)
+    /// \returns Returns a list of all <c>GAMSSymbolDomainViolations</c>.
     std::vector<GAMSSymbolDomainViolation> getSymbolDVs(int maxViol = 0);
 
-    /// Retrieve the first record in GAMSSymbol that meets the slice criteria
-    /// \param slice Define filter for elements whose record should be retrieved
-    /// \returns Instance of GAMSSymbolRecord
+    /// Retrieve the first record in GAMSSymbol that meets the slice criteria.
+    /// \param slice Define filter for elements whose record should be retrieved.
+    /// \returns Instance of GAMSSymbolRecord.
     GAMSSymbolRecord firstRecord(const std::vector<std::string>& slice);
 
-    /// Retrieve first record in GAMSSymbol
-    /// \returns Instance of GAMSSymbolRecord
+    /// Retrieve first record in GAMSSymbol.
+    /// \returns Instance of GAMSSymbolRecord.
     GAMSSymbolRecord firstRecord();
 
-    /// Retrieve first record in GAMSSymbol that meets the slice criteria
-    /// \param key1 slicing criteria for first index position
+    /// Retrieve first record in GAMSSymbol that meets the slice criteria.
+    /// \param key1 Slicing criteria for first index position.
     /// \returns Instance of GAMSSymbolRecord
     GAMSSymbolRecord firstRecord(const std::string& key1);
 
-    /// Retrieve first record in GAMSSymbol that meets the slice criteria
-    /// \param key1 slicing criteria for first index position
-    /// \param key2 slicing criteria for second index position
-    /// \returns Instance of GAMSSymbolRecord
+    /// Retrieve first record in GAMSSymbol that meets the slice criteria.
+    /// \param key1 Slicing criteria for first index position.
+    /// \param key2 Slicing criteria for second index position.
+    /// \returns Instance of GAMSSymbolRecord.
     GAMSSymbolRecord firstRecord(const std::string& key1, const std::string& key2);
 
-    /// Retrieve first record in GAMSSymbol that meets the slice criteria
-    /// \param key1 slicing criteria for first index position
-    /// \param key2 slicing criteria for second index position
-    /// \param key3 slicing criteria for third index position
-    /// \returns Instance of GAMSSymbolRecord
+    /// Retrieve first record in GAMSSymbol that meets the slice criteria.
+    /// \param key1 Slicing criteria for first index position.
+    /// \param key2 Slicing criteria for second index position.
+    /// \param key3 Slicing criteria for third index position.
+    /// \returns Instance of GAMSSymbolRecord.
     GAMSSymbolRecord firstRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Retrieve a slice of the last record in GAMSSymbol
-    /// \param slice Define filter for elements whose record should be retrieved
-    /// \returns Instance of GAMSSymbolRecord
+    /// Retrieve a slice of the last record in GAMSSymbol.
+    /// \param slice Define filter for elements whose record should be retrieved.
+    /// \returns Instance of GAMSSymbolRecord.
     GAMSSymbolRecord lastRecord(const std::vector<std::string>& slice);
 
-    /// Retrieve last record in GAMSSymbol
-    /// \returns Instance of GAMSSymbolRecord
+    /// Retrieve last record in GAMSSymbol.
+    /// \returns Instance of GAMSSymbolRecord.
     GAMSSymbolRecord lastRecord();
 
-    /// Retrieve last record in GAMSSymbol
-    /// \param key1 slicing criteria for first index position
-    /// \returns Instance of GAMSSymbolRecord
+    /// Retrieve last record in GAMSSymbol.
+    /// \param key1 slicing criteria for first index position.
+    /// \returns Instance of GAMSSymbolRecord.
     GAMSSymbolRecord lastRecord(const std::string& key1);
 
-    /// Retrieve last record in GAMSSymbol
-    /// \param key1 slicing criteria for first index position
-    /// \param key2 slicing criteria for second index position
-    /// \returns Instance of GAMSSymbolRecord
+    /// Retrieve last record in GAMSSymbol.
+    /// \param key1 Slicing criteria for first index position.
+    /// \param key2 Slicing criteria for second index position.
+    /// \returns Instance of GAMSSymbolRecord.
     GAMSSymbolRecord lastRecord(const std::string& key1, const std::string& key2);
 
-    /// Retrieve last record in GAMSSymbol
-    /// \param key1 slicing criteria for first index position
-    /// \param key2 slicing criteria for second index position
-    /// \param key3 slicing criteria for third index position
+    /// Retrieve last record in GAMSSymbol.
+    /// \param key1 Slicing criteria for first index position.
+    /// \param key2 Slicing criteria for second index position.
+    /// \param key3 Slicing criteria for third index position.
     /// \returns Instance of GAMSSymbolRecord
     GAMSSymbolRecord lastRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Find record in GAMSSymbol
-    /// \param keys vector of keys
-    /// \returns Instance of GAMSSymbolRecord
+    /// Find record in GAMSSymbol.
+    /// \param keys Vector of keys.
+    /// \returns Instance of GAMSSymbolRecord.
     GAMSSymbolRecord findRecord(const std::vector<std::string>& keys);
 
-    /// Find record in GAMSSymbol
-    /// \returns Instance of GAMSSymbolRecord
+    /// Find record in GAMSSymbol.
+    /// \returns Instance of GAMSSymbolRecord.
     GAMSSymbolRecord findRecord();
 
-    /// Find record in GAMSSymbol
-    /// \param key1 key for first index position
-    /// \returns Instance of GAMSSymbolRecord
+    /// Find record in GAMSSymbol.
+    /// \param key1 Key for first index position.
+    /// \returns Instance of GAMSSymbolRecord.
     GAMSSymbolRecord findRecord(const std::string& key1);
 
-    /// Find record in GAMSSymbol
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \returns Instance of GAMSSymbolRecord
+    /// Find record in GAMSSymbol.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \returns Instance of GAMSSymbolRecord.
     GAMSSymbolRecord findRecord(const std::string& key1, const std::string& key2);
 
-    /// Find record in GAMSSymbol
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \param key3 key for third index position
-    /// \returns Instance of GAMSSymbolRecord
+    /// Find record in GAMSSymbol.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \param key3 Key for third index position.
+    /// \returns Instance of GAMSSymbolRecord.
     GAMSSymbolRecord findRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Finds record in GAMSSymbol if it exists, adds it if not
-    /// \param keys List of keys
-    /// \returns Instance of found or added GAMSSymbolRecord
+    /// Finds a record in a GAMSSymbol if it exists, otherwise the record gets added to the symbol.
+    /// \param keys List of keys.
+    /// \returns Instance of found or added GAMSSymbolRecord.
     GAMSSymbolRecord mergeRecord(const std::vector<std::string>& keys);
 
-    /// Finds record in GAMSSymbol if it exists, adds it if not
-    /// \returns Instance of found or added GAMSSymbolRecord
+    /// Finds a record in a GAMSSymbol if it exists, otherwise the record gets added to the symbol.
+    /// \returns Instance of found or added GAMSSymbolRecord.
     GAMSSymbolRecord mergeRecord();
 
-    /// Finds record in GAMSSymbol if it exists, adds it if not
-    /// \param key1 key for first index position
-    /// \returns Instance of found or added GAMSSymbolRecord
+    /// Finds a record in a GAMSSymbol if it exists, otherwise the record gets added to the symbol.
+    /// \param key1 Key for first index position.
+    /// \returns Instance of found or added GAMSSymbolRecord.
     GAMSSymbolRecord mergeRecord(const std::string& key1);
 
-    /// Finds record in GAMSSymbol if it exists, adds it if not
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \returns Instance of found or added GAMSSymbolRecord
+    /// Finds record in GAMSSymbol if it exists, otherwise the record gets added to the symbol.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \returns Instance of found or added GAMSSymbolRecord.
     GAMSSymbolRecord mergeRecord(const std::string& key1, const std::string& key2);
 
-    /// Finds record in GAMSSymbol if it exists, adds it if not
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \param key3 key for third index position
-    /// \returns Instance of found or added GAMSSymbolRecord
+    /// Finds record in GAMSSymbol if it exists, otherwise the record gets added to the symbol.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \param key3 Key for third index position.
+    /// \returns Instance of found or added GAMSSymbolRecord.
     GAMSSymbolRecord mergeRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    //TODO: merge record for different number of keys
-
-    /// Copys all records of this GAMSSymbol to target GAMSSymbol (if target had records, they will be deleted)
-    /// \param target Target GAMSSymbol
+    /// Copys all records of this GAMSSymbol to the target GAMSSymbol.
+    /// \remark If the target symbol had records, they will be deleted.
+    /// \param target Target GAMSSymbol.
     void copySymbol(const GAMSSymbol& target);
 
-    //TODO: implement all the copyToXXX functions
-
-    /// Get GAMSDatabase containing GAMSSymbol
+    /// Get GAMSDatabase containing the GAMSSymbol.
     gams::GAMSDatabase &database() const;
 
-    /// Get explanatory text of GAMSSymbol
+    /// Get explanatory text of GAMSSymbol.
     std::string text() const;
 
-    /// Get GAMSSymbol name
+    /// Get GAMSSymbol name.
     std::string& name() const;
 
-    /// Get GAMSSymbol dimension
+    /// Get GAMSSymbol dimension.
     int dim() const;
 
-    /// Retrieve the number of records of the GAMSSymbol
+    /// Retrieve the number of records of the GAMSSymbol.
     int numberRecords() const;
 
     /// Get the GAMS log ID.
