@@ -57,17 +57,17 @@ public:
     GAMSDomain(const GAMSDomain& other);
 
     /// Assigns a GAMSSet.
-    /// \param other A GAMSSet used as data source.
+    /// \param set A GAMSSet used as data source.
     /// \return Returns the assigned GAMSDomain (*this).
     GAMSDomain& operator=(const GAMSSet& set);
 
     /// Assigns a relaxed set.
-    /// \param other A relaxed set used as data source.
+    /// \param relaxedName A relaxed set used as data source.
     /// \return Returns the assigned GAMSDomain (*this).
     GAMSDomain& operator=(const std::string& relaxedName);
 
     /// Assigns a relaxed set.
-    /// \param other A relaxed set used as data source.
+    /// \param relaxedName A relaxed set used as data source.
     /// \return Returns the assigned GAMSDomain (*this).
     GAMSDomain& operator=(const char* relaxedName);
 
@@ -86,9 +86,12 @@ public:
     /// \return Returns <c>true</c> if the two GAMSDomain are different; otherwise <c>false</c>.
     bool operator==(const GAMSDomain& other) const;
 
+    /// Get the GAMSSet.
+    /// \remark This function throws an exception if it is called on an relaxed domain.
+    /// \return  Returns the GAMSSet of a non relaxed domain.
     GAMSSet getSet() const;
 
-    /// \brief name Get the set name.
+    /// Get the set name.
     /// \return Returns the name.
     const std::string& name() const;
 
@@ -102,9 +105,6 @@ public:
 
 private:
     std::shared_ptr<GAMSDomainImpl> mImpl;
-//    GAMSSet mSet;
-//    std::string mDomain;
-//    bool mValid;
 };
 
 } // namespace gams
