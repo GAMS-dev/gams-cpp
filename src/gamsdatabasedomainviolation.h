@@ -43,7 +43,7 @@ public:
     /// \return Returns the assigned GAMSDatabaseDomainViolation (*this).
     GAMSDatabaseDomainViolation& operator=(const GAMSDatabaseDomainViolation& other);
 
-    ///Check if a GAMSDatabaseDomainViolation is valid.
+    /// Check if a GAMSDatabaseDomainViolation is valid.
     /// \return Returns <c>true</c> if the GAMSCheckpoint is valid; otherwise <c>false</c>.
     bool isValid() const;
 
