@@ -89,17 +89,17 @@ class GAMSSymbolImpl;
 /// and then inside the GAMS model source: $GDXIN SupplyData) or an automatically
 /// generated name can be used. This name can be passed down to the GAMS model by
 /// using the Defines list of a GAMSOptions instance:</p>
-/// <code>
+/// \code{.cpp}
 ///   GAMSDatabase db = workspace.addDatabase();
 ///   GAMSOptions opt = workspace.addOptions();
 ///   opt.setDefines("SupplyDataFileName", db.Name);
 ///   ...
 ///   gamsjob.run(opt, db);
-/// </code>
+/// \endcode
 /// <p>Inside the GAMS model source the name is accessed as follows:</p>
-/// <code lang="GAMS">
+/// \code{.gms}
 ///   $GDXIN %SupplyDataFileName%
-/// </code>
+/// \endcode
 /// <p>One has to act with some caution when it comes to ordered sets which e.g.
 /// allow lag and lead. By not enforcing the "domain checking" for the GAMSDatabase
 /// we have aggravated the potential problems for ordered sets.
@@ -120,24 +120,24 @@ class GAMSSymbolImpl;
 /// <p>Special attention needs to be given to the value of 0. Since GAMS is a sparse system
 /// it does not store (parameter) records with a true 0. If a record with numerical value of
 /// 0 is needed, EPS can help. For example:</p>
-/// <code lang="GAMS">
+/// \code{.gms}
 /// set j /1*10 /; parameter b(j); b(j) = 1; b('5') = 0;
 /// scalar s,c; s = sum(j, b(j)); c = card(b); display s,c;
-/// </code>
+/// \endcode
 /// <p>will result in</p>
-/// <code lang="GAMS">
+/// \code{.gms}
 /// ----      3 PARAMETER s                    =        9.000
 ///             PARAMETER c                    =        9.000
-/// </code>
+/// \endcode
 /// <p>but</p>
-/// <code lang="GAMS">
+/// \code{.gms}
 /// b(j) = 1; b('5') = EPS;
-/// </code>
+/// \endcode
 /// <p>will result in</p>
-/// <code lang="GAMS">
+/// \code{.gms}
 /// ----      3 PARAMETER s                    =        9.000
 ///             PARAMETER c                    =       10.000
-/// </code>
+/// \endcode
 /// <p>What are the consequences for the GAMS C++ API? If we read parameter b in case of b('5')=0,
 /// the GAMSDatabase will not have a record for b('5'). In case of b('5')=EPS, the GAMSDatabase will
 /// have a record with EPS (numeric_limits<double>::min()). Unlike the IEEE values (e.g.
@@ -150,17 +150,17 @@ class GAMSSymbolImpl;
 /// zeros will not be entered as data records in GAMS. The compiler control $on/offEPS can help to
 /// automatically map zeros to EPS.</p>
 /// <p>There is one oddity concerning values smaller than 1e-250 on GAMS input. Consider the following example:</p>
-/// <code>
+/// \code{.cpp}
 /// GAMSParameter b = db.AddGAMSParameter("b",1,"");
 /// for(int i=1; i &lt; 11; i++) b.AddRecord(i.ToString()).Value = 1;
 /// b.FindRecord("5").Value = 1e-251;
 /// job.Run(db);
-/// </code>
-/// <code lang="GAMS">
+/// \endcode
+/// \code{.gms}
 /// $load j b
 /// scalar card_b; card_b = card(b); display card_b;
 /// b(j) = 2*b(j); card_b = card(b); display card_b;
-/// </code>
+/// \endcode
 /// <p>A record with values smaller than 1e-250 exists on input in GAMS, but as soon as the record gets
 /// updated by GAMS and is still smaller than 1e-250, the record gets removed.</p>
 /// <p>The ordering of a set in GAMS can be non-intuitive: Consider "set i /5/, j /1*5/;".
