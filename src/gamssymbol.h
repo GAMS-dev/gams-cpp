@@ -130,7 +130,7 @@ public:
     std::vector<GAMSDomain> domains();
 
     /// Check for domain violations.
-    /// \returns Returns <c>true</c> if there is any domain violation; <c>false</c>.
+    /// \returns Returns <c>true</c> if there is any domain violation; otherwise <c>false</c>.
     bool checkDomains();
 
     /// Get all <c>GAMSSymbolDomainViolations</c>.
