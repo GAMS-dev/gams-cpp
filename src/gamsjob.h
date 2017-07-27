@@ -53,10 +53,8 @@ class GAMSDatabase;
 /// create a GAMSCheckpoint that not only captures data but represents the state of
 /// the entire GAMSJob and allows some other GAMSJob to continue from this state.
 /// In case of a compilation or execution error, the Run method will throw an
-/// exception. If the log output of GAMS is of interest, this can be captured by
+/// exception. If the log output of GAMS is of interest, it can be captured by
 /// providing a TextWriter instance.</p>
-/// <p>A GAMSJob is connected to external resources and needs to be properly
-/// disposed before the .NET garbage collector can claim the instance.</p>
 class LIBSPEC GAMSJob
 {
 public:
@@ -121,7 +119,7 @@ public:
     /// \param gamsOptions GAMSOptions to control the GAMSJob.
     /// \param checkpoint GAMSCheckpoint to be created by GAMSJob.
     /// \param output Stream to capture GAMS log.
-    /// \param createOutDB GAMSDatabase loaded by the GAMSJob.
+    /// \param createOutDB Flag that activates writing to outDB.
     /// \param databases GAMSDatabases read by the GAMSJob.
     void run(GAMSOptions& gamsOptions, GAMSCheckpoint checkpoint, std::ostream& output, bool createOutDB
              , std::vector<gams::GAMSDatabase> databases);
@@ -137,7 +135,7 @@ public:
 
     /// Send interrupt signal to running GAMSJob
     /// Note: On Mac OS using Mono this call requires the tool pstree to be installed
-    /// @returns True meaning "the signal was sent", false meaning "there is no Job running"
+    /// @returns Returns <c>true</c> when the interrupt signal was sent and <c>false</c> when there is no Job running
     bool interrupt();
 
     /// Get the GAMS log ID.
