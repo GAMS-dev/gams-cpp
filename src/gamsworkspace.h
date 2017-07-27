@@ -50,11 +50,11 @@ class GAMSJob;
 /// <p>Furthermore, a working directory (the anchor into the file system) can be
 /// provided when constructing the GAMSWorkspace instance. All file based
 /// operation inside a GAMS model should be relative to this location (e.g. $GDXIN
-/// and $include). There are options to add input search paths (e.g. IDir) and
-/// output path (e.g. PutDir) to specify other file system locations. If no working
+/// and $include). There are options to add input search paths (e.g. addInputDir) and
+/// output path (e.g. putDir) to specify other file system locations. If no working
 /// directory is supplied, GAMSWorkspace creates a temporary folder and on
 /// instance destruction removes this temporary folder.</p>
-/// <p>In a typical .NET solution a single instance of GAMSWorkspace will
+/// <p>In a typical C++ solution a single instance of GAMSWorkspace will
 /// suffice, since the class is thread-safe.</p>
 /// <p>Note: If you use multiple instances of the GAMSWorkspace in parallel, you should
 /// avoid using the same WorkingDirectory. Otherwise you may end up with conflicting
@@ -76,7 +76,7 @@ class GAMSJob;
 /// <p>If one has a very structured way of organizing the GAMS installations (e.g. following
 /// the GAMS default installation location) one can construct from the GAMS assembly information
 /// enough information to point to the best matching GAMS system directory:</p>
-/// \code
+/// \code{.cpp}
 ///   string sysdir; <br/>
 ///   if (IntPtr.Size == 4) <br/>
 ///       sysdir = @"c:\\GAMS\\win32\\" + GAMSWorkspace.apiMajorRelNumber + "." + GAMSWorkspace.apiMinorRelNumber; <br/>
@@ -85,299 +85,315 @@ class GAMSJob;
 /// \endcode
 /// <p>This avoids the automatic identification of the GAMS system directory but might be the
 /// most convenient solution for systems running multiple applications using different versions
-/// of the GAMS.NET API together with different versions of GAMS.</p>
+/// of the GAMS C++ API together with different versions of GAMS.</p>
 class LIBSPEC GAMSWorkspace
 {
 public:
     /// Constructor
     GAMSWorkspace();
 
-    /// Constructor
-    /// \param workingDir   GAMS working directory, anchor for all file-based operations (determined automatically if omitted, in user's temporary folder)
-    /// \param systemDir    GAMS system directory (determined automatically if omitted)
-    /// \param debug        Debug Flag
+    /// Constructor.
+    /// \param workingDir   GAMS working directory, anchor for all file-based operations (determined automatically
+    ///                     if omitted, in user's temporary folder).
+    /// \param systemDir    GAMS system directory (determined automatically if omitted).
+    /// \param debug        GAMS debug level.
     GAMSWorkspace(const std::string& workingDir, const std::string& systemDir, GAMSEnum::DebugLevel debug);
 
-    /// Constructor
-    /// \param workingDir   GAMS working directory, anchor for all file-based operations (determined automatically if omitted, in user's temporary folder)
-    /// \param systemDir    GAMS system directory (determined automatically if omitted)
+    /// Constructor.
+    /// \param workingDir   GAMS working directory, anchor for all file-based operations (determined automatically
+    ///                     if omitted, in user's temporary folder).
+    /// \param systemDir    GAMS system directory (determined automatically if omitted).
     GAMSWorkspace(const std::string& workingDir, const std::string& systemDir = "");
 
-    /// Constructor
-    /// \param workingDir   GAMS working directory, anchor for all file-based operations (determined automatically if omitted, in user's temporary folder)
-    /// \param debug        Debug Flag
+    /// Constructor.
+    /// \param workingDir   GAMS working directory, anchor for all file-based operations (determined automatically
+    ///                     if omitted, in user's temporary folder).
+    /// \param debug        GAMS debug level.
     GAMSWorkspace(const std::string& workingDir, GAMSEnum::DebugLevel debug);
 
-    /// Constructor
-    /// \param debug        Debug Flag
+    /// Constructor.
+    /// \param debug        GAMS debug level.
     GAMSWorkspace(GAMSEnum::DebugLevel debug);
 
-    /// Copy Constructor
+    /// Copy Constructor.
     GAMSWorkspace(const GAMSWorkspace& other);
 
-    /// Constructor
-    /// \param wsInfo GAMSWorkspaceInfo defining GAMS working directory, GAMS system directory and Debug Flag
+    /// Constructor.
+    /// \param wsInfo <c>GAMSWorkspaceInfo</c> defining GAMS working directory,
+    ///               GAMS system directory and GAMS debug level.
     GAMSWorkspace(const GAMSWorkspaceInfo& wsInfo);
 
-    /// Destructor
+    /// Destructor.
     ~GAMSWorkspace();
 
-    /// shallow copy operator
-    /// \param other the other GAMSWorkspace
-    /// \return  a reference to this
+    /// Assigns a GAMSWorkspace.
+    /// \param other Another GAMSWorkspace used as data source.
+    /// \return Returns the assigned GAMSDatabase (*this).
     GAMSWorkspace& operator=(const GAMSWorkspace& other);
 
-    /// GAMS Version used
+    /// Get the required GAMS version.
     std::string version();
 
-    /// GAMS Major Release Number
+    /// Get the required GAMS major version number.
     int majorRelNumber();
 
-    /// GAMS Minor Release Number
+    /// Get the required GAMS minor version number.
     int minorRelNumber();
 
-    /// GAMS GOLD Release Number
+    /// Get the GAMS GOLD release number.
     int goldRelNumber();
 
-    /// API Version used
+    /// Get the detailed GAMS C++ API version.
+    /// \return Returns the detailed API information, including major and minor
+    ///         version number, build number as well as the build time stamp.
     static std::string apiVersionDetail();
 
-    /// API Version used
+    /// Get the GAMS C++ API version.
+    /// \return Returns the API information, including major and
+    ///         minor version number and build number.
     static std::string apiVersion();
 
-    /// API Major Release Number
+    /// Get the GAMS C++ API major release number.
     static int apiMajorRelNumber();
 
-    /// API Minor Release Number
+    /// Get the GAMS C++ API minor release number.
     static int apiMinorRelNumber();
 
-    /// API GOLD Release Number
+    /// Get the GAMS C++ API GOLD release number.
     static int apiGoldRelNumber();
 
-    /// Get the string used to prefix automatically generated files
+    /// Get the string used to prefix automatically generated files.
     std::string scratchFilePrefix();
 
-    /// Set the string used to prefix automatically generated files
-    /// \param prefix String used to prefix automatically generated files
+    /// Set the string used to prefix automatically generated files.
+    /// \param prefix String used to prefix automatically generated files.
     void setScratchFilePrefix(std::string prefix);
 
-    /// Get value to be stored in and read from GAMSDatabase for Epsilon, default is numeric_limits<double>::min()
+    /// Get value to be stored in and read from GAMSDatabase for Epsilon.
+    /// \remark Default is numeric_limits<double>::min().
     double myEPS();
 
-    /// Set value to be stored in and read from GAMSDatabase for Epsilon, default is numeric_limits<double>::min()
+    /// Set value to be stored in and read from GAMSDatabase for Epsilon.
+    /// \remark Default is numeric_limits<double>::min().
     void setMyEPS(double eps);
 
-    /// Database creation from an existing GDX file
-    /// \param gdxFileName  File to initialize Database from
-    /// \param dbName       Identifier of GAMSDatabase (determined automatically if null)
-    /// \param inModelName  GAMS string constant that is used to access this database
-    /// \returns GAMSDatabase instance
-    /// \throws GAMSException if GAMSDatabase could not be successfully created
-    GAMSDatabase addDatabaseFromGDX(const std::string& gdxFileName, const std::string& databaseName, const std::string& inModelName);
+    /// Database creation from an existing GDX file.
+    /// \param gdxFileName  File to initialize Database from.
+    /// \param databaseName Identifier of GAMSDatabase (determined automatically if null).
+    /// \param inModelName  GAMS string constant that is used to access this database.
+    /// \returns Returns the GAMSDatabase.
+    /// \throws GAMSException if GAMSDatabase could not be successfully created.
+    GAMSDatabase addDatabaseFromGDX(const std::string& gdxFileName, const std::string& databaseName
+                                    , const std::string& inModelName);
 
-    /// Database creation from an existing GDX file
+    /// Database creation from an existing GDX file.
     /// \param gdxFileName  File to initialize Database from
-    /// \param dbName       Identifier of GAMSDatabase (determined automatically if null)
-    /// \returns GAMSDatabase instance
-    /// \throws GAMSException if GAMSDatabase could not be successfully created
+    /// \param databaseName Identifier of GAMSDatabase (determined automatically if null).
+    /// \returns Returns the GAMSDatabase.
+    /// \throws GAMSException if GAMSDatabase could not be successfully created.
     GAMSDatabase addDatabaseFromGDX(const std::string& gdxFileName, const std::string& databaseName);
 
-    /// Database creation from an existing GDX file
-    /// \param gdxFileName  File to initialize Database from
-    /// \returns GAMSDatabase instance
-    /// \throws GAMSException if GAMSDatabase could not be successfully created
+    /// Database creation from an existing GDX file.
+    /// \param gdxFileName  File to initialize Database from.
+    /// \returns Returns the GAMSDatabase.
+    /// \throws GAMSException if GAMSDatabase could not be successfully created.
     GAMSDatabase addDatabaseFromGDX(const std::string& gdxFileName);
 
-    /// TODO(JM): experimental (keep this?)
+    // TODO(JM): experimental (keep this?)
+    /// Database creation from an GMD handle.
+    /// \param gmdPtr GMD low level handle
+    /// \remark This is an experimental call.
+    /// \return Returns the GAMSDatabase.
     GAMSDatabase addDatabaseFromGMD(void* gmdPtr);
 
-    /// Empty Database creation
-    /// \param databaseName Identifier of GAMSDatabase (determined automatically if omitted)
-    /// \param inModelName  GAMS string constant that is used to access this database
-    /// \returns GAMSDatabase instance
+    /// Empty database creation.
+    /// \param databaseName Identifier of GAMSDatabase (determined automatically if omitted).
+    /// \param inModelName  GAMS string constant that is used to access this database.
+    /// \returns Returns the GAMSDatabase.
     GAMSDatabase addDatabase(const std::string& databaseName = "", const std::string& inModelName = "");
 
-    /// Database creation from existing database
-    /// \param sourceDatabase Source GAMSDatabase to initialize Database from
-    /// \param databaseName Identifier of GAMSDatabase (determined automatically if omitted)
-    /// \param inModelName GAMS string constant that is used to access this database
-    /// \returns GAMSDatabase object
-    GAMSDatabase addDatabase(const GAMSDatabase& sourceDatabase, const std::string& databaseName = "", const std::string& inModelName = "");
+    /// Database creation from existing database.
+    /// \param sourceDatabase Source GAMSDatabase to initialize Database from.
+    /// \param databaseName Identifier of GAMSDatabase (determined automatically if omitted).
+    /// \param inModelName GAMS string constant that is used to access this database.
+    /// \returns Returns the GAMSDatabase.
+    GAMSDatabase addDatabase(const GAMSDatabase& sourceDatabase, const std::string& databaseName = ""
+                             , const std::string& inModelName = "");
 
-    /// Create GAMSCheckpoint
-    /// \param checkpointName   Identifier of GAMSCheckpoint or filename for existing checkpoint (determined automatically if omitted)
-    /// \returns GAMSCheckpoint
+    /// Create GAMSCheckpoint.
+    /// \param checkpointName Identifier of GAMSCheckpoint or filename for existing checkpoint (determined
+    ///                       automatically if omitted).
+    /// \returns Return the GAMSCheckpoint.
     GAMSCheckpoint addCheckpoint(const std::string& checkpointName = "");
 
-    /// Create GAMSJob from model file
-    /// \param fileName GAMS source file name
-    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from model file.
+    /// \param fileName GAMS source file name.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromFile(const std::string& fileName, const std::string& jobName = "");
 
-    /// Create GAMSJob from model file
-    /// \param fileName GAMS source file name
-    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from model file.
+    /// \param fileName GAMS source file name.
+    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromFile(const std::string& fileName, const GAMSCheckpoint& checkpoint, const std::string& jobName = "");
 
-    /// Create GAMSJob from string model source
-    /// \param gamsSource GAMS model as string
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from string model source.
+    /// \param gamsSource GAMS model as string.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromString(const std::string& gamsSource, const std::string& jobName = "");
 
-    /// Create GAMSJob from string model source
-    /// \param gamsSource GAMS model as string
-    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from string model source.
+    /// \param gamsSource GAMS model as string.
+    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromString(const std::string& gamsSource, const GAMSCheckpoint& checkpoint, const std::string& jobName = "");
 
-    /// Create GAMSJob from model from GAMS Model Library
-    /// \param model Model name
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from GAMS Model Library.
+    /// \param model Model name.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromGamsLib(const std::string& model, const std::string& jobName = "");
 
-    /// Create GAMSJob from model from GAMS Model Library
-    /// \param model Model name
-    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from GAMS Model Library.
+    /// \param model Model name.
+    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromGamsLib(const std::string& model, const GAMSCheckpoint& checkpoint, const std::string& jobName = "");
 
-    /// Create GAMSJob from model from GAMS API Library
-    /// \param model Model name
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from GAMS API Library.
+    /// \param model Model name.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromApiLib(const std::string& model, const std::string& jobName = "");
 
-    /// Create GAMSJob from model from GAMS API Library
-    /// \param model Model name
-    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from GAMS API Library.
+    /// \param model Model name.
+    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from.
+    /// \param jobName Job name (determined automatically if omitted.)
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromApiLib(const std::string& model, const GAMSCheckpoint& checkpoint, const std::string& jobName = "");
 
-    /// Create GAMSJob from model from GAMS Test Library
-    /// \param model Model name
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from GAMS Test Library.
+    /// \param model Model name.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromTestLib(const std::string& model, const std::string& jobName = "");
 
-    /// Create GAMSJob from model from GAMS Test Library
-    /// \param model Model name
-    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from GAMS Test Library.
+    /// \param model Model name.
+    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromTestLib(const std::string& model, const GAMSCheckpoint& checkpoint, const std::string& jobName = "");
 
-    /// Create GAMSJob from model from Extended Math Programming Library
-    /// \param model Model name
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob rom Extended Math Programming Library.
+    /// \param model Model name.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromEmpLib(const std::string& model, const std::string& jobName = "");
 
-    /// Create GAMSJob from model from Extended Math Programming Library
-    /// \param model Model name
-    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from Extended Math Programming Library.
+    /// \param model Model name.
+    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromEmpLib(const std::string& model, const GAMSCheckpoint& checkpoint, const std::string& jobName = "");
 
-    /// Create GAMSJob from model from GAMS Data Utilities Library
-    /// \param model Model name
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from GAMS Data Utilities Library.
+    /// \param model Model name.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromDataLib(const std::string& model, const std::string& jobName = "");
 
-    /// Create GAMSJob from model from GAMS Data Utilities Library
-    /// \param model Model name
-    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from GAMS Data Utilities Library.
+    /// \param model Model name.
+    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromDataLib(const std::string& model, const GAMSCheckpoint& checkpoint, const std::string& jobName = "");
 
-    /// Create GAMSJob from model from Practical Financial Optimization Library
-    /// \param model Model name
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from Practical Financial Optimization Library.
+    /// \param model Model name.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromFinLib(const std::string& model, const std::string& jobName = "");
 
-    /// Create GAMSJob from model from Practical Financial Optimization Library
-    /// \param model Model name
-    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from Practical Financial Optimization Library
+    /// \param model Model name.
+    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromFinLib(const std::string& model, const GAMSCheckpoint& checkpoint, const std::string& jobName = "");
 
-    /// Create GAMSJob from model from GAMS Non-linear Optimization Applications Library
-    /// \param model Model name
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from GAMS Non-linear Optimization Applications Library.
+    /// \param model Model name.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromNoaLib(const std::string& model, const std::string& jobName = "");
 
-    /// Create GAMSJob from model from GAMS Non-linear Optimization Applications Library
-    /// \param model Model name
-    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from
-    /// \param jobName Job name (determined automatically if omitted)
-    /// \returns Handle to new instance of GAMSJob
+    /// Create GAMSJob from GAMS Non-linear Optimization Applications Library.
+    /// \param model Model name.
+    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
     GAMSJob addJobFromNoaLib(const std::string& model, const GAMSCheckpoint& checkpoint, const std::string& jobName = "");
 
     /// Create a default GAMSOptions instance.
-    /// \returns Default GAMSOptions object.
+    /// \returns Returns default GAMSOptions.
     /// \throws  GAMSException   If GAMSOptions could not be successfully created.
     GAMSOptions addOptions();
 
-    /// Create GAMSOptions
-    /// \param optFrom GAMSOptions used to initialize the new options object
-    /// \returns GAMSOptions object
-    /// \throws  GAMSException   If GAMSOptions could not be successfully created
+    /// Create GAMSOptions.
+    /// \param optFrom GAMSOptions used to initialize the new options object.
+    /// \returns Returns the GAMSOptions.
+    /// \throws  GAMSException   If GAMSOptions could not be successfully created.
     GAMSOptions addOptions(const GAMSOptions& optFrom);
 
-    /// Create GAMSOptions from an option file
-    /// \param   optFile Option file name
-    /// \returns GAMSOptions object
-    /// \throws  GAMSException   If GAMSOptions could not be successfully created
+    /// Create GAMSOptions from an option file.
+    /// \param   optFile Option file name.
+    /// \returns Returns the GAMSOptions.
+    /// \throws  GAMSException   If GAMSOptions could not be successfully created.
     GAMSOptions addOptions(const std::string& optFile);
 
-    /// Retrieves model from GAMS Model Library
-    /// \param model Model name
+    /// Retrieves model from GAMS Model Library.
+    /// \param model Model name.
     void gamsLib(std::string model);
 
-    /// Retrieves model from GAMS Test Library
-    /// \param model Model name
+    /// Retrieves model from GAMS Test Library.
+    /// \param model Model name.
     void testLib(std::string model);
 
-    /// Retrieves model from Extended Math Programming Library
-    /// \param model Model name
+    /// Retrieves model from Extended Math Programming Library.
+    /// \param model Model name.
     void empLib(std::string model);
 
-    /// Retrieves model from GAMS Data Utilities Library
-    /// \param model Model name
+    /// Retrieves model from GAMS Data Utilities Library.
+    /// \param model Model name.
     void dataLib(std::string model);
 
-    /// Retrieves model from GAMS API Library
-    /// \param model Model name
+    /// Retrieves model from GAMS API Library.
+    /// \param model Model name.
     void apiLib(std::string model);
 
-    /// Retrieves model from Practical Financial Optimization Library
-    /// \param model Model name
+    /// Retrieves model from Practical Financial Optimization Library.
+    /// \param model Model name.
     void finLib(std::string model);
 
-    /// Retrieves model from Nonlinear Optimization Applications Library
-    /// \param model Model name
+    /// Retrieves model from Nonlinear Optimization Applications Library.
+    /// \param model Model name.
     void noaLib(std::string model);
 
-    /// GAMS working directory, anchor for all file-based operations
-    /// \returns working directory
+    /// Get GAMS working directory, anchor for all file-based operations.
+    /// \returns GAMS working directory.
     std::string workingDirectory() const;
 
-    /// GAMS system directory
-    /// \returns system directory
+    /// Get GAMS system directory.
+    /// \returns GAMS system directory.
     std::string systemDirectory() const;
 
     /// Compares two GAMSWorkspace objects.
