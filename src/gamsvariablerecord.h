@@ -40,8 +40,8 @@ public:
     /// The method \ref isValid() shows if the instance is initialized.
     GAMSVariableRecord();
 
-    /// Shallow copy constructor
-    /// \param record the target GAMSVariableRecord
+    /// Copy constructor
+    /// \param symbol Another GAMSSymbolRecord used as data source.
     GAMSVariableRecord(const GAMSSymbolRecord& record);
 
     /// Assigns a GAMSVariableRecord.
@@ -49,34 +49,44 @@ public:
     /// \return Returns the assigned GAMSVariableRecord (*this).
     GAMSVariableRecord& operator=(const GAMSVariableRecord& other);
 
-    /// Retrieve the the level of this GAMSVariableRecord.
+    /// Retrieve the level of this GAMSVariableRecord.
+    /// \return Returns the level.
     double level();
 
-    /// Set the the level of this GAMSVariableRecord.
+    /// Set the level of this GAMSVariableRecord.
+    /// \param val Level.
     void setLevel(const double val);
 
     /// Retrieve the marginal of this GAMSVariableRecord.
+    /// \return Returns the marginal.
     double marginal();
 
     /// Set the marginal of this GAMSVariableRecord.
+    /// \param val Marginal.
     void setMarginal(const double val);
 
     /// Retrieve the upper bound of this GAMSVariableRecord.
+    /// \return Returns the upper bound.
     double upper();
 
     /// Set the upper bound of this GAMSVariableRecord.
+    /// \param val Upper bound.
     void setUpper(const double val);
 
     /// Retrieve the lower bound of this GAMSVariableRecord.
+    /// \return Returns the lower bound.
     double lower();
 
     /// Set the lower bound of this GAMSVariableRecord.
+    /// \param val Lower bound.
     void setLower(const double val);
 
     /// Retrieve the scale factor of this GAMSVariableRecord.
+    /// \return Returns the scale.
     double scale();
 
     /// Set the scale factor of this GAMSVariableRecord.
+    /// \param val scale factor.
     void setScale(const double val);
 
 private:
