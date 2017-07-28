@@ -38,14 +38,14 @@ class GAMSModelInstanceOptImpl;
 class LIBSPEC GAMSModelInstanceOpt
 {
 public:
-    /// Constructor
-    /// \param solver GAMS Solver
-    /// \param optfile GAMS Optionfile number
-    /// \param noMatchLimit Controls the maximum number of accepted unmatched scenario records before terminating the solve
-    /// \param debug Debug Flag
+    /// Constructor.
+    /// \param solver GAMS Solver.
+    /// \param optfile GAMS option file number.
+    /// \param noMatchLimit Controls the maximum number of accepted unmatched scenario records before terminating the solve.
+    /// \param debug Debug Flag.
     GAMSModelInstanceOpt(std::string solver = "", int optfile = -1, int noMatchLimit = 0, bool debug = false);
 
-    /// Destructor
+    /// Destructor.
     ~GAMSModelInstanceOpt();
 
     /// Assigns a GAMSModelInstanceOpt.
@@ -63,28 +63,40 @@ public:
     /// \return Returns <c>true</c> if the two GAMSModelInstanceOpt are equal; otherwise <c>false</c>.
     bool operator==(const GAMSModelInstanceOpt& other) const;
 
-    /// Retrieve the specified solver
+    /// Retrieve the specified solver.
+    /// \return Get the solver name.
     std::string solver();
 
-    /// Set a solver for use
+    /// Set a solver for use.
+    /// \param solver Solver name.
     void setSolver(const std::string& solver);
 
-    /// Get the GAMS Optionfile number
+    /// Get the GAMS Optionfile number.
     int optFile();
 
     /// Set the GAMS Optionfile number
+    /// \param optfile GAMS option file number.
     void setOptFile(const int optfile);
 
-    /// Get the no match limit: This number controls the maximum number of accepted unmatched scenario records before terminating the solve
+    /// Get the no match limit. This number controls the maximum number of accepted
+    /// unmatched scenario records before terminating the solve.
     int noMatchLimit();
 
-    /// Set the no match limit: This number controls the maximum number of accepted unmatched scenario records before terminating the solve
+    /// Set the no match limit. This number controls the maximum number of accepted
+    /// unmatched scenario records before terminating the solve.
+    /// \param noMatchLimit The match limit.
     void setNoMatchLimit(const int noMatchLimit);
 
-    /// Get the debug flag
+    /// Get the debug flag.
+    /// \remark This value triggers the convert solver to write additional debug
+    ///         information (debug models). These files are located in the GAMS workspace.
+    /// \return <c>true</c> if the convert solver is called; otherwise <c>false</c>.
     bool debug();
 
-    /// Set the debug flag
+    /// Set the debug flag.
+    /// \remark This value triggers the convert solver to write additional debug
+    ///         information (debug models). These files are located in the GAMS workspace.
+    /// \param debug <c>true</c> if the convert solver is called; otherwise <c>false</c>.
     void setDebug(const bool debug);
 
 private:
