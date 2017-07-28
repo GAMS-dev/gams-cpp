@@ -35,14 +35,13 @@ class GAMSParameter;
 /// This is the representation of a single record of a GAMSParameter.
 class LIBSPEC GAMSParameterRecord : public GAMSSymbolRecord
 {
-
 public:
     /// The default constructor allows to create an uninitialized GAMSParameterRecord to be used later in the code.
     /// The method \ref isValid() shows if the instance is initialized.
     GAMSParameterRecord();
 
-    /// Shallow copy constructor
-    /// \param record the target GAMSParameterRecord
+    /// Copy constructor.
+    /// \param symbol Another GAMSSymbolRecord used as data source.
     GAMSParameterRecord(const GAMSSymbolRecord &record);
 
     /// Assigns a GAMSParameterRecord.
