@@ -56,144 +56,144 @@ public:
     /// \return Iterator to the element following the last GAMSEquation.
     GAMSSymbolIter<GAMSSet> end();
 
-    /// Shares the data of other (shallow copy)
-    /// \param other the other set
-    /// \return the GAMSSet
+    /// Assigns a GAMSSet.
+    /// \param other Another GAMSSet used as data source.
+    /// \return Returns the assigned GAMSSet (*this).
     GAMSSet& operator=(const GAMSSet& other);
 
-    /// Retrieve the first record in GAMSSet that meets the slice criteria
-    /// \param slice Define filter for elements whose record should be retrieved
-    /// \returns Instance of GAMSSetRecord
+    /// Retrieve the first record in GAMSSet that meets the slice criteria.
+    /// \param slice Define filter for elements whose record should be retrieved.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord firstRecord(const std::vector<std::string>& slice);
 
-    /// Retrieve first record in GAMSSet
-    /// \returns Instance of GAMSSetRecord
+    /// Retrieve first record in GAMSSet.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord firstRecord();
 
-    /// Retrieve first record in GAMSSet that meets the slice criteria
-    /// \param key1 slicing criteria for first index position
-    /// \returns Instance of GAMSSetRecord
+    /// Retrieve first record in GAMSSet that meets the slice criteria.
+    /// \param key1 Slicing criteria for first index position.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord firstRecord(const std::string& key1);
 
-    /// Retrieve first record in GAMSSet that meets the slice criteria
-    /// \param key1 slicing criteria for first index position
-    /// \param key2 slicing criteria for second index position
-    /// \returns Instance of GAMSSetRecord
+    /// Retrieve first record in GAMSSet that meets the slice criteria.
+    /// \param key1 Slicing criteria for first index position.
+    /// \param key2 Slicing criteria for second index position.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord firstRecord(const std::string& key1, const std::string& key2);
 
-    /// Retrieve first record in GAMSSet that meets the slice criteria
-    /// \param key1 slicing criteria for first index position
-    /// \param key2 slicing criteria for second index position
-    /// \param key3 slicing criteria for third index position
-    /// \returns Instance of GAMSSetRecord
+    /// Retrieve first record in GAMSSet that meets the slice criteria.
+    /// \param key1 Slicing criteria for first index position.
+    /// \param key2 Slicing criteria for second index position.
+    /// \param key3 Slicing criteria for third index position.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord firstRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Retrieve a slice of the last record in GAMSSet
-    /// \param slice Define filter for elements whose record should be retrieved
-    /// \returns Instance of GAMSSetRecord
+    /// Retrieve a slice of the last record in GAMSSet.
+    /// \param slice Define filter for elements whose record should be retrieved.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord lastRecord(const std::vector<std::string>& slice);
 
-    /// Retrieve last record in GAMSSet
-    /// \returns Instance of GAMSSetRecord
+    /// Retrieve last record in GAMSSet.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord lastRecord();
 
-    /// Retrieve last record in GAMSSet
-    /// \param key1 slicing criteria for first index position
-    /// \returns Instance of GAMSSetRecord
+    /// Retrieve last record in GAMSSet.
+    /// \param key1 Slicing criteria for first index position.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord lastRecord(const std::string& key1);
 
-    /// Retrieve last record in GAMSSet
-    /// \param key1 slicing criteria for first index position
-    /// \param key2 slicing criteria for second index position
-    /// \returns Instance of GAMSSetRecord
+    /// Retrieve last record in GAMSSet.
+    /// \param key1 Slicing criteria for first index position.
+    /// \param key2 Slicing criteria for second index position.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord lastRecord(const std::string& key1, const std::string& key2);
 
-    /// Retrieve last record in GAMSSet
-    /// \param key1 slicing criteria for first index position
-    /// \param key2 slicing criteria for second index position
-    /// \param key3 slicing criteria for third index position
-    /// \returns Instance of GAMSSetRecord
+    /// Retrieve last record in GAMSSet.
+    /// \param key1 Slicing criteria for first index position.
+    /// \param key2 Slicing criteria for second index position.
+    /// \param key3 Slicing criteria for third index position.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord lastRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Find record in GAMSSet
-    /// \param keys vector of keys
-    /// \returns Instance of GAMSSetRecord
+    /// Find record in GAMSSet.
+    /// \param keys Vector of keys.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord findRecord(const std::vector<std::string>& keys);
 
-    /// Find record in GAMSSet
-    /// \returns Instance of GAMSSetRecord
+    /// Find record in GAMSSet.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord findRecord();
 
-    /// Find record in GAMSSet
-    /// \param key1 key for first index position
-    /// \returns Instance of GAMSSetRecord
+    /// Find record in GAMSSet.
+    /// \param key1 Key for first index position.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord findRecord(const std::string& key1);
 
-    /// Find record in GAMSSet
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
+    /// Find record in GAMSSet.
+    /// \param key1 Key for first index position
+    /// \param key2 Key for second index position
     /// \returns Instance of GAMSSetRecord
     GAMSSetRecord findRecord(const std::string& key1, const std::string& key2);
 
-    /// Find record in GAMSSet
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \param key3 key for third index position
-    /// \returns Instance of GAMSSetRecord
+    /// Find record in GAMSSet.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \param key3 Key for third index position.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord findRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Finds record in GAMSSet if it exists, adds it if not
-    /// \param keys List of keys
-    /// \returns Instance of found or added GAMSSetRecord
+    /// Finds record in GAMSSet if it exists; otherwise add it.
+    /// \param keys List of keys.
+    /// \returns Instance of found or added GAMSSetRecord.
     GAMSSetRecord mergeRecord(const std::vector<std::string>& keys);
 
-    /// Finds record in GAMSSet if it exists, adds it if not
-    /// \returns Instance of found or added GAMSSetRecord
+    /// Finds record in GAMSSet if it exists; otherwise add it.
+    /// \returns Instance of found or added GAMSSetRecord.
     GAMSSetRecord mergeRecord();
 
-    /// Finds record in GAMSSet if it exists, adds it if not
-    /// \param key1 key for first index position
-    /// \returns Instance of found or added GAMSSetRecord
+    /// Finds record in GAMSSet if it exists; otherwise add it.
+    /// \param key1 Key for first index position.
+    /// \returns Instance of found or added GAMSSetRecord.
     GAMSSetRecord mergeRecord(const std::string& key1);
 
-    /// Finds record in GAMSSet if it exists, adds it if not
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \returns Instance of found or added GAMSSetRecord
+    /// Finds record in GAMSSet if it exists; otherwise add it.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \returns Instance of found or added GAMSSetRecord.
     GAMSSetRecord mergeRecord(const std::string& key1, const std::string& key2);
 
-    /// Finds record in GAMSSet if it exists, adds it if not
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \param key3 key for third index position
-    /// \returns Instance of found or added GAMSSetRecord
+    /// Finds record in GAMSSet if it exists; otherwise add it.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \param key3 Key for third index position.
+    /// \returns Instance of found or added GAMSSetRecord.
     GAMSSetRecord mergeRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Add record to GAMSSet
-    /// \param keys vector of keys
-    /// \returns Instance of GAMSSetRecord
+    /// Add record to GAMSSet.
+    /// \param keys Vector of keys.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord addRecord(const std::vector<std::string>& keys);
 
-    /// Add record to GAMSSet
-    /// \returns Instance of GAMSSetRecord
+    /// Add record to GAMSSet.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord addRecord();
 
-    /// Add record to GAMSSet
-    /// \param key1 key for first index position
-    /// \returns Instance of GAMSSetRecord
+    /// Add record to GAMSSet.
+    /// \param key1 Key for first index position.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord addRecord(const std::string& key1);
 
-    /// Add record to GAMSSet
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \returns Instance of GAMSSetRecord
+    /// Add record to GAMSSet.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord addRecord(const std::string& key1, const std::string& key2);
 
-    /// Add record to GAMSSet
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \param key3 key for third index position
-    /// \returns Instance of GAMSSetRecord
+    /// Add record to GAMSSet.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \param key3 Key for third index position.
+    /// \returns Instance of GAMSSetRecord.
     GAMSSetRecord addRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
 private:
