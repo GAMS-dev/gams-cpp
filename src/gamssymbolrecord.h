@@ -41,7 +41,7 @@ class GAMSSymbolRecordImpl;
 class GAMSSymbol;
 
 /// This is the representation of a single record of a GAMSSymbol.
-/// Derived classes are GAMSEquationRecord, GAMSParameterRecord, GAMSSetRecord and GAMSVariableRecord
+/// \remark Derived classes are GAMSEquationRecord, GAMSParameterRecord, GAMSSetRecord and GAMSVariableRecord.
 class LIBSPEC GAMSSymbolRecord
 {
 public:
@@ -49,8 +49,8 @@ public:
     /// The method \ref isValid() shows if the instance is initialized.
     GAMSSymbolRecord();
 
-    /// Shallow copy constructor
-    /// \param record the target GAMSSymbolRecord
+    /// Copy constructor
+    /// \param record GAMSSymbolRecord used to initialize the new GAMSSymbolRecord.
     GAMSSymbolRecord(const GAMSSymbolRecord& record);
 
     /// Destructor.
