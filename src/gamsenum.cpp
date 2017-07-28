@@ -46,6 +46,67 @@ std::string GAMSEnum::text(GAMSEnum::VarType type)
     return res[type];
 }
 
+std::string GAMSEnum::text(GAMSEnum::GAMSExitCode type)
+{
+    if (type >= 1000) {
+        int code = type/1000 -1;
+        if (code > 5 || (type / 1000.0 - type / 1000 > 0.0)) {
+            return "InvalidReturnCode";
+        }
+        const char * res[] = {"MissingCommandLineParameter","CannotInstallInterrupt","CouldNotGetCurrentDir","CmexNotFound","OptNotFound"};
+        return res[code];
+    } else if (static_cast<int>(type) == 909) {
+        return "CannotAddPath";
+    } else if (type >= 400) {
+        if (type > 412) {
+            return "InvalidReturnCode";
+        }
+        const char * res[] = {"CouldNotSpawnGAMScmex"
+                              ,"CurDirNotFound"
+                              ,"CurDirNotSet"
+                              ,"InvalidReturnCode"
+                              ,"BlankInSysDir"
+                              ,"BlankInCurDir"
+                              ,"BlankInScrExt"
+                              ,"UnexpectedCmexRC"
+                              ,"ProcDirNotFound"
+                              ,"CmexLibNotFound"
+                              ,"CmexLibEPNotFound"
+                              ,"BlankInProcDir"
+                              ,"BlankInScrDir"};
+        return res[type-400];
+    } else if (type >= 109) {
+        if (type > 114) {
+            return "InvalidReturnCode";
+        }
+        const char * res[] = {"CouldNotCreateScratchDir"
+                              ,"TooManyScratchDirs"
+                              ,"InvalidReturnCode"
+                              ,"CouldNotDeleteScratchDir"
+                              ,"CouldNotWriteGamsNext"
+                              ,"CouldNotWriteParamFile"};
+        return res[type-109];
+    } else {
+        int code = type;
+        if (code < 0 || code > 11) {
+            return "InvalidReturnCode";
+        }
+        const char * res[] = {"NormalReturn"
+                              ,"SolverToBeCalled"
+                              ,"CompilationError"
+                              ,"ExecutionError"
+                              ,"SystemLimitsReached"
+                              ,"FileError"
+                              ,"ParameterError"
+                              ,"LicensingError"
+                              ,"GAMSSystemError"
+                              ,"GAMSCouldNotBeStarted"
+                              ,"OutOfMemory"
+                              ,"OutOfDisk"};
+        return res[type];
+    }
+}
+
 std::string GAMSEnum::text(GAMSEnum::EAction type)
 {
     const char * res[] = {"RestartAfterSolve","CompileOnly","ExecuteOnly","CompileAndExecute","GlueCodeGeneration","TraceReport"};
