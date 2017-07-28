@@ -63,19 +63,22 @@ public:
     std::string workingDirectory() const;
 
     /// Set GAMS working directory, i.e. the anchor for all file-based operations.
+    /// \param workingDir GAMS working directory.
     void setWorkingDirectory(std::string workingDir);
 
     /// Get GAMS system directory.
     std::string systemDirectory() const;
 
     /// Set GAMS system directory.
+    /// \param systemDir GAMS system directory.
     void setSystemDirectory(std::string systemDir);
 
     /// Get GAMS debug level.
     GAMSEnum::DebugLevel debug() const;
 
     /// Set GAMS debug level.
-    void setDebug(GAMSEnum::DebugLevel deb);
+    /// \param debug GAMS debug level.
+    void setDebug(GAMSEnum::DebugLevel debug);
 
 private:
     std::shared_ptr<GAMSWorkspaceInfoImpl> mImpl;

@@ -73,9 +73,9 @@ GAMSEnum::DebugLevel GAMSWorkspaceInfo::debug() const
     return mImpl->mDebug;
 }
 
-void GAMSWorkspaceInfo::setDebug(GAMSEnum::DebugLevel deb)
+void GAMSWorkspaceInfo::setDebug(GAMSEnum::DebugLevel debug)
 {
-    mImpl->mDebug = deb;
+    mImpl->mDebug = debug;
 }
 
 } // namespace gams
