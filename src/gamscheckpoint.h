@@ -74,9 +74,9 @@ public:
     /// \return Returns <c>true</c> if the two GAMSCheckpoint are equal; otherwise <c>false</c>.
     bool operator==(const GAMSCheckpoint& other) const;
 
-    /// Create model instance
-    /// \param modelInstanceName Identifier of GAMSModelInstance (determined automatically if omitted)
-    /// \returns GAMSModelInstance object
+    /// Create model instance.
+    /// \param modelInstanceName Identifier of GAMSModelInstance (determined automatically if omitted).
+    /// \returns Returns the GAMSModelInstance.
     GAMSModelInstance addModelInstance(const std::string& modelInstanceName = "");
 
     /// Get the checkpoint name.
