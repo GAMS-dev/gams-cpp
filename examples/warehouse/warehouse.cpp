@@ -193,8 +193,7 @@ int main(int argc, char* argv[])
         for (auto& t : v)
             t.join();
         if (status > 0)
-            //TODO: print text that corresponds to the status code instead of the number
-            throw GAMSExceptionExecution("Error when running GAMS: " + to_string(status) + " " + statusString, status);
+            throw GAMSExceptionExecution("Error when running GAMS: " + GAMSEnum::text((GAMSEnum::GAMSExitCode) status) + " " + statusString, status);
         else if (status == -1)
             throw GAMSException("Error in GAMS API");
         else if (status == -2)
