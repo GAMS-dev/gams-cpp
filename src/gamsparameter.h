@@ -38,162 +38,162 @@ class LIBSPEC GAMSParameter : public GAMSSymbol
 public:
     typedef GAMSParameterRecord RecordType;
 
-    /// Standard constructor
+    /// Standard constructor.
     GAMSParameter() {}
 
     /// Copy constructor.
-    /// \param other Another GAMSDomain used as data source.
+    /// \param other Another GAMSSymbol used as data source.
     GAMSParameter(const GAMSSymbol& other);
 
     /// Destructor.
     ~GAMSParameter();
 
     /// Interator to the begining.
-    /// \return Iterator to the first GAMSEquation.
+    /// \return Iterator to the first GAMSParameter.
     GAMSSymbolIter<GAMSParameter> begin();
 
     /// Iterator to end.
-    /// \return Iterator to the element following the last GAMSEquation.
+    /// \return Iterator to the element following the last GAMSParameter.
     GAMSSymbolIter<GAMSParameter> end();
 
-    /// Shares the data of other (shallow copy)
-    /// \param other the other parameter
-    /// \return the GAMSParameter
+    /// Assigns a GAMSParameter.
+    /// \param other Another GAMSParameter used as data source.
+    /// \return Returns the assigned GAMSParameter (*this).
     GAMSParameter& operator=(const GAMSParameter& other);
 
-    /// Retrieve the first record in GAMSParameter that meets the slice criteria
-    /// \param slice Define filter for elements whose record should be retrieved
-    /// \returns Instance of GAMSParameterRecord
+    /// Retrieve the first record in GAMSParameter that meets the slice criteria.
+    /// \param slice Define filter for elements whose record should be retrieved.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord firstRecord(const std::vector<std::string>& slice);
 
-    /// Retrieve first record in GAMSParameter
-    /// \returns Instance of GAMSParameterRecord
+    /// Retrieve first record in GAMSParameter.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord firstRecord();
 
-    /// Retrieve first record in GAMSParameter that meets the slice criteria
-    /// \param key1 slicing criteria for first index position
-    /// \returns Instance of GAMSParameterRecord
+    /// Retrieve first record in GAMSParameter that meets the slice criteria.
+    /// \param key1 Slicing criteria for first index position.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord firstRecord(const std::string& key1);
 
-    /// Retrieve first record in GAMSParameter that meets the slice criteria
-    /// \param key1 slicing criteria for first index position
-    /// \param key2 slicing criteria for second index position
-    /// \returns Instance of GAMSParameterRecord
+    /// Retrieve first record in GAMSParameter that meets the slice criteria.
+    /// \param key1 Slicing criteria for first index position.
+    /// \param key2 Slicing criteria for second index position.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord firstRecord(const std::string& key1, const std::string& key2);
 
-    /// Retrieve first record in GAMSParameter that meets the slice criteria
-    /// \param key1 slicing criteria for first index position
-    /// \param key2 slicing criteria for second index position
-    /// \param key3 slicing criteria for third index position
-    /// \returns Instance of GAMSParameterRecord
+    /// Retrieve first record in GAMSParameter that meets the slice criteria.
+    /// \param key1 Slicing criteria for first index position.
+    /// \param key2 Slicing criteria for second index position.
+    /// \param key3 Slicing criteria for third index position.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord firstRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Retrieve a slice of the last record in GAMSParameter
-    /// \param slice Define filter for elements whose record should be retrieved
-    /// \returns Instance of GAMSParameterRecord
+    /// Retrieve a slice of the last record in GAMSParameter.
+    /// \param slice Define filter for elements whose record should be retrieved.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord lastRecord(const std::vector<std::string>& slice);
 
-    /// Retrieve last record in GAMSParameter
-    /// \returns Instance of GAMSParameterRecord
+    /// Retrieve last record in GAMSParameter.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord lastRecord();
 
-    /// Retrieve last record in GAMSParameter
-    /// \param key1 slicing criteria for first index position
-    /// \returns Instance of GAMSParameterRecord
+    /// Retrieve last record in GAMSParameter.
+    /// \param key1 Slicing criteria for first index position.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord lastRecord(const std::string& key1);
 
-    /// Retrieve last record in GAMSParameter
-    /// \param key1 slicing criteria for first index position
-    /// \param key2 slicing criteria for second index position
-    /// \returns Instance of GAMSParameterRecord
+    /// Retrieve last record in GAMSParameter.
+    /// \param key1 Slicing criteria for first index position.
+    /// \param key2 Slicing criteria for second index position.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord lastRecord(const std::string& key1, const std::string& key2);
 
-    /// Retrieve last record in GAMSParameter
-    /// \param key1 slicing criteria for first index position
-    /// \param key2 slicing criteria for second index position
-    /// \param key3 slicing criteria for third index position
-    /// \returns Instance of GAMSParameterRecord
+    /// Retrieve last record in GAMSParameter.
+    /// \param key1 Slicing criteria for first index position.
+    /// \param key2 Slicing criteria for second index position.
+    /// \param key3 Slicing criteria for third index position.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord lastRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Find record in GAMSParameter
-    /// \param keys vector of keys
-    /// \returns Instance of GAMSParameterRecord
+    /// Find record in GAMSParameter.
+    /// \param keys Vector of keys.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord findRecord(const std::vector<std::string>& keys);
 
-    /// Find record in GAMSParameter
-    /// \returns Instance of GAMSParameterRecord
+    /// Find record in GAMSParameter.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord findRecord();
 
-    /// Find record in GAMSParameter
-    /// \param key1 key for first index position
-    /// \returns Instance of GAMSParameterRecord
+    /// Find record in GAMSParameter.
+    /// \param key1 Key for first index position.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord findRecord(const std::string& key1);
 
-    /// Find record in GAMSParameter
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \returns Instance of GAMSParameterRecord
+    /// Find record in GAMSParameter.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord findRecord(const std::string& key1, const std::string& key2);
 
-    /// Find record in GAMSParameter
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \param key3 key for third index position
-    /// \returns Instance of GAMSParameterRecord
+    /// Find record in GAMSParameter.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \param key3 Key for third index position.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord findRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Finds record in GAMSParameter if it exists, adds it if not
-    /// \param keys List of keys
-    /// \returns Instance of found or added GAMSParameterRecord
+    /// Finds record in GAMSParameter if it exists; otherwise add it.
+    /// \param keys List of keys.
+    /// \returns Instance of found or added GAMSParameterRecord.
     GAMSParameterRecord mergeRecord(const std::vector<std::string>& keys);
 
-    /// Finds record in GAMSParameter if it exists, adds it if not
+    /// Finds record in GAMSParameter if it exists; otherwise add it.
     /// \returns Instance of found or added GAMSParameterRecord
     GAMSParameterRecord mergeRecord();
 
-    /// Finds record in GAMSParameter if it exists, adds it if not
-    /// \param key1 key for first index position
-    /// \returns Instance of found or added GAMSParameterRecord
+    /// Finds record in GAMSParameter if it exists; otherwise add it.
+    /// \param key1 Key for first index position.
+    /// \returns Instance of found or added GAMSParameterRecord.
     GAMSParameterRecord mergeRecord(const std::string& key1);
 
-    /// Finds record in GAMSParameter if it exists, adds it if not
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \returns Instance of found or added GAMSParameterRecord
+    /// Finds record in GAMSParameter if it exists; otherwise add it.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \returns Instance of found or added GAMSParameterRecord.
     GAMSParameterRecord mergeRecord(const std::string& key1, const std::string& key2);
 
-    /// Finds record in GAMSParameter if it exists, adds it if not
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \param key3 key for third index position
-    /// \returns Instance of found or added GAMSParameterRecord
+    /// Finds record in GAMSParameter if it exists; otherwise add it.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \param key3 Key for third index position.
+    /// \returns Instance of found or added GAMSParameterRecord.
     GAMSParameterRecord mergeRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Add record to GAMSParameter
-    /// \param keys vector of keys
-    /// \returns Instance of GAMSParameterRecord
+    /// Add record to GAMSParameter.
+    /// \param keys Vector of keys.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord addRecord(const std::vector<std::string>& keys);
 
-    /// Add record to GAMSParameter
-    /// \returns Instance of GAMSParameterRecord
+    /// Add record to GAMSParameter.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord addRecord();
 
-    /// Add record to GAMSParameter
-    /// \param key1 key for first index position
-    /// \returns Instance of GAMSParameterRecord
+    /// Add record to GAMSParameter.
+    /// \param key1 Key for first index position.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord addRecord(const std::string& key1);
 
-    /// Add record to GAMSParameter
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \returns Instance of GAMSParameterRecord
+    /// Add record to GAMSParameter.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord addRecord(const std::string& key1, const std::string& key2);
 
-    /// Add record to GAMSParameter
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \param key3 key for third index position
-    /// \returns Instance of GAMSParameterRecord
+    /// Add record to GAMSParameter.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \param key3 Key for third index position.
+    /// \returns Instance of GAMSParameterRecord.
     GAMSParameterRecord addRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
 private:
