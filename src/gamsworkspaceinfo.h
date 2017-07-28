@@ -33,7 +33,7 @@ namespace gams {
 
 class GAMSWorkspaceInfoImpl;
 
-/// The GAMSWorkspaceInfo can be used input parameter for the GAMSWorkspace constructor.
+/// The GAMSWorkspaceInfo can be used to input parameters for the GAMSWorkspace constructor.
 class LIBSPEC GAMSWorkspaceInfo
 {
 public:
@@ -66,10 +66,10 @@ public:
     /// \param workingDir GAMS working directory.
     void setWorkingDirectory(std::string workingDir);
 
-    /// Get GAMS system directory.
+    /// Get GAMS system directory, i.e. installation directory of the GAMS distribution.
     std::string systemDirectory() const;
 
-    /// Set GAMS system directory.
+    /// Set GAMS system directory, i.e. installation directory of the GAMS distribution.
     /// \param systemDir GAMS system directory.
     void setSystemDirectory(std::string systemDir);
 
