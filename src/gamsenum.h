@@ -51,9 +51,9 @@ public:
     /// Get a <c>GAMSEnum::SymbolType</c> as string.
     static std::string text(GAMSEnum::SymbolType type);
 
+
+    // TODO(AF) difference gmomcc.h/gmoEquType(=> B) and gclgms.h/GMS_EQUTYPE_MAX(=> MAX)?
     /// Equation subtype
-    ///
-    /// TODO(AF) difference gmomcc.h/gmoEquType(=> B) and gclgms.h/GMS_EQUTYPE_MAX(=> MAX)?
     enum EquType
     {
         E = 0,          ///< Equality - =E=
@@ -171,7 +171,7 @@ public:
     /// What field to update
     enum SymbolUpdateAction
     {
-        Param = 0,          ///<
+        Param = 0,          ///< Supplies paramter value
         Upper = 1,          ///< Supplies upper bounds for a variable
         Lower = 2,          ///< Supplies lower bounds for a variable
         Fixed = 3,          ///< Supplies fixed bounds for a variable
