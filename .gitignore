@@ -5,4 +5,4 @@ build*
 Makefile
 .directory
 **/*.dylib
-
+gamsinclude.pri
