@@ -35,7 +35,6 @@ namespace gams {
 class LIBSPEC GAMSSymbolDomainViolation
 {
 public:
-
     /// Standard constructor.
     GAMSSymbolDomainViolation();
 
@@ -58,10 +57,11 @@ public:
     /// \return Returns <c>true</c> if the two GAMSSymbolDomainViolation are equal; otherwise <c>false</c>.
     bool operator==(const GAMSSymbolDomainViolation& other) const;
 
-    /// GAMSSymbolRecord that has a domain violation
+    /// GAMSSymbolRecord that has a domain violation.
+    /// \return Returns the GAMSSymbolRecord.
     GAMSSymbolRecord violRec();
 
-    /// Array indicating which position of a record has a domain violation
+    /// Array indicating which position of a record has a domain violation.
     std::vector<bool> violInd();
 
 private:
