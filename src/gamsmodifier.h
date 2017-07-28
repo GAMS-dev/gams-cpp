@@ -38,7 +38,7 @@ class GAMSVariable;
 class GAMSEquation;
 class GAMSModifierImpl;
 
-/// Instances of this class are input to GAMSModelInstance.instatiate. A GAMSModifier consists either
+/// Instances of this class are input to GAMSModelInstance.instatiate(). A GAMSModifier consists either
 /// of a GAMSParameter or a triple: A GAMSVariable or GAMSEquation to be modified, the modification
 /// action (e.g. . Upper, Lower or Fixed for updating bounds of a variable, or Primal/Dual for updating
 /// the level/marginal of a variable or equation mainly used for starting non-linear models from different
@@ -47,27 +47,27 @@ class GAMSModifierImpl;
 class LIBSPEC GAMSModifier
 {
 public:
-    /// Default constructor
+    /// Default constructor.
     GAMSModifier() {}
 
-    /// Constructor
-    /// \param gamsPar Parameter in the GAMS model to be modified with data for modification
-    /// \param updType Symbol Update Type
+    /// Constructor.
+    /// \param gamsPar GAMSParameter in the GAMS model to be modified with data for modification.
+    /// \param updType Symbol Update Type.
     GAMSModifier(const GAMSParameter& gamsPar, GAMSEnum::SymbolUpdateType updType = GAMSEnum::SymbolUpdateType::Inherit);
 
-    /// Constructor
-    /// \param gamsVar GAMS Variable in the GAMS model to be modified
-    /// \param updAction Modification action
-    /// \param dataSym Parameter containing the data for the modification
-    /// \param updType Symbol Update Type
+    /// Constructor.
+    /// \param gamsVar GAMSVariable in the GAMS model to be modified.
+    /// \param updAction Modification action.
+    /// \param dataSym Parameter containing the data for the modification.
+    /// \param updType Symbol Update Type.
     GAMSModifier(const GAMSVariable& gamsVar,  GAMSEnum::SymbolUpdateAction updAction, const GAMSParameter& dataSym
                  , GAMSEnum::SymbolUpdateType updType = GAMSEnum::SymbolUpdateType::Inherit);
 
-    /// Constructor
-    /// \param gamsEqu GAMS Equation in the GAMS model to be modified
-    /// \param updAction Modification action
-    /// \param dataSym Parameter containing the data for the modification
-    /// \param updType Symbol Update Type
+    /// Constructor.
+    /// \param gamsEqu GAMSEquation in the GAMS model to be modified.
+    /// \param updAction Modification action.
+    /// \param dataSym GAMSParameter containing the data for the modification.
+    /// \param updType Symbol Update Type.
     GAMSModifier(const GAMSEquation& gamsEqu, GAMSEnum::SymbolUpdateAction updAction, const GAMSParameter& dataSym
                  , GAMSEnum::SymbolUpdateType updType = GAMSEnum::SymbolUpdateType::Inherit);
 
@@ -87,31 +87,38 @@ public:
     bool operator==(const GAMSModifier& other) const;
 
     /// The GAMSModifier is invalid, if it has no assignment to a GAMSSymbol.
-    /// \return true, if the GAMModifier has been initialized.
+    /// \return <c>true</c> if the GAMModifier has been initialized; otherwise <c>false</c>.
     bool isValid() const;
 
-    /// Symbol in the GAMS model to be modified
+    /// Get symbol of the GAMS model to be modified.
+    /// \return Returns the GAMSSymbol.
     GAMSSymbol gamsSymbol();
 
-    /// Type of modification
+    /// Get the type of modification.
+    /// \return Returns the symbol update action.
     GAMSEnum::SymbolUpdateAction updAction();
 
-    /// Symbol containing the data for the modification
+    /// Get paramter containing the data for the modification.
+    /// \return Returns the GAMSParamter.
     GAMSParameter dataSymbol();
 
-    /// Symbol Update Type
+    /// Get the symbol update type.
+    /// \return Returns the symbol update type.
     GAMSEnum::SymbolUpdateType updType();
 
     // TODO(jm) new getter in API
-    /// True, if the associated symbol is a parameter
+    /// Checks if a modifier is related to a GAMSParameter.
+    /// \return <c>true</c> if it is realted to an GAMSParameter; otherwise <c>false</c>.
     bool isParameter();
 
     // TODO(jm) new getter in API
-    /// True, if the associated symbol is a variable
+    /// Checks if a modifier is related to a GAMSVariable.
+    /// \return <c>true</c> if it is realted to an GAMSParameter; otherwise <c>false</c>.
     bool isVariable();
 
     // TODO(jm) new getter in API
-    /// True, if the associated symbol is ae equation
+    /// Checks if a modifier is related to a GAMSDEquation.
+    /// \return <c>true</c> if it is realted to an GAMSParameter; otherwise <c>false</c>.
     bool isEquation();
 
 private:

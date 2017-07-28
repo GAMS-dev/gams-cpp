@@ -37,8 +37,10 @@ class GAMSModifierImpl
 {
 public:
     GAMSModifierImpl(const GAMSParameter& gamsPar, GAMSEnum::SymbolUpdateType updType);
-    GAMSModifierImpl(const GAMSVariable& gamsVar, GAMSEnum::SymbolUpdateAction updAction, const GAMSParameter& dataSymbol, GAMSEnum::SymbolUpdateType updType);
-    GAMSModifierImpl(const GAMSEquation& gamsEqu, GAMSEnum::SymbolUpdateAction updAction, const GAMSParameter& dataSymbol, GAMSEnum::SymbolUpdateType updType);
+    GAMSModifierImpl(const GAMSVariable& gamsVar, GAMSEnum::SymbolUpdateAction updAction, const GAMSParameter& dataSymbol
+                     , GAMSEnum::SymbolUpdateType updType);
+    GAMSModifierImpl(const GAMSEquation& gamsEqu, GAMSEnum::SymbolUpdateAction updAction, const GAMSParameter& dataSymbol
+                     , GAMSEnum::SymbolUpdateType updType);
 
     bool operator!=(const GAMSModifierImpl& other) const;
     bool operator==(const GAMSModifierImpl& other) const;
