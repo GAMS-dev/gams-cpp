@@ -35,14 +35,13 @@ class GAMSSet;
 /// This is the representation of a single record of a GAMSSet.
 class LIBSPEC GAMSSetRecord : public GAMSSymbolRecord
 {
-
 public:
     /// The default constructor allows to create an uninitialized GAMSSetRecord to be used later in the code.
     /// The method \ref isValid() shows if the instance is initialized.
     GAMSSetRecord();
 
-    /// Shallow copy constructor
-    /// \param record the target GAMSSetRecord
+    /// Copy constructor.
+    /// \param record Another GAMSSymbolRecord used as data source.
     GAMSSetRecord(const GAMSSymbolRecord& record);
 
     /// Assigns a GAMSSetRecord.
@@ -50,16 +49,17 @@ public:
     /// \return Returns the assigned GAMSSetRecord (*this).
     GAMSSetRecord& operator =(const GAMSSetRecord& other);
 
-    /// Retrieve the explanatory text of this GAMSSetRecord
+    /// Retrieve the explanatory text of this GAMSSetRecord.
+    /// \return Returns the explanatory text.
     std::string text();
 
-    /// Set the explanatory text of this GAMSSetRecord
+    /// Set the explanatory text of this GAMSSetRecord.
+    /// \param text Explanatory text.
     void setText(const std::string& text);
 
 private:
     friend class GAMSSymbolIter<GAMSSet>;
     GAMSSetRecord(const GAMSSet &set, void* symIterPtr);
-
 };
 
 }
