@@ -49,153 +49,154 @@ public:
     ~GAMSVariable();
 
     /// Interator to the begining.
-    /// \return Iterator to the first GAMSEquation.
+    /// \return Iterator to the first GAMSVariable.
     GAMSSymbolIter<GAMSVariable> begin();
 
     /// Iterator to end.
-    /// \return Iterator to the element following the last GAMSEquation.
+    /// \return Iterator to the element following the last GAMSVariable.
     GAMSSymbolIter<GAMSVariable> end();
 
-    /// Shares the data of other (shallow copy)
-    /// \param other the other variable
-    /// \return the GAMSVariable
+    /// Assigns a GAMSVariable.
+    /// \param other Another GAMSVariable used as data source.
+    /// \return Returns the assigned GAMSVariable (*this).
     GAMSVariable& operator=(const GAMSVariable& other);
-    /// Retrieve the first record in GAMSVariable that meets the slice criteria
-    /// \param slice Define filter for elements whose record should be retrieved
-    /// \returns Instance of GAMSVariableRecord
+
+    /// Retrieve the first record in GAMSVariable that meets the slice criteria.
+    /// \param slice Define filter for elements whose record should be retrieved.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord firstRecord(const std::vector<std::string>& slice);
 
-    /// Retrieve first record in GAMSVariable
-    /// \returns Instance of GAMSVariableRecord
+    /// Retrieve first record in GAMSVariable.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord firstRecord();
 
-    /// Retrieve first record in GAMSVariable that meets the slice criteria
-    /// \param key1 slicing criteria for first index position
-    /// \returns Instance of GAMSVariableRecord
+    /// Retrieve first record in GAMSVariable that meets the slice criteria.
+    /// \param key1 Slicing criteria for first index position.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord firstRecord(const std::string& key1);
 
-    /// Retrieve first record in GAMSVariable that meets the slice criteria
-    /// \param key1 slicing criteria for first index position
-    /// \param key2 slicing criteria for second index position
-    /// \returns Instance of GAMSVariableRecord
+    /// Retrieve first record in GAMSVariable that meets the slice criteria.
+    /// \param key1 Slicing criteria for first index position.
+    /// \param key2 Slicing criteria for second index position.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord firstRecord(const std::string& key1, const std::string& key2);
 
-    /// Retrieve first record in GAMSVariable that meets the slice criteria
-    /// \param key1 slicing criteria for first index position
-    /// \param key2 slicing criteria for second index position
-    /// \param key3 slicing criteria for third index position
-    /// \returns Instance of GAMSVariableRecord
+    /// Retrieve first record in GAMSVariable that meets the slice criteria.
+    /// \param key1 Slicing criteria for first index position.
+    /// \param key2 Slicing criteria for second index position.
+    /// \param key3 Slicing criteria for third index position.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord firstRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Retrieve a slice of the last record in GAMSVariable
-    /// \param slice Define filter for elements whose record should be retrieved
-    /// \returns Instance of GAMSVariableRecord
+    /// Retrieve a slice of the last record in GAMSVariable.
+    /// \param slice Define filter for elements whose record should be retrieved.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord lastRecord(const std::vector<std::string>& slice);
 
-    /// Retrieve last record in GAMSVariable
-    /// \returns Instance of GAMSVariableRecord
+    /// Retrieve last record in GAMSVariable.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord lastRecord();
 
-    /// Retrieve last record in GAMSVariable
-    /// \param key1 slicing criteria for first index position
-    /// \returns Instance of GAMSVariableRecord
+    /// Retrieve last record in GAMSVariable.
+    /// \param key1 Slicing criteria for first index position.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord lastRecord(const std::string& key1);
 
-    /// Retrieve last record in GAMSVariable
-    /// \param key1 slicing criteria for first index position
-    /// \param key2 slicing criteria for second index position
-    /// \returns Instance of GAMSVariableRecord
+    /// Retrieve last record in GAMSVariable.
+    /// \param key1 Slicing criteria for first index position.
+    /// \param key2 Slicing criteria for second index position.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord lastRecord(const std::string& key1, const std::string& key2);
 
-    /// Retrieve last record in GAMSVariable
-    /// \param key1 slicing criteria for first index position
-    /// \param key2 slicing criteria for second index position
-    /// \param key3 slicing criteria for third index position
-    /// \returns Instance of GAMSVariableRecord
+    /// Retrieve last record in GAMSVariable.
+    /// \param key1 Slicing criteria for first index position.
+    /// \param key2 Slicing criteria for second index position.
+    /// \param key3 Slicing criteria for third index position.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord lastRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Find record in GAMSVariable
-    /// \param keys vector of keys
-    /// \returns Instance of GAMSVariableRecord
+    /// Find record in GAMSVariable.
+    /// \param keys Vector of keys.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord findRecord(const std::vector<std::string>& keys);
 
-    /// Find record in GAMSVariable
-    /// \returns Instance of GAMSVariableRecord
+    /// Find record in GAMSVariable.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord findRecord();
 
-    /// Find record in GAMSVariable
-    /// \param key1 key for first index position
-    /// \returns Instance of GAMSVariableRecord
+    /// Find record in GAMSVariable.
+    /// \param key1 Key for first index position.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord findRecord(const std::string& key1);
 
-    /// Find record in GAMSVariable
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \returns Instance of GAMSVariableRecord
+    /// Find record in GAMSVariable.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord findRecord(const std::string& key1, const std::string& key2);
 
-    /// Find record in GAMSVariable
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \param key3 key for third index position
-    /// \returns Instance of GAMSVariableRecord
+    /// Find record in GAMSVariable.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \param key3 Key for third index position.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord findRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Finds record in GAMSVariable if it exists, adds it if not
-    /// \param keys List of keys
-    /// \returns Instance of found or added GAMSVariableRecord
+    /// Finds record in GAMSVariable if it exists; otherwise add it.
+    /// \param keys List of keys.
+    /// \returns Instance of found or added GAMSVariableRecord.
     GAMSVariableRecord mergeRecord(const std::vector<std::string>& keys);
 
-    /// Finds record in GAMSVariable if it exists, adds it if not
-    /// \returns Instance of found or added GAMSVariableRecord
+    /// Finds record in GAMSVariable if it exists; otherwise add it.
+    /// \returns Instance of found or added GAMSVariableRecord.
     GAMSVariableRecord mergeRecord();
 
-    /// Finds record in GAMSVariable if it exists, adds it if not
-    /// \param key1 key for first index position
-    /// \returns Instance of found or added GAMSVariableRecord
+    /// Finds record in GAMSVariable if it exists; otherwise add it.
+    /// \param key1 Key for first index position.
+    /// \returns Instance of found or added GAMSVariableRecord.
     GAMSVariableRecord mergeRecord(const std::string& key1);
 
-    /// Finds record in GAMSVariable if it exists, adds it if not
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \returns Instance of found or added GAMSVariableRecord
+    /// Finds record in GAMSVariable if it exists; otherwise add it.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \returns Instance of found or added GAMSVariableRecord.
     GAMSVariableRecord mergeRecord(const std::string& key1, const std::string& key2);
 
-    /// Finds record in GAMSVariable if it exists, adds it if not
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \param key3 key for third index position
-    /// \returns Instance of found or added GAMSVariableRecord
+    /// Finds record in GAMSVariable if it exists; otherwise add it.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \param key3 Key for third index position.
+    /// \returns Instance of found or added GAMSVariableRecord.
     GAMSVariableRecord mergeRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Add record to GAMSVariable
-    /// \param keys vector of keys
-    /// \returns Instance of GAMSVariableRecord
+    /// Add record to GAMSVariable.
+    /// \param keys Vector of keys.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord addRecord(const std::vector<std::string>& keys);
 
-    /// Add record to GAMSVariable
-    /// \returns Instance of GAMSVariableRecord
+    /// Add record to GAMSVariable.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord addRecord();
 
-    /// Add record to GAMSVariable
-    /// \param key1 key for first index position
-    /// \returns Instance of GAMSVariableRecord
+    /// Add record to GAMSVariable.
+    /// \param key1 Key for first index position.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord addRecord(const std::string& key1);
 
-    /// Add record to GAMSVariable
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \returns Instance of GAMSVariableRecord
+    /// Add record to GAMSVariable.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord addRecord(const std::string& key1, const std::string& key2);
 
-    /// Add record to GAMSVariable
-    /// \param key1 key for first index position
-    /// \param key2 key for second index position
-    /// \param key3 key for third index position
-    /// \returns Instance of GAMSVariableRecord
+    /// Add record to GAMSVariable.
+    /// \param key1 Key for first index position.
+    /// \param key2 Key for second index position.
+    /// \param key3 Key for third index position.
+    /// \returns Instance of GAMSVariableRecord.
     GAMSVariableRecord addRecord(const std::string& key1, const std::string& key2, const std::string& key3);
 
-    /// Retrieve subtype of variable (Binary, Integer, Positive, Negative, Free, SOS1, SOS2, SemiCont, SemiInt)
+    /// Retrieve subtype of variable (Binary, Integer, Positive, Negative, Free, SOS1, SOS2, SemiCont, SemiInt).
     GAMSEnum::VarType varType();
 
 private:
