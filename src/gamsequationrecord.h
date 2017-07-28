@@ -40,8 +40,8 @@ public:
     /// The method \ref isValid() shows if the instance is initialized.
     GAMSEquationRecord();
 
-    /// Shallow copy constructor
-    /// \param record the target GAMSEquationRecord
+    /// Copy constructor.
+    /// \param symbol Another GAMSSymbolRecord used as data source.
     GAMSEquationRecord(const GAMSSymbolRecord& record);
 
     /// Assigns a GAMSEquationRecord.
@@ -50,33 +50,43 @@ public:
     GAMSEquationRecord& operator =(const GAMSEquationRecord& other);
 
     /// Retrieve the the level of this GAMSEquationRecord.
+    /// \return Returns the level.
     double level();
 
     /// Set the level of this GAMSEquationRecord.
+    /// \param val Level.
     void setLevel(const double val);
 
     /// Retrieve the marginal of this GAMSEquationRecord.
+    /// \return Returns the marginal.
     double marginal();
 
     /// Set the marginal of this GAMSEquationRecord.
+    /// \param val Marginal.
     void setMarginal(const double val);
 
     /// Retrieve the upper bound of this GAMSEquationRecord.
+    /// \return Returns the upper bound.
     double upper();
 
     /// Set the upper bound of this GAMSEquationRecord.
+    /// \param val Upper bound.
     void setUpper(const double val);
 
     /// Retrieve the lower bound of this GAMSEquationRecord.
+    /// \return Returns the lower bound.
     double lower();
 
     /// Set the lower bound of this GAMSEquationRecord.
+    /// \param val Lower bound.
     void setLower(const double val);
 
     /// Retrieve the scale factor of this GAMSEquationRecord.
+    /// \return Returns the scale.
     double scale();
 
     /// Set the scale factor of this GAMSEquationRecord.
+    /// \param val Scale.
     void setScale(const double val);
 
 private:
