@@ -86,7 +86,6 @@ string getModelText()
 void createSaveRestart(int argc, char* argv[], const string &checkpointName)
 {
     GAMSWorkspaceInfo wsInfo;
-    wsInfo.setDebug(GAMSEnum::DebugLevel::ShowLog);
     if (argc > 1)
         wsInfo.setSystemDirectory(argv[1]);
     wsInfo.setWorkingDirectory("." +(cPathSep+ checkpointName));
@@ -174,8 +173,6 @@ int main(int argc, char* argv[])
     opt.setDefine("gdxincname", db.name());
     opt.setAllModelTypes("xpress");
     t4.run(opt, db);
-    cout << "x number records: " << t4.outDB().getVariable("x").numberRecords() << endl;
-
     for (auto record : t4.outDB().getVariable("x"))
         cout << "x(" << record.key(0) << "," << record.key(1) << "): level=" << record.level() <<
                 " marginal=" << record.marginal() << endl;

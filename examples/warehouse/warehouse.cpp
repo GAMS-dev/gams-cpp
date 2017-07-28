@@ -137,9 +137,9 @@ void solveWarehouse(GAMSWorkspace* ws, int numberOfWarehouses, GAMSDatabase* res
                 resultDB->getSet("supplyMap").addRecord(to_string(numberOfWarehouses), supplyRec.key(0), supplyRec.key(1));
             }
         }
-    }catch(GAMSExceptionExecution e){
-        //TODO(CW): change enums according to C# ? GAMSExitCode.ExecutionError vs. GAMSEnum::ExecutionError
-        // Check if we see a User triggered abort and look for the user defined result
+    }
+    catch(GAMSExceptionExecution e)
+    {
         if(e.rc() == GAMSEnum::ExecutionError)
         {
             lock_guard<mutex> dbLock(*dbMutex);
@@ -149,12 +149,14 @@ void solveWarehouse(GAMSWorkspace* ws, int numberOfWarehouses, GAMSDatabase* res
             lock_guard<mutex> dbLock(*dbMutex);
             status = e.rc();
         }
-    }catch (GAMSException e)
+    }
+    catch (GAMSException e)
     {
         cout << e.what() << endl;
         lock_guard<mutex> dbLock(*dbMutex);
         status = -1;
-    }catch (exception e)
+    }
+    catch (exception e)
     {
         cout << e.what() << endl;
         lock_guard<mutex> dbLock(*dbMutex);
@@ -179,8 +181,7 @@ int main(int argc, char* argv[])
 
     // create a GAMSDatabase for the results
     GAMSDatabase resultDB = ws.addDatabase();
-    GAMSParameter objrep = resultDB.addParameter("objrep", 1, "Objective value");
-
+    resultDB.addParameter("objrep", 1, "Objective value");
     resultDB.addSet("supplyMap", 3, "Supply connection with level");
 
     try{
@@ -188,36 +189,26 @@ int main(int argc, char* argv[])
         mutex dbMutex;
         vector<thread> v;
         for(int nrWarehouses=10; nrWarehouses<22; nrWarehouses++)
-        {
             v.emplace_back([&ws, nrWarehouses, &resultDB, &dbMutex]{solveWarehouse(&ws, nrWarehouses, &resultDB, &dbMutex);});
-        }
         for (auto& t : v)
             t.join();
         if (status > 0)
-        {
-            //TODO(CW): cast to GAMSExitCode to get string describtion of error status?
+            //TODO: print text that corresponds to the status code instead of the number
             throw GAMSExceptionExecution("Error when running GAMS: " + to_string(status) + " " + statusString, status);
-        }
         else if (status == -1)
             throw GAMSException("Error in GAMS API");
         else if (status == -2)
             throw exception();
         // export the result database to a GDX file
-        //TODO(CW): doExport vs. export
-        resultDB.doExport("C:\\tmp\\resultCpp.gdx");
-    }catch (GAMSException ex)
+        resultDB.doExport("\\tmp\\resultCpp.gdx");
+    }
+    catch (GAMSException ex)
     {
         cout << "GAMSException occured: " << ex.what() << endl;
-    }catch (exception ex)
+    }
+    catch (exception ex)
     {
         cout << ex.what() << endl;
     }
-    //finally
-    //{
-        //TODO(CW): do we need an GAMSDatabase.dispoose() in C++ ?
-        //resultDB.Dispose();
-    //}
-    //TODO(CW)
-    //Environment.ExitCode = status;
     return status;
 }
