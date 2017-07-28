@@ -1,4 +1,4 @@
-/**
+/*
  *
  * GAMS - General Algebraic Modeling System C++ API
  *

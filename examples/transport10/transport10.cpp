@@ -1,4 +1,4 @@
-/**
+/*
  *
  * GAMS - General Algebraic Modeling System C++ API
  *
@@ -85,7 +85,6 @@ int main(int argc, char* argv[])
     cout << "Transport10: not implementet yet." << endl;
 
     GAMSWorkspaceInfo wsInfo;
-    wsInfo.setDebug(GAMSEnum::DebugLevel::ShowLog);
     if (argc > 1)
         wsInfo.setSystemDirectory(argv[1]);
     GAMSWorkspace ws(wsInfo);
