@@ -142,8 +142,8 @@ class GAMSSymbolImpl;
 /// the GAMSDatabase will not have a record for b('5'). In case of b('5')=EPS, the GAMSDatabase will
 /// have a record with EPS (numeric_limits<double>::min()). Unlike the IEEE values (e.g.
 /// numeric_limits<double>::infinity()), arithmetic operations in C++ will modify EPS (e.g.
-/// 5*numeric_limits<double>::min()==numeric_limits<double>::min()
-/// but 5*numeric_limits<double>::min()!=numeric_limits<double>::min()). The same rules
+/// 5*numeric_limits\<double\>::min()==numeric_limits\<double\>::min()
+/// but 5*numeric_limits\<double\>::min()!=numeric_limits<double>::min()). The same rules
 /// apply for preparing input data for GAMS in a GAMSDatabase. If a value of EPS is written,
 /// GAMS will see the special value EPS. The value used for EPS can be reset using GAMSWorkspace.setMyEPS().
 /// All other small values (including 0) will be communicated unfiltered to GAMS. As mentioned before,
