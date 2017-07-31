@@ -308,21 +308,19 @@ void TestGAMSModelInstance::testGetLogID()  {
      std::string cpname = "mycp";
      GAMSModelInstance mi1 = cp.addModelInstance(cpname);
      GAMSModelInstance mi2 = mi1;
-
      // when, then
-     QCOMPARE( mi2.logID(), mi1.logID() );
-     QVERIFY( mi1.logID()== mi2.logID() );
+     QVERIFY( mi1.logID() == mi2.logID() );
 
-     GAMSCheckpoint cp3 = ws.addCheckpoint("mycp");
+     GAMSCheckpoint cp3 = ws.addCheckpoint(cpname);
      GAMSModelInstance mi3 = cp3.addModelInstance();
      QVERIFY( mi3.logID() == mi1.logID());
 
      GAMSWorkspaceInfo anotherWsInfo;
-     GAMSWorkspace anotherws(anotherWsInfo);
-     GAMSCheckpoint cp4 = anotherws.addCheckpoint("mycp");
+     GAMSWorkspace anotherWs(anotherWsInfo);
+     GAMSCheckpoint cp4 = anotherWs.addCheckpoint(cpname);
      GAMSModelInstance mi4 = cp4.addModelInstance();
-     QVERIFY( mi4.logID() == anotherws.logID());
-     QVERIFY( mi4.logID() != mi3.logID());
+     QVERIFY(mi4.logID() == anotherWs.logID());
+     QVERIFY(mi4.logID() != mi3.logID());
 }
 
 void TestGAMSModelInstance::getTestData() {
