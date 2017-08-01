@@ -55,6 +55,7 @@ public:
 
     /// Constructs a GAMSPath based on a path or file.
     /// \param dir Path.
+    /// \param file File.
     GAMSPath(const QDir & dir, const QString &file) : QFileInfo(dir, file) {}
 
     /// Constructs a GAMSPath based on a path or file.
@@ -128,18 +129,22 @@ public:
     const char* c_str();
 
     /// Create a GAMSPath to a temporary directory.
+    /// \param templatePath Template temporary directory.
     /// \return Returns a GAMSPath to the temporary directory.
     GAMSPath tempDir(const QString &templatePath = QString());
 
     /// Create a GAMSPath to a temporary file.
+    /// \param templateName Template for temporary file name.
     /// \return Returns a GAMSPath to the temporary file.
     GAMSPath tempFile(const QString &templateName = "XXXXXX.tmp");
 
     /// Create a GAMSPath to a temporary file.
+    /// \param templateName Template for temporary file name.
     /// \return Returns a GAMSPath to the temporary file.
     GAMSPath tempFile(const std::string &templateName = "XXXXXX.tmp");
 
     /// Create a GAMSPath to a temporary file.
+    /// \param templateName Template for temporary file name.
     /// \return Returns a GAMSPath to the temporary file.
     GAMSPath tempFile(const char* templateName = "XXXXXX.tmp");
 

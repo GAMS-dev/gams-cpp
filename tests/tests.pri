@@ -9,4 +9,6 @@ QT -= gui
 unix : LIBS += -ldl -L../../bin -lgamscpp
 win32: LIBS += -L../../bin/ -lgamscpp0
 
-INCLUDEPATH += $$TEST $$TEST/../src/
+TESTROOT = $$_PRO_FILE_PWD_/..
+
+INCLUDEPATH += $$TESTROOT $$TESTROOT/../src/

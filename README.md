@@ -26,11 +26,15 @@ Download the gams-cpp sources from GitHub (via git or as zip archive). All infor
 
 ## 4. Building the gams-cpp project ##
 
-Start Qt Creator and open the project file 'gams-cpp.pro'. Depending on the GAMS installation location the following lines of the 'dependency.pri' file have to be updated to the correct GAMS installation location.
+Start Qt Creator, open the project file 'gams-cpp.pro' and click 'Build/Run qmake'. This generates the file '**gamsinclude.pri**' that defines the default location of the GAMS installation location. The path of the 'gamsinclude.pri' file may have to be updated to the correct GAMS installation location on your system.
 
+On Windows the file contains:
 ```
-unix:GAMS_DISTRIB = $$(HOME)/gams/gams24.9_linux_x64_64_sfx/apifiles/C/api
-win32:GAMS_DISTRIB = C:\GAMS\win64\24.9\apifiles\C\api
+GAMS_DISTRIB=C:\GAMS\win64\24.9\apifiles\C\api
+```
+On Unix it will look like:
+```
+GAMS_DISTRIB=$$(HOME)/gams/gams24.9_linux_x64_64_sfx/apifiles/C/api
 ```
 
 Then perform a 'Build All' operation (Build->Build All) to build the library as well as all examples and tests. Finally, the examples can be executed by triggering Run button or pressing 'Ctrl+R'.

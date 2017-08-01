@@ -6,6 +6,10 @@ CLIB_MIN_VER = 3.1.0
 unix:GAMS_DISTRIB = $$(HOME)/gams/gams24.9_linux_x64_64_sfx/apifiles/C/api
 win32:GAMS_DISTRIB = C:\GAMS\win64\24.9\apifiles\C\api
 
+exists($$PWD/gamsinclude.pri) {
+    include($$PWD/gamsinclude.pri)
+}
+
 INCLUDEPATH += $$GAMS_DISTRIB
 
 DEFINES += _CRT_SECURE_NO_WARNINGS
