@@ -41,7 +41,7 @@ public:
     GAMSParameterRecord();
 
     /// Copy constructor.
-    /// \param symbol Another GAMSSymbolRecord used as data source.
+    /// \param record Another GAMSSymbolRecord used as data source.
     GAMSParameterRecord(const GAMSSymbolRecord &record);
 
     /// Assigns a GAMSParameterRecord.

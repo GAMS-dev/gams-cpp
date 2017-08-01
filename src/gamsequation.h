@@ -186,7 +186,7 @@ public:
 
     /// Finds record in GAMSEquation if it exists; otherwise add it.
     /// \param key1 Key for first index position.
-    /// \param Key2 key for second index position.
+    /// \param key2 key for second index position.
     /// \returns Instance of found or added GAMSEquationRecord.
     GAMSEquationRecord mergeRecord(const std::string& key1, const std::string& key2);
 

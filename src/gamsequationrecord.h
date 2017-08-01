@@ -41,7 +41,7 @@ public:
     GAMSEquationRecord();
 
     /// Copy constructor.
-    /// \param symbol Another GAMSSymbolRecord used as data source.
+    /// \param record Another GAMSSymbolRecord used as data source.
     GAMSEquationRecord(const GAMSSymbolRecord& record);
 
     /// Assigns a GAMSEquationRecord.
