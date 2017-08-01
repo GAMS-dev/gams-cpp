@@ -37,14 +37,11 @@ const char* GAMSVersion::mApiBuildTime = GAMSOptions::gamsBuild();
 const char* GAMSVersion::mApiDetail = std::string(API_VERSION).append(" (").append(GAMSVersion::mApiBuildTime)
                                                               .append(")").c_str();
 
-const char* GAMSVersion::mGamsMinVersion = GAMSOptions::gamsVersion();
-const char* GAMSVersion::mCLibMinVersion = CLIB_MIN_VERSION;
+const char* GAMSVersion::mGamsVersion = GAMSOptions::gamsVersion();
 
 static const char* mApiName = "API version";
 static const char* mMinGamsName = "required GAMS version";
 static const char* mCurGamsName = "current GAMS version";
-static const char* mMinCLibName = "required CLib version";
-static const char* mCurCLibName = "current CLib version";
 
 static int part(const char* vString, const int index, const std::string typeName)
 {
@@ -84,58 +81,31 @@ const char* GAMSVersion::apiBuildTime()
     return mApiBuildTime;
 }
 
-const char* GAMSVersion::minGams()
+const char* GAMSVersion::gamsVersion()
 {
-    return mGamsMinVersion;
+    return mGamsVersion;
 }
 
-int GAMSVersion::minGamsMajor()
+int GAMSVersion::gamsMajor()
 {
-    return part(minGams(), 0, mMinGamsName);
+    return part(gamsVersion(), 0, mMinGamsName);
 }
 
-int GAMSVersion::minGamsMinor()
+int GAMSVersion::gamsMinor()
 {
-    return part(minGams(), 1, mMinGamsName);
+    return part(gamsVersion(), 1, mMinGamsName);
 }
 
-int GAMSVersion::minGamsBuild()
+int GAMSVersion::gamsBuild()
 {
-    return part(minGams(), 2, mMinGamsName);
+    return part(gamsVersion(), 2, mMinGamsName);
 }
 
 bool GAMSVersion::checkGamsVersion(const char* currentGamsVersion)
 {
-    return (part(currentGamsVersion, 0, mCurGamsName) >= minGamsMajor())
-            && (part(currentGamsVersion, 1, mCurGamsName) >= minGamsMinor())
-            && (part(currentGamsVersion, 2, mCurGamsName) >= minGamsBuild());
-}
-
-const char* GAMSVersion::minCLib()
-{
-    return mCLibMinVersion;
-}
-
-int GAMSVersion::minCLibMajor()
-{
-    return part(minCLib(), 0, mMinCLibName);
-}
-
-int GAMSVersion::minCLibMinor()
-{
-    return part(minCLib(), 1, mMinCLibName);
-}
-
-int GAMSVersion::minCLibBuild()
-{
-    return part(minCLib(), 2, mMinCLibName);
-}
-
-bool GAMSVersion::checkCLibVersion(const char* currentClibVersion)
-{
-    return (part(currentClibVersion, 0, mCurCLibName) >= minCLibMajor())
-            && (part(currentClibVersion, 1, mCurCLibName) >= minCLibMinor())
-            && (part(currentClibVersion, 2, mCurCLibName) >= minCLibBuild());
+    return (part(currentGamsVersion, 0, mCurGamsName) >= gamsMajor())
+            && (part(currentGamsVersion, 1, mCurGamsName) >= gamsMinor())
+            && (part(currentGamsVersion, 2, mCurGamsName) >= gamsBuild());
 }
 
 GAMSVersion::GAMSVersion()

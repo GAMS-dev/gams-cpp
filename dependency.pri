@@ -1,6 +1,5 @@
 #---------------------------- Versions ------------------------------
-GAMS_MIN_VER = 24.8.0
-CLIB_MIN_VER = 3.1.0
+GAMS_VERSION = 24.8.0
 #--------------------------------------------------------------------
 
 unix:GAMS_DISTRIB = $$(HOME)/gams/gams24.9_linux_x64_64_sfx/apifiles/C/api
