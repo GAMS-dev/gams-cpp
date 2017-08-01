@@ -86,7 +86,7 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     // handle working directory
     mUsingTmpWorkingDir = workingDir.empty();
     if (mUsingTmpWorkingDir) {
-        GAMSPath tempDir = mWorkingDir.tempDir(QDir::tempPath() + "/gams");
+        GAMSPath tempDir = mWorkingDir.tempDir(QDir::tempPath());
         if (!tempDir.isDir()) {
             throw GAMSException("Cannot create workspace directory: " + tempDir.toStdString());
         }
