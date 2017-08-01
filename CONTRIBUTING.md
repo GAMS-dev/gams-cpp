@@ -7,11 +7,13 @@ We highly appreciate contributions to the gams-cpp project! To submit your impro
 We recommend that you use the Qt Creator to work on gams-cpp. Below you find some information on how we
 setup up the Qt Creator and how we style our code.
 
-## Behavior
+## Text Editor
+
+### Behavior
 
   - Tabs And Indentation
     * Tab policy: spaces only
-    * Tab size: 8
+    * Tab size: 4
     * Indent size: 4
     * Align continuation lines: with spaces
   - Typing
@@ -27,7 +29,7 @@ setup up the Qt Creator and how we style our code.
     * (all ☑)
     * Show help tooltipps using the mouse: On Mouseover
 
-## Display
+### Display
 
   - Text Wrapping
     * ☐ Enable text wrapping
