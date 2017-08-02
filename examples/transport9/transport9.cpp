@@ -24,7 +24,6 @@
  * SOFTWARE.
  */
 
-#include <QtSql>
 #include <vector>
 #include "gams.h"
 #include <iostream>
@@ -42,6 +41,8 @@ int main()
 }
 
 #else
+
+#include <QtSql>
 
 string getModelText()
 {
