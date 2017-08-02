@@ -126,14 +126,25 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
         for (QString lib: libstems) {
             GAMSPath tmpLib = mWorkingDir / libTmpl.arg(lib);
             if (tmpLib.exists()) {
-                MSG   << "--- Warning: Found library " << tmpLib.fileName() << " in the Working Directory (" << mWorkingDir.toStdString() << ").\n"
-                      << "---          This could cause a problem when it is a different version than\n"
-                      << "---          the one in the System Directory (" + mSystemDir.toStdString() + ").";
+                MSG   << "\n--- Warning: Found library " << tmpLib.fileName() << " in the Working Directory (" << mWorkingDir.toStdString() << ")."
+                      << "\n---          This could cause a problem when it is a different version than"
+                      << "\n---          the one in the System Directory (" + mSystemDir.toStdString() + ").";
             }
         }
     }
 
     GAMSPlatform::ensureEnvPathContains(mSystemDir.c_str());
+
+    // Check GAMS version of the system directory
+    QString compiledVersion = GAMSVersion::gamsVersion();
+    QString systemVersion = QString::fromStdString(GAMSVersion::systemVersion(mSystemDir.toStdString()));
+    if (systemVersion.isEmpty()) {
+        MSG << "Warning: The GAMS version at '" << mSystemDir.c_str() << "' could not be determined.";
+    } else if (compiledVersion != systemVersion) {
+        MSG << "\n--- Warning: This library is developed for GAMS version " << compiledVersion << "."
+            << "\n---          The selected system path '" << mSystemDir.c_str() << "' contains GAMS version " << systemVersion << "."
+            << "\n---          This may result in unpredictable behavior.";
+    }
 
     // TODO: all the ProcessStartInfo stuff.
 
