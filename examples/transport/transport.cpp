@@ -74,7 +74,7 @@ void Transport::run(/*GAMSCheckpoint *checkpoint, ostream *output*/)
     fz = fDbOut1.getVariable("z");
 }
 
-void Transport::run(GAMSCheckpoint checkpoint, ostream &output)
+void Transport::run(gams::GAMSCheckpoint checkpoint, std::ostream &output)
 {
     if (!fDbIn1.checkDomains())
         throw GAMSException("Domain Errors in Database 1");

@@ -96,8 +96,6 @@ int main(int argc, char* argv[]){
   }
   PGX.Close();
 
-
-  double val;
   cout << "-----" << endl << "random access of a key that does not exist:" << endl;
   key = "seattle.something else";
   if (xlevel.find(key) != xlevel.end()) {
