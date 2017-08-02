@@ -58,7 +58,7 @@ Additionaly we use some rules which are quite common in Qt projects.
 |---|---|---|
 |1| Split lines that extend about 120 characters. QtCreator can be setup to mark 120 character mark.  |  |
 |2| When splitting (e.g. extend 120 characters) take the separator to the next line (simplifies detection of continue-lines) |  if (this == that <br> && allTheBest) <br> <br> func(par1, para2 <br> , par3, par4) |
-|3| Separate opening curly bracket for starting namespace, class and method implementation  | class MyClass() <br> {` |
+|3| Separate opening curly bracket for starting namespace, class and method implementation  | class MyClass() <br> { |
 |4| Trailing opening curly bracket for implement part (loops, conditional branch, ...) | for (int i: list) { |
 |5| **else** and **else if** are combined in one line with curly brackets | if (something) { <br> } else if (another thing) { <br> } else { <br> }  |
 |6| Closing curly brackets always are on a seperate line | if (something) { <br> } |
