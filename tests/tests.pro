@@ -5,6 +5,7 @@ SUBDIRS += testgamsdatabase
 SUBDIRS += testgamsdatabasedomainviolation
 SUBDIRS += testgamsdatabaseiter
 SUBDIRS += testgamsdomain
+SUBDIRS += testgamsenum
 SUBDIRS += testgamsequation
 SUBDIRS += testgamsequationrecord
 SUBDIRS += testgamsexception

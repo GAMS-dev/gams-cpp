@@ -168,6 +168,9 @@ public:
         OptNotFound = 5000                  ///< Driver error: Internal error: Cannot load option handling library
     };
 
+    /// Get a <c>GAMSEnum::GAMSExitCode</c> as text.
+    static std::string text(GAMSEnum::GAMSExitCode type);
+
     /// What field to update
     enum SymbolUpdateAction
     {
@@ -210,13 +213,13 @@ public:
         TraceReport             ///< Trace Report
     };
 
-    /// Get a <c>GAMSEnum::VarType</c> as text.
+    /// Get a <c>GAMSEnum::EAction</c> as text.
     static std::string text(GAMSEnum::EAction type);
 
-    /// Get a <c>GAMSEnum::VarType</c> as code.
+    /// Get a <c>GAMSEnum::EAction</c> as code.
     static std::string code(GAMSEnum::EAction type);
 
-    /// Get a <c>GAMSEnum::VarType</c> from a <c>std::string</c>.
+    /// Get a <c>GAMSEnum::EAction</c> from a <c>std::string</c>.
     static EAction eActionFromCode(std::string str);
 
 };
