@@ -6,7 +6,7 @@ gams-cpp uses [Qt](https://www.qt.io/) which is licensed under [LGPL](https://ww
 
 # Contribute #
 
-Contributions to gams-cpp are highly appreciated! For futher information please check our [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Cunduct](CODE_OF_CONDUCT.md).
+Contributions to gams-cpp are highly appreciated! For futher information please check our [CONTRIBUTING.md](CONTRIBUTING.md) and [Code of Cunduct](CODE_OF_CONDUCT.md).
 
 # How to build #
 
