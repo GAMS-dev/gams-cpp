@@ -23,14 +23,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include "gams.h"
-#include "gamssymbolrecord.h"
 
+#include "gams.h"
 #include <iostream>
 #include <vector>
 
 using namespace gams;
 using namespace std;
+
+#ifdef __unix__
+
+int main()
+{
+    cout << "---------- Transport 10 --------------" << endl;
+    cout << "Transport 10 is a Microsoft Windows only example." << endl;
+    return 0;
+}
+
+#else
+
+#include <QAxObject>
+#include <Windows.h> // includes "Ole2.h" that includes "objbase.h" to access CoInitialize() and CoUninitialize()
 
 string getModelText()
 {
@@ -77,78 +90,120 @@ string getModelText()
             "  Display x.l, x.m ;                                                       \n";
 }
 
+/// Creates an 1 dimensional GAMSParameter and transfers data from an Excel sheet (horizontal ordered)
+///
+/// \param sheets The sheets object of an open Excel workbook
+/// \param sheetName The name of the sheet to be read
+/// \param db The GAMSDatabase where the GAMSParameter is created in
+/// \param paramName The name of the new GAMSParameter
+/// \param paramText The explplanatory text of the new GAMSParameter
+/// \param set The GAMSSet for GAMSParameter dimension
+/// \return The new GAMSParameter in the GAMSDatabase
+///
+GAMSParameter sheetToParameter(QAxObject* sheets, string sheetName
+                               , GAMSDatabase db, string paramName, string paramText, GAMSSet set)
+{
+    QAxObject* sheet = sheets->querySubObject( "Item( string )", sheetName.c_str() );
+    GAMSParameter param = db.addParameter(paramName, paramText, set);
+
+    QAxObject* usedrange = sheet->querySubObject( "UsedRange");
+    QAxObject * columns = usedrange->querySubObject("Columns");
+    int intCols = columns->property("Count").toInt();
+
+    for (int i = 1; i <= intCols; i++) {
+        std::string name = sheet->querySubObject("Cells( int, int )", 1, i)->dynamicCall("Value()").toString().toStdString();
+        double value = sheet->querySubObject("Cells( int, int )", 2, i)->dynamicCall("Value()").toDouble();
+        set.addRecord(name);
+        GAMSParameterRecord rec = param.addRecord(name);
+        rec.setValue(value);
+    }
+    return param;
+}
+
+/// Creates a 2 dimensional GAMSParameter and transfers data from an Excel sheet
+///
+/// \param sheets The sheets object of an open Excel workbook
+/// \param sheetName The name of the sheet to be read
+/// \param db The GAMSDatabase where the GAMSParameter is created in
+/// \param paramName The name of the new GAMSParameter
+/// \param paramText The explplanatory text of the new GAMSParameter
+/// \param set1 The GAMSSet for first GAMSParameter dimension
+/// \param set2 The GAMSSet for second GAMSParameter dimension
+/// \return The new GAMSParameter in the GAMSDatabase
+///
+GAMSParameter sheetToParameter(QAxObject* sheets, string sheetName
+                               , GAMSDatabase db, string paramName, string paramText, GAMSSet set1, GAMSSet set2)
+{
+    QAxObject* sheet = sheets->querySubObject( "Item( string )", sheetName.c_str() );
+    vector<GAMSDomain> sets {set1, set2};
+    GAMSParameter param = db.addParameter(paramName, paramText, sets);
+
+    QAxObject* usedrange = sheet->querySubObject( "UsedRange");
+    QAxObject * columns = usedrange->querySubObject("Columns");
+    int intCols = columns->property("Count").toInt();
+    QAxObject * rows = usedrange->querySubObject("Rows");
+    int intRows = rows->property("Count").toInt();
+
+    for (int j = 2; j <= intCols; j++) {
+        string namej = sheet->querySubObject("Cells( int, int )", 1, j)->dynamicCall("Value()").toString().toStdString();
+        for (int i = 2; i <= intRows; ++i) {
+            string namei = sheet->querySubObject("Cells( int, int )", i, 1)->dynamicCall("Value()").toString().toStdString();
+            GAMSParameterRecord rec = param.addRecord(namei, namej);
+            double value = sheet->querySubObject("Cells( int, int )", i, j)->dynamicCall("Value()").toDouble();
+            rec.setValue(value);
+        }
+    }
+    return param;
+}
+
 /// This is the 10th model in a series of tutorial examples. Here we show:
 ///   - How to fill a GAMSDatabase by reading from MS Excel
 int main(int argc, char* argv[])
 {
     cout << "---------- Transport 10 --------------" << endl;
-    cout << "Transport10: not implementet yet." << endl;
+
+    ::CoInitialize(0); // initialize thread to use ActiveX (some systems may need CoInititializeEx)
 
     GAMSWorkspaceInfo wsInfo;
     if (argc > 1)
         wsInfo.setSystemDirectory(argv[1]);
     GAMSWorkspace ws(wsInfo);
 
-    // TODO(AF) add excel stuff
-    // Reading input data from workbook
-    //    var excelApp = new Excel.Application();
-    //    Excel.Workbook wb = excelApp.Workbooks.Open(Path.Combine(ws.SystemDirectory, @"apifiles/Data/transport.xls"));
-
-    //    Excel.Range range;
-
-    //    Excel.Worksheet capacity = (Excel.Worksheet)wb.Worksheets.get_Item("capacity");
-    //    range = capacity.UsedRange;
-    //    Array capacityData = (Array)range.Cells.Value;
-    //    int iCount = capacity.UsedRange.Columns.Count;
-
-    //    Excel.Worksheet demand = (Excel.Worksheet)wb.Worksheets.get_Item("demand");
-    //    range = demand.UsedRange;
-    //    Array demandData = (Array)range.Cells.Value;
-    //    int jCount = range.Columns.Count;
-
-    //    Excel.Worksheet distance = (Excel.Worksheet)wb.Worksheets.get_Item("distance");
-    //    range = distance.UsedRange;
-    //    Array distanceData = (Array)range.Cells.Value;
-
-    //    // number of markets/plants have to be the same in all spreadsheets
-    //    Debug.Assert((range.Columns.Count - 1) == jCount && (range.Rows.Count - 1) == iCount,
-    //                 "Size of the spreadsheets doesn't match");
-    //    wb.Close();
-
     // Creating the GAMSDatabase and fill with the workbook data
     GAMSDatabase db = ws.addDatabase();
+    QString fileName = QString::fromStdString(ws.systemDirectory())+ cPathSep + "apifiles" + cPathSep + "Data" + cPathSep + "transport.xls";
+
+    QAxObject* excel = new QAxObject( "Excel.Application", 0 );
+    QAxObject* workbooks = excel->querySubObject( "Workbooks" );
+    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", fileName );
+    QAxObject* sheets = workbook->querySubObject( "Worksheets" );
 
     GAMSSet i = db.addSet("i", 1, "Plants");
     GAMSSet j = db.addSet("j", 1, "Markets");
-    GAMSParameter capacityParam = db.addParameter("a", "Capacity", i);
-    GAMSParameter demandParam = db.addParameter("b", "Demand", j);
-    vector<GAMSDomain> sets {i, j};
-    GAMSParameter distanceParam = db.addParameter("d", "Distance", sets);
 
-    //    for (int ic = 1; ic <= iCount; ic++)
-    //    {
-    //        i.AddRecord((string)capacityData.GetValue(1, ic));
-    //        capacityParam.AddRecord((string)capacityData.GetValue(1, ic)).Value = (double)capacityData.GetValue(2, ic);
-    //    }
-    //    for (int jc = 1; jc <= jCount; jc++)
-    //    {
-    //        j.AddRecord((string)demandData.GetValue(1, jc));
-    //        demandParam.AddRecord((string)demandData.GetValue(1, jc)).Value = (double)demandData.GetValue(2, jc);
-    //        for (int ic = 1; ic <= iCount; ic++)
-    //        {
-    //            distanceParam.AddRecord((string)distanceData.GetValue(ic + 1, 1), (string)distanceData.GetValue(1, jc + 1)).Value = (double)distanceData.GetValue(ic + 1, jc + 1);
-    //        }
-    //    }
+    // read parameters
+    sheetToParameter(sheets, "capacity", db, "a", "Capacity", i);
+    sheetToParameter(sheets, "demand", db, "b", "Demand", j);
+    sheetToParameter(sheets, "distance", db, "d", "Distance", i, j);
+
+    // clean up and close up
+    workbook->dynamicCall("Close()");
+    excel->dynamicCall("Quit()");
+
 
     // Create and run the GAMSJob
-    //    GAMSOptions opt = ws.addOptions();
-    //    GAMSJob t10 = ws.addJobFromString(getModelText());
-    //    opt.mDefines["gdxincname"] = db.name();
-    //    opt.setAllModelTypes("xpress");
-    //    t10.run(opt, db);
-    //    for (GAMSVariableRecord record : t10.outDB().getVariable("x"))
-    //        cout << "x(" << record.key(0) << "," << record.key(1) << "): level=" << record.level() <<
-    //                " marginal=" << record.marginal() << endl;
+    GAMSOptions opt = ws.addOptions();
+    GAMSJob t10 = ws.addJobFromString(getModelText());
+    opt.setDefine("gdxincname", db.name());
+    opt.setAllModelTypes("xpress");
+    t10.run(opt, db);
+    for (GAMSVariableRecord record : t10.outDB().getVariable("x"))
+        cout << "x(" << record.key(0) << "," << record.key(1) << "): level=" << record.level() <<
+                " marginal=" << record.marginal() << endl;
+
+
+    ::CoUninitialize();
 
     return 0;
 }
+#endif

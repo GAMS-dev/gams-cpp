@@ -129,10 +129,10 @@ public:
     GAMSPath systemDir() const {return mSystemDir;}
     bool usingTmpWorkingDir() {return mUsingTmpWorkingDir;}
 
-    std::string gamsVersion() const {return GAMSVersion::minGams();}
-    int gamsRelease() const {return GAMSVersion::minGamsMajor();}
-    int gamsSubRel() const {return GAMSVersion::minGamsMinor();}
-    int gamsGoldRel() const {return GAMSVersion::minGamsBuild();}
+    std::string gamsVersion() const {return GAMSVersion::gamsVersion();}
+    int gamsRelease() const {return GAMSVersion::gamsMajor();}
+    int gamsSubRel() const {return GAMSVersion::gamsMinor();}
+    int gamsGoldRel() const {return GAMSVersion::gamsBuild();}
 
     static std::string apiVersionDetail() {return GAMSVersion::apiDetail();}
     static std::string apiVersion() {return GAMSVersion::api();}

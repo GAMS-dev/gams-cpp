@@ -49,12 +49,12 @@ std::string GAMSEnum::text(GAMSEnum::VarType type)
 std::string GAMSEnum::text(GAMSEnum::GAMSExitCode type)
 {
     if (type >= 1000) {
-        int code = type/1000 -1;
+        int code = type/1000;
         if (code > 5 || (type / 1000.0 - type / 1000 > 0.0)) {
             return "InvalidReturnCode";
         }
         const char * res[] = {"MissingCommandLineParameter","CannotInstallInterrupt","CouldNotGetCurrentDir","CmexNotFound","OptNotFound"};
-        return res[code];
+        return res[code-1];
     } else if (static_cast<int>(type) == 909) {
         return "CannotAddPath";
     } else if (type >= 400) {

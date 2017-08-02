@@ -6,9 +6,6 @@ DESTDIR = ../bin
 QT -= gui
 QT += testlib
 
-TEST = $$PWD/..
-DEP = $$TEST/dep
-
 include(../dependency.pri)
 
 unix : LIBS += -ldl -L../../bin -lgamscpp
