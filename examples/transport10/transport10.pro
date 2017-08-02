@@ -3,6 +3,6 @@ TEMPLATE = app
 include(../../dependency.pri)
 include(../examples.pri)
 
-QT += axcontainer
+win32:QT += axcontainer
 
 SOURCES += transport10.cpp

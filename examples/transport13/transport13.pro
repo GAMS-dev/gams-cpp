@@ -3,8 +3,8 @@ TEMPLATE = app
 include(../../dependency.pri)
 include(../examples.pri)
 
-INCLUDEPATH += ../Transport
+INCLUDEPATH += ../transport
 
 SOURCES += \
     transport13.cpp \
-    ../Transport/transport.cpp
+    ../transport/transport.cpp
