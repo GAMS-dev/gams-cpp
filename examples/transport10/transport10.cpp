@@ -27,12 +27,23 @@
 #include "gams.h"
 #include <iostream>
 #include <vector>
-#include <QAxObject>
-
-#include <Windows.h> // includes "Ole2.h" that includes "objbase.h" to access CoInitialize() and CoUninitialize()
 
 using namespace gams;
 using namespace std;
+
+#ifdef __unix__
+
+int main()
+{
+    cout << "---------- Transport 10 --------------" << endl;
+    cout << "Transport 10 is a Microsoft Windows only example." << endl;
+    return 0;
+}
+
+#else
+
+#include <QAxObject>
+#include <Windows.h> // includes "Ole2.h" that includes "objbase.h" to access CoInitialize() and CoUninitialize()
 
 string getModelText()
 {
@@ -149,6 +160,8 @@ GAMSParameter sheetToParameter(QAxObject* sheets, string sheetName
 ///   - How to fill a GAMSDatabase by reading from MS Excel
 int main(int argc, char* argv[])
 {
+    cout << "---------- Transport 10 --------------" << endl;
+
     ::CoInitialize(0); // initialize thread to use ActiveX (some systems may need CoInititializeEx)
 
     GAMSWorkspaceInfo wsInfo;
@@ -190,5 +203,7 @@ int main(int argc, char* argv[])
 
 
     ::CoUninitialize();
+
     return 0;
 }
+#endif

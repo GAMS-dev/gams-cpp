@@ -32,6 +32,16 @@
 using namespace std;
 using namespace gams;
 
+#ifdef __unix__
+
+int main()
+{
+    cout << "---------- Transport 9 --------------" << endl;
+    cout << "Transport 9 is a Microsoft Windows only example." << endl;
+    return 0;
+}
+
+#else
 
 string getModelText()
 {
@@ -243,11 +253,11 @@ int main(int argc, char* argv[])
     opt.setAllModelTypes("xpress");
     t9.run(opt, db);
     for (GAMSVariableRecord rec : t9.outDB().getVariable("x"))
-        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal=" << rec.marginal() << endl;
+        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
+             << rec.marginal() << endl;
     // write results into Access file
     writeToAccess(ws, t9.outDB());
 
     return 0;
 }
-
-
+#endif
