@@ -161,7 +161,6 @@ GAMSParameter sheetToParameter(QAxObject* sheets, string sheetName
 int main(int argc, char* argv[])
 {
     cout << "---------- Transport 10 --------------" << endl;
-    cout << "Transport 10 is a Microsoft Windows only example." << endl;
 
     ::CoInitialize(0); // initialize thread to use ActiveX (some systems may need CoInititializeEx)
 
