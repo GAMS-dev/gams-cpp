@@ -28,6 +28,7 @@
 #include <vector>
 #include "gams.h"
 #include <iostream>
+#include <QCoreApplication>
 
 using namespace std;
 using namespace gams;
@@ -237,7 +238,7 @@ void writeToAccess(GAMSWorkspace ws, GAMSDatabase db)
 int main(int argc, char* argv[])
 {
     cout << "---------- Transport 9 --------------" << endl;
-
+    QCoreApplication app(argc, argv);
     GAMSWorkspaceInfo wsInfo;
     if (argc > 1)
         wsInfo.setSystemDirectory(argv[1]);
