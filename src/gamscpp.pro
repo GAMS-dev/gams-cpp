@@ -6,6 +6,7 @@ TARGET = gamscpp
 include(../dependency.pri)
 include(gamscpp.pri)
 
+CONFIG += skip_target_version_ext
 CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG += lib
