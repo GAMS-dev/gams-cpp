@@ -32,7 +32,8 @@
 #include <ostream>
 #include <string>
 
-/// Wrapper class for GAMS trnsport model
+/// \file transport.h
+/// \brief Wrapper class definition for GAMS trnsport model
 class Transport
 {
 public:

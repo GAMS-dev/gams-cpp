@@ -32,6 +32,7 @@
 using namespace gams;
 using namespace std;
 
+/// Run the job with a different scenario
 void runScenario(GAMSWorkspace* ws, const GAMSCheckpoint& cp, mutex* ioMutex, double b)
 {
     auto t6 = ws->addJobFromString("bmult=" + to_string(b) + "; solve transport min z use lp; ms=transport.modelstat; ss=transport.solvestat;", cp);
@@ -45,6 +46,7 @@ void runScenario(GAMSWorkspace* ws, const GAMSCheckpoint& cp, mutex* ioMutex, do
     cout << "  Obj: " << t6.outDB().getVariable("z").findRecord().level() << endl;
 }
 
+/// Get model as string
 string getModelText()
 {
     return "Sets                                                                       \n"
@@ -96,7 +98,8 @@ string getModelText()
 }
 
 
-/// This is the 6th model in a series of tutorial examples.
+/// \file transport6.cpp
+/// \brief This is the 6th model in a series of tutorial examples.
 ///
 /// Here we show:
 ///   - How to run multiple GAMSJobs in parallel using a GAMSCheckpoint

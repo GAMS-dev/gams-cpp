@@ -32,6 +32,7 @@
 using namespace gams;
 using namespace std;
 
+/// Get model as string
 string getModelText()
 {
     return "Sets                                                                       \n"
@@ -78,7 +79,8 @@ string getModelText()
            "Display x.l, x.m ;                                                         \n";
 }
 
-/// This is the 4th model in a series of tutorial examples.
+/// \file transport4.cpp
+/// \brief This is the 4th model in a series of tutorial examples.
 ///
 /// Here we show:
 ///   - How to define data using C++ data structures

@@ -32,6 +32,7 @@
 using namespace gams;
 using namespace std;
 
+/// Solve the model in different scenarios
 void scenSolve(GAMSWorkspace* ws, GAMSCheckpoint* cp, vector<double>* bmultVector, std::mutex* vectorMutex, std::mutex* ioMutex)
 {
     unique_lock<mutex> vectorLock(*vectorMutex);
@@ -70,6 +71,7 @@ void scenSolve(GAMSWorkspace* ws, GAMSCheckpoint* cp, vector<double>* bmultVecto
     }
 }
 
+/// Get model as string
 string getModelText()
 {
     return "Sets                                                                  \n"
@@ -119,7 +121,8 @@ string getModelText()
            "Model transport / all / ;                                             \n";
 }
 
-/// This is the 8th model in a series of tutorial examples.
+/// \file transport8.cpp
+/// \brief This is the 8th model in a series of tutorial examples.
 ///
 /// Here we show:
 ///   - How to use a vector to solve multiple GAMSModelInstances in parallel

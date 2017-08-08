@@ -29,12 +29,17 @@
 using namespace gams;
 using namespace std;
 
+/// \file transport1.cpp
+/// \brief This is the 1st model in a series of tutorial examples.
+///
 /// This is the 1st model in a series of tutorial examples.
 ///
 /// Here we show:
 ///   - How to run a GAMSJob from file
 ///   - How to specify the solver
 ///   - How to run a job with a solver option file
+///
+/// The example runs the [trnsport] model from the GAMS Model Library.
 int main(int argc, char* argv[])
 {
     cout << "---------- Transport 1 --------------" << endl;
@@ -43,6 +48,7 @@ int main(int argc, char* argv[])
     if (argc > 1)
         wsInfo.setSystemDirectory(argv[1]);
     GAMSWorkspace ws(wsInfo);
+    // Retrieves [trnsport] model from GAMS Model Library
     ws.gamsLib("trnsport");
 
     // create a GAMSJob from file and run it with default settings

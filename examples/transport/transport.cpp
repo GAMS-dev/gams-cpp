@@ -1,5 +1,4 @@
 /*
- *
  * GAMS - General Algebraic Modeling System C++ API
  *
  * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
@@ -31,6 +30,8 @@
 using namespace gams;
 using namespace std;
 
+/// \file transport.cpp
+/// \brief Wrapper class implementation for GAMS trnsport model
 Transport::Transport(GAMSWorkspace ws)
     : fws(ws),
       job(fws.addJobFromString(getModelSource())),

@@ -30,6 +30,7 @@
 using namespace gams;
 using namespace std;
 
+/// Get data as string
 string getDataText()
 {
     return "Sets                                                           \n"
@@ -54,6 +55,7 @@ string getDataText()
            "Scalar f  freight in dollars per case per thousand miles  /90/;\n";
 }
 
+/// Get model as string
 string getModelText()
 {
     return "Sets                                                                    \n"
@@ -98,7 +100,8 @@ string getModelText()
            "Display x.l, x.m ;                                                      \n";
 }
 
-/// This is the 2nd model in a series of tutorial examples.
+/// \file transport2.cpp
+/// \brief This is the 2nd model in a series of tutorial examples.
 ///
 /// Here we show:
 ///   - How to use include files to separate model and data

@@ -33,6 +33,8 @@ using namespace std;
 
 #ifdef __unix__
 
+/// \file transport10.cpp
+/// \brief This is the 10th model in a series of tutorial examples.
 int main()
 {
     cout << "---------- Transport 10 --------------" << endl;
@@ -156,7 +158,8 @@ GAMSParameter sheetToParameter(QAxObject* sheets, string sheetName
     return param;
 }
 
-/// This is the 10th model in a series of tutorial examples.
+/// \file transport10.cpp
+/// \brief This is the 10th model in a series of tutorial examples.
 ///
 /// Here we show:
 ///   - How to fill a GAMSDatabase by reading from MS Excel

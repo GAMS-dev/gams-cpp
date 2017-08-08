@@ -34,10 +34,11 @@
 using namespace gams;
 using namespace std;
 
-/// This is the 13th model in a series of tutorial examples.
+/// \file transport13.cpp
+/// \brief This is the 13th model in a series of tutorial examples.
 ///
 /// Here we show:
-///   - How to run a GAMSJob using a wrapper class to package a particular GAMS model
+///  - How to run a GAMSJob using a wrapper class to package a particular GAMS model
 int main(int argc, char* argv[])
 {
     cout << "---------- Transport 13 --------------" << endl;

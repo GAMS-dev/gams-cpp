@@ -33,6 +33,10 @@ using namespace gams;
 
 #ifdef __unix__
 
+/// \file transport9.cpp
+/// \brief This is the 9th model in a series of tutorial examples.
+/// Here we show:
+///   - How to fill a GAMSDatabase by reading from MS Access
 int main()
 {
     cout << "---------- Transport 9 --------------" << endl;
@@ -45,6 +49,7 @@ int main()
 #include <QCoreApplication>
 #include <QtSql>
 
+/// Get model as string
 string getModelText()
 {
     return " Sets                                                                       \n"
@@ -91,6 +96,7 @@ string getModelText()
            "                                                                            \n";
 }
 
+/// Read GAMSSet from MS Access
 void readSet(QSqlDatabase sqlDb, GAMSDatabase db, string strAccessSelect, string setName, int setDim, string setExp = "")
 {
     QSqlQuery query(sqlDb);
@@ -117,6 +123,7 @@ void readSet(QSqlDatabase sqlDb, GAMSDatabase db, string strAccessSelect, string
     }
 }
 
+/// Read GAMSParameter from MS Access
 void readParameter(QSqlDatabase sqlDb, GAMSDatabase db, string strAccessSelect, string parName, int parDim, string parExp = "")
 {
     QSqlQuery query(sqlDb);
@@ -143,6 +150,7 @@ void readParameter(QSqlDatabase sqlDb, GAMSDatabase db, string strAccessSelect, 
     }
 }
 
+/// Read data from MS Access into a GAMSDatabase
 GAMSDatabase readFromAccess(GAMSWorkspace ws)
 {
     GAMSDatabase db = ws.addDatabase();
@@ -173,6 +181,7 @@ GAMSDatabase readFromAccess(GAMSWorkspace ws)
     return db;
 }
 
+/// Write GAMSVariable to MS Access
 void writeVariable(QSqlDatabase sqlDb, GAMSDatabase db, string varName, vector<string> domains)
 {
     GAMSVariable var = db.getVariable(varName);
@@ -211,6 +220,7 @@ void writeVariable(QSqlDatabase sqlDb, GAMSDatabase db, string varName, vector<s
     }
 }
 
+/// Write GAMSDatabase to MS Access
 void writeToAccess(GAMSWorkspace ws, GAMSDatabase db)
 {
     // connect to database
@@ -234,9 +244,10 @@ void writeToAccess(GAMSWorkspace ws, GAMSDatabase db)
     }
 }
 
-/// This is the 9th model in a series of tutorial examples.
+/// \file transport9.cpp
+/// \brief This is the 9th model in a series of tutorial examples.
 ///
-///  Here we show:
+/// Here we show:
 ///   - How to fill a GAMSDatabase by reading from MS Access
 int main(int argc, char* argv[])
 {
