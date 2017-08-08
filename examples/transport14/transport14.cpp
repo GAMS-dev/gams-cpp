@@ -35,6 +35,10 @@ void run(Optimizer optim, double bmult)
     cout << "Scenario bmult=" << bmult << ", Obj:" << optim.solve(bmult) << endl;
 }
 
+/// This is the 14th model in a series of tutorial examples.
+///
+/// Here we show:
+///   - How to run multiple GAMSJobs in parallel each using different scenario data
 int main(int argc, char* argv[])
 {
     cout << "---------- Transport 14 --------------" << endl;

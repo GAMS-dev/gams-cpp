@@ -1,5 +1,4 @@
 /*
- *
  * GAMS - General Algebraic Modeling System C++ API
  *
  * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
@@ -245,6 +244,10 @@ void GUSSCall(GAMSSet dict, GAMSModelInstance mi, string solveStatement
     }
 }
 
+/// This is the 12th model in a series of tutorial examples.
+///
+/// Here we show:
+///   - How to implement a GUSS approach using the GAMS API
 int main(int argc, char* argv[])
 {
     cout << "---------- Transport 12 --------------" << endl;

@@ -1,5 +1,4 @@
 /*
- *
  * GAMS - General Algebraic Modeling System C++ API
  *
  * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
@@ -100,7 +99,9 @@ void createSaveRestart(int argc, char* argv[], const string &checkpointName)
     j1.run(opt, cp);
 }
 
-/// This is the 11th model in a series of tutorial examples. Here we show:
+/// This is the 11th model in a series of tutorial examples.
+///
+/// Here we show:
 ///   - How to create and use a save/restart file
 int main(int argc, char* argv[])
 {

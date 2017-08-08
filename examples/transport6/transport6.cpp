@@ -96,7 +96,9 @@ string getModelText()
 }
 
 
-/// This is the 6th model in a series of tutorial examples. Here we show:
+/// This is the 6th model in a series of tutorial examples.
+///
+/// Here we show:
 ///   - How to run multiple GAMSJobs in parallel using a GAMSCheckpoint
 int main(int argc, char* argv[])
 {

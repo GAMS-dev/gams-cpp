@@ -1,5 +1,4 @@
 /*
- *
  * GAMS - General Algebraic Modeling System C++ API
  *
  * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
@@ -30,7 +29,9 @@
 using namespace gams;
 using namespace std;
 
-/// This is the 1st model in a series of tutorial examples. Here we show:
+/// This is the 1st model in a series of tutorial examples.
+///
+/// Here we show:
 ///   - How to run a GAMSJob from file
 ///   - How to specify the solver
 ///   - How to run a job with a solver option file

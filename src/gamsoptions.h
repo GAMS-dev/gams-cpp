@@ -43,17 +43,15 @@ class GAMSOptionsImpl;
 /// parameters since they correspond to the command line parameters of the GAMS
 /// executable) for a GAMSJob and GAMSModelInstance. There are integer (e.g.
 /// NodLim), double (e.g. ResLim), and string (e.g. PutDir) valued options. There
-/// are also a few list options (Defines to set string macros inside GAMS and IDir
+/// are also a few list options (setDefine() to set string macros inside GAMS and addInputDir()
 /// provide multiple search paths for include files) and a power option to set a
-/// solver for all suitable model types (AllModelTypes).</p>
+/// solver for all suitable model types (setAllModelTypes()).</p>
 /// <p>Some options known from other interfaces to GAMS that are of limited use or
-/// could even create problematic situations in the .NET environment are not
+/// could even create problematic situations in the C++ environment are not
 /// settable through the GAMSOptions class.</p>
 /// <p>For some options (e.g. Case) other GAMS interfaces use numeric values (e.g. 0,1)
 /// while the GAMSOptions class has enumerated types with proper names (e.g.
 /// MixedCase, UpperCase).</p>
-/// <p>A GAMSOptions instance is connected to external resources and needs to be properly
-/// disposed before the .NET garbage collector can claim the instance.</p>
 class LIBSPEC GAMSOptions
 {
     friend class GAMSModelInstanceImpl;
@@ -203,11 +201,11 @@ public:
             RefDataNewSetElementNames = 2,                     ///< Extract referenced data from the restart file using new set element names
             RefDataNewSetElementNamesDropSymbolText = 3,       ///< Extract referenced data from the restart file using new set element names and drop symbol text
             RefSymbol = 4,                                     ///< Extract referenced symbol declarations from the restart file
-            Deprecated_10 = 10,                                ///< (Sameas 11 and therefore hidden)
+            Deprecated_10 = 10,                                ///< (Same as 11 and therefore hidden)
             InputFileWOComments = 11,                          ///< Write processed input file without comments
-            Deprecated_12 = 12,                                ///< (Sameas 11 and therefore hidden)
-            Deprecated_19 = 19,                                ///< ???
-            Deprecated_20 = 20,                                ///< (Sameas 21 and therefore hidden)
+            Deprecated_12 = 12,                                ///< (Same as 11 and therefore hidden)
+            Deprecated_19 = 19,                                ///< ?????
+            Deprecated_20 = 20,                                ///< (Same as 21 and therefore hidden)
             InputFileWithComments = 21                         ///< Write processed input file with all comments
         };
     };
@@ -509,6 +507,8 @@ public:
             On = 1                                             ///< Use Python installation provided in GAMS system directory
         };
     };
+
+    /// Destructor
     ~GAMSOptions();
 
     /// Get GAMS build information.

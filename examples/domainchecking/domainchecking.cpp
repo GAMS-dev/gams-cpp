@@ -1,5 +1,4 @@
 /*
- *
  * GAMS - General Algebraic Modeling System C++ API
  *
  * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
@@ -40,6 +39,22 @@ std::string getDataText()
            "Alias (i,ii);                                    \n";
 }
 
+/// Enforcing referential integrity also known in the GAMS lingo as domain
+/// checking is an essential and important part of GAMS.
+/// The Object-oriented API does a delayed domain checking of symbols. So
+/// you can add records to a domain controlled parameter (e.g. p(i)) even
+/// though the GAMSSet i does not contain the label (yet). The user can
+/// trigger an explicit check of the referential integrity by calling the
+/// GAMSDatabase.CheckDomains (or GAMSSymbol.CheckDomains) method. The Object-
+/// oriented API provides methods to access the records that violate the
+/// referential integrity (see GAMSDatabaseDomainViolation for details).
+/// Domain checking is implicitly done when the GAMSDatabase is exported to
+/// a GDX file via the GAMSDatabase.Export method or for databases provided
+/// in the GAMSJob.Run method. The implicit domain check can be suppressed
+/// (and left to GAMS when importing data) via the
+/// GAMSDatabase.SuppressAutoDomainChecking property. This example
+/// demonstrates how to trigger domain checking and how to access the
+/// records that violate the referential integrity.
 int main(int argc, char* argv[])
 {
     cout << "---------- Domain Checking --------------" << endl;

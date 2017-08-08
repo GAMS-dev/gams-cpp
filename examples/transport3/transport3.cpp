@@ -100,7 +100,9 @@ string getModelText()
            "Display x.l, x.m ;                                                         \n";
 }
 
-/// This is the 3rd model in a series of tutorial examples. Here we show:
+/// This is the 3rd model in a series of tutorial examples.
+///
+/// Here we show:
 ///   - How to read data from string and export to GDX
 ///   - How to run a job using data from GDX
 ///   - How to run a job using implicit database communication

@@ -165,11 +165,12 @@ void solveWarehouse(GAMSWorkspace* ws, int numberOfWarehouses, GAMSDatabase* res
 }
 
 /// This example demonstrates how to solve a simple GAMS model to assign
-/// stores to warehouses for different data sets in parallel. The model has
-/// been parameterized. The data can be derived from a few numbers namely
-/// the number of warehouses, stores, and some fixed cost scalar. The
-/// results of the model are written into a single result database that is
-/// protected across the parallel threads via a mutex.
+/// stores to warehouses for different data sets in parallel.
+///
+/// The model has  been parameterized. The data can be derived from a few
+/// numbers namely the number of warehouses, stores, and some fixed cost
+/// scalar. The results of the model are written into a single result
+/// database that is protected across the parallel threads via a mutex.
 int main(int argc, char* argv[])
 {
     cout << "---------- Warehouse --------------" << endl;

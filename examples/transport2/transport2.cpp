@@ -98,7 +98,9 @@ string getModelText()
            "Display x.l, x.m ;                                                      \n";
 }
 
-/// This is the 2nd model in a series of tutorial examples. Here we show:
+/// This is the 2nd model in a series of tutorial examples.
+///
+/// Here we show:
 ///   - How to use include files to separate model and data
 int main(int argc, char* argv[])
 {

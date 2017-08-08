@@ -119,7 +119,9 @@ string getModelText()
            "Model transport / all / ;                                             \n";
 }
 
-/// This is the 8th model in a series of tutorial examples. Here we show:
+/// This is the 8th model in a series of tutorial examples.
+///
+/// Here we show:
 ///   - How to use a vector to solve multiple GAMSModelInstances in parallel
 int main(int argc, char* argv[])
 {

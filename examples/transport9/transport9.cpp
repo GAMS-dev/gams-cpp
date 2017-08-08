@@ -233,7 +233,9 @@ void writeToAccess(GAMSWorkspace ws, GAMSDatabase db)
     }
 }
 
-/// This is the 9th model in a series of tutorial examples. Here we show:
+/// This is the 9th model in a series of tutorial examples.
+///
+///  Here we show:
 ///   - How to fill a GAMSDatabase by reading from MS Access
 int main(int argc, char* argv[])
 {

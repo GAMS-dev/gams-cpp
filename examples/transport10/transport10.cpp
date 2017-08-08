@@ -156,7 +156,9 @@ GAMSParameter sheetToParameter(QAxObject* sheets, string sheetName
     return param;
 }
 
-/// This is the 10th model in a series of tutorial examples. Here we show:
+/// This is the 10th model in a series of tutorial examples.
+///
+/// Here we show:
 ///   - How to fill a GAMSDatabase by reading from MS Excel
 int main(int argc, char* argv[])
 {

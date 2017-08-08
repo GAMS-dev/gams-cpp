@@ -79,7 +79,9 @@ string getModelText()
            "Scalar ms 'model status', ss 'solve status';                        \n";
 }
 
-/// This is the 5th model in a series of tutorial examples. Here we show:
+/// This is the 5th model in a series of tutorial examples.
+///
+/// Here we show:
 ///   - How to initialize a GAMSCheckpoint by running a GAMSJob
 ///   - How to initialize a GAMSJob from a GAMSCheckpoint
 int main(int argc, char* argv[])

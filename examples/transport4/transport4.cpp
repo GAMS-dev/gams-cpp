@@ -78,7 +78,9 @@ string getModelText()
            "Display x.l, x.m ;                                                         \n";
 }
 
-/// This is the 4th model in a series of tutorial examples. Here we show:
+/// This is the 4th model in a series of tutorial examples.
+///
+/// Here we show:
 ///   - How to define data using C++ data structures
 ///   - How to prepare a GAMSDatabase from C++ data structures
 int main(int argc, char* argv[])
