@@ -124,7 +124,7 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     // TODO(JM) backward replacement of pointer logic with instance of gamsOptions
 
     GAMSOptions tmpOpt = GAMSOptions(mWs, gamsOptions);
-    GAMSCheckpoint* tmpCP = 0;
+    GAMSCheckpoint* tmpCP = nullptr;
 
     if (mCheckpointStart != nullptr)
         tmpOpt.setRestart(mCheckpointStart->fileName());

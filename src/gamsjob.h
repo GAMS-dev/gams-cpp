@@ -123,7 +123,7 @@ public:
     /// \param output Stream to capture GAMS log.
     /// \param createOutDB GAMSDatabase loaded by the GAMSJob.
     /// \param databases GAMSDatabases read by the GAMSJob.
-    void run(GAMSOptions& gamsOptions, GAMSCheckpoint checkpoint, std::ostream& output, bool createOutDB
+    void run(GAMSOptions& gamsOptions, GAMSCheckpoint gamsCheckpoint, std::ostream& output, bool createOutDB
              , std::vector<gams::GAMSDatabase> databases);
 
     /// Get GAMSDatabase created by Run method

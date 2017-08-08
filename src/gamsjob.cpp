@@ -98,13 +98,13 @@ void GAMSJob::run(GAMSOptions& gamsOptions, GAMSDatabase db)
 void GAMSJob::run(GAMSCheckpoint gamsCheckpoint)
 {
     if (!mImpl) throw GAMSException("GAMSJob: This job has not been initialized.");
-    mImpl->run(nullptr, &gamsCheckpoint, nullptr, true);
+    mImpl->run(nullptr, (gamsCheckpoint.isValid() ? &gamsCheckpoint : nullptr), nullptr, true);
 }
 
 void GAMSJob::run(GAMSOptions& gamsOptions, GAMSCheckpoint gamsCheckpoint)
 {
     if (!mImpl) throw GAMSException("GAMSJob: This job has not been initialized.");
-    mImpl->run(&gamsOptions, &gamsCheckpoint, nullptr, true);
+    mImpl->run(&gamsOptions, (gamsCheckpoint.isValid() ? &gamsCheckpoint : nullptr), nullptr, true);
 }
 
 GAMSJob::~GAMSJob()
@@ -132,10 +132,11 @@ GAMSDatabase GAMSJob::outDB()
     return mImpl->outDB();
 }
 
-void GAMSJob::run(GAMSOptions& gamsOptions, GAMSCheckpoint checkpoint, std::ostream& output, bool createOutDB, std::vector<GAMSDatabase> databases)
+void GAMSJob::run(GAMSOptions& gamsOptions, GAMSCheckpoint gamsCheckpoint, std::ostream& output, bool createOutDB
+                  , std::vector<GAMSDatabase> databases)
 {
     if (!mImpl) throw GAMSException("GAMSJob: This job has not been initialized.");
-    mImpl->run(&gamsOptions, &checkpoint, &output, createOutDB, databases);
+    mImpl->run(&gamsOptions, (gamsCheckpoint.isValid() ? &gamsCheckpoint : nullptr), &output, createOutDB, databases);
 }
 
 bool GAMSJob::interrupt()
