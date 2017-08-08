@@ -42,8 +42,7 @@ const char* GAMSVersion::mApiDetail = std::string(API_VERSION).append(" (").appe
 const char* GAMSVersion::mGamsVersion = GAMSOptions::gamsVersion();
 
 static const char* mApiName = "API version";
-static const char* mMinGamsName = "required GAMS version";
-static const char* mCurGamsName = "current GAMS version";
+static const char* mGamsName = "required GAMS version";
 
 static int part(const char* vString, const int index, const std::string typeName)
 {
@@ -90,17 +89,17 @@ const char* GAMSVersion::gamsVersion()
 
 int GAMSVersion::gamsMajor()
 {
-    return part(gamsVersion(), 0, mMinGamsName);
+    return part(gamsVersion(), 0, mGamsName);
 }
 
 int GAMSVersion::gamsMinor()
 {
-    return part(gamsVersion(), 1, mMinGamsName);
+    return part(gamsVersion(), 1, mGamsName);
 }
 
 int GAMSVersion::gamsBuild()
 {
-    return part(gamsVersion(), 2, mMinGamsName);
+    return part(gamsVersion(), 2, mGamsName);
 }
 
 std::string GAMSVersion::systemVersion(std::string gamsSystemDir)

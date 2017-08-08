@@ -41,8 +41,6 @@ using namespace std;
 int main(int argc, char* argv[])
 {
     cout << "---------- Transport 13 --------------" << endl;
-    cout << "Transport13: not implementet yet." << endl;
-    return 0;
 
     vector<string> plants {"Seattle", "San-Diego"};
     vector<string> markets {"New-York", "Chicago", "Topeka"};
