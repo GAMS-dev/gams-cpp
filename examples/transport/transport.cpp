@@ -39,8 +39,8 @@ Transport::Transport(GAMSWorkspace ws)
     fws = ws;
     fopt = ws.addOptions();
 
-    fDbIn1 = ws.addDatabase("dbIn1");
-    fDbIn2 = ws.addDatabase("dbIn2");
+    fDbIn1 = ws.addDatabase("", "dbIn1");
+    fDbIn2 = ws.addDatabase("", "dbIn2");
 
     // TODO(AF) add enum to GAMSOptions
     fopt.setSolveLink(GAMSOptions::ESolveLink::LoadLibrary);
@@ -55,23 +55,6 @@ Transport::Transport(GAMSWorkspace ws)
     ff = fDbIn2.addParameter("f", "freight in dollars per case per thousand miles");
 
     job = ws.addJobFromString(getModelSource());
-}
-
-void Transport::run(/*GAMSCheckpoint *checkpoint, ostream *output*/)
-{
-    if (!fDbIn1.checkDomains())
-        throw GAMSException("Domain Errors in Database 1");
-    if (!fDbIn2.checkDomains())
-        throw GAMSException("Domain Errors in Database 2");
-
-    vector<GAMSDatabase> dbs {fDbIn1, fDbIn2};
-    // TODO(AF) is the second call ok? no
-    // job.run(fopt, *checkpoint, *output, false, dbs);
-    job.run(fopt);
-
-    fDbOut1 = fws.addDatabaseFromGDX(fopt.getDefine("dbOut1") + ".gdx");
-    fx = fDbOut1.getVariable("x");
-    fz = fDbOut1.getVariable("z");
 }
 
 void Transport::run(GAMSCheckpoint checkpoint, ostream &output)

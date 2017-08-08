@@ -40,7 +40,6 @@ public:
     Transport(gams::GAMSWorkspace ws);
 
     /// Executes the trnsport model
-    void run();
     void run(gams::GAMSCheckpoint checkpoint, std::ostream &output);
 
     /// i(i): canning plants
