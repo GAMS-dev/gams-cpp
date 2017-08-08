@@ -3,7 +3,7 @@ CONFIG -= app_bundle
 DESTDIR = ../../bin
 
 unix : LIBS += -ldl -L../../bin -lgamscpp
-win32: LIBS += -L../../bin/ -lgamscpp0
+win32: LIBS += -L../../bin/ -lgamscpp
 
 INCLUDEPATH += ../../src/
 

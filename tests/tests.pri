@@ -7,7 +7,7 @@ QT += testlib
 QT -= gui
 
 unix : LIBS += -ldl -L../../bin -lgamscpp
-win32: LIBS += -L../../bin/ -lgamscpp0
+win32: LIBS += -L../../bin/ -lgamscpp
 
 TESTROOT = $$_PRO_FILE_PWD_/..
 
