@@ -102,8 +102,9 @@ void GAMSPath::setSuffix(const char *suffix)
 
 void GAMSPath::setSuffix(const QString &suffix)
 {
+    int j = filePath().lastIndexOf("/");
     int i = filePath().lastIndexOf(".");
-    if (i < 0) i = filePath().length();
+    if (i <= j) i = filePath().length();
     setFile(filePath().left(i) + suffix);
 }
 

@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
 
     t.opt().setAllModelTypes("cplex");
 
-    t.run();
+    t.run(GAMSCheckpoint(), cout);
 
     cout << "Objective: " << t.z().firstRecord().level() << endl;
     for (GAMSVariableRecord rec : t.x())

@@ -78,10 +78,10 @@ public:
     /// \return Returns the required GAMS build number.
     static int gamsBuild();
 
-    /// Check the GAMS version number.
-    /// \param currentGamsVersion GAMS version number to check.
-    /// \return Returns <c>true</c> if the version is equal; otherwise <c>false</c>.
-    static bool checkGamsVersion(const char* currentGamsVersion);
+    /// Get the GAMS version number of an explicit installation path.
+    /// \param gamsSystemDir The GAMS installation path.
+    /// \return Returns the GAMS version if possible; otherwise an empty string.
+    static std::string systemVersion(std::string gamsSystemDir);
 
 private:
     GAMSVersion();
