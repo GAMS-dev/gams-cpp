@@ -204,7 +204,7 @@ public:
             Deprecated_10 = 10,                                ///< (Same as 11 and therefore hidden)
             InputFileWOComments = 11,                          ///< Write processed input file without comments
             Deprecated_12 = 12,                                ///< (Same as 11 and therefore hidden)
-            Deprecated_19 = 19,                                ///< ?????
+            Deprecated_19 = 19,                                ///< (Same as 21 and therefore hidden)
             Deprecated_20 = 20,                                ///< (Same as 21 and therefore hidden)
             InputFileWithComments = 21                         ///< Write processed input file with all comments
         };

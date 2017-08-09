@@ -30,6 +30,8 @@
 using namespace gams;
 using namespace std;
 
+/// \file Optimizer.cpp
+/// \brief Wrapper class implementation for executing transport14
 Optimizer::Optimizer(int argc, char *argv[])
 {
     GAMSWorkspaceInfo wsInfo;

@@ -30,6 +30,7 @@
 using namespace gams;
 using namespace std;
 
+/// Get model as string
 string getModelText()
 {
     return " Sets                                                               \n"
@@ -78,12 +79,13 @@ string getModelText()
            "Model transport /all/ ;                                             \n";
 }
 
-/// This is the 7th model in a series of tutorial examples.
+/// \file transport7.cpp
+/// \brief This is the 7th model in a series of tutorial examples.
 ///
 /// Here we show:
-///  - How to create a GAMSModelInstance from a GAMSCheckpoint
-///  - How to modify a parameter of a GAMSModelInstance using GAMSModifier
-///  - How to modify a variable of a GAMSModelInstance using GAMSModifier
+///   - How to create a GAMSModelInstance from a GAMSCheckpoint
+///   - How to modify a parameter of a GAMSModelInstance using GAMSModifier
+///   - How to modify a variable of a GAMSModelInstance using GAMSModifier
 int main(int argc, char* argv[])
 {
     cout << "---------- Transport 7 --------------" << endl;

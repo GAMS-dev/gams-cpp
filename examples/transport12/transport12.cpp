@@ -32,6 +32,7 @@
 using namespace gams;
 using namespace std;
 
+/// Get model as string
 string getModelText()
 {
     return "  Sets                                                                     \n"
@@ -81,6 +82,7 @@ string getModelText()
            "  Model transport /all/ ;                                                  \n";
 }
 
+/// Convert string to lower case
 string toLower(const string &str)
 {
     string lstr(str);
@@ -88,6 +90,7 @@ string toLower(const string &str)
     return lstr;
 }
 
+/// Using GUSS to solve the model in different scenarios
 void GUSSCall(GAMSSet dict, GAMSModelInstance mi, string solveStatement
               , gams::GAMSOptions* opt = nullptr
               , gams::GAMSModelInstanceOpt miOpt = gams::GAMSModelInstanceOpt()
@@ -244,10 +247,11 @@ void GUSSCall(GAMSSet dict, GAMSModelInstance mi, string solveStatement
     }
 }
 
-/// This is the 12th model in a series of tutorial examples.
+/// \file transport12.cpp
+/// \brief This is the 12th model in a series of tutorial examples.
 ///
 /// Here we show:
-///   - How to implement a GUSS approach using the GAMS API
+///  - How to implement a GUSS approach using the GAMS API
 int main(int argc, char* argv[])
 {
     cout << "---------- Transport 12 --------------" << endl;

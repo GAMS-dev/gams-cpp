@@ -32,6 +32,7 @@
 using namespace gams;
 using namespace std;
 
+/// Get model as string
 string getBaseModelText()
 {
     return "$onempty                                                                   \n"
@@ -71,6 +72,7 @@ string getBaseModelText()
            "  Solve transport using lp minimizing z ;                                  \n";
 }
 
+/// Get model as string
 string getModelText()
 {
     return "$if not set gdxincname $abort 'no include file name for data file provided'\n"
@@ -82,6 +84,7 @@ string getModelText()
            "  Display x.l, x.m ;                                                       \n";
 }
 
+/// Create Save and Restart checkpoint
 void createSaveRestart(int argc, char* argv[], const string &checkpointName)
 {
     GAMSWorkspaceInfo wsInfo;
@@ -99,7 +102,8 @@ void createSaveRestart(int argc, char* argv[], const string &checkpointName)
     j1.run(opt, cp);
 }
 
-/// This is the 11th model in a series of tutorial examples.
+/// \file transport11.cpp
+/// \brief This is the 11th model in a series of tutorial examples.
 ///
 /// Here we show:
 ///   - How to create and use a save/restart file

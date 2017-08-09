@@ -29,14 +29,19 @@
 
 #include <string>
 
+/// \file Optimizer.h
+/// \brief Wrapper class definition for executing transport14
 class Optimizer
 {
 public:
+    /// Initialize workspace
     Optimizer(int argc, char *argv[]);
 
+    /// Create database and execute a job
     double solve(double mult);
 
 private:
+    /// Get model text
     std::string getModelText();
 
 private:

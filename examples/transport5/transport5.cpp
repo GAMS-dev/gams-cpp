@@ -30,6 +30,7 @@
 using namespace gams;
 using namespace std;
 
+/// Get model as string
 string getModelText()
 {
     return " Sets                                                               \n"
@@ -79,7 +80,8 @@ string getModelText()
            "Scalar ms 'model status', ss 'solve status';                        \n";
 }
 
-/// This is the 5th model in a series of tutorial examples.
+/// \file transport5.cpp
+/// \brief This is the 5th model in a series of tutorial examples.
 ///
 /// Here we show:
 ///   - How to initialize a GAMSCheckpoint by running a GAMSJob
