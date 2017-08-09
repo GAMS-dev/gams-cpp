@@ -117,7 +117,7 @@ public:
 
     /// Run GAMSJob.
     /// \param gamsOptions GAMSOptions to control the GAMSJob.
-    /// \param checkpoint GAMSCheckpoint to be created by GAMSJob.
+    /// \param gamsCheckpoint GAMSCheckpoint to be created by GAMSJob.
     /// \param output Stream to capture GAMS log.
     /// \param createOutDB Flag that activates writing to outDB.
     /// \param databases GAMSDatabases read by the GAMSJob.
