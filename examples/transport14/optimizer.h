@@ -29,7 +29,7 @@
 
 #include <string>
 
-/// \file Optimizer.h
+/// \file optimizer.h
 /// \brief Wrapper class definition for executing transport14
 class Optimizer
 {
@@ -37,14 +37,15 @@ public:
     /// Initialize workspace
     Optimizer(int argc, char *argv[]);
 
-    /// Create database and execute a job
+    /// Create database and execute a job 
     double solve(double mult);
 
 private:
-    /// Get model text
+    /// Get model text 
     std::string getModelText();
 
 private:
+
     gams::GAMSWorkspace ws;
 };
 
