@@ -46,7 +46,10 @@ void LoggerPool::unregisterLogger(const LogId logId)
 Logger::~Logger()
 {
     for (auto f: mTargets) {
-        QTextStream(f) << "[" << qSetFieldWidth(30) << mWhere << qSetFieldWidth(0) << "] " << mBuffer << endl;
+        QTextStream ts(f);
+        ts << "[" << qSetFieldWidth(30) << mWhere << qSetFieldWidth(0) << "] " << mBuffer;
+        //TODO (JM) Sometimes fails with access violation (with MSys at WEI and VS8)
+        ts.flush();
     }
 }
 
