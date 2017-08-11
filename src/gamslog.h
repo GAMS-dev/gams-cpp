@@ -143,6 +143,7 @@ private:
 #define DEB_S(logID) ::gams::Logger(logID, ::gams::GAMSEnum::DebugLevel::Verbose, __FUNCTION__)
 #define DEB ::gams::Logger(logID(), ::gams::GAMSEnum::DebugLevel::Verbose, __FUNCTION__)
 #define MSG ::gams::Logger(logID(), ::gams::GAMSEnum::DebugLevel::ShowLog, __FUNCTION__)
+#define ERR ::gams::Logger(logID(), ::gams::GAMSEnum::DebugLevel::Off, __FUNCTION__)
 //#define MSG(ws) ::gams::Logger(ws, ::gams::GAMSEnum::DebugLevel::ShowLog, __FUNCTION__)
 
 #endif // GAMSLOG_H

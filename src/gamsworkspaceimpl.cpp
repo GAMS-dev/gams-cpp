@@ -114,11 +114,15 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     const char* bitsuf = (bitness == 8) ? "64" : "";
 
     // if 32 bit
-    if (bitness == 4 && joat64File.exists())
+    if (bitness == 4 && joat64File.exists()) {
+        ERR << "Expected GAMS system to be 32 bit but found 64 bit instead. System directory: " << mSystemDir.c_str() << endl;
         throw GAMSException("Expected GAMS system to be 32 bit but found 64 bit instead. System directory: " + mSystemDir.toStdString());
+    }
     // if 64 bit
-    if (bitness == 8 && !joat64File.exists())
+    if (bitness == 8 && !joat64File.exists()) {
+        ERR << "Expected GAMS system to be 64 bit but found 32 bit instead. System directory: " << mSystemDir.c_str() << endl;
         throw GAMSException("Expected GAMS system to be 64 bit but found 32 bit instead. System directory: " + mSystemDir.toStdString());
+    }
 
     if (mSystemDir != mWorkingDir) {
         QStringList libstems = QStringList() << "gamsxdc" << "gdxdc" << "gmdcc" << "joatdc" << "optdc";
