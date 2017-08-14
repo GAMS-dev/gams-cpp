@@ -9,5 +9,5 @@ exists($$PWD/../gams-cpp.pro) {
 } else {
     unix : LIBS += -ldl -L../../.. -lgamscpp
     win32: LIBS += -L../../.. -lgamscpp
-    INCLUDEPATH += ../ap
+    INCLUDEPATH += ../api
 }
