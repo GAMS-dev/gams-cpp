@@ -45,7 +45,7 @@ void TestGAMSSymbolDomainViolation::testDefaultConstructor() {
 
 void TestGAMSSymbolDomainViolation::testCopyConstructor() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -64,7 +64,7 @@ void TestGAMSSymbolDomainViolation::testCopyConstructor() {
 
 void TestGAMSSymbolDomainViolation::testIsValid() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -79,7 +79,7 @@ void TestGAMSSymbolDomainViolation::testIsValid() {
 
 void TestGAMSSymbolDomainViolation::testEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -105,7 +105,7 @@ void TestGAMSSymbolDomainViolation::testEqualToOperator() {
 
 void TestGAMSSymbolDomainViolation::testNotEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -130,7 +130,7 @@ void TestGAMSSymbolDomainViolation::testNotEqualToOperator() {
 
 void TestGAMSSymbolDomainViolation::testViolRecs() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -163,7 +163,7 @@ void TestGAMSSymbolDomainViolation::testViolRecs() {
 
 void TestGAMSSymbolDomainViolation::testViolInd() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );

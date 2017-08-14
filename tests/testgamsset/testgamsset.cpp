@@ -52,7 +52,7 @@ void TestGAMSSet::testDefaultConstructor() {
 
 void TestGAMSSet::testCopyConstructor() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -73,7 +73,7 @@ void TestGAMSSet::testCopyConstructor() {
 
 void TestGAMSSet::testCopyConstructor_IncorrectType() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -87,7 +87,7 @@ void TestGAMSSet::testCopyConstructor_IncorrectType() {
 
 void TestGAMSSet::testIterator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
 
@@ -111,7 +111,7 @@ void TestGAMSSet::testIterator() {
 
 void TestGAMSSet::testAssignmentOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -128,7 +128,7 @@ void TestGAMSSet::testAssignmentOperator() {
 
 void TestGAMSSet::testAssignmentOperator_IncorrectType() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -142,7 +142,7 @@ void TestGAMSSet::testAssignmentOperator_IncorrectType() {
 
 void TestGAMSSet::testGetFirstRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -155,7 +155,7 @@ void TestGAMSSet::testGetFirstRecord() {
 
 void TestGAMSSet::testGetFirstRecordSlice() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -168,7 +168,7 @@ void TestGAMSSet::testGetFirstRecordSlice() {
 
 void TestGAMSSet::testGetFirstRecordSlice_InvalidKeys_IncorrectDimension() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -182,7 +182,7 @@ void TestGAMSSet::testGetFirstRecordSlice_InvalidKeys_IncorrectDimension() {
 
 void TestGAMSSet::testGetLastRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -195,7 +195,7 @@ void TestGAMSSet::testGetLastRecord() {
 
 void TestGAMSSet::testGetLastRecordSlice() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -208,7 +208,7 @@ void TestGAMSSet::testGetLastRecordSlice() {
 
 void TestGAMSSet::testGetLastRecordSlice_InvalidKeys_IncorrectDimension() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -222,7 +222,7 @@ void TestGAMSSet::testGetLastRecordSlice_InvalidKeys_IncorrectDimension() {
 
 void TestGAMSSet::testFindRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -235,7 +235,7 @@ void TestGAMSSet::testFindRecord() {
 
 void TestGAMSSet::testFindRecord_InsensitiveCaseKeys() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -248,7 +248,7 @@ void TestGAMSSet::testFindRecord_InsensitiveCaseKeys() {
 
 void TestGAMSSet::testAddRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     {
@@ -277,7 +277,7 @@ void TestGAMSSet::testAddRecord() {
 
 void TestGAMSSet::testAddRecord_DuplicatedKeys_IncorrectDimension() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -295,7 +295,7 @@ void TestGAMSSet::testAddRecord_DuplicatedKeys_IncorrectDimension() {
 
 void TestGAMSSet::testMergeExistingRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -310,7 +310,7 @@ void TestGAMSSet::testMergeExistingRecord() {
 
 void TestGAMSSet::testMergeNonExistingRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );

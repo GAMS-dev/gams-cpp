@@ -37,7 +37,7 @@ QString TestGAMSDatabaseIter::classname()  { return "TestGAMSDatabaseIter"; }
 
 void TestGAMSDatabaseIter::testConstructor() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -51,7 +51,7 @@ void TestGAMSDatabaseIter::testConstructor() {
 
 void TestGAMSDatabaseIter::testInvalidIterator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -88,7 +88,7 @@ void TestGAMSDatabaseIter::testInvalidIterator() {
 
 void TestGAMSDatabaseIter::testEqualToOperator_EmptyDatabase() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase emptydb1 = ws.addDatabase();
     GAMSDatabase emptydb2 = ws.addDatabase();
@@ -119,7 +119,7 @@ void TestGAMSDatabaseIter::testEqualToOperator_EmptyDatabase() {
 
 void TestGAMSDatabaseIter::testEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -159,7 +159,7 @@ void TestGAMSDatabaseIter::testEqualToOperator() {
 
 void TestGAMSDatabaseIter::testNotEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -198,7 +198,7 @@ void TestGAMSDatabaseIter::testNotEqualToOperator() {
 
 void TestGAMSDatabaseIter::testPointerAndIncrementOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();

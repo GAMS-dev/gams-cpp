@@ -63,7 +63,7 @@ void TestGAMSModelInstance::testDefaultConstructor()  {
 
 void TestGAMSModelInstance::testAssignmentOperator()  {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSModelInstance mi1 = ws.addCheckpoint().addModelInstance();
 
@@ -78,7 +78,7 @@ void TestGAMSModelInstance::testAssignmentOperator()  {
 
 void TestGAMSModelInstance::testEqualToOperator()  {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSModelInstance mi1 = ws.addCheckpoint().addModelInstance();
 
@@ -92,7 +92,7 @@ void TestGAMSModelInstance::testEqualToOperator()  {
 
 void TestGAMSModelInstance::testNotEqualToOperator()  {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint("mycp");
     GAMSModelInstance mi1 = cp.addModelInstance();
@@ -107,7 +107,7 @@ void TestGAMSModelInstance::testNotEqualToOperator()  {
 
 void TestGAMSModelInstance::testIsValid()  {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     // when, then
@@ -116,7 +116,7 @@ void TestGAMSModelInstance::testIsValid()  {
 
 void TestGAMSModelInstance::testGetSyncDb()  {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
 
@@ -135,7 +135,7 @@ void TestGAMSModelInstance::testInstantiate()  {
     QFETCH(double, modifier);
 
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     ws.addJobFromString(getModelText()).run(cp);
@@ -154,7 +154,7 @@ void TestGAMSModelInstance::testInstantiate()  {
 
 void TestGAMSModelInstance::testInstantiateBeforeInitializingCP()  {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     ws.addJobFromString(getModelText());
@@ -177,7 +177,7 @@ void TestGAMSModelInstance::testSolve()  {
     QFETCH(double, obj);
 
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     ws.addJobFromString(getModelText()).run(cp);
@@ -201,7 +201,7 @@ void TestGAMSModelInstance::testSolve()  {
 
 void TestGAMSModelInstance::testSolveBeforeInstantiate()  {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     GAMSModelInstance mi = cp.addModelInstance();
@@ -224,7 +224,7 @@ void TestGAMSModelInstance::testGetModelSolveStatus()  {
     QFETCH(QString, ModelStatusStr);
 
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     ws.addJobFromString(getModelText()).run(cp);
@@ -248,7 +248,7 @@ void TestGAMSModelInstance::testGetModelSolveStatus()  {
 
 void TestGAMSModelInstance::testCopyModelInstance() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     ws.addJobFromString(getModelText()).run(cp);
@@ -267,7 +267,7 @@ void TestGAMSModelInstance::testCopyModelInstance() {
 
 void TestGAMSModelInstance::testGetCheckpoint()  {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     GAMSModelInstance mi = cp.addModelInstance();
@@ -277,7 +277,7 @@ void TestGAMSModelInstance::testGetCheckpoint()  {
 
 void TestGAMSModelInstance::testGetName()  {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
 
@@ -302,7 +302,7 @@ void TestGAMSModelInstance::testGetName()  {
 
 void TestGAMSModelInstance::testGetLogID()  {
      // given
-     GAMSWorkspaceInfo wsInfo;
+     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
      GAMSWorkspace ws(wsInfo);
      GAMSCheckpoint cp = ws.addCheckpoint();
      std::string cpname = "mycp";
@@ -315,7 +315,7 @@ void TestGAMSModelInstance::testGetLogID()  {
      GAMSModelInstance mi3 = cp3.addModelInstance();
      QVERIFY( mi3.logID() == mi1.logID());
 
-     GAMSWorkspaceInfo anotherWsInfo;
+     GAMSWorkspaceInfo anotherWsInfo("", testSystemDir.path().toStdString());
      GAMSWorkspace anotherWs(anotherWsInfo);
      GAMSCheckpoint cp4 = anotherWs.addCheckpoint(cpname);
      GAMSModelInstance mi4 = cp4.addModelInstance();

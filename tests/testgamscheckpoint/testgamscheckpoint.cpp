@@ -49,7 +49,7 @@ void TestGAMSCheckpoint::testDefaultConstructor()  {
 
 void TestGAMSCheckpoint::testConstructor()  {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
 
     std::string cpname = "mycp";
@@ -61,7 +61,7 @@ void TestGAMSCheckpoint::testConstructor()  {
 
 void TestGAMSCheckpoint::testAssignmentOperator()  {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp1 = ws.addCheckpoint();
 
@@ -71,7 +71,7 @@ void TestGAMSCheckpoint::testAssignmentOperator()  {
 
 void TestGAMSCheckpoint::testAddModelInstance() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     // when
@@ -84,7 +84,7 @@ void TestGAMSCheckpoint::testAddModelInstance() {
 
 void TestGAMSCheckpoint::testGetWorkspace() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     // when, then
@@ -93,7 +93,7 @@ void TestGAMSCheckpoint::testGetWorkspace() {
 
 void TestGAMSCheckpoint::testGetName() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     // when, then
@@ -103,7 +103,7 @@ void TestGAMSCheckpoint::testGetName() {
 
 void TestGAMSCheckpoint::testGetLogID() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp1 = ws.addCheckpoint();
     GAMSCheckpoint cp2(cp1);
@@ -122,7 +122,7 @@ void TestGAMSCheckpoint::testGetLogID() {
 
 void TestGAMSCheckpoint::testEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp1 = ws.addCheckpoint();
     GAMSCheckpoint cp2(cp1);
@@ -134,7 +134,7 @@ void TestGAMSCheckpoint::testEqualToOperator() {
 
 void TestGAMSCheckpoint::testNotEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp1 = ws.addCheckpoint();
     GAMSCheckpoint cp2(cp1);
@@ -147,7 +147,7 @@ void TestGAMSCheckpoint::testNotEqualToOperator() {
 
 void TestGAMSCheckpoint::testCopyConstructor() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
 
     GAMSCheckpoint cp1 = ws.addCheckpoint();
@@ -159,7 +159,7 @@ void TestGAMSCheckpoint::testCopyConstructor() {
 
 void TestGAMSCheckpoint::testUninitializedCheckpoint() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
 

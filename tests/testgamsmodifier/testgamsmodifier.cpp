@@ -52,7 +52,7 @@ void TestGAMSModifier::testDefaultConstructor() {
 
 void TestGAMSModifier::testConstructor_Par() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_capacity_a( db );
@@ -81,7 +81,7 @@ void TestGAMSModifier::testConstructor_Par() {
 
 void TestGAMSModifier::testConstructor_Var() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -126,7 +126,7 @@ void TestGAMSModifier::testConstructor_Var() {
 
 void TestGAMSModifier::testConstructor_Equ() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -178,7 +178,7 @@ void TestGAMSModifier::testConstructor_Equ() {
 
 void TestGAMSModifier::testAssignmentOperator_Par() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -215,7 +215,7 @@ void TestGAMSModifier::testAssignmentOperator_Par() {
 
 void TestGAMSModifier::testAssignmentOperator_Var() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -252,7 +252,7 @@ void TestGAMSModifier::testAssignmentOperator_Var() {
 
 void TestGAMSModifier::testAssignmentOperator_Equ() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -289,7 +289,7 @@ void TestGAMSModifier::testAssignmentOperator_Equ() {
 
 void TestGAMSModifier::testEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -319,7 +319,7 @@ void TestGAMSModifier::testEqualToOperator() {
 
 void TestGAMSModifier::testNotEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -355,7 +355,7 @@ void TestGAMSModifier::testNotEqualToOperator() {
 
 void TestGAMSModifier::testIsValid() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -376,7 +376,7 @@ void TestGAMSModifier::testIsValid() {
 
 void TestGAMSModifier::testGetGamsSymbol() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -392,7 +392,7 @@ void TestGAMSModifier::testGetGamsSymbol() {
 
 void TestGAMSModifier::testGetDataSymbol() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -408,7 +408,7 @@ void TestGAMSModifier::testGetDataSymbol() {
 
 void TestGAMSModifier::testGetUpdAction() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -428,7 +428,7 @@ void TestGAMSModifier::testGetUpdAction() {
 
 void TestGAMSModifier::testGetUpdType() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -449,7 +449,7 @@ void TestGAMSModifier::testGetUpdType() {
 
 void TestGAMSModifier::testIsParameter_Variable_Equation() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
