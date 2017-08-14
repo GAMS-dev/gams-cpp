@@ -53,7 +53,7 @@ void TestGAMSParameter::testDefaultConstructor() {
 
 void TestGAMSParameter::testCopyConstructor() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_capacity_a( db );
@@ -74,7 +74,7 @@ void TestGAMSParameter::testCopyConstructor() {
 
 void TestGAMSParameter::testCopyConstructor_IncorrectType() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -88,7 +88,7 @@ void TestGAMSParameter::testCopyConstructor_IncorrectType() {
 
 void TestGAMSParameter::testIterator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
 
@@ -112,7 +112,7 @@ void TestGAMSParameter::testIterator() {
 
 void TestGAMSParameter::testAssignmentOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_capacity_a( db );
@@ -128,7 +128,7 @@ void TestGAMSParameter::testAssignmentOperator() {
 
 void TestGAMSParameter::testAssignmentOperator_IncorrectType() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -141,7 +141,7 @@ void TestGAMSParameter::testAssignmentOperator_IncorrectType() {
 
 void TestGAMSParameter::testGetFirstRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_capacity_a( db );
@@ -155,7 +155,7 @@ void TestGAMSParameter::testGetFirstRecord() {
 
 void TestGAMSParameter::testGetFirstRecordSlice() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_demand_b(db);
@@ -169,7 +169,7 @@ void TestGAMSParameter::testGetFirstRecordSlice() {
 
 void TestGAMSParameter::testGetFirstRecordSlice_InvalidKeys_IncorrectDimension() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_capacity_a( db );
@@ -183,7 +183,7 @@ void TestGAMSParameter::testGetFirstRecordSlice_InvalidKeys_IncorrectDimension()
 
 void TestGAMSParameter::testGetLastRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_capacity_a( db );
@@ -197,7 +197,7 @@ void TestGAMSParameter::testGetLastRecord() {
 
 void TestGAMSParameter::testGetLastRecordSlice() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_demand_b( db );
@@ -211,7 +211,7 @@ void TestGAMSParameter::testGetLastRecordSlice() {
 
 void TestGAMSParameter::testGetLastRecordSlice_InvalidKeys_IncorrectDimension() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_demand_b( db );
@@ -225,7 +225,7 @@ void TestGAMSParameter::testGetLastRecordSlice_InvalidKeys_IncorrectDimension() 
 
 void TestGAMSParameter::testFindRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_demand_b( db );
@@ -240,7 +240,7 @@ void TestGAMSParameter::testFindRecord() {
 
 void TestGAMSParameter::testFindRecord_InsensitiveCaseKeys() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_demand_b( db );
@@ -254,7 +254,7 @@ void TestGAMSParameter::testFindRecord_InsensitiveCaseKeys() {
 
 void TestGAMSParameter::testAddRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_demand_b( db );
@@ -290,7 +290,7 @@ void TestGAMSParameter::testAddRecord() {
 
 void TestGAMSParameter::testAddRecord_DuplicatedKeys_IncorrectDimension() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_demand_b( db );
@@ -308,7 +308,7 @@ void TestGAMSParameter::testAddRecord_DuplicatedKeys_IncorrectDimension() {
 
 void TestGAMSParameter::testMergeExistingRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_demand_b( db );
@@ -323,7 +323,7 @@ void TestGAMSParameter::testMergeExistingRecord() {
 
 void TestGAMSParameter::testMergeNonExistingRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_capacity_a( db );

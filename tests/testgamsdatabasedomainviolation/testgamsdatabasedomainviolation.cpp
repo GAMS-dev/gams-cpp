@@ -44,7 +44,7 @@ void TestGAMSDatabaseDomainViolation::testDefaultConstructor() {
 
 void TestGAMSDatabaseDomainViolation::testCopyConstructor() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -62,7 +62,7 @@ void TestGAMSDatabaseDomainViolation::testCopyConstructor() {
 
 void TestGAMSDatabaseDomainViolation::testIsValid() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -76,7 +76,7 @@ void TestGAMSDatabaseDomainViolation::testIsValid() {
 
 void TestGAMSDatabaseDomainViolation::testAssignmentOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -95,7 +95,7 @@ void TestGAMSDatabaseDomainViolation::testAssignmentOperator() {
 
 void TestGAMSDatabaseDomainViolation::testEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -118,7 +118,7 @@ void TestGAMSDatabaseDomainViolation::testEqualToOperator() {
 
 void TestGAMSDatabaseDomainViolation::testNotEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -140,7 +140,7 @@ void TestGAMSDatabaseDomainViolation::testNotEqualToOperator() {
 
 void TestGAMSDatabaseDomainViolation::testViolSym() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -158,7 +158,7 @@ void TestGAMSDatabaseDomainViolation::testViolSym() {
 
 void TestGAMSDatabaseDomainViolation::testViolRecs() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );

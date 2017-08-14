@@ -52,7 +52,7 @@ void TestGAMSSymbolRecord::testDefaultConstructor() {
 
 void TestGAMSSymbolRecord::testCopyConstructor() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i(db);
@@ -79,7 +79,7 @@ void TestGAMSSymbolRecord::testAssignmentOperator() {
     QFETCH(QString, symbolID);
 
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -149,7 +149,7 @@ void TestGAMSSymbolRecord::testAssignmentOperator_IncorrectType() {
     QFETCH(QString, symbolID);
 
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -199,7 +199,7 @@ void TestGAMSSymbolRecord::testAssignmentOperator_IncorrectType() {
 
 void TestGAMSSymbolRecord::testEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -224,7 +224,7 @@ void TestGAMSSymbolRecord::testEqualToOperator() {
 
 void TestGAMSSymbolRecord::testNotEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -243,7 +243,7 @@ void TestGAMSSymbolRecord::testNotEqualToOperator() {
 
 void TestGAMSSymbolRecord::testIsValid() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -281,7 +281,7 @@ void TestGAMSSymbolRecord::testIsValid() {
 
 void TestGAMSSymbolRecord::testIterator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -351,7 +351,7 @@ void TestGAMSSymbolRecord::testIterator() {
 
 void TestGAMSSymbolRecord::testGetKeys() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -379,7 +379,7 @@ void TestGAMSSymbolRecord::testGetKeys() {
 
 void TestGAMSSymbolRecord::testGetKey_index() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -413,7 +413,7 @@ void TestGAMSSymbolRecord::testGetKey_index() {
 
 void TestGAMSSymbolRecord::testIndexOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -447,7 +447,7 @@ void TestGAMSSymbolRecord::testIndexOperator() {
 
 void TestGAMSSymbolRecord::testGetType() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();

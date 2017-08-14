@@ -33,7 +33,7 @@ QString TestGAMSDomain::classname()  { return "TestGAMSDomain"; }
 
 void TestGAMSDomain::testConstructor_Set() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -70,7 +70,7 @@ void TestGAMSDomain::testConstructor_CharPtrRelaxedName() {
 
 void TestGAMSDomain::testCopyConstructor() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
 
@@ -99,7 +99,7 @@ void TestGAMSDomain::testCopyConstructor() {
 
 void TestGAMSDomain::testAssignmentOperator_Set() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -134,7 +134,7 @@ void TestGAMSDomain::testAssignmentOperator_CharPtrReleaxedName() {
 
 void TestGAMSDomain::testAssignmentOperator_GAMSDomain() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -163,7 +163,7 @@ void TestGAMSDomain::testAssignmentOperator_GAMSDomain() {
 
 void TestGAMSDomain::testGetName() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -182,7 +182,7 @@ void TestGAMSDomain::testGetName() {
 
 void TestGAMSDomain::testGetSet() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -205,7 +205,7 @@ void TestGAMSDomain::testGetSet() {
 
 void TestGAMSDomain::testIsRelaxed() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );

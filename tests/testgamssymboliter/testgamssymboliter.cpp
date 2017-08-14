@@ -39,7 +39,7 @@ QString TestGAMSSymbolIter::classname()  { return "TestGAMSSymbolIter"; }
 
 void TestGAMSSymbolIter::testConstructor() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -87,7 +87,7 @@ void TestGAMSSymbolIter::testConstructor() {
 
 void TestGAMSSymbolIter::testConstructor_InvalidPosition() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -155,7 +155,7 @@ void TestGAMSSymbolIter::testConstructor_InvalidSymbol() {
 
 void TestGAMSSymbolIter::testEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -253,7 +253,7 @@ void TestGAMSSymbolIter::testEqualToOperator() {
 
 void TestGAMSSymbolIter::testNotEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -316,7 +316,7 @@ void TestGAMSSymbolIter::testNotEqualToOperator() {
 
 void TestGAMSSymbolIter::testPointerOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -362,7 +362,7 @@ void TestGAMSSymbolIter::testPointerOperator() {
 
 void TestGAMSSymbolIter::testPointerOperator_BeyondLastRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -403,7 +403,7 @@ void TestGAMSSymbolIter::testPointerOperator_BeyondLastRecord() {
 
 void TestGAMSSymbolIter::testIncrementOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();

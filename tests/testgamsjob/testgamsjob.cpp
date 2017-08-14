@@ -46,7 +46,7 @@ void TestGAMSJob::testDefaultConstructor() {
 
 void TestGAMSJob::testNotEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job;
     GAMSJob job1 = ws.addJobFromGamsLib("trnsport");
@@ -58,7 +58,7 @@ void TestGAMSJob::testNotEqualToOperator() {
 
 void TestGAMSJob::testEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job1 = ws.addJobFromGamsLib("trnsport");
     GAMSJob job2 = ws.addJobFromGamsLib("trnsport");
@@ -74,7 +74,7 @@ void TestGAMSJob::testEqualToOperator() {
 
 void TestGAMSJob::testIsValid() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job1 = ws.addJobFromGamsLib("trnsport");
     QVERIFY( job1.isValid() );
@@ -85,7 +85,7 @@ void TestGAMSJob::testIsValid() {
 
 void TestGAMSJob::testRun() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib("trnsport");
     // when
@@ -99,7 +99,7 @@ void TestGAMSJob::testRun() {
 
 void TestGAMSJob::testRunJobFromEmptyString() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     // when
     GAMSJob job = ws.addJobFromString("");
@@ -108,7 +108,7 @@ void TestGAMSJob::testRunJobFromEmptyString() {
 }
 
 void TestGAMSJob::testOutDB() {
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
 
     GAMSJob job = ws.addJobFromString(TestGAMSObject::getDataText());
@@ -131,7 +131,7 @@ void TestGAMSJob::testOutDB() {
 
 void TestGAMSJob::testOutDB_BeforeRun() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromString(TestGAMSObject::getDataText());
 
@@ -144,7 +144,7 @@ void TestGAMSJob::testOutDB_BeforeRun() {
 
 void TestGAMSJob::testGetName() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromString(TestGAMSObject::getDataText());
     // when
@@ -156,7 +156,7 @@ void TestGAMSJob::testGetName() {
 }
 
 void TestGAMSJob::testGetWorkspace() {
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
 
     GAMSJob job = ws.addJobFromGamsLib("zloof");
@@ -165,7 +165,7 @@ void TestGAMSJob::testGetWorkspace() {
 }
 
 void TestGAMSJob::testGetLogID() {
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
 
     GAMSJob job1 = ws.addJobFromGamsLib("trnsport");

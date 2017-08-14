@@ -52,7 +52,7 @@ void TestGAMSSetRecord::testDefaultConstructor() {
 
 void TestGAMSSetRecord::testCopyConstructor() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i(db);
@@ -64,7 +64,7 @@ void TestGAMSSetRecord::testCopyConstructor() {
 
 void TestGAMSSetRecord::testCopyConstructor_IncorrectType() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -77,7 +77,7 @@ void TestGAMSSetRecord::testCopyConstructor_IncorrectType() {
 
 void TestGAMSSetRecord::testAssignmentOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -105,7 +105,7 @@ void TestGAMSSetRecord::testIncorrectType() {
     QFETCH(QString, symbolID);
 
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -143,7 +143,7 @@ void TestGAMSSetRecord::testIncorrectType() {
 
 void TestGAMSSetRecord::testGetSetText() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i(db);

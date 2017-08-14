@@ -53,7 +53,7 @@ void TestGAMSVariableRecord::testDefaultConstructor() {
 
 void TestGAMSVariableRecord::testCopyConstructor() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -72,7 +72,7 @@ void TestGAMSVariableRecord::testCopyConstructor() {
 
 void TestGAMSVariableRecord::testCopyConstructor_IncorrectType() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -85,7 +85,7 @@ void TestGAMSVariableRecord::testCopyConstructor_IncorrectType() {
 
 void TestGAMSVariableRecord::testAssignmentOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -112,7 +112,7 @@ void TestGAMSVariableRecord::testIncorrectType() {
     QFETCH(QString, symbolID);
 
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -147,7 +147,7 @@ void TestGAMSVariableRecord::testIncorrectType() {
 
 void TestGAMSVariableRecord::testGetSetLevel() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -171,7 +171,7 @@ void TestGAMSVariableRecord::testGetSetLevel() {
 
 void TestGAMSVariableRecord::testGetSetMarginal() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -196,7 +196,7 @@ void TestGAMSVariableRecord::testGetSetMarginal() {
 
 void TestGAMSVariableRecord::testGetSetUpper() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -225,7 +225,7 @@ void TestGAMSVariableRecord::testGetSetUpper() {
 
 void TestGAMSVariableRecord::testGetSetLower() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -258,7 +258,7 @@ void TestGAMSVariableRecord::testGetSetLower() {
 
 void TestGAMSVariableRecord::testGetSetScale() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();

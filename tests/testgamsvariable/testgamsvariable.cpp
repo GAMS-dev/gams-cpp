@@ -57,7 +57,7 @@ void TestGAMSVariable::testDefaultConstructor() {
 
 void TestGAMSVariable::testCopyConstructor() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -83,7 +83,7 @@ void TestGAMSVariable::testCopyConstructor() {
 
 void TestGAMSVariable::testCopyConstructor_IncorrectType() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -97,7 +97,7 @@ void TestGAMSVariable::testCopyConstructor_IncorrectType() {
 
 void TestGAMSVariable::testIterator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -121,7 +121,7 @@ void TestGAMSVariable::testIterator() {
 
 void TestGAMSVariable::testAssignmentOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -138,7 +138,7 @@ void TestGAMSVariable::testAssignmentOperator() {
 
 void TestGAMSVariable::testAssignmentOperator_IncorrectType() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -152,7 +152,7 @@ void TestGAMSVariable::testAssignmentOperator_IncorrectType() {
 
 void TestGAMSVariable::testGetFirstRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -174,7 +174,7 @@ void TestGAMSVariable::testGetFirstRecord() {
 
 void TestGAMSVariable::testGetFirstRecordSlice() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -198,7 +198,7 @@ void TestGAMSVariable::testGetFirstRecordSlice() {
 
 void TestGAMSVariable::testGetFirstRecordSlice_InvalidKeys_IncorrectDimension() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -218,7 +218,7 @@ void TestGAMSVariable::testGetFirstRecordSlice_InvalidKeys_IncorrectDimension() 
 
 void TestGAMSVariable::testGetLastRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -240,7 +240,7 @@ void TestGAMSVariable::testGetLastRecord() {
 
 void TestGAMSVariable::testGetLastRecordSlice() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -265,7 +265,7 @@ void TestGAMSVariable::testGetLastRecordSlice() {
 
 void TestGAMSVariable::testGetLastRecordSlice_InvalidKeys_IncorrectDimension() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -281,7 +281,7 @@ void TestGAMSVariable::testGetLastRecordSlice_InvalidKeys_IncorrectDimension() {
 
 void TestGAMSVariable::testFindRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -297,7 +297,7 @@ void TestGAMSVariable::testFindRecord() {
 
 void TestGAMSVariable::testFindRecord_InsensitiveCaseKeys() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -314,7 +314,7 @@ void TestGAMSVariable::testFindRecord_InsensitiveCaseKeys() {
 
 void TestGAMSVariable::testAddRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -332,7 +332,7 @@ void TestGAMSVariable::testAddRecord() {
 
 void TestGAMSVariable::testAddRecord_DuplicatedKeys_IncorrectDimension() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -352,7 +352,7 @@ void TestGAMSVariable::testAddRecord_DuplicatedKeys_IncorrectDimension() {
 
 void TestGAMSVariable::testMergeExistingRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -386,7 +386,7 @@ void TestGAMSVariable::testMergeExistingRecord() {
 
 void TestGAMSVariable::testMergeNonExistingRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -408,7 +408,7 @@ void TestGAMSVariable::testMergeNonExistingRecord() {
 
 void TestGAMSVariable::testGetVarType() {
     // given
-    GAMSWorkspaceInfo wsInfo;
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();

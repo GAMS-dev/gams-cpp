@@ -45,7 +45,10 @@ using namespace gams;
 using namespace std;
 
 void TestGAMSObject::initTestCase() {
-    testSystemDir = GAMSPlatform::findGams(0).c_str();
+    testSystemDir = qgetenv("GTESTDIR");
+    QCOMPARE(testSystemDir.path().isEmpty(), false);
+//    if (testSystemDir.path() == "")
+//        testSystemDir = GAMSPlatform::findGams(0).c_str();
     testDebugLevel = qgetenv("GAMSOOAPIDEBUG");
     testGAMSVersion = GAMSOptions::gamsVersion();
     testAPIVersion = GAMSVersion::api();
