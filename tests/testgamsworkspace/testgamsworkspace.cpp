@@ -48,7 +48,7 @@ void TestGAMSWorkspace::testDefaultConstructor() {
         // then
         TestGAMSObject::testDir( QString::fromStdString(ws.systemDirectory()) );
         QString sdir = QString::fromStdString(ws.systemDirectory());
-        QCOMPARE( testSystemDir.canonicalPath(), QDir(sdir).canonicalPath() );
+        QCOMPARE( testSystemDir, QDir(sdir) );
         TestGAMSObject::testDir( sdir );
 
         TestGAMSObject::testDir( QString::fromStdString(ws.workingDirectory()) );
