@@ -45,7 +45,7 @@ using namespace gams;
 using namespace std;
 
 void TestGAMSObject::initTestCase() {
-    QString gamsDir = QString(qgetenv("GAMSDIRx"));
+    QString gamsDir = QString(qgetenv("GAMSDIR"));
     QStringList gamsDirs = gamsDir.split(cEnvSep);
     for (QString d: gamsDirs) {
         if (!d.isEmpty() && gamsDir.length() > d.length())
