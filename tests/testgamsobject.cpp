@@ -45,10 +45,16 @@ using namespace gams;
 using namespace std;
 
 void TestGAMSObject::initTestCase() {
-    testSystemDir = qgetenv("GTESTDIR");
-//    QCOMPARE(testSystemDir.path().isEmpty(), false);
+    QString gamsDir = QString(qgetenv("GAMSDIRx"));
+    QStringList gamsDirs = gamsDir.split(cEnvSep);
+    for (QString d: gamsDirs) {
+        if (!d.isEmpty() && gamsDir.length() > d.length())
+            gamsDir = d;
+    }
+    testSystemDir = gamsDir;
     if (testSystemDir.path() == "")
         testSystemDir = GAMSPlatform::findGams(0).c_str();
+    QCOMPARE(testSystemDir.path().isEmpty(), false);
     testDebugLevel = qgetenv("GAMSOOAPIDEBUG");
     testGAMSVersion = GAMSOptions::gamsVersion();
     testAPIVersion = GAMSVersion::api();
