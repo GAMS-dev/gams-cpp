@@ -47,8 +47,7 @@ QString TestPerformance::classname() { return "TestPerformance"; }
 // preparing huge GAMSSet with >1e6 entries
 void TestPerformance::initTestCase(){
 
-    GAMSWorkspaceInfo wsInfo;
-    GAMSWorkspace ws(wsInfo);
+    GAMSWorkspace ws("", qgetenv("GAMSDIR").toStdString());
 
     // filling hugeTestSet
     GAMSDatabase db = ws.addDatabase();
@@ -66,8 +65,7 @@ void TestPerformance::initTestCase(){
 // test adding many many (>1e6) records to a symbol
 void TestPerformance::testAddingRecords(){
 
-    GAMSWorkspaceInfo wsInfo;
-    GAMSWorkspace ws(wsInfo);
+    GAMSWorkspace ws("", qgetenv("GAMSDIR").toStdString());
     GAMSDatabase db = ws.addDatabase();
 
     GAMSSet set = db.addSet("set", 1, "test set");
@@ -85,8 +83,7 @@ void TestPerformance::testAddingRecords(){
 // test adding many many symbols to a database
 void TestPerformance::testAddingSymbols(){
 
-    GAMSWorkspaceInfo wsInfo;
-    GAMSWorkspace ws(wsInfo);
+    GAMSWorkspace ws("", qgetenv("GAMSDIR").toStdString());
     GAMSDatabase db = ws.addDatabase();
 
     QElapsedTimer timer;
@@ -102,8 +99,7 @@ void TestPerformance::testAddingSymbols(){
 // test adding many databases to a workspace
 void TestPerformance::testAddingDatabases(){
 
-    GAMSWorkspaceInfo wsInfo;
-    GAMSWorkspace ws(wsInfo);
+    GAMSWorkspace ws("", qgetenv("GAMSDIR").toStdString());
 
     QElapsedTimer timer;
     timer.start();
@@ -120,8 +116,7 @@ void TestPerformance::testAddingDatabases(){
 // test adding many jobs to a workspace
 void TestPerformance::testAddingJobs(){
 
-    GAMSWorkspaceInfo wsInfo;
-    GAMSWorkspace ws(wsInfo);
+    GAMSWorkspace ws("", qgetenv("GAMSDIR").toStdString());
 
     QElapsedTimer timer;
     timer.start();
@@ -136,8 +131,7 @@ void TestPerformance::testAddingJobs(){
 // test adding many options to a workspace
 void TestPerformance::testAddingOptions(){
 
-    GAMSWorkspaceInfo wsInfo;
-    GAMSWorkspace ws(wsInfo);
+    GAMSWorkspace ws("", qgetenv("GAMSDIR").toStdString());
 
     QElapsedTimer timer;
     timer.start();
@@ -182,8 +176,7 @@ void TestPerformance::testIteratingRecordsObject(){
 // running many small (>1e3) GAMSJobs (or running the same job many times)
 void TestPerformance::testRunningJobs(){
 
-    GAMSWorkspaceInfo wsInfo;
-    GAMSWorkspace ws(wsInfo);
+    GAMSWorkspace ws("", qgetenv("GAMSDIR").toStdString());
     GAMSJob job = ws.addJobFromGamsLib("trnsport");
 
     QElapsedTimer timer;
@@ -199,8 +192,7 @@ void TestPerformance::testRunningJobs(){
 // test duplicating many GAMSModelInstances and solving them
 void TestPerformance::testDuplicatingModelInstances(){
 
-    GAMSWorkspaceInfo wsInfo;
-    GAMSWorkspace ws(wsInfo);
+    GAMSWorkspace ws("", qgetenv("GAMSDIR").toStdString());
     GAMSCheckpoint cp = ws.addCheckpoint();
     GAMSJob job = ws.addJobFromGamsLib("trnsport");
     job.run(cp);
