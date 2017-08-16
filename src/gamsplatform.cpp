@@ -72,7 +72,7 @@ const char *cLibPrefix = "lib";
 const char *cLibSuffix = ".so";
 const char *cLibEnv = "LD_LIBRARY_PATH";
 #else // Windows
-const char cEnvSep = ':';
+const char cEnvSep = ';';
 const char *cLibEnv = "";                   // JM: unused until now
 const char *cPathSep = "\\";
 const char *cCmpFileName = "gmscmpnt.txt";
