@@ -31,7 +31,7 @@
 using namespace gams;
 using namespace std;
 
-#ifdef __unix__
+#if defined(__unix__) || defined(__linux__) || defined(__APPLE__)
 
 /// \file transport10.cpp
 /// \brief This is the 10th model in a series of tutorial examples.
