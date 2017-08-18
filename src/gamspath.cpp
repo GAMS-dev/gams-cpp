@@ -24,6 +24,7 @@
  */
 
 #include "gamspath.h"
+#include "gamsexception.h"
 #include <QDir>
 #include <QRegularExpression>
 #include <QTemporaryFile>
@@ -243,7 +244,7 @@ GAMSPath GAMSPath::tempDir(const QString &templatePath)
     QTemporaryDir temp(mask + "/gams-cpp");
     temp.setAutoRemove(false);
     if (!temp.isValid())
-        return GAMSPath("");
+        throw GAMSException("Could not create temporary directory in " + templatePath.toStdString());
     return GAMSPath(temp.path());
 }
 
@@ -252,7 +253,7 @@ GAMSPath GAMSPath::tempFile(const QString &templateName)
     QTemporaryFile temp(*this / templateName);
     temp.setAutoRemove(false);
     if (!temp.open())
-        return GAMSPath("");
+        throw GAMSException("Could not create temporary file in " + templateName.toStdString());
     temp.close();
     return GAMSPath(temp.fileName());
 }
