@@ -154,9 +154,6 @@ void TestGAMSWorkspace::testConstructor_DebugLevel() {
     QString dir;
     // when
     {
-        if (debugLevelEnum != GAMSEnum::Off) {
-            QEXPECT_FAIL("", "Avoiding access violation for debugLevelEnum != GAMSEnum::Off ", Abort); QVERIFY(false);
-        }
         GAMSWorkspace ws("", testSystemDir.path().toStdString(), debugLevelEnum);
         dir = QString::fromStdString(ws.workingDirectory());
     }
