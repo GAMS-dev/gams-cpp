@@ -49,15 +49,19 @@ void TestGAMSSymbol::testDefaultConstructor() {
 void TestGAMSSymbol::testCopyConstructor() {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
-    GAMSWorkspace ws(wsInfo);
-    GAMSDatabase db = ws.addDatabase();
-    TestGAMSObject::getTestData_Set_plants_i( db );
-    // when
-    GAMSSymbol symbol( db.getSet("i") );
-    // then
-    QVERIFY( symbol.isValid() );
-    QCOMPARE( symbol.name(), db.getSet("i").name() );
-    QCOMPARE( symbol.numberRecords(), db.getSet("i").numberRecords() );
+    try {
+        GAMSWorkspace ws(wsInfo);
+        GAMSDatabase db = ws.addDatabase();
+        TestGAMSObject::getTestData_Set_plants_i( db );
+        // when
+        GAMSSymbol symbol( db.getSet("i") );
+        // then
+        QVERIFY( symbol.isValid() );
+        QCOMPARE( symbol.name(), db.getSet("i").name() );
+        QCOMPARE( symbol.numberRecords(), db.getSet("i").numberRecords() );
+    } catch (GAMSException &e) {
+        QCOMPARE(e.what(), "");
+    }
 }
 
 void TestGAMSSymbol::testAssignmentOperator() {
