@@ -29,6 +29,7 @@
 #include <QRegularExpression>
 #include <QTemporaryFile>
 #include <QTemporaryDir>
+#include <QDateTime>
 
 namespace gams {
 
@@ -239,6 +240,8 @@ const char *GAMSPath::c_str()
 
 GAMSPath GAMSPath::tempDir(const QString &templatePath)
 {
+    uint seed = QDateTime::currentDateTimeUtc().toMSecsSinceEpoch() % 4294967295;
+    qsrand(seed);
     QString mask = templatePath.isEmpty() ? absoluteFilePath() : templatePath;
     if (!QDir(mask).exists()) QDir(mask).mkpath(mask);
     QTemporaryDir temp(mask + "/gams-cpp");
@@ -250,6 +253,8 @@ GAMSPath GAMSPath::tempDir(const QString &templatePath)
 
 GAMSPath GAMSPath::tempFile(const QString &templateName)
 {
+    uint seed = QDateTime::currentDateTimeUtc().toMSecsSinceEpoch() % 4294967295;
+    qsrand(seed);
     QTemporaryFile temp(*this / templateName);
     temp.setAutoRemove(false);
     if (!temp.open())
