@@ -57,6 +57,11 @@ struct GdxStringArray {
         return *this;
     }
 
+    GdxStringArray& set(const std::string& input) {
+        strcpy(mIndxC[0], input.c_str());
+        return *this;
+    }
+
     void set(const int index, const std::string& input) {
         strcpy(mIndxC[index], input.c_str());
     }
@@ -91,6 +96,7 @@ public:
     bool operator ==(const GAMSSymbolImpl& other);
 
     GAMSSymbolRecord addRecord(const GAMSSymbol& sym, const std::vector<std::string>& keys);
+    GAMSSymbolRecord addRecord(const GAMSSymbol& sym, const std::string& key);
 
     /// Delete GAMSSymbol record
     /// \param keys List of keys

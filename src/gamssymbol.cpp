@@ -129,8 +129,8 @@ GAMSSymbolRecord GAMSSymbol::addRecord()
 
 GAMSSymbolRecord GAMSSymbol::addRecord(const std::string& key1)
 {
-    vector<string> keys = { key1 };
-    return addRecord(keys);
+    if (!mImpl) throw GAMSException("GAMSSymbol: The symbol has not been initialized.");
+    return mImpl->addRecord(*this, key1);
 }
 
 GAMSSymbolRecord GAMSSymbol::addRecord(const std::string& key1, const std::string& key2)

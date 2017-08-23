@@ -133,6 +133,19 @@ GAMSSymbolRecord GAMSSymbolImpl::addRecord(const GAMSSymbol& sym, const std::vec
     return checkAndReturnRecord(sym, symIterPtr);
 }
 
+GAMSSymbolRecord GAMSSymbolImpl::addRecord(const GAMSSymbol& sym, const string& key)
+{
+    if (recordLock())
+        throw GAMSException("Cannot add data records to record-locked database");
+    if (1 != mDim)
+        throw GAMSException("Different dimensions: 1 vs. " + to_string(mDim));
+    const char* cPtr[] { key.c_str()};
+    void* symIterPtr = 0;
+
+    checkForGMDError(gmdAddRecord(gmd(), mSymPtr, cPtr, &symIterPtr), __FILE__, __LINE__);
+    return checkAndReturnRecord(sym, symIterPtr);
+}
+
 void GAMSSymbolImpl::deleteRecord(const std::vector<string>& keys)
 {
     if (recordLock())
