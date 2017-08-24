@@ -47,170 +47,221 @@ QString TestPerformance::classname() { return "TestPerformance"; }
 // preparing huge GAMSSet with >1e6 entries
 void TestPerformance::initTestCase(){
 
-    GAMSWorkspace ws("", qgetenv("GAMSDIR").toStdString());
+    try {
+        int amount = NR_ITEMS_HUGE_TEST;
+        GAMSWorkspace ws("", qgetenv("GTESTDIR").toStdString());
 
-    // filling hugeTestSet
-    GAMSDatabase db = ws.addDatabase();
-    hugeTestSet = db.addSet("set", 1, "test set");
+        // filling hugeTestSet
+        GAMSDatabase db = ws.addDatabase();
+        hugeTestSet = db.addSet("set", 1, "test set");
 
-    QElapsedTimer timer;
-    timer.start();
-    for(int i = 0; i < NR_ITEMS_HUGE_TEST; i++){
-        hugeTestSet.addRecord(string("rec" + to_string(i)));
+        QElapsedTimer timer;
+        timer.start();
+        for(int i = 0; i < amount; i++){
+            hugeTestSet.addRecord(string("rec" + to_string(i)));
+        }
+        qInfo() << "[" << amount << " iterations ]  Elapsed time:" << timer.elapsed() << "ms";
+
+    } catch (GAMSException &e) {
+        qInfo() << "Crashed: " << e.what();
     }
-    qInfo() << "Elapsed time:" << timer.elapsed() << "ms";
 }
 
 
 // test adding many many (>1e6) records to a symbol
 void TestPerformance::testAddingRecords(){
 
-    GAMSWorkspace ws("", qgetenv("GAMSDIR").toStdString());
-    GAMSDatabase db = ws.addDatabase();
+    try {
+        int amount = NR_ITEMS_HUGE_TEST;
+        GAMSWorkspace ws("", qgetenv("GTESTDIR").toStdString());
+        GAMSDatabase db = ws.addDatabase();
 
-    GAMSSet set = db.addSet("set", 1, "test set");
+        GAMSSet set = db.addSet("set", 1, "test set");
 
-    QElapsedTimer timer;
-    timer.start();
-    for(int i = 0; i < NR_ITEMS_HUGE_TEST; i++){
-        set.addRecord(string("dim" + to_string(i)));
+        QElapsedTimer timer;
+        timer.start();
+        for(int i = 0; i < amount; i++){
+            set.addRecord(string("dim" + to_string(i)));
+        }
+        qInfo() << "[" << amount << " iterations ]  Elapsed time:" << timer.elapsed() << "ms";
+
+        QVERIFY(1);
+    } catch (GAMSException &e) {
+        qInfo() << "Crashed: " << e.what();
     }
-    qInfo() << "Elapsed time:" << timer.elapsed() << "ms";
-
-    QVERIFY(1);
 }
 
 // test adding many many symbols to a database
 void TestPerformance::testAddingSymbols(){
 
-    GAMSWorkspace ws("", qgetenv("GAMSDIR").toStdString());
-    GAMSDatabase db = ws.addDatabase();
+    try {
+        int amount = NR_ITEMS_HUGE_TEST;
+        GAMSWorkspace ws("", qgetenv("GTESTDIR").toStdString());
+        GAMSDatabase db = ws.addDatabase();
 
-    QElapsedTimer timer;
-    timer.start();
-    for(int i = 0; i < NR_ITEMS_HUGE_TEST; i++){
-        GAMSSet set = db.addSet(string("set" + to_string(i)), 1, "test set");
+        QElapsedTimer timer;
+        timer.start();
+        for(int i = 0; i < amount; i++){
+            GAMSSet set = db.addSet(string("set" + to_string(i)), 1, "test set");
+        }
+        qInfo() << "[" << amount << " iterations ]  Elapsed time:" << timer.elapsed() << "ms";
+
+        QVERIFY(1);
+    } catch (GAMSException &e) {
+        qInfo() << "Crashed: " << e.what();
     }
-    qInfo() << "Elapsed time:" << timer.elapsed() << "ms";
-
-    QVERIFY(1);
 }
 
 // test adding many databases to a workspace
 void TestPerformance::testAddingDatabases(){
 
-    GAMSWorkspace ws("", qgetenv("GAMSDIR").toStdString());
+    try {
+        int amount = NR_ITEMS_BIG_TEST;
+        GAMSWorkspace ws("", qgetenv("GTESTDIR").toStdString());
 
-    QElapsedTimer timer;
-    timer.start();
-    for(int i = 0; i < NR_ITEMS_BIG_TEST; i++){
-        GAMSDatabase db = ws.addDatabase();
-        db.addSet("someset", 1).addRecord("rec1");
-        QVERIFY(db.getSet("someset").dim());
+        QElapsedTimer timer;
+        timer.start();
+        for(int i = 0; i < amount; i++){
+            GAMSDatabase db = ws.addDatabase();
+            db.addSet("someset", 1).addRecord("rec1");
+            QVERIFY(db.getSet("someset").dim());
+        }
+        qInfo() << "[" << amount << " iterations ]  Elapsed time:" << timer.elapsed() << "ms";
+
+        QVERIFY(1);
+    } catch (GAMSException &e) {
+        qInfo() << "Crashed: " << e.what();
     }
-    qInfo() << "Elapsed time:" << timer.elapsed() << "ms";
-
-    QVERIFY(1);
 }
 
 // test adding many jobs to a workspace
 void TestPerformance::testAddingJobs(){
 
-    GAMSWorkspace ws("", qgetenv("GAMSDIR").toStdString());
+    try {
+        int amount = NR_ITEMS_BIG_TEST;
+        GAMSWorkspace ws("", qgetenv("GTESTDIR").toStdString());
 
-    QElapsedTimer timer;
-    timer.start();
-    for(int i = 0; i < NR_ITEMS_BIG_TEST; i++){
-        GAMSJob j = ws.addJobFromGamsLib("diet");
+        QElapsedTimer timer;
+        timer.start();
+        for(int i = 0; i < amount; i++){
+            GAMSJob j = ws.addJobFromGamsLib("diet");
+        }
+        qInfo() << "[" << amount << " iterations ]  Elapsed time:" << timer.elapsed() << "ms";
+
+        QVERIFY(1);
+    } catch (GAMSException &e) {
+        qInfo() << "Crashed: " << e.what();
     }
-    qInfo() << "Elapsed time:" << timer.elapsed() << "ms";
-
-    QVERIFY(1);
 }
 
 // test adding many options to a workspace
 void TestPerformance::testAddingOptions(){
 
-    GAMSWorkspace ws("", qgetenv("GAMSDIR").toStdString());
+    try {
+        int amount = NR_ITEMS_BIG_TEST;
+        GAMSWorkspace ws("", qgetenv("GTESTDIR").toStdString());
 
-    QElapsedTimer timer;
-    timer.start();
-    for(int i = 0; i < NR_ITEMS_BIG_TEST; i++){
-        GAMSOptions o = ws.addOptions();
+        QElapsedTimer timer;
+        timer.start();
+        for(int i = 0; i < amount; i++){
+            GAMSOptions o = ws.addOptions();
+        }
+        qInfo() << "[" << amount << " iterations ]  Elapsed time:" << timer.elapsed() << "ms";
+
+        QVERIFY(1);
+    } catch (GAMSException &e) {
+        qInfo() << "Crashed: " << e.what();
     }
-    qInfo() << "Elapsed time:" << timer.elapsed() << "ms";
-
-    QVERIFY(1);
 }
 
 // test iterating over all records for a very large symbol
 void TestPerformance::testIteratingRecordsPointer(){
 
-    GAMSSymbolRecord record = hugeTestSet.firstRecord();
+    try {
+        int amount = NR_ITEMS_HUGE_TEST;
+        GAMSSymbolRecord record = hugeTestSet.firstRecord();
 
-    QElapsedTimer timer;
-    timer.start();
-    int i=0;
-    while(record.moveNext()){
-        i++;
+        QElapsedTimer timer;
+        timer.start();
+        int i=0;
+        while(record.moveNext()){
+            i++;
+        }
+        qInfo() << "[" << amount << " iterations ]  Elapsed time:" << timer.elapsed() << "ms";
+
+        QVERIFY(1);
+    } catch (GAMSException &e) {
+        qInfo() << "Crashed: " << e.what();
     }
-    qInfo() << "Elapsed time:" << timer.elapsed() << "ms";
-
-    QVERIFY(1);
 }
 
 // test iterating over all records for a very large symbol
 void TestPerformance::testIteratingRecordsObject(){
 
-    QElapsedTimer timer;
-    timer.start();
-    int i = 0;
-    for(GAMSSetRecord rec : hugeTestSet){
-        i++;
-    }
-    qInfo() << "Elapsed time:" << timer.elapsed() << "ms";
+    try {
+        int amount = NR_ITEMS_HUGE_TEST;
+        QElapsedTimer timer;
+        timer.start();
+        int i = 0;
+        for(GAMSSetRecord rec : hugeTestSet){
+            i++;
+        }
+        qInfo() << "[" << amount << " iterations ]  Elapsed time:" << timer.elapsed() << "ms";
 
-    QVERIFY(1);
+        QVERIFY(1);
+    } catch (GAMSException &e) {
+        qInfo() << "Crashed: " << e.what();
+    }
 }
 
 // running many small (>1e3) GAMSJobs (or running the same job many times)
 void TestPerformance::testRunningJobs(){
 
-    GAMSWorkspace ws("", qgetenv("GAMSDIR").toStdString());
-    GAMSJob job = ws.addJobFromGamsLib("trnsport");
+    try {
+        int amount = NR_ITEMS_BIG_TEST;
+        GAMSWorkspace ws("", qgetenv("GTESTDIR").toStdString());
+        GAMSJob job = ws.addJobFromGamsLib("trnsport");
 
-    QElapsedTimer timer;
-    timer.start();
-    for (int i = 0; i < NR_ITEMS_BIG_TEST; i++) {
-        job.run();
+        QElapsedTimer timer;
+        timer.start();
+        for (int i = 0; i < amount; i++) {
+            job.run();
+        }
+        qInfo() << "[" << amount << " iterations ]  Elapsed time:" << timer.elapsed() << "ms";
+
+        QVERIFY(1);
+    } catch (GAMSException &e) {
+        qInfo() << "Crashed: " << e.what();
     }
-    qInfo() << "Elapsed time:" << timer.elapsed() << "ms";
-
-    QVERIFY(1);
 }
 
 // test duplicating many GAMSModelInstances and solving them
 void TestPerformance::testDuplicatingModelInstances(){
 
-    GAMSWorkspace ws("", qgetenv("GAMSDIR").toStdString());
-    GAMSCheckpoint cp = ws.addCheckpoint();
-    GAMSJob job = ws.addJobFromGamsLib("trnsport");
-    job.run(cp);
+    try {
+        int amount = NR_ITEMS_BIG_TEST;
+        GAMSWorkspace ws("", qgetenv("GTESTDIR").toStdString());
+        GAMSCheckpoint cp = ws.addCheckpoint();
+        GAMSJob job = ws.addJobFromGamsLib("trnsport");
+        job.run(cp);
 
-    GAMSModelInstance mi = cp.addModelInstance("");
-    mi.instantiate("transport use lp min z");
+        GAMSModelInstance mi = cp.addModelInstance("");
+        mi.instantiate("transport use lp min z");
 
-    mi.solve();
+        mi.solve();
 
-    QElapsedTimer timer;
-    timer.start();
-    for (int i = 0; i < NR_ITEMS_BIG_TEST; i++) {
-        GAMSModelInstance copy = mi.copyModelInstance();
-        copy.solve();
+        QElapsedTimer timer;
+        timer.start();
+        for (int i = 0; i < amount; i++) {
+            GAMSModelInstance copy = mi.copyModelInstance();
+            copy.solve();
+        }
+        qInfo() << "[" << amount << " iterations ]  Elapsed time:" << timer.elapsed() << "ms";
+
+        QVERIFY(1);
+    } catch (GAMSException &e) {
+        qInfo() << "Crashed: " << e.what();
     }
-    qInfo() << "Elapsed time:" << timer.elapsed() << "ms";
-
-    QVERIFY(1);
 }
 
 //QTEST_MAIN(TestPerformance)
