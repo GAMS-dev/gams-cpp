@@ -238,6 +238,7 @@ const char *GAMSPath::c_str()
     return mBuffer.c_str();
 }
 
+void initSeed();
 void initSeed()
 {
     // generate seed with timestamp and random number

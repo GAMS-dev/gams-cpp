@@ -185,7 +185,7 @@ GAMSDatabase readFromAccess(GAMSWorkspace ws)
 void writeVariable(QSqlDatabase sqlDb, GAMSDatabase db, string varName, vector<string> domains)
 {
     GAMSVariable var = db.getVariable(varName);
-    if(domains.size() != var.dim())
+    if(domains.size() != static_cast<size_t>(var.dim()))
     {
         cout << "Number of column names does not match the dimension of the variable." << endl;
         exit(1);
