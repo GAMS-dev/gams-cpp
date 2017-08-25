@@ -1,29 +1,31 @@
-unix:GAMS_DISTRIB = $$(HOME)/gams/gams24.9_linux_x64_64_sfx/apifiles/C/api
-win32:GAMS_DISTRIB = C:\GAMS\win64\24.9\apifiles\C\api
+unix:GAMS_DISTRIB = $$(HOME)/gams/gams24.9_linux_x64_64_sfx
+unix:GAMS_DISTRIB_API = $$(HOME)/gams/gams24.9_linux_x64_64_sfx/apifiles/C/api
+win32:GAMS_DISTRIB = C:/GAMS/win64/24.9
+win32:GAMS_DISTRIB_API = $$GAMS_DISTRIB/apifiles/C/api
 
 exists($$PWD/gamsinclude.pri) {
     include($$PWD/gamsinclude.pri)
 }
 
-INCLUDEPATH += $$GAMS_DISTRIB
+INCLUDEPATH += $$GAMS_DISTRIB_API
 
 DEFINES += _CRT_SECURE_NO_WARNINGS
 
 HEADERS = \
-    $$GAMS_DISTRIB/gclgms.h \
-    $$GAMS_DISTRIB/gmdcc.h \
-    $$GAMS_DISTRIB/cfgmcc.h \
-    $$GAMS_DISTRIB/gevmcc.h \
-    $$GAMS_DISTRIB/gmomcc.h \
-    $$GAMS_DISTRIB/optcc.h
+    $$GAMS_DISTRIB_API/gclgms.h \
+    $$GAMS_DISTRIB_API/gmdcc.h \
+    $$GAMS_DISTRIB_API/cfgmcc.h \
+    $$GAMS_DISTRIB_API/gevmcc.h \
+    $$GAMS_DISTRIB_API/gmomcc.h \
+    $$GAMS_DISTRIB_API/optcc.h
 
 SOURCES = \
-    $$GAMS_DISTRIB/gclgms.c \
-    $$GAMS_DISTRIB/gmdcc.c \
-    $$GAMS_DISTRIB/cfgmcc.c \
-    $$GAMS_DISTRIB/gevmcc.c \
-    $$GAMS_DISTRIB/gmomcc.c \
-    $$GAMS_DISTRIB/optcc.c
+    $$GAMS_DISTRIB_API/gclgms.c \
+    $$GAMS_DISTRIB_API/gmdcc.c \
+    $$GAMS_DISTRIB_API/cfgmcc.c \
+    $$GAMS_DISTRIB_API/gevmcc.c \
+    $$GAMS_DISTRIB_API/gmomcc.c \
+    $$GAMS_DISTRIB_API/optcc.c
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
