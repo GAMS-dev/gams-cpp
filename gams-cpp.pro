@@ -16,7 +16,8 @@ TEMPLATE=subdirs
         }
         write_file($$PWD/gamsinclude.pri,GAMSINC)
     } else {
-        GAMSINC = GAMS_DISTRIB=$$(GAMS_CORE_PATH)
+        GAMSINC = GAMS_DISTRIB=$$(GAMS_CORE_PATH) \
+                  GAMS_DISTRIB_API=\$$GAMS_DISTRIB/apifiles/C/api
         write_file($$PWD/gamsinclude.pri,GAMSINC)
     }
 }
