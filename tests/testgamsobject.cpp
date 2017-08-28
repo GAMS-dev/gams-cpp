@@ -62,7 +62,7 @@ void TestGAMSObject::initTestCase() {
 void TestGAMSObject::cleanupTestCase() {
     for (QString dir: testCleanupDirs) {
         QDir path(dir);
-        if (path.exists()) {
+        if (path.exists() && path.absolutePath().contains("gams-cpp")) {
             path.removeRecursively();
         }
     }
