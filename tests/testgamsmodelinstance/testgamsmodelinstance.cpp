@@ -250,6 +250,7 @@ void TestGAMSModelInstance::testCopyModelInstance() {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
+    testCleanupDirs << QString::fromStdString(ws.workingDirectory());
     GAMSCheckpoint cp = ws.addCheckpoint();
     ws.addJobFromString(getModelText()).run(cp);
 

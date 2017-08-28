@@ -176,7 +176,11 @@ void TestGAMSWorkspace::testConstructor_DebugLevel() {
            break;
       default:
            break;
-     }
+    }
+    QDir qdir(dir);
+    if (qdir.exists()) {
+        qdir.removeRecursively();
+    }
 }
 
 void TestGAMSWorkspace::testConstructorFromOccupiedWorkingDirectory() {

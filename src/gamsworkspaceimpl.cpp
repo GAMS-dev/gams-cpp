@@ -160,7 +160,7 @@ GAMSWorkspaceImpl::~GAMSWorkspaceImpl()
     GAMSWorkspacePool::unregisterWorkspacePath(mWorkingDir.toStdString());
     if ((mDebug != GAMSEnum::DebugLevel::KeepFiles) && mUsingTmpWorkingDir) {
         if (!mWorkingDir.rmDirRecurse()) {
-            DEB << "Error on cleaning workspace.";
+            MSG << "Error on cleaning workspace.";
         }
     }
     LoggerPool::instance().registerLogger(static_cast<LogId>(this), mDebug, stdout);

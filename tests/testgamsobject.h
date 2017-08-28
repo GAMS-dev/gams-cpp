@@ -36,6 +36,7 @@
 #include <QDir>
 #include <QDebug>
 #include <QTest>
+#include <QSet>
 
 class TestGAMSObject: public QObject
 {
@@ -85,6 +86,7 @@ class TestGAMSObject: public QObject
      QString testGAMSVersion;
      QString testAPIVersion;
      QString testDebugLevel;
+     QSet<QString> testCleanupDirs;
 
      int tests_Executed;
      int tests_Failed;
