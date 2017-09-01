@@ -238,8 +238,7 @@ const char *GAMSPath::c_str()
     return mBuffer.c_str();
 }
 
-void initSeed();
-void initSeed()
+static void initSeed()
 {
     // generate seed with timestamp and random number
     qsrand(static_cast<uint>(QDateTime::currentDateTimeUtc().toMSecsSinceEpoch() + qrand()));
