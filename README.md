@@ -30,11 +30,13 @@ Start Qt Creator, open the project file 'gams-cpp.pro' and click 'Build/Run qmak
 
 On Windows the file contains:
 ```
-GAMS_DISTRIB=C:\GAMS\win64\24.9\apifiles\C\api
+GAMS_DISTRIB=C:/GAMS/win64/24.9
+GAMS_DISTRIB_API=$$GAMS_DISTRIB/apifiles/C/api
 ```
 On Unix it will look like:
 ```
-GAMS_DISTRIB=$$(HOME)/gams/gams24.9_linux_x64_64_sfx/apifiles/C/api
+GAMS_DISTRIB=$$(HOME)/gams/gams24.9_linux_x64_64_sfx
+GAMS_DISTRIB_API=$$GAMS_DISTRIB/apifiles/C/api
 ```
 
 Then perform a 'Build All' operation (Build->Build All) to build the library as well as all examples and tests. Finally, the examples can be executed by triggering Run button or pressing 'Ctrl+R'.

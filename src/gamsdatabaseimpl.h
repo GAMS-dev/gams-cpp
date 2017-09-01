@@ -122,7 +122,6 @@ private:
     bool mOwnGMD = true;
     bool mRecordLock = false;
     bool mSymbolLock = false;
-    bool mDisposed;
 };
 
 } // namespace gams

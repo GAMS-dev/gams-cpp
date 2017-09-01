@@ -238,10 +238,15 @@ const char *GAMSPath::c_str()
     return mBuffer.c_str();
 }
 
+static void initSeed()
+{
+    // generate seed with timestamp and random number
+    qsrand(static_cast<uint>(QDateTime::currentDateTimeUtc().toMSecsSinceEpoch() + qrand()));
+}
+
 GAMSPath GAMSPath::tempDir(const QString &templatePath)
 {
-    uint seed = QDateTime::currentDateTimeUtc().toMSecsSinceEpoch() % 4294967295;
-    qsrand(seed);
+    initSeed();
     QString mask = templatePath.isEmpty() ? absoluteFilePath() : templatePath;
     if (!QDir(mask).exists()) QDir(mask).mkpath(mask);
     QTemporaryDir temp(mask + "/gams-cpp");
@@ -253,8 +258,7 @@ GAMSPath GAMSPath::tempDir(const QString &templatePath)
 
 GAMSPath GAMSPath::tempFile(const QString &templateName)
 {
-    uint seed = QDateTime::currentDateTimeUtc().toMSecsSinceEpoch() % 4294967295;
-    qsrand(seed);
+    initSeed();
     QTemporaryFile temp(*this / templateName);
     temp.setAutoRemove(false);
     if (!temp.open())
