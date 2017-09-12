@@ -31,6 +31,7 @@
 #include <QObject>
 #include <QDebug>
 #include <QTest>
+#include <QMetaObject>
 
 using namespace std;
 using namespace gams;
