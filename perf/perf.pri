@@ -8,7 +8,7 @@ QT += testlib
 
 include(../dependency.pri)
 
-unix : LIBS += -ldl -L$$DESTDIR -lgamscpp
-win32: LIBS += -L$$DESTDIR/ -lgamscpp
+unix : LIBS += -ldl -L$$PWD/../bin/ -lgamscpp
+win32: LIBS += -L$$WPD/../bin/ -lgamscpp
 
 INCLUDEPATH += $$PWD/../src/
