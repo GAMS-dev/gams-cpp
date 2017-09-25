@@ -32,7 +32,12 @@ class TestGAMSWorkspace: public TestGAMSObject
 {
   Q_OBJECT
   private slots:
+#ifndef WIN32
+// The workspace default constructor calls findGAMS, which gets the path from the registry. Since the system is
+// actually tested for 32 and 64 bit in the same account, one of them will always fail. As temporary workaround
+// we skip this test on Windows.
     void testDefaultConstructor();
+#endif
     void testCopyConstructor();
     void testConstructor_WorkspaceInfo();
     void testConstructor_EmptyWorkspaceInfo();

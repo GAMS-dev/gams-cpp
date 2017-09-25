@@ -40,6 +40,10 @@ using namespace gams;
 
 QString TestGAMSWorkspace::classname()  { return "TestGAMSWorkspace"; }
 
+#ifndef WIN32
+// The workspace default constructor calls findGAMS, which gets the path from the registry. Since the system is
+// actually tested for 32 and 64 bit in the same account, one of them will always fail. As temporary workaround
+// we skip this test on Windows.
 void TestGAMSWorkspace::testDefaultConstructor() {
     // when
     try {
@@ -58,6 +62,7 @@ void TestGAMSWorkspace::testDefaultConstructor() {
         QEXPECT_FAIL("", e.what(), Abort); QVERIFY(false);
     }
 }
+#endif
 
 
 void TestGAMSWorkspace::testCopyConstructor() {
