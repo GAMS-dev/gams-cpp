@@ -314,7 +314,7 @@ public:
         {
             EverythingAllowed = 0,                             ///< Everything allowed
             InteractiveShellsProhibited = 1,                   ///< Interactive shells in $call and execute commands are prohibited
-            CallAndExecuteProhibited = 2,                      ///< All $call and execute commands are prohibited
+            CallAndExecuteProhibited = 2,                      ///< Embedded Code and all $call and execute commands are prohibited
             EchoAndPutOnlyToWorkdir = 3,                       ///< $echo or put commands can only write to directories in or below the working or scratchdir
             EchoAndPutProhibited = 4                           ///< $echo and put commands are not allowed
         };
@@ -505,6 +505,16 @@ public:
         {
             Off = 0,                                           ///< Rely on user setup of Python
             On = 1                                             ///< Use Python installation provided in GAMS system directory
+        };
+    };
+    /// GAMS/Python Multiple Instance Interpreter
+    struct EPyMultInst
+    {
+        /// GAMS/Python Multiple Instance Interpreter
+        enum EPyMultInstEnum
+        {
+            Single = 0,                                        ///< Use a single-session Python interpreter
+            Multi = 1                                          ///< Use a multi-session Python interpreter
         };
     };
 
@@ -1207,6 +1217,12 @@ public:
 
     /// Set GAMS/Python Setup
     void setPySetup(const GAMSOptions::EPySetup::EPySetupEnum value);
+
+    /// Get GAMS/Python Multiple Instance Interpreter
+    GAMSOptions::EPyMultInst::EPyMultInstEnum pyMultInst();
+
+    /// Set GAMS/Python Multiple Instance Interpreter
+    void setPyMultInst(const GAMSOptions::EPyMultInst::EPyMultInstEnum value);
 
     /// Get default LP solver
     std::string LP();

@@ -26,7 +26,7 @@
 
 /*
   Use this command to compile the example:
-  cl xp_associative_vec.cpp api/gdxco.cpp ../C/api/gdxcc.c -Iapi -I../C/api
+  cl xp_associative_vec.cpp ../C/api/gdxcc.c -I../C/api
 */
 
 #include <string>
@@ -35,68 +35,68 @@
 #include <iostream>
 #include <map>
 #include <vector>
-#include "gdxco.hpp"
+#include "gdxcc.h"
 
 using namespace std;
-using namespace GAMS;
 
 int main(int argc, char* argv[]){
-  string sysDir = "c:\\gams\\win32\\23.9";
-  if (argc > 1) {
-    sysDir = argv[1];
-    if (sysDir.length() >= GMS_SSSIZE){
-      cout << "*** Your system directory (argument 1) cannot exceed 255 characters" << endl;
-      exit(1);
-    }
-  }
+  gdxHandle_t PGX = NULL;
   int dim = 0;
   int errNr = 0;
   int varNr = 0;
   int varType = 0;
   int nrRecs = 0;
   int n = 0;
-  string msg, varName;
-  string idx[GMS_MAX_INDEX_DIM];
+  char   msg[GMS_SSSIZE], sysDir[GMS_SSSIZE], varName[GMS_SSSIZE];
+  static gdxStrIndexPtrs_t idx;
+  static gdxStrIndex_t     idxXXX;
   gdxValues_t values;
-  
-  GDX PGX(sysDir, msg);
-  if (msg != "") {
-    cout << "**** Could not load GDX library" << endl;
-    cout << "**** " + msg << endl;
-    exit(1);
+
+  if (argc > 1) {
+	  strcpy(sysDir, argv[1]);
+  }
+  else {
+	  strcpy(sysDir, "c:\\gams\\win32\\24.9");
+  }
+
+  if (!gdxCreateD(&PGX, sysDir, msg, sizeof(msg))) {
+	  cout << "**** Could not load GDX library" << endl << "**** " << msg << endl;
+	  exit(1);
   }
 
   map<vector<string>, double> xlevel;
 
-  PGX.OpenRead("..\\GAMS\\trnsport.gdx", errNr);
+  gdxOpenRead(PGX, "..\\..\\GAMS\\trnsport.gdx", &errNr);
   if (errNr != 0) {
-    PGX.ErrorStr(errNr, msg);
-    cout << msg << endl;
-    cout << "*** Error opening trnsport.gdx" << endl;
-    exit(1);
+	  gdxErrorStr(PGX, errNr, msg);
+	  cout << msg << endl;
+	  cout << "*** Error opening trnsport.gdx" << endl;
+	  exit(1);
   }
-  if (PGX.FindSymbol("x", varNr) == 0) {
-    cout << "*** Cannot find symbol 'x'" << endl;
-    exit(1);
+  if (gdxFindSymbol(PGX, "x", &varNr) == 0) {
+	  cout << "*** Cannot find symbol 'x'" << endl;
+	  exit(1);
   }
-  PGX.SymbolInfo(varNr, varName, dim, varType);
+  gdxSymbolInfo(PGX, varNr, varName, &dim, &varType);
   if (dim != 2 || GMS_DT_VAR != varType) {
-    cout << "**** x is not a two dimensional variable.  dim:" << dim << "  type:" << varType << endl;
-    exit(1);
+	  cout << "**** x is not a two dimensional variable.  dim:" << dim << "  type:" << varType << endl;
+	  exit(1);
   }
-  if (PGX.DataReadStrStart(varNr, nrRecs) == 0) {
-    cout << "*** Cannot read symbol 'x'" << endl;
-    exit(1);
+  if (gdxDataReadStrStart(PGX, varNr, &nrRecs) == 0) {
+	  cout << "*** Cannot read symbol 'x'" << endl;
+	  exit(1);
   }
+
+  GDXSTRINDEXPTRS_INIT(idxXXX, idx);
 
   vector<string> key(2);
   for (int i=0; i<nrRecs; i++){
-    PGX.DataReadStr(idx, values, n);
+    gdxDataReadStr(PGX, idx, values, &n);
     key[0] = idx[0];
 	key[1] = idx[1];
     xlevel[key] = values[GMS_VAL_LEVEL];
   }
-  PGX.Close();
+  gdxClose(PGX);
 
   
   double val = 0.;

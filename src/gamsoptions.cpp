@@ -1708,6 +1708,16 @@ void GAMSOptions::setPySetup(const GAMSOptions::EPySetup::EPySetupEnum value)
    mImpl->setPySetup(static_cast<int>(value));
 }
 
+GAMSOptions::EPyMultInst::EPyMultInstEnum GAMSOptions::pyMultInst()
+{
+    return static_cast<GAMSOptions::EPyMultInst::EPyMultInstEnum> (mImpl->pyMultInst());
+}
+
+void GAMSOptions::setPyMultInst(const GAMSOptions::EPyMultInst::EPyMultInstEnum value)
+{
+   mImpl->setPyMultInst(static_cast<int>(value));
+}
+
 std::string GAMSOptions::LP()
 {
     return mImpl->LP();

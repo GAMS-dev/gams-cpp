@@ -1742,6 +1742,16 @@ void GAMSOptionsImpl::setPySetup(const int value)
     optSetIntStr(mOPT, "PySetup", value);
 }
 
+int GAMSOptionsImpl::pyMultInst()
+{
+    return optGetIntStr(mOPT, "PyMultInst");
+}
+
+void GAMSOptionsImpl::setPyMultInst(const int value)
+{
+    optSetIntStr(mOPT, "PyMultInst", value);
+}
+
 std::string GAMSOptionsImpl::LP()
 {
     char buf[GMS_SSSIZE];
