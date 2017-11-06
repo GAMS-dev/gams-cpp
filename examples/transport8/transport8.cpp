@@ -130,25 +130,32 @@ int main(int argc, char* argv[])
 {
     cout << "---------- Transport 8 --------------" << endl;
 
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
-    GAMSCheckpoint cp = ws.addCheckpoint();
+    try {
+        GAMSWorkspaceInfo wsInfo;
+        if (argc > 1)
+            wsInfo.setSystemDirectory(argv[1]);
+        GAMSWorkspace ws(wsInfo);
+        GAMSCheckpoint cp = ws.addCheckpoint();
 
-    // initialize a GAMSCheckpoint by running a GAMSJob
-    ws.addJobFromString(getModelText()).run(cp);
+        // initialize a GAMSCheckpoint by running a GAMSJob
+        ws.addJobFromString(getModelText()).run(cp);
 
-    vector<double> bmultVector = { 1.3, 1.2, 1.1, 1.0, 0.9, 0.8, 0.7, 0.6 };
-    int nrThreads = 2;
-    // solve multiple model instances in parallel
-    std::mutex vectorMutex;
-    std::mutex ioMutex;
-    vector<thread> v;
-    for (int i = 0; i < nrThreads; i++)
-        v.emplace_back([&ws, &cp, &bmultVector, &vectorMutex, &ioMutex] {scenSolve(&ws, &cp, &bmultVector, &vectorMutex, &ioMutex);});
-    for (auto& t : v)
-        t.join();
+        vector<double> bmultVector = { 1.3, 1.2, 1.1, 1.0, 0.9, 0.8, 0.7, 0.6 };
+        int nrThreads = 2;
+        // solve multiple model instances in parallel
+        std::mutex vectorMutex;
+        std::mutex ioMutex;
+        vector<thread> v;
+        for (int i = 0; i < nrThreads; i++)
+            v.emplace_back([&ws, &cp, &bmultVector, &vectorMutex, &ioMutex] {scenSolve(&ws, &cp, &bmultVector, &vectorMutex, &ioMutex);});
+        for (auto& t : v)
+            t.join();
+
+    } catch (GAMSException &ex) {
+        cout << "GAMSException occured: " << ex.what() << endl;
+    } catch (exception &ex) {
+        cout << ex.what() << endl;
+    }
 
     return 0;
 }

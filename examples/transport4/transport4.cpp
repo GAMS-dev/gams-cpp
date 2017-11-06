@@ -66,7 +66,7 @@ string getModelText()
            "      supply(i)   observe supply limit at plant i                          \n"
            "       demand(j)   satisfy demand at market j ;                            \n"
            "                                                                           \n"
-           "  cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;                       \n"
+           "  cost ..        z  = e =  sum((i,j), c(i,j)*x(i,j)) ;                       \n"
            "                                                                           \n"
            "  supply(i) ..   sum(j, x(i,j))  =l=  a(i) ;                               \n"
            "                                                                           \n"
@@ -89,69 +89,76 @@ int main(int argc, char* argv[])
 {
     cout << "---------- Transport 4 --------------" << endl;
 
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
+    try {
+        GAMSWorkspaceInfo wsInfo;
+        if (argc > 1)
+            wsInfo.setSystemDirectory(argv[1]);
+        GAMSWorkspace ws(wsInfo);
 
-    // define some data by using C++ data structures
-    vector<string> plants = {
-        "Seattle", "San-Diego"
-    };
-    vector<string> markets = {
-        "New-York", "Chicago", "Topeka"
-    };
-    map<string, double> capacity = {
-        { "Seattle", 350.0 }, { "San-Diego", 600.0 }
-    };
-    map<string, double> demand = {
-        { "New-York", 325.0 }, { "Chicago", 300.0 }, { "Topeka", 275.0 }
-    };
-    map<tuple<string, string>, double> distance = {
-        { make_tuple("Seattle", "New-York"), 2.5 },
-        { make_tuple("Seattle", "Chicago"), 1.7 },
-        { make_tuple("Seattle", "Topeka"), 1.8 },
-        { make_tuple("San-Diego", "New-York"), 2.5 },
-        { make_tuple("San-Diego", "Chicago"), 1.8 },
-        { make_tuple("San-Diego", "Topeka"), 1.4 }
-    };
+        // define some data by using C++ data structures
+        vector<string> plants = {
+            "Seattle", "San-Diego"
+        };
+        vector<string> markets = {
+            "New-York", "Chicago", "Topeka"
+        };
+        map<string, double> capacity = {
+            { "Seattle", 350.0 }, { "San-Diego", 600.0 }
+        };
+        map<string, double> demand = {
+            { "New-York", 325.0 }, { "Chicago", 300.0 }, { "Topeka", 275.0 }
+        };
+        map<tuple<string, string>, double> distance = {
+            { make_tuple("Seattle", "New-York"), 2.5 },
+            { make_tuple("Seattle", "Chicago"), 1.7 },
+            { make_tuple("Seattle", "Topeka"), 1.8 },
+            { make_tuple("San-Diego", "New-York"), 2.5 },
+            { make_tuple("San-Diego", "Chicago"), 1.8 },
+            { make_tuple("San-Diego", "Topeka"), 1.4 }
+        };
 
-    // prepare a GAMSDatabase with data from the C++ data structures
-    GAMSDatabase db = ws.addDatabase();
+        // prepare a GAMSDatabase with data from the C++ data structures
+        GAMSDatabase db = ws.addDatabase();
 
-    GAMSSet i = db.addSet("i", 1, "canning plants");
-    for (string p: plants)
-        i.addRecord(p);
+        GAMSSet i = db.addSet("i", 1, "canning plants");
+        for (string p: plants)
+            i.addRecord(p);
 
-    GAMSSet j = db.addSet("j", 1, "markets");
-    for (string m: markets)
-        j.addRecord(m);
+        GAMSSet j = db.addSet("j", 1, "markets");
+        for (string m: markets)
+            j.addRecord(m);
 
-    GAMSParameter a = db.addParameter("a", "capacity of plant i in cases", i);
-    for (string p: plants)
-        a.addRecord(p).setValue(capacity[p]);
+        GAMSParameter a = db.addParameter("a", "capacity of plant i in cases", i);
+        for (string p: plants)
+            a.addRecord(p).setValue(capacity[p]);
 
-    GAMSParameter b = db.addParameter("b", "demand at market j in cases", j);
-    for (string m: markets)
-        b.addRecord(m).setValue(demand[m]);
+        GAMSParameter b = db.addParameter("b", "demand at market j in cases", j);
+        for (string m: markets)
+            b.addRecord(m).setValue(demand[m]);
 
-    GAMSParameter d = db.addParameter("d", "distance in thousands of miles", i, j);
-    for (auto t : distance)
-        d.addRecord(get<0>(t.first), get<1>(t.first)).setValue(t.second);
+        GAMSParameter d = db.addParameter("d", "distance in thousands of miles", i, j);
+        for (auto t : distance)
+            d.addRecord(get<0>(t.first), get<1>(t.first)).setValue(t.second);
 
-    GAMSParameter f = db.addParameter("f", "freight in dollars per case per thousand miles");
-    f.addRecord().setValue(90);
+        GAMSParameter f = db.addParameter("f", "freight in dollars per case per thousand miles");
+        f.addRecord().setValue(90);
 
-    // run a job using data from the created GAMSDatabase
-    GAMSJob t4 = ws.addJobFromString(getModelText());
-    GAMSOptions opt = ws.addOptions();
-    opt.setDefine("gdxincname", db.name());
-    opt.setAllModelTypes("xpress");
-    t4.run(opt, db);
+        // run a job using data from the created GAMSDatabase
+        GAMSJob t4 = ws.addJobFromString(getModelText());
+        GAMSOptions opt = ws.addOptions();
+        opt.setDefine("gdxincname", db.name());
+        opt.setAllModelTypes("xpress");
+        t4.run(opt, db);
 
-    for (GAMSVariableRecord rec : t4.outDB().getVariable("x"))
-        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
-             << rec.marginal() << endl;
+        for (GAMSVariableRecord rec : t4.outDB().getVariable("x"))
+            cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
+                 << rec.marginal() << endl;
+
+    } catch (GAMSException &ex) {
+        cout << "GAMSException occured: " << ex.what() << endl;
+    } catch (exception &ex) {
+        cout << ex.what() << endl;
+    }
 
     return 0;
 }

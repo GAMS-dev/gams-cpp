@@ -256,67 +256,74 @@ int main(int argc, char* argv[])
 {
     cout << "---------- Transport 12 --------------" << endl;
 
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
-    GAMSCheckpoint cp = ws.addCheckpoint();
+    try {
+        GAMSWorkspaceInfo wsInfo;
+        if (argc > 1)
+            wsInfo.setSystemDirectory(argv[1]);
+        GAMSWorkspace ws(wsInfo);
+        GAMSCheckpoint cp = ws.addCheckpoint();
 
-    // initialize a GAMSCheckpoint by running a GAMSJob
-    GAMSJob t12 = ws.addJobFromString(getModelText());
-    t12.run(cp);
+        // initialize a GAMSCheckpoint by running a GAMSJob
+        GAMSJob t12 = ws.addJobFromString(getModelText());
+        t12.run(cp);
 
-    // create a GAMSModelInstance and solve it multiple times with different scalar bmult
-    GAMSModelInstance mi = cp.addModelInstance();
+        // create a GAMSModelInstance and solve it multiple times with different scalar bmult
+        GAMSModelInstance mi = cp.addModelInstance();
 
-    double bmultlist[] { 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3 };
+        double bmultlist[] { 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3 };
 
-    GAMSDatabase db = ws.addDatabase();
+        GAMSDatabase db = ws.addDatabase();
 
-    GAMSSet scen = db.addSet("scen", 1, "");
-    GAMSParameter bmult = db.addParameter("bmultlist", "", scen);
-    GAMSParameter zscen = db.addParameter("zscen", "", scen);
+        GAMSSet scen = db.addSet("scen", 1, "");
+        GAMSParameter bmult = db.addParameter("bmultlist", "", scen);
+        GAMSParameter zscen = db.addParameter("zscen", "", scen);
 
-    int i = 0;
-    for (double b : bmultlist) {
-        bmult.addRecord("s" + to_string(i)).setValue(b);
-        scen.addRecord("s" + to_string(i++));
+        int i = 0;
+        for (double b : bmultlist) {
+            bmult.addRecord("s" + to_string(i)).setValue(b);
+            scen.addRecord("s" + to_string(i++));
+        }
+
+        GAMSSet dict = db.addSet("dict",3,"");
+        dict.addRecord(scen.name(), "scenario", "");
+        dict.addRecord("bmult", "param", bmult.name());
+        dict.addRecord("z", "level", zscen.name());
+
+
+        GUSSCall(dict, mi, "transport use lp min z");
+
+        for (GAMSParameterRecord rec : db.getParameter(zscen.name()))
+            cout << rec.key(0) << " obj: " << rec.value() << endl;
+
+        GAMSModelInstance mi2 = cp.addModelInstance();
+        GAMSDatabase db2 = ws.addDatabase();
+
+        GAMSSet scen2 = db2.addSet("scen", 1, "");
+        GAMSParameter zscen2 = db2.addParameter("zscen", "", scen2);
+        GAMSParameter xup = db2.addParameter("xup", 3);
+
+        for (int j = 0; j < 4; j++) {
+            for (GAMSSetRecord irec : t12.outDB().getSet("i"))
+                for (GAMSSetRecord jrec : t12.outDB().getSet("j"))
+                    xup.addRecord("s" + to_string(j), irec.key(0), jrec.key(0)).setValue(j+1);
+            scen2.addRecord("s" + to_string(j));
+        }
+
+        GAMSSet dict2 = db2.addSet("dict", 3, "");
+        dict2.addRecord(scen2.name(), "scenario", "");
+        dict2.addRecord("x", "lower", xup.name());
+        dict2.addRecord("z", "level", zscen2.name());
+
+        GUSSCall(dict2, mi2, "transport use lp min z");
+
+        for (GAMSParameterRecord rec : db2.getParameter(zscen2.name()))
+            cout << rec.key(0) << " obj: " << rec.value() << endl;
+
+    } catch (GAMSException &ex) {
+        cout << "GAMSException occured: " << ex.what() << endl;
+    } catch (exception &ex) {
+        cout << ex.what() << endl;
     }
-
-    GAMSSet dict = db.addSet("dict",3,"");
-    dict.addRecord(scen.name(), "scenario", "");
-    dict.addRecord("bmult", "param", bmult.name());
-    dict.addRecord("z", "level", zscen.name());
-
-
-    GUSSCall(dict, mi, "transport use lp min z");
-
-    for (GAMSParameterRecord rec : db.getParameter(zscen.name()))
-        cout << rec.key(0) << " obj: " << rec.value() << endl;
-
-    GAMSModelInstance mi2 = cp.addModelInstance();
-    GAMSDatabase db2 = ws.addDatabase();
-
-    GAMSSet scen2 = db2.addSet("scen", 1, "");
-    GAMSParameter zscen2 = db2.addParameter("zscen", "", scen2);
-    GAMSParameter xup = db2.addParameter("xup", 3);
-
-    for (int j = 0; j < 4; j++) {
-        for (GAMSSetRecord irec : t12.outDB().getSet("i"))
-            for (GAMSSetRecord jrec : t12.outDB().getSet("j"))
-                xup.addRecord("s" + to_string(j), irec.key(0), jrec.key(0)).setValue(j+1);
-        scen2.addRecord("s" + to_string(j));
-    }
-
-    GAMSSet dict2 = db2.addSet("dict", 3, "");
-    dict2.addRecord(scen2.name(), "scenario", "");
-    dict2.addRecord("x", "lower", xup.name());
-    dict2.addRecord("z", "level", zscen2.name());
-
-    GUSSCall(dict2, mi2, "transport use lp min z");
-
-    for (GAMSParameterRecord rec : db2.getParameter(zscen2.name()))
-        cout << rec.key(0) << " obj: " << rec.value() << endl;
 
     return 0;
 }

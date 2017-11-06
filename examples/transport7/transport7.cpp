@@ -90,56 +90,63 @@ int main(int argc, char* argv[])
 {
     cout << "---------- Transport 7 --------------" << endl;
 
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
-    GAMSCheckpoint cp = ws.addCheckpoint();
+    try {
+        GAMSWorkspaceInfo wsInfo;
+        if (argc > 1)
+            wsInfo.setSystemDirectory(argv[1]);
+        GAMSWorkspace ws(wsInfo);
+        GAMSCheckpoint cp = ws.addCheckpoint();
 
-    // initialize a GAMSCheckpoint by running a GAMSJob
-    GAMSJob t7 = ws.addJobFromString(getModelText());
-    t7.run(cp);
+        // initialize a GAMSCheckpoint by running a GAMSJob
+        GAMSJob t7 = ws.addJobFromString(getModelText());
+        t7.run(cp);
 
-    // create a GAMSModelInstance and solve it multiple times with different scalar bmult
-    GAMSModelInstance mi = cp.addModelInstance();
-    GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
-    GAMSOptions opt = ws.addOptions();
-    opt.setAllModelTypes("cplexd");
+        // create a GAMSModelInstance and solve it multiple times with different scalar bmult
+        GAMSModelInstance mi = cp.addModelInstance();
+        GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
+        GAMSOptions opt = ws.addOptions();
+        opt.setAllModelTypes("cplexd");
 
-    // instantiate the GAMSModelInstance and pass a model definition and GAMSModifier to declare bmult mutable
-    mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));
+        // instantiate the GAMSModelInstance and pass a model definition and GAMSModifier to declare bmult mutable
+        mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));
 
-    bmult.addRecord().setValue(1.0);
-    vector<double> bmultlist = { 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3 };
+        bmult.addRecord().setValue(1.0);
+        vector<double> bmultlist = { 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3 };
 
-    for (double b : bmultlist) {
-        bmult.firstRecord().setValue(b);
-        mi.solve();
-        cout << "Scenario bmult=" << b << ":" << endl;
-        cout << "  Modelstatus: " << mi.modelStatusAsString() << endl;
-        cout << "  Solvestatus: " << mi.solveStatusAsString() << endl;
-        cout << "  Obj: " << mi.syncDb().getVariable("z").findRecord().level() << endl;
-    }
-
-    // create a GAMSModelInstance and solve it with single links in the network blocked
-    mi = cp.addModelInstance();
-
-    GAMSVariable x = mi.syncDb().addVariable("x", 2, GAMSEnum::VarType::Positive, "");
-    GAMSParameter xup = mi.syncDb().addParameter("xup", 2, "upper bound on x");
-
-    // instantiate the GAMSModelInstance and pass a model definition and GAMSModifier to declare upper bound of X mutable
-    mi.instantiate("transport use lp min z", GAMSModifier (x, GAMSEnum::SymbolUpdateAction::Upper, xup));
-
-    for (GAMSSetRecord i : t7.outDB().getSet("i")) {
-        for (GAMSSetRecord j : t7.outDB().getSet("j")) {
-            xup.clear();
-            xup.addRecord(i.key(0), j.key(0)).setValue(0);
+        for (double b : bmultlist) {
+            bmult.firstRecord().setValue(b);
             mi.solve();
-            cout << "Scenario link blocked=" << i.key(0) << "-" << j.key(0) << endl;
+            cout << "Scenario bmult=" << b << ":" << endl;
             cout << "  Modelstatus: " << mi.modelStatusAsString() << endl;
             cout << "  Solvestatus: " << mi.solveStatusAsString() << endl;
             cout << "  Obj: " << mi.syncDb().getVariable("z").findRecord().level() << endl;
         }
+
+        // create a GAMSModelInstance and solve it with single links in the network blocked
+        mi = cp.addModelInstance();
+
+        GAMSVariable x = mi.syncDb().addVariable("x", 2, GAMSEnum::VarType::Positive, "");
+        GAMSParameter xup = mi.syncDb().addParameter("xup", 2, "upper bound on x");
+
+        // instantiate the GAMSModelInstance and pass a model definition and GAMSModifier to declare upper bound of X mutable
+        mi.instantiate("transport use lp min z", GAMSModifier (x, GAMSEnum::SymbolUpdateAction::Upper, xup));
+
+        for (GAMSSetRecord i : t7.outDB().getSet("i")) {
+            for (GAMSSetRecord j : t7.outDB().getSet("j")) {
+                xup.clear();
+                xup.addRecord(i.key(0), j.key(0)).setValue(0);
+                mi.solve();
+                cout << "Scenario link blocked=" << i.key(0) << "-" << j.key(0) << endl;
+                cout << "  Modelstatus: " << mi.modelStatusAsString() << endl;
+                cout << "  Solvestatus: " << mi.solveStatusAsString() << endl;
+                cout << "  Obj: " << mi.syncDb().getVariable("z").findRecord().level() << endl;
+            }
+        }
+
+    } catch (GAMSException &ex) {
+        cout << "GAMSException occured: " << ex.what() << endl;
+    } catch (exception &ex) {
+        cout << ex.what() << endl;
     }
 
     return 0;

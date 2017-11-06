@@ -113,37 +113,44 @@ int main(int argc, char* argv[])
 {
     cout << "---------- Transport 3 --------------" << endl;
 
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
+    try {
+        GAMSWorkspaceInfo wsInfo;
+        if (argc > 1)
+            wsInfo.setSystemDirectory(argv[1]);
+        GAMSWorkspace ws(wsInfo);
 
-    // data from a string with GAMS syntax with explicit export to GDX file
-    GAMSJob t3 = ws.addJobFromString(getDataText());
-    t3.run();
-    //TODO: change doExport to export?
-    t3.outDB().doExport(ws.workingDirectory() + cPathSep + "tdata.gdx");
+        // data from a string with GAMS syntax with explicit export to GDX file
+        GAMSJob t3 = ws.addJobFromString(getDataText());
+        t3.run();
+        //TODO: change doExport to export?
+        t3.outDB().doExport(ws.workingDirectory() + cPathSep + "tdata.gdx");
 
-    // run a job using an instance of GAMSOptions that defines the data include file
-    t3 = ws.addJobFromString(getModelText());
-    GAMSOptions opt = ws.addOptions();
-    opt.setDefine("gdxincname", "tdata");
-    opt.setAllModelTypes("xpress");
-    t3.run(opt);
-    for (GAMSVariableRecord rec : t3.outDB().getVariable("x"))
-        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
-             << rec.marginal() << endl;
+        // run a job using an instance of GAMSOptions that defines the data include file
+        t3 = ws.addJobFromString(getModelText());
+        GAMSOptions opt = ws.addOptions();
+        opt.setDefine("gdxincname", "tdata");
+        opt.setAllModelTypes("xpress");
+        t3.run(opt);
+        for (GAMSVariableRecord rec : t3.outDB().getVariable("x"))
+            cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
+                 << rec.marginal() << endl;
 
-    // same but with implicit database communication
-    GAMSJob t3a = ws.addJobFromString(getDataText());
-    GAMSJob t3b = ws.addJobFromString(getModelText());
-    t3a.run();
-    opt.setDefine("gdxincname", t3a.outDB().name());
+        // same but with implicit database communication
+        GAMSJob t3a = ws.addJobFromString(getDataText());
+        GAMSJob t3b = ws.addJobFromString(getModelText());
+        t3a.run();
+        opt.setDefine("gdxincname", t3a.outDB().name());
 
-    t3b.run(opt, t3a.outDB());
-    for (GAMSVariableRecord rec : t3.outDB().getVariable("x"))
-        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
-             << rec.marginal() << endl;
+        t3b.run(opt, t3a.outDB());
+        for (GAMSVariableRecord rec : t3.outDB().getVariable("x"))
+            cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
+                 << rec.marginal() << endl;
+
+    } catch (GAMSException &ex) {
+        cout << "GAMSException occured: " << ex.what() << endl;
+    } catch (exception &ex) {
+        cout << ex.what() << endl;
+    }
 
     return 0;
 }
