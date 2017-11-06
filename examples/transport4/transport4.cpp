@@ -66,7 +66,7 @@ string getModelText()
            "      supply(i)   observe supply limit at plant i                          \n"
            "       demand(j)   satisfy demand at market j ;                            \n"
            "                                                                           \n"
-           "  cost ..        z  = e =  sum((i,j), c(i,j)*x(i,j)) ;                       \n"
+           "  cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;                       \n"
            "                                                                           \n"
            "  supply(i) ..   sum(j, x(i,j))  =l=  a(i) ;                               \n"
            "                                                                           \n"
