@@ -64,7 +64,6 @@ void TestGAMSWorkspace::testDefaultConstructor() {
 #endif
 }
 
-
 void TestGAMSWorkspace::testCopyConstructor() {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
