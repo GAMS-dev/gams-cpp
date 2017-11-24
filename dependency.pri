@@ -7,25 +7,26 @@ exists($$PWD/gamsinclude.pri) {
     include($$PWD/gamsinclude.pri)
 }
 
-INCLUDEPATH += $$GAMS_DISTRIB_API
+GAMS_BUILD_ENV = $$(GAMS_BUILD)
+equals(GAMS_BUILD_ENV, "") {
+    INCLUDEPATH += $$GAMS_DISTRIB_API
+
+    SOURCES = \
+        $$GAMS_DISTRIB_API/gclgms.c \
+        $$GAMS_DISTRIB_API/gmdcc.c  \
+        $$GAMS_DISTRIB_API/cfgmcc.c \
+        $$GAMS_DISTRIB_API/gevmcc.c \
+        $$GAMS_DISTRIB_API/gmomcc.c \
+        $$GAMS_DISTRIB_API/optcc.c
+} else {
+    #INCLUDEPATH +=
+
+    #HEADERS = \
+
+    #SOURCES = \
+}
 
 DEFINES += _CRT_SECURE_NO_WARNINGS
-
-HEADERS = \
-    $$GAMS_DISTRIB_API/gclgms.h \
-    $$GAMS_DISTRIB_API/gmdcc.h \
-    $$GAMS_DISTRIB_API/cfgmcc.h \
-    $$GAMS_DISTRIB_API/gevmcc.h \
-    $$GAMS_DISTRIB_API/gmomcc.h \
-    $$GAMS_DISTRIB_API/optcc.h
-
-SOURCES = \
-    $$GAMS_DISTRIB_API/gclgms.c \
-    $$GAMS_DISTRIB_API/gmdcc.c \
-    $$GAMS_DISTRIB_API/cfgmcc.c \
-    $$GAMS_DISTRIB_API/gevmcc.c \
-    $$GAMS_DISTRIB_API/gmomcc.c \
-    $$GAMS_DISTRIB_API/optcc.c
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
