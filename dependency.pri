@@ -19,11 +19,38 @@ equals(GAMS_BUILD_ENV, "") {
         $$GAMS_DISTRIB_API/gmomcc.c \
         $$GAMS_DISTRIB_API/optcc.c
 } else {
-    #INCLUDEPATH +=
+    DEFINES += HAVE_MUTEX
+    GSYS_ENV = $$(GSYS)
+    equals(GSYS_ENV, "wei") {
+        DEFINES += WEI 
+        DEFINES += CIA_WEX
+    }
+    equals(GSYS_ENV, "vs8") {
+        DEFINES += VS8 
+        DEFINES += CIA_WIN
+    }
+    equals(GSYS_ENV, "leg") {
+        DEFINES += LEG 
+        DEFINES += CIA_LEX
+        QMAKE_CXXFLAGS += -Werror-implicit-function-declaration -Wreturn-type -Wmissing-declarations -m64
+        QMAKE_CFLAGS += -Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64
+    }
+    equals(GSYS_ENV, "deg") {
+        DEFINES += DEG 
+        DEFINES += CIA_DEX
+        QMAKE_CXXFLAGS += -Werror-implicit-function-declaration -Wreturn-type -Wmissing-declarations -m64
+        QMAKE_CFLAGS += -Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64
+    }
+    INCLUDEPATH += $$(GPRODUCTS)/gclib $$(GPRODUCTS)/apiwrap/gmdobj $$(GPRODUCTS)/apiwrap/joat $$(GPRODUCTS)/apiwrap/optobj
 
-    #HEADERS = \
-
-    #SOURCES = \
+    SOURCES = \
+        $$(GPRODUCTS)/gclib/gclgms.c \
+        $$(GPRODUCTS)/gclib/gcmt.c \
+        $$(GPRODUCTS)/apiwrap/gmdobj/gmdcc.c  \
+        $$(GPRODUCTS)/apiwrap/joat/cfgmcc.c \
+        $$(GPRODUCTS)/apiwrap/joat/gevmcc.c \
+        $$(GPRODUCTS)/apiwrap/joat/gmomcc.c \
+        $$(GPRODUCTS)/apiwrap/optobj/optcc.c
 }
 
 DEFINES += _CRT_SECURE_NO_WARNINGS
