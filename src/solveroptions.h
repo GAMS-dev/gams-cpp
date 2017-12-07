@@ -45,7 +45,7 @@ public:
 
     /// Export GAMSOptions file.
     /// \param fileName GAMSOptions file name.
-    void exportOptFile(std::string fileName);
+    void exportOptFile(/*std::string fileName*/);
 
     /// Reset all GAMS options to default.
     void ResetToDefaults();

@@ -42,8 +42,9 @@ std::string SolverOptions::getSolverName()
     return "TODO: ";
 }
 
-void SolverOptions::exportOptFile(std::string fileName)
+void SolverOptions::exportOptFile(/*std::string fileName*/)
 {
+    // TODO(AF) implement
 }
 
 void SolverOptions::ResetToDefaults()
