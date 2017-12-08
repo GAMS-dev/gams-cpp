@@ -9,7 +9,7 @@ include(gamscpp.pri)
 CONFIG += skip_target_version_ext
 CONFIG += console c++11
 CONFIG -= app_bundle
-CONFIG += lib
+CONFIG += plugin
 QT -= gui
 DEFINES += GAMS_CPP_LIB
 DEFINES += MAKELIB

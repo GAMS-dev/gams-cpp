@@ -7,7 +7,7 @@ exists($$PWD/../gams-cpp.pro) {
     win32: LIBS += -L../../bin/ -lgamscpp
     INCLUDEPATH += ../../src/
 } else {
-    unix : LIBS += -ldl -L../../.. -lgamscpp
-    win32: LIBS += -L../../.. -lgamscpp
+    unix : LIBS += -ldl -L../lib -lgamscpp
+    win32: LIBS += -L../lib/$$VSVERSION -lgamscpp
     INCLUDEPATH += ../api
 }

@@ -1000,8 +1000,9 @@ void TestGAMSWorkspace::testAddOptions_OptFile() {
     } else {
        QVERIFY_EXCEPTION_THROWN( ws.addOptions(optfilename.toStdString()), GAMSException);
     }
-    // clean up
-    dir.removeRecursively();
+    // clean up only when working dir is not application dir
+    if (QFileInfo(QCoreApplication::applicationDirPath())!=QFileInfo(dir.canonicalPath()))
+       dir.removeRecursively();
 }
 
 void TestGAMSWorkspace::testRetrievingModelFromLibrary_data() {
