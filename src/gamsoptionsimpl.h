@@ -523,6 +523,9 @@ public:
     int pyMultInst();
     void setPyMultInst(const int value);
 
+    std::string fileStemApFromEnv();
+    void setFileStemApFromEnv(const std::string& value);
+
     std::string LP();
     void setLP(const std::string& value);
 

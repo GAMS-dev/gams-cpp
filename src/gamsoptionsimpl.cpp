@@ -1752,6 +1752,17 @@ void GAMSOptionsImpl::setPyMultInst(const int value)
     optSetIntStr(mOPT, "PyMultInst", value);
 }
 
+std::string GAMSOptionsImpl::fileStemApFromEnv()
+{
+    char buf[GMS_SSSIZE];
+    return optGetStrStr(mOPT, "FileStemApFromEnv", buf);
+}
+
+void GAMSOptionsImpl::setFileStemApFromEnv(const std::string& value)
+{
+    optSetStrStr(mOPT, "FileStemApFromEnv", value.c_str());
+}
+
 std::string GAMSOptionsImpl::LP()
 {
     char buf[GMS_SSSIZE];

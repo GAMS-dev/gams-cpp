@@ -1224,6 +1224,12 @@ public:
     /// Set GAMS/Python Multiple Instance Interpreter
     void setPyMultInst(const GAMSOptions::EPyMultInst::EPyMultInstEnum value);
 
+    /// Get Append a string read from an environment variable to the "FileStem"
+    std::string fileStemApFromEnv();
+
+    /// Set Append a string read from an environment variable to the "FileStem"
+    void setFileStemApFromEnv(const std::string& value);
+
     /// Get default LP solver
     std::string LP();
 

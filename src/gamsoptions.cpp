@@ -1718,6 +1718,16 @@ void GAMSOptions::setPyMultInst(const GAMSOptions::EPyMultInst::EPyMultInstEnum 
    mImpl->setPyMultInst(static_cast<int>(value));
 }
 
+std::string GAMSOptions::fileStemApFromEnv()
+{
+    return mImpl->fileStemApFromEnv();
+}
+
+void GAMSOptions::setFileStemApFromEnv(const std::string& value)
+{
+    mImpl->setFileStemApFromEnv(value);
+}
+
 std::string GAMSOptions::LP()
 {
     return mImpl->LP();
