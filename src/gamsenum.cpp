@@ -76,7 +76,7 @@ std::string GAMSEnum::text(GAMSEnum::GAMSExitCode type)
                               ,"BlankInScrDir"};
         return res[type-400];
     } else if (type >= 109) {
-        if (type > 114) {
+        if (type > 115) {
             return "InvalidReturnCode";
         }
         const char * res[] = {"CouldNotCreateScratchDir"
@@ -84,7 +84,8 @@ std::string GAMSEnum::text(GAMSEnum::GAMSExitCode type)
                               ,"InvalidReturnCode"
                               ,"CouldNotDeleteScratchDir"
                               ,"CouldNotWriteGamsNext"
-                              ,"CouldNotWriteParamFile"};
+                              ,"CouldNotWriteParamFile"
+                              ,"CouldNotReadEnvVar"};
         return res[type-109];
     } else {
         int code = type;
