@@ -16,13 +16,13 @@ gams-cpp relies on Qt for platform independent handling of directories and also 
 
 ## 2. Download and install GAMS ##
 
-gams-cpp requires the GAMS low-level APIs. All those files are provided by the GAMS distribution packages, which are available for all major platforms. The installation package for your platform can be obtained from the [GAMS download page](https://www.gams.com/download/). After downloading the package please follow the latest GAMS [installation instructions](https://www.gams.com/latest/docs/userguides/userguide/_u_g__i_n_s_t_a_l_l.html).
+gams-cpp requires the GAMS low-level APIs. All those files are provided by the GAMS distribution packages, which are available for all major platforms. The installation package for your platform can be obtained from the [GAMS download page](https://www.gams.com/download/). After downloading the package please follow the latest GAMS [installation instructions](https://www.gams.com/latest/docs/UG_MAIN.html#UG_INSTALL).
 
 **Note** By default GAMS will run in demo mode. Please check the [download page](https://www.gams.com/download/). for further details.
 
 ## 3. Get the gams-cpp source code ##
 
-Download the gams-cpp sources from GitHub (via git or as zip archive). All information about the usage of this library can be found within the [GAMS API documentation](https://www.gams.com/latest/docs/apis/index.html).
+Download the gams-cpp sources from GitHub (via git or as zip archive). All information about the usage of this library can be found within the [GAMS API documentation](https://www.gams.com/latest/docs/API_MAIN.html).
 
 ## 4. Building the gams-cpp project ##
 
