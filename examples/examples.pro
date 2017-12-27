@@ -1,5 +1,6 @@
 TEMPLATE = subdirs
 
+SUBDIRS += transportGDX
 SUBDIRS += transport1
 SUBDIRS += transport2
 SUBDIRS += transport3
