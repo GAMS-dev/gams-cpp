@@ -148,6 +148,7 @@ public:
         CouldNotDeleteScratchDir = 112,     ///< Could not delete process/scratch directory
         CouldNotWriteGamsNext = 113,        ///< Could not write the "gamsnext" script
         CouldNotWriteParamFile = 114,       ///< Could not write the "parameter" file
+        CouldNotReadEnvVar = 115,           ///< Could not read environment variable
         CouldNotSpawnGAMScmex = 400,        ///< Could not spawn the GAMS language compiler (gamscmex)
         CurDirNotFound = 401,               ///< Current directory (curdir) does not exist
         CurDirNotSet = 402,                 ///< Cannot set current directory (curdir)

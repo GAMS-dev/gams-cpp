@@ -44,8 +44,8 @@ public:
     std::string getSolverName();
 
     /// Export GAMSOptions file.
-    /// \param fileName GAMSOptions file name.
-    void exportOptFile(std::string fileName);
+    // \param fileName GAMSOptions file name.
+    void exportOptFile(/*std::string fileName*/);
 
     /// Reset all GAMS options to default.
     void ResetToDefaults();

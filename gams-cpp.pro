@@ -1,7 +1,8 @@
 TEMPLATE=subdirs
 
+GAMS_CORE_TMP = $$(GAMS_CORE_PATH)
 !exists($$PWD/gamsinclude.pri) {
-    equals($$(GAMS_CORE_PATH)x, x) {
+    equals(GAMS_CORE_TMP, "") {
         macx {
             GAMSINC = GAMS_DISTRIB=/Applications/GAMS24.9/sysdir \
                       GAMS_DISTRIB_API=\$$GAMS_DISTRIB/apifiles/C/api

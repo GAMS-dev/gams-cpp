@@ -520,6 +520,9 @@ public:
     int pySetup();
     void setPySetup(const int value);
 
+    int pyMultInst();
+    void setPyMultInst(const int value);
+
     std::string LP();
     void setLP(const std::string& value);
 

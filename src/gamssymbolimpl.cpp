@@ -114,7 +114,7 @@ GAMSSymbolImpl::~GAMSSymbolImpl()
 
 bool GAMSSymbolImpl::operator !=(const GAMSSymbolImpl& other)
 {
-    return operator==(other);
+    return !operator==(other);
 }
 
 bool GAMSSymbolImpl::operator ==(const GAMSSymbolImpl& other)

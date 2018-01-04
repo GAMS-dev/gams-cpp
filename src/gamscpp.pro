@@ -9,10 +9,11 @@ include(gamscpp.pri)
 CONFIG += skip_target_version_ext
 CONFIG += console c++11
 CONFIG -= app_bundle
-CONFIG += lib
+CONFIG += plugin
 QT -= gui
 DEFINES += GAMS_CPP_LIB
 DEFINES += MAKELIB
+win32:QMAKE_CXXFLAGS += -EHsc -GR -c -nologo -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -D_CRT_SECURE_NO_WARNINGS -DHAVE_MUTEX
 
 SOURCES += \
     gamscheckpoint.cpp \

@@ -34,7 +34,7 @@ QString TestGAMSEnum::classname()  { return "TestGAMSEnum"; }
 void  TestGAMSEnum::testGamsReturnCodeToText() {
     // given
     const int valid[] = {0,1,2,3,4,5,6,7,8,9,10,11
-                        ,109,110, 112,113,114
+                        ,109,110, 112,113,114,115
                         ,400,401,402, 404,405,406,407,408,409,410,411,412
                         ,909
                         ,1000,2000,3000,4000,5000};

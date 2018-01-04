@@ -41,6 +41,11 @@ using namespace gams;
 QString TestGAMSWorkspace::classname()  { return "TestGAMSWorkspace"; }
 
 void TestGAMSWorkspace::testDefaultConstructor() {
+#ifndef _WIN32 // fails on Windows, see #3301
+#ifndef WIN32
+// The workspace default constructor calls findGAMS, which gets the path from the registry. Since the system is
+// actually tested for 32 and 64 bit in the same account, one of them will always fail. As temporary workaround
+// we skip this test on Windows.
     // when
     try {
         GAMSWorkspace ws;
@@ -57,6 +62,8 @@ void TestGAMSWorkspace::testDefaultConstructor() {
     } catch (GAMSException &e) {
         QEXPECT_FAIL("", e.what(), Abort); QVERIFY(false);
     }
+#endif
+#endif
 }
 
 
@@ -993,8 +1000,9 @@ void TestGAMSWorkspace::testAddOptions_OptFile() {
     } else {
        QVERIFY_EXCEPTION_THROWN( ws.addOptions(optfilename.toStdString()), GAMSException);
     }
-    // clean up
-    dir.removeRecursively();
+    // clean up only when working dir is not application dir
+    if (QFileInfo(QCoreApplication::applicationDirPath())!=QFileInfo(dir.canonicalPath()))
+       dir.removeRecursively();
 }
 
 void TestGAMSWorkspace::testRetrievingModelFromLibrary_data() {

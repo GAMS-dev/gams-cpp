@@ -252,26 +252,35 @@ void writeToAccess(GAMSWorkspace ws, GAMSDatabase db)
 int main(int argc, char* argv[])
 {
     cout << "---------- Transport 9 --------------" << endl;
-     QCoreApplication app(argc, argv);
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
 
-    // fill GAMSDatabase by reading from Access
-    GAMSDatabase db = readFromAccess(ws);
 
-    // run job
-    GAMSOptions opt = ws.addOptions();
-    GAMSJob t9 = ws.addJobFromString(getModelText());
-    opt.setDefine("gdxincname", db.name());
-    opt.setAllModelTypes("xpress");
-    t9.run(opt, db);
-    for (GAMSVariableRecord rec : t9.outDB().getVariable("x"))
-        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
-             << rec.marginal() << endl;
-    // write results into Access file
-    writeToAccess(ws, t9.outDB());
+    try {
+        QCoreApplication app(argc, argv);
+        GAMSWorkspaceInfo wsInfo;
+        if (argc > 1)
+            wsInfo.setSystemDirectory(argv[1]);
+        GAMSWorkspace ws(wsInfo);
+
+        // fill GAMSDatabase by reading from Access
+        GAMSDatabase db = readFromAccess(ws);
+
+        // run job
+        GAMSOptions opt = ws.addOptions();
+        GAMSJob t9 = ws.addJobFromString(getModelText());
+        opt.setDefine("gdxincname", db.name());
+        opt.setAllModelTypes("xpress");
+        t9.run(opt, db);
+        for (GAMSVariableRecord rec : t9.outDB().getVariable("x"))
+            cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
+                 << rec.marginal() << endl;
+        // write results into Access file
+        writeToAccess(ws, t9.outDB());
+
+    } catch (GAMSException &ex) {
+        cout << "GAMSException occured: " << ex.what() << endl;
+    } catch (exception &ex) {
+        cout << ex.what() << endl;
+    }
 
     return 0;
 }
