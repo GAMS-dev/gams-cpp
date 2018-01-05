@@ -64,10 +64,9 @@ pipeline {
                             mkdir reports
                             export LD_LIBRARY_PATH=$WORKSPACE/bin:$LD_LIBRARY_PATH
                             #./tests/bin/testgamscheckpoint -xunitxml -o reports/xunit-result.xml
-                            for f in tests/bin/*; do
-                                if [[ -f $f ]]; then
-                                    ./tests/bin/$f -xunitxml -o reports/$f.xml
-                                fi
+                            cd tests/bin
+                            for f in *; do
+                                ./$f -xunitxml -o $WORKSPACE/reports/$f.xml
                             done
                         '''
                         sh '''
