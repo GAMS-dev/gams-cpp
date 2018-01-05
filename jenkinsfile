@@ -63,14 +63,10 @@ pipeline {
                         sh '''
                             mkdir reports
                             export LD_LIBRARY_PATH=$WORKSPACE/bin:$LD_LIBRARY_PATH
-                            #./tests/bin/testgamscheckpoint -xunitxml -o reports/xunit-result.xml
                             cd tests/bin
                             for f in *; do
                                 ./$f -xunitxml -o $WORKSPACE/reports/$f.xml
                             done
-                        '''
-                        sh '''
-                            ls reports
                         '''
                         junit allowEmptyResults: true, testResults: 'reports/*.xml'
                     }
@@ -92,8 +88,18 @@ pipeline {
                 macos: {
                     node('macos') {
                         sh '''
-                            echo 'TODO Test on macos'
+                            mkdir reports
+                            export DYLD_LIBRARY_PATH=$WORKSPACE/bin:$DYLD_LIBRARY_PATH
+                            cd tests/bin
+                            for f in *; do
+                                ./$f -xunitxml -o $WORKSPACE/reports/$f.xml
+                            done
                         '''
+                        sh '''
+                            ls reports
+                        '''
+                        junit allowEmptyResults: true, testResults: 'reports/*.xml'
+                    }
                     }
                 }
             }
