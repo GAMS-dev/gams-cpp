@@ -61,10 +61,12 @@ pipeline {
                 parallel linux: {
                     node('master') {
                         sh '''
+                            gams
+                        '''
+                        sh '''
                             export LD_LIBRARY_PATH=$WORKSPACE/bin:$LD_LIBRARY_PATH
                             ./tests/bin/testgamscheckpoint 
                             # -xunitxml -o xunit-result.xml
-                            echo $?
                         '''
                     }
                 },
