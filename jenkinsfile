@@ -100,7 +100,6 @@ pipeline {
                         '''
                         junit allowEmptyResults: true, testResults: 'reports/*.xml'
                     }
-                    }
                 }
             }
         }
