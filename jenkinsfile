@@ -74,15 +74,23 @@ pipeline {
                 windowsX86: {
                     node('windowsX86') {
                         bat '''
-                            echo 'TODO Test on windowsX86'
+                            mkdir reports
+                            set PATH=%WORKSPACE%/bin;%PATH%
+                            cd tests/bin
+                            for /d %f in (*) do %f -xunitxml -o %WORKSPACE%/reports/%f.xml
                         '''
+                        junit allowEmptyResults: true, testResults: 'reports/*.xml'
                     }
                 },
                 windowsX64: {
                     node('windowsX64') {
                         bat '''
-                            echo 'TODO Test on windowsX64'
+                            mkdir reports
+                            set PATH=%WORKSPACE%/bin;%PATH%
+                            cd tests/bin
+                            for /d %f in (*) do %f -xunitxml -o %WORKSPACE%/reports/%f.xml
                         '''
+                        junit allowEmptyResults: true, testResults: 'reports/*.xml'
                     }
                 },
                 macos: {
