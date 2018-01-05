@@ -61,7 +61,8 @@ pipeline {
                 parallel linux: {
                     node('master') {
                         sh '''
-                            echo 'TODO Test on linux'
+                            export LD_LIBRARY_PATH=$WORKSPACE/bin:$LD_LIBRARY_PATH
+                            ./tests/bin/testgamsworkspace -xunitxml -o xunit-result.xml
                         '''
                     }
                 },
