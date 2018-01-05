@@ -6,14 +6,15 @@ TARGET = gamscpp
 include(../dependency.pri)
 include(gamscpp.pri)
 
-CONFIG += skip_target_version_ext
-CONFIG += console c++11
+CONFIG += skip_target_version_ext console c++11 plugin
 CONFIG -= app_bundle
-CONFIG += plugin
+
+DEFINES += GAMS_CPP_LIB MAKELIB
+
 QT -= gui
-DEFINES += GAMS_CPP_LIB
-DEFINES += MAKELIB
-win32:QMAKE_CXXFLAGS += -EHsc -GR -c -nologo -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -D_CRT_SECURE_NO_WARNINGS -DHAVE_MUTEX
+
+win32-g++:QMAKE_CXXFLAGS += -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -D_CRT_SECURE_NO_WARNINGS -DHAVE_MUTEX
+win32-msvc*:QMAKE_CXXFLAGS += -EHsc -GR -c -nologo -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -D_CRT_SECURE_NO_WARNINGS -DHAVE_MUTEX
 
 SOURCES += \
     gamscheckpoint.cpp \

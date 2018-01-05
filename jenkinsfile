@@ -13,7 +13,7 @@ pipeline {
                         step([$class: 'WsCleanup'])
                         checkout scm
                         sh '''
-                            qmake gams-cpp.pro && make -j3
+                            qmake gams-cpp.pro && make -j4
                         '''
                         warnings canComputeNew: false, canResolveRelativePaths: false, categoriesPattern: '', consoleParsers: [[parserName: 'GNU Make + GNU C Compiler (gcc)']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: ''
                     }
@@ -50,7 +50,7 @@ pipeline {
                     node('macos') {
                         step([$class: 'WsCleanup'])
                         checkout scm
-                        sh 'qmake gams-cpp.pro && make -j3'
+                        sh 'qmake gams-cpp.pro && make -j4'
                         warnings canComputeNew: false, canResolveRelativePaths: false, categoriesPattern: '', consoleParsers: [[parserName: 'Clang (LLVM based)']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: ''
                     }
                 }
