@@ -98,37 +98,5 @@ pipeline {
                 }
             }
         }
-        stage('Pack') {
-            steps {
-                parallel linux: {
-                    node('master') {
-                        sh '''
-                            echo 'TODO Pack on linux'
-                        '''
-                    }
-                },
-                windowsX86: {
-                    node('windowsX86') {
-                        bat '''
-                             echo 'TODO Pack on windowsX86'
-                        '''
-                    }
-                },
-                windowsX64: {
-                    node('windowsX64') {
-                        bat '''
-                            echo 'TODO Pack on windowsX64
-                        '''
-                    }
-                },
-                macos: {
-                    node('macos') {
-                        sh '''
-                            echo 'TODO Pack on macos'
-                        '''
-                    }
-                }
-            }
-        }
     }
 }
