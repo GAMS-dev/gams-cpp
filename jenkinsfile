@@ -68,6 +68,7 @@ pipeline {
                         sh '''
                             ls reports
                         '''
+                        junit allowEmptyResults: true, testResults: 'reports/*.xml'
                     }
                 },
                 windowsX86: {
