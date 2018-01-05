@@ -1,3 +1,124 @@
-node {
-  echo 'Hello World!'
+pipeline {
+    agent any
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10', daysToKeepStr: '2'))
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                parallel linux: {
+                    node('master') {
+                        step([$class: 'WsCleanup'])
+                        checkout scm
+                        sh '''
+                            qmake gams-cpp.pro && make -j3
+                        '''
+                        warnings canComputeNew: false, canResolveRelativePaths: false, categoriesPattern: '', consoleParsers: [[parserName: 'GNU Make + GNU C Compiler (gcc)']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: ''
+                    }
+                },
+                windowsX86: {
+                    node('windowsX86') {
+                        step([$class: 'WsCleanup'])
+                        checkout scm
+                        bat '''
+                            qmake gams-cpp.pro
+                            mingw32-make
+                        '''
+                        warnings canComputeNew: false, canResolveRelativePaths: false, categoriesPattern: '', consoleParsers: [[parserName: 'GNU Make + GNU C Compiler (gcc)']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: ''
+                    }
+                },
+                windowsX64: {
+                    node('windowsX64') {
+                        step([$class: 'WsCleanup'])
+                        checkout scm
+                        bat '''
+                            @echo off
+                            echo Setting up environment for VS2014 usage...
+                            cd "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Auxiliary\\Build"
+                            call vcvars64.bat
+                            set
+                            cd %WORKSPACE%
+                            qmake gams-cpp.pro "CONFIG+=release"
+                            nmake
+                        '''
+                        warnings canComputeNew: false, canResolveRelativePaths: false, categoriesPattern: '', consoleParsers: [[parserName: 'MSBuild']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: ''
+                    }
+                },
+                macos: {
+                    node('macos') {
+                        step([$class: 'WsCleanup'])
+                        checkout scm
+                        sh 'qmake gams-cpp.pro && make -j3'
+                        warnings canComputeNew: false, canResolveRelativePaths: false, categoriesPattern: '', consoleParsers: [[parserName: 'Clang (LLVM based)']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: ''
+                    }
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                parallel linux: {
+                    node('master') {
+                        sh '''
+                            echo 'TODO Test on linux'
+                        '''
+                    }
+                },
+                windowsX86: {
+                    node('windowsX86') {
+                        bat '''
+                            echo 'TODO Test on windowsX86'
+                        '''
+                    }
+                },
+                windowsX64: {
+                    node('windowsX64') {
+                        bat '''
+                            echo 'TODO Test on windowsX64'
+                        '''
+                    }
+                },
+                macos: {
+                    node('macos') {
+                        sh '''
+                            echo 'TODO Test on macos'
+                        '''
+                    }
+                }
+            }
+        }
+        stage('Pack') {
+            steps {
+                parallel linux: {
+                    node('master') {
+                        sh '''
+                            echo 'TODO Pack on linux'
+                        '''
+                    }
+                },
+                windowsX86: {
+                    node('windowsX86') {
+                        bat '''
+                             echo 'TODO Pack on windowsX86'
+                        '''
+                    }
+                },
+                windowsX64: {
+                    node('windowsX64') {
+                        bat '''
+                            echo 'TODO Pack on windowsX64
+                        '''
+                    }
+                },
+                macos: {
+                    node('macos') {
+                        sh '''
+                            echo 'TODO Pack on macos'
+                        '''
+                    }
+                }
+            }
+        }
+    }
 }
