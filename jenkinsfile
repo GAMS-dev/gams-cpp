@@ -74,6 +74,7 @@ pipeline {
                 windowsX86: {
                     node('windowsX86') {
                         bat '''
+                            echo off
                             mkdir reports
                             set PATH=%WORKSPACE%/bin;%PATH%
                             cd tests/bin
@@ -102,9 +103,6 @@ pipeline {
                             for f in *; do
                                 ./$f -xunitxml -o $WORKSPACE/reports/$f.xml
                             done
-                        '''
-                        sh '''
-                            ls reports
                         '''
                         junit allowEmptyResults: true, testResults: 'reports/*.xml'
                     }
