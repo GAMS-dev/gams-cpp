@@ -41,7 +41,7 @@ const char* GAMSOptionsImpl::cGamsBuild = __DATE__ " " __TIME__;
 #if LOCAL_BUILD
 const char* GAMSOptionsImpl::cGamsVersion = "0.0.0";
 #else
-const char* GAMSOptionsImpl::cGamsVersion = "25.0.0";
+const char* GAMSOptionsImpl::cGamsVersion = "25.1.0";
 #endif
 
 GAMSOptionsImpl::GAMSOptionsImpl(GAMSWorkspace& workspace, GAMSOptionsImpl* optFrom)
