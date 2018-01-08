@@ -79,8 +79,7 @@ pipeline {
                             set PATH=%WORKSPACE%/bin;%PATH%
                             cd tests/bin
                             dir
-                            for /D %%f in (*) do echo "%%f"
-                            for /D %f in (*) do echo "%f"
+                            for %%f in (*) do echo "%%f"
                         '''
                         junit allowEmptyResults: true, testResults: 'reports/*.xml'
                     }
