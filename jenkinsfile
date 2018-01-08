@@ -78,8 +78,7 @@ pipeline {
                             mkdir reports
                             set PATH=%WORKSPACE%/bin;%PATH%
                             cd tests/bin
-                            dir
-                            for %%f in (*) do echo "%%f"
+                            for %%f in (*) do %%f -xunitxml -o %WORKSPACE%/reports/%%f.xml
                         '''
                         junit allowEmptyResults: true, testResults: 'reports/*.xml'
                     }
@@ -90,7 +89,7 @@ pipeline {
                             mkdir reports
                             set PATH=%WORKSPACE%/bin;%PATH%
                             cd tests/bin
-                            for /D %%f in (*) do call %%f -xunitxml -o %WORKSPACE%/reports/%%f.xml
+                            for %%f in (*) do %%f -xunitxml -o %WORKSPACE%/reports/%%f.xml
                         '''
                         junit allowEmptyResults: true, testResults: 'reports/*.xml'
                     }
