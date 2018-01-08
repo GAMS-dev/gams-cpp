@@ -135,7 +135,7 @@ int main(int argc, char* argv[])
         for(GAMSParameterRecord rec : db2.getParameter("d"))
             dNew[make_tuple(rec.key(0), rec.key(1))] = rec.value();
 
-        int fNew = db2.getParameter("f").firstRecord().value();
+        double fNew = db2.getParameter("f").firstRecord().value();
 
     } catch (GAMSException &ex) {
         cout << "GAMSException occured: " << ex.what() << endl;
