@@ -137,6 +137,24 @@ int main(int argc, char* argv[])
 
         double fNew = db2.getParameter("f").firstRecord().value();
 
+        cout << "i:" << endl;
+        for(string s : iNew)
+            cout << "  " << s << endl;
+        cout  << "j:" << endl;
+        for(string s : jNew)
+            cout << "  " << s << endl;
+        cout << "a:" << endl;
+        for (auto rec : aNew)
+            cout << "  " << rec.first << " : " << rec.second << endl;
+        cout << "b:" << endl;
+        for (auto rec : bNew)
+            cout << "  " << rec.first << " : " << rec.second << endl;
+        cout << "d:" << endl;
+        for (auto rec : dNew)
+            cout << "  " << get<0>(rec.first) << ", " << get<1>(rec.first) << " : " << rec.second << endl;
+        cout << "f:" << endl;
+        cout << "  " << fNew;
+
     } catch (GAMSException &ex) {
         cout << "GAMSException occured: " << ex.what() << endl;
     } catch (exception &ex) {
