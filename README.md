@@ -12,7 +12,7 @@ Contributions to gams-cpp are highly appreciated! For futher information please 
 
 ## 1. Download and install Qt ##
 
-gams-cpp relies on Qt for platform independent handling of directories and also makes use of the Qt Test framework. The recommended way to get Qt is via its official [Qt online installer](https://www.qt.io/). If you are interested in the Qt sources you can download them through the installer and build Qt from scratch by following the [Qt documentation](https://doc.qt.io/qt-5/build-sources.html). Alternatively, you can get and build Qt from the official [Qt GitHub mirror](https://github.com/qt/qt5).
+gams-cpp relies on Qt for platform independent handling of directories and also makes use of the Qt Test framework. The recommended way to get Qt is via its official [Qt online installer](https://www.qt.io/). If you are interested in the Qt sources you can download them through the installer and build Qt from scratch by following the [Qt documentation](https://doc.qt.io/qt-5/build-sources.html). Alternatively, you can get and build Qt from the official [Qt GitHub mirror](https://github.com/qt/qt5). Please note the the current version of gams-cpp requires Qt 5.8 or later.
 
 ## 2. Download and install GAMS ##
 
