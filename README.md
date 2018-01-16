@@ -26,7 +26,7 @@ Download the gams-cpp sources from GitHub (via git or as zip archive). All infor
 
 ## 4. Building the gams-cpp project ##
 
-Start Qt Creator, open the project file 'gams-cpp.pro' and click 'Build/Run qmake'. This generates the file '**gamsinclude.pri**' that defines the default location of the GAMS installation location. The path of the 'gamsinclude.pri' file may have to be updated to the correct GAMS installation location on your system.
+Start Qt Creator, open the project file 'gams-cpp.pro' and click 'Build/Run qmake'. This generates the file '**gamsinclude.pri**' that defines the default location of the GAMS installation location. The path within the 'gamsinclude.pri' may have to be updated to the correct GAMS installation location on your system.
 
 On Windows the file contains:
 ```
