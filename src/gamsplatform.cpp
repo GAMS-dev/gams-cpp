@@ -161,34 +161,12 @@ void GAMSPlatform::ensureEnvPathSetOnLinux(const char *dirName)
 
 bool GAMSPlatform::interruptOnNonWindows(long pid)
 {
-    QString childListStr = "";
     QProcess proc;
     proc.setProgram("/bin/bash");
-    QStringList s1;
-#ifdef __APPLE__
-    s1 << "-c" << QString("pstree pid ") + QString::number(pid).toUtf8().constData()
-          + QString(" | sed 's/^.*- /(/g' | grep '^(' | cut -f 1 -d ' ' | sed 's/(//g'");
-#else
-
-    s1 << "-c" << QString("pstree -p ") + QString::number(pid).toUtf8().constData()
-          + QString(" | sed 's/(/\\n(/g' | grep '(' | sed 's/(\\(.*\\)).*/\\1/'");
-#endif
-    proc.setArguments(QStringList(s1));
-    proc.start();
-    proc.waitForFinished(-1);
-    QString s(proc.readAllStandardOutput());
-
-    QStringList childList = s.split("\n");
-
-    for(int i=0; i<childList.length(); i++)
-    {
-        childListStr += childList[i].toUtf8().constData();
-        childListStr += " ";
-    }
 
     //start "kill" with List of children PID
     proc.setProgram("/bin/bash");
-    QStringList s2 { "-c", "kill -2 " + childListStr};
+    QStringList s2 { "-c", "kill -2 " + QString::number(pid)};
     proc.setArguments(s2);
     proc.start();
 
