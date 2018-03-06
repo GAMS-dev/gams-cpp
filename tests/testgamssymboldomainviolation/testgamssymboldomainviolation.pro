@@ -26,7 +26,7 @@ TEMPLATE = app
 
 DESTDIR = ../bin
 
-include(../../dependency.pri)
+include(../../gamsgamsdependency.pri)
 include(../tests.pri)
 
 HEADERS += \

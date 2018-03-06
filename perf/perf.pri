@@ -30,7 +30,7 @@ DESTDIR = ../bin
 QT -= gui
 QT += testlib
 
-include(../dependency.pri)
+include(../gamsdependency.pri)
 
 unix : LIBS += -ldl -L$$OUT_PWD/../../bin/ -lgamscpp
 win32: LIBS += -L$$OUT_PWD/../../bin/ -lgamscpp

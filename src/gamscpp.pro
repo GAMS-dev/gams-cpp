@@ -27,7 +27,7 @@ DESTDIR = ../bin
 
 TARGET = gamscpp
 
-include(../dependency.pri)
+include(../gamsdependency.pri)
 include(gamscpp.pri)
 
 CONFIG += skip_target_version_ext console c++11 plugin
