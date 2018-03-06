@@ -22,20 +22,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
+
+QT -= gui
+
 TEMPLATE = lib
 DESTDIR = ../bin
 
 TARGET = gamscpp
 
 include(../gamsdependency.pri)
-include(gamscpp.pri)
 
 CONFIG += skip_target_version_ext console c++11 plugin
 CONFIG -= app_bundle
 
+include (../gamscppversion)
+DEFINES += API_VERSION=\\\"$$VERSION\\\"
+
 DEFINES += GAMS_CPP_LIB MAKELIB
 
-QT -= gui
+DEFINES -= UNICODE
+
+unix:LIBS += -ldl
+win32:LIBS += -luser32
 
 win32-g++:QMAKE_CXXFLAGS += -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -D_CRT_SECURE_NO_WARNINGS -DHAVE_MUTEX
 win32-msvc*:QMAKE_CXXFLAGS += -EHsc -GR -c -nologo -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -D_CRT_SECURE_NO_WARNINGS -DHAVE_MUTEX
