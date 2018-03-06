@@ -1,10 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017 Alexander Fust <afust@gams.com>
- * Copyright (c) 2017 Clemens Westphal <cwestphal@gams.com>
- * Copyright (c) 2017 Jesko von Monkiewitsch <jmonki@gams.com>m>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
