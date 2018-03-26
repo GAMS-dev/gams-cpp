@@ -79,6 +79,7 @@ equals(GAMS_BUILD_ENV, "") {
         DEFINES += CIA_LEX
         QMAKE_CXXFLAGS += -Werror-implicit-function-declaration -Wreturn-type -Wmissing-declarations -m64
         QMAKE_CFLAGS += -Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64
+        QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\',-rpath,\'\$$ORIGIN/../../..\'"
     }
     equals(GSYS_ENV, "deg") {
         DEFINES += DEG
