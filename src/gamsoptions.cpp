@@ -1728,6 +1728,16 @@ void GAMSOptions::setFileStemApFromEnv(const std::string& value)
     mImpl->setFileStemApFromEnv(value);
 }
 
+GAMSOptions::EShowOSMemory::EShowOSMemoryEnum GAMSOptions::showOSMemory()
+{
+    return static_cast<GAMSOptions::EShowOSMemory::EShowOSMemoryEnum> (mImpl->showOSMemory());
+}
+
+void GAMSOptions::setShowOSMemory(const GAMSOptions::EShowOSMemory::EShowOSMemoryEnum value)
+{
+   mImpl->setShowOSMemory(static_cast<int>(value));
+}
+
 std::string GAMSOptions::LP()
 {
     return mImpl->LP();

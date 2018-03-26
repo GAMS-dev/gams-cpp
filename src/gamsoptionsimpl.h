@@ -526,6 +526,9 @@ public:
     std::string fileStemApFromEnv();
     void setFileStemApFromEnv(const std::string& value);
 
+    int showOSMemory();
+    void setShowOSMemory(const int value);
+
     std::string LP();
     void setLP(const std::string& value);
 

@@ -517,6 +517,17 @@ public:
             Multi = 1                                          ///< Use a multi-session Python interpreter
         };
     };
+    /// Show the memory usage reported by the Operating System instead of the internal counting
+    struct EShowOSMemory
+    {
+        /// Show the memory usage reported by the Operating System instead of the internal counting
+        enum EShowOSMemoryEnum
+        {
+            InternalAccounting = 0,                            ///< Show memory by internal accounting
+            RSS = 1,                                           ///< Show resident set size reported by operating system
+            VSS = 2                                            ///< Show virtual set size reported by operating system
+        };
+    };
 
     /// Destructor
     ~GAMSOptions();
@@ -1229,6 +1240,12 @@ public:
 
     /// Set Append a string read from an environment variable to the "FileStem"
     void setFileStemApFromEnv(const std::string& value);
+
+    /// Get Show the memory usage reported by the Operating System instead of the internal counting
+    GAMSOptions::EShowOSMemory::EShowOSMemoryEnum showOSMemory();
+
+    /// Set Show the memory usage reported by the Operating System instead of the internal counting
+    void setShowOSMemory(const GAMSOptions::EShowOSMemory::EShowOSMemoryEnum value);
 
     /// Get default LP solver
     std::string LP();

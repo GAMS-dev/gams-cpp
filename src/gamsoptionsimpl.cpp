@@ -1763,6 +1763,16 @@ void GAMSOptionsImpl::setFileStemApFromEnv(const std::string& value)
     optSetStrStr(mOPT, "FileStemApFromEnv", value.c_str());
 }
 
+int GAMSOptionsImpl::showOSMemory()
+{
+    return optGetIntStr(mOPT, "ShowOSMemory");
+}
+
+void GAMSOptionsImpl::setShowOSMemory(const int value)
+{
+    optSetIntStr(mOPT, "ShowOSMemory", value);
+}
+
 std::string GAMSOptionsImpl::LP()
 {
     char buf[GMS_SSSIZE];
