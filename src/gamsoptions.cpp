@@ -1738,6 +1738,16 @@ void GAMSOptions::setShowOSMemory(const GAMSOptions::EShowOSMemory::EShowOSMemor
    mImpl->setShowOSMemory(static_cast<int>(value));
 }
 
+GAMSOptions::ELstTitleLeftAligned::ELstTitleLeftAlignedEnum GAMSOptions::lstTitleLeftAligned()
+{
+    return static_cast<GAMSOptions::ELstTitleLeftAligned::ELstTitleLeftAlignedEnum> (mImpl->lstTitleLeftAligned());
+}
+
+void GAMSOptions::setLstTitleLeftAligned(const GAMSOptions::ELstTitleLeftAligned::ELstTitleLeftAlignedEnum value)
+{
+   mImpl->setLstTitleLeftAligned(static_cast<int>(value));
+}
+
 std::string GAMSOptions::LP()
 {
     return mImpl->LP();

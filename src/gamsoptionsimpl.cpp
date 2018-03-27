@@ -1773,6 +1773,16 @@ void GAMSOptionsImpl::setShowOSMemory(const int value)
     optSetIntStr(mOPT, "ShowOSMemory", value);
 }
 
+int GAMSOptionsImpl::lstTitleLeftAligned()
+{
+    return optGetIntStr(mOPT, "LstTitleLeftAligned");
+}
+
+void GAMSOptionsImpl::setLstTitleLeftAligned(const int value)
+{
+    optSetIntStr(mOPT, "LstTitleLeftAligned", value);
+}
+
 std::string GAMSOptionsImpl::LP()
 {
     char buf[GMS_SSSIZE];

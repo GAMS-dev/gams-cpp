@@ -529,6 +529,9 @@ public:
     int showOSMemory();
     void setShowOSMemory(const int value);
 
+    int lstTitleLeftAligned();
+    void setLstTitleLeftAligned(const int value);
+
     std::string LP();
     void setLP(const std::string& value);
 

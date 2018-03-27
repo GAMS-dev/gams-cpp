@@ -528,6 +528,16 @@ public:
             VSS = 2                                            ///< Show virtual set size reported by operating system
         };
     };
+    /// Write title of LST file all left aligned
+    struct ELstTitleLeftAligned
+    {
+        /// Write title of LST file all left aligned
+        enum ELstTitleLeftAlignedEnum
+        {
+            Off = 0,                                           ///< Split LST title into left and right aligned part
+            On = 1                                             ///< Write LST title completely left aligned
+        };
+    };
 
     /// Destructor
     ~GAMSOptions();
@@ -1246,6 +1256,12 @@ public:
 
     /// Set Show the memory usage reported by the Operating System instead of the internal counting
     void setShowOSMemory(const GAMSOptions::EShowOSMemory::EShowOSMemoryEnum value);
+
+    /// Get Write title of LST file all left aligned
+    GAMSOptions::ELstTitleLeftAligned::ELstTitleLeftAlignedEnum lstTitleLeftAligned();
+
+    /// Set Write title of LST file all left aligned
+    void setLstTitleLeftAligned(const GAMSOptions::ELstTitleLeftAligned::ELstTitleLeftAlignedEnum value);
 
     /// Get default LP solver
     std::string LP();
