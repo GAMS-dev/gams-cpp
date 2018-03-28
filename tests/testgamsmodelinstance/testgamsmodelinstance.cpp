@@ -2,8 +2,8 @@
  *
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -250,6 +250,7 @@ void TestGAMSModelInstance::testCopyModelInstance() {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
+    testCleanupDirs << QString::fromStdString(ws.workingDirectory());
     GAMSCheckpoint cp = ws.addCheckpoint();
     ws.addJobFromString(getModelText()).run(cp);
 

@@ -6,19 +6,19 @@ gams-cpp uses [Qt](https://www.qt.io/) which is licensed under [LGPL](https://ww
 
 # Contribute #
 
-Contributions to gams-cpp are highly appreciated! For futher information please check our [CONTRIBUTING.md](CONTRIBUTING.md) and [Code of Cunduct](CODE_OF_CONDUCT.md).
+Contributions to gams-cpp are highly appreciated! For futher information please check our [CONTRIBUTING.md](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md).
 
 # How to build #
 
 ## 1. Download and install Qt ##
 
-gams-cpp relies on Qt for platform independent handling of directories and also makes use of the Qt Test framework. The recommended way to get Qt is via its official [Qt online installer](https://www.qt.io/). If you are interested in the Qt sources you can download them through the installer and build Qt from scratch by following the [Qt documentation](https://doc.qt.io/qt-5/build-sources.html). Alternatively, you can get and build Qt from the official [Qt GitHub mirror](https://github.com/qt/qt5).
+gams-cpp relies on Qt for platform independent handling of directories and also makes use of the Qt Test framework. The recommended way to get Qt is via its official [Qt online installer](https://www.qt.io/). If you are interested in the Qt sources you can download them through the installer and build Qt from scratch by following the [Qt documentation](https://doc.qt.io/qt-5/build-sources.html). Alternatively, you can get and build Qt from the official [Qt GitHub mirror](https://github.com/qt/qt5). Please note the the current version of gams-cpp requires Qt 5.8 or later.
 
 ## 2. Download and install GAMS ##
 
 gams-cpp requires the GAMS low-level APIs. All those files are provided by the GAMS distribution packages, which are available for all major platforms. The installation package for your platform can be obtained from the [GAMS download page](https://www.gams.com/download/). After downloading the package please follow the latest GAMS [installation instructions](https://www.gams.com/latest/docs/UG_MAIN.html#UG_INSTALL).
 
-**Note** By default GAMS will run in demo mode. Please check the [download page](https://www.gams.com/download/). for further details.
+**Note** By default GAMS will run in demo mode. Please check the [download page](https://www.gams.com/download/) for further details.
 
 ## 3. Get the gams-cpp source code ##
 

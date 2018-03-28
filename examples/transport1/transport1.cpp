@@ -1,8 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -44,43 +44,50 @@ int main(int argc, char* argv[])
 {
     cout << "---------- Transport 1 --------------" << endl;
 
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
-    // Retrieves [trnsport] model from GAMS Model Library
-    ws.gamsLib("trnsport");
+    try {
+        GAMSWorkspaceInfo wsInfo;
+        if (argc > 1)
+            wsInfo.setSystemDirectory(argv[1]);
+        GAMSWorkspace ws(wsInfo);
+        // Retrieves [trnsport] model from GAMS Model Library
+        ws.gamsLib("trnsport");
 
-    // create a GAMSJob from file and run it with default settings
-    GAMSJob t1 = ws.addJobFromFile("trnsport.gms");
+        // create a GAMSJob from file and run it with default settings
+        GAMSJob t1 = ws.addJobFromFile("trnsport.gms");
 
-    // Default run
-    t1.run();
-    cout << "Ran with Defaults:" << endl;
-    for (GAMSVariableRecord rec : t1.outDB().getVariable("x"))
-        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
-             << rec.marginal() << endl;
+        // Default run
+        t1.run();
+        cout << "Ran with Defaults:" << endl;
+        for (GAMSVariableRecord rec : t1.outDB().getVariable("x"))
+            cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
+                 << rec.marginal() << endl;
 
-    // Run the job again with another solver
-    GAMSOptions opt = ws.addOptions();
-    opt.setAllModelTypes("xpress");
-    t1.run(opt);
-    cout << "Ran with XPRESS:" << endl;
-    for (GAMSVariableRecord rec : t1.outDB().getVariable("x"))
-        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
-             << rec.marginal() << endl;
+        // Run the job again with another solver
+        GAMSOptions opt = ws.addOptions();
+        opt.setAllModelTypes("xpress");
+        t1.run(opt);
+        cout << "Ran with XPRESS:" << endl;
+        for (GAMSVariableRecord rec : t1.outDB().getVariable("x"))
+            cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
+                 << rec.marginal() << endl;
 
-    // Run the job with a solver option file
-    ofstream xpressopt(ws.workingDirectory() + cPathSep + "xpress.opt");
-    xpressopt << "algorithm=barrier" << endl;
-    xpressopt.close();
+        // Run the job with a solver option file
+        ofstream xpressopt(ws.workingDirectory() + cPathSep + "xpress.opt");
+        xpressopt << "algorithm=barrier" << endl;
+        xpressopt.close();
 
-    opt.setOptFile(1);
-    t1.run(opt);
-    cout << "Ran with XPRESS with non-default option:" << endl;
-    for (GAMSVariableRecord rec : t1.outDB().getVariable("x"))
-        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
-             << rec.marginal() << endl;
+        opt.setOptFile(1);
+        t1.run(opt);
+        cout << "Ran with XPRESS with non-default option:" << endl;
+        for (GAMSVariableRecord rec : t1.outDB().getVariable("x"))
+            cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
+                 << rec.marginal() << endl;
+
+    } catch (GAMSException &ex) {
+        cout << "GAMSException occured: " << ex.what() << endl;
+    } catch (exception &ex) {
+        cout << ex.what() << endl;
+    }
 
     return 0;
 }

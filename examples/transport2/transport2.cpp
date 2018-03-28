@@ -2,8 +2,8 @@
  *
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -109,24 +109,31 @@ int main(int argc, char* argv[])
 {
     cout << "---------- Transport 2 --------------" << endl;
 
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
+    try {
+        GAMSWorkspaceInfo wsInfo;
+        if (argc > 1)
+            wsInfo.setSystemDirectory(argv[1]);
+        GAMSWorkspace ws(wsInfo);
 
-    // write an include file containing data with GAMS syntax
-    ofstream tdata(ws.workingDirectory() + cPathSep + "tdata.gms");
-    tdata << getDataText();
-    tdata.close();
+        // write an include file containing data with GAMS syntax
+        ofstream tdata(ws.workingDirectory() + cPathSep + "tdata.gms");
+        tdata << getDataText();
+        tdata.close();
 
-    // run a job using an instance of GAMSOptions that defines the data include file
-    GAMSOptions opt = ws.addOptions();
-    GAMSJob t2 = ws.addJobFromString(getModelText());
-    opt.setDefine("incname", "tdata");
-    t2.run(opt);
-    for (GAMSVariableRecord rec : t2.outDB().getVariable("x"))
-        cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
-             << rec.marginal() << endl;
+        // run a job using an instance of GAMSOptions that defines the data include file
+        GAMSOptions opt = ws.addOptions();
+        GAMSJob t2 = ws.addJobFromString(getModelText());
+        opt.setDefine("incname", "tdata");
+        t2.run(opt);
+        for (GAMSVariableRecord rec : t2.outDB().getVariable("x"))
+            cout << "x(" << rec.key(0) << "," << rec.key(1) << "):" << " level=" << rec.level() << " marginal="
+                 << rec.marginal() << endl;
+
+    } catch (GAMSException &ex) {
+        cout << "GAMSException occured: " << ex.what() << endl;
+    } catch (exception &ex) {
+        cout << ex.what() << endl;
+    }
 
     return 0;
 }

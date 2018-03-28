@@ -1,7 +1,7 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
  * Copyright (c) 2017 Jarungjit Parnjai <jeed@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -36,6 +36,7 @@
 #include <QDir>
 #include <QDebug>
 #include <QTest>
+#include <QSet>
 
 class TestGAMSObject: public QObject
 {
@@ -85,6 +86,7 @@ class TestGAMSObject: public QObject
      QString testGAMSVersion;
      QString testAPIVersion;
      QString testDebugLevel;
+     QSet<QString> testCleanupDirs;
 
      int tests_Executed;
      int tests_Failed;

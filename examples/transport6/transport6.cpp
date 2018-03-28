@@ -2,8 +2,8 @@
  *
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -107,24 +107,31 @@ int main(int argc, char* argv[])
 {
     cout << "---------- Transport 6 --------------" << endl;
 
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
-    GAMSCheckpoint cp = ws.addCheckpoint();
+    try {
+        GAMSWorkspaceInfo wsInfo;
+        if (argc > 1)
+            wsInfo.setSystemDirectory(argv[1]);
+        GAMSWorkspace ws(wsInfo);
+        GAMSCheckpoint cp = ws.addCheckpoint();
 
-    // initialize a GAMSCheckpoint by running a GAMSJob
-    ws.addJobFromString(getModelText()).run(cp);
+        // initialize a GAMSCheckpoint by running a GAMSJob
+        ws.addJobFromString(getModelText()).run(cp);
 
-    vector<double> bmultlist = { 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3 };
+        vector<double> bmultlist = { 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3 };
 
-    // run multiple parallel jobs using the created GAMSCheckpoint
-    mutex ioMutex;
-    vector<thread> v;
-    for(double b : bmultlist)
-        v.emplace_back([&ws, cp, &ioMutex, b]{runScenario(&ws, cp,&ioMutex,b);});
-    for (auto& t : v)
-        t.join();
+        // run multiple parallel jobs using the created GAMSCheckpoint
+        mutex ioMutex;
+        vector<thread> v;
+        for(double b : bmultlist)
+            v.emplace_back([&ws, cp, &ioMutex, b]{runScenario(&ws, cp,&ioMutex,b);});
+        for (auto& t : v)
+            t.join();
+
+    } catch (GAMSException &ex) {
+        cout << "GAMSException occured: " << ex.what() << endl;
+    } catch (exception &ex) {
+        cout << ex.what() << endl;
+    }
 
     return 0;
 }

@@ -2,8 +2,8 @@
  *
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -177,17 +177,17 @@ int main(int argc, char* argv[])
 {
     cout << "---------- Warehouse --------------" << endl;
 
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
-
-    // create a GAMSDatabase for the results
-    GAMSDatabase resultDB = ws.addDatabase();
-    resultDB.addParameter("objrep", 1, "Objective value");
-    resultDB.addSet("supplyMap", 3, "Supply connection with level");
-
     try{
+        GAMSWorkspaceInfo wsInfo;
+        if (argc > 1)
+            wsInfo.setSystemDirectory(argv[1]);
+        GAMSWorkspace ws(wsInfo);
+
+        // create a GAMSDatabase for the results
+        GAMSDatabase resultDB = ws.addDatabase();
+
+        resultDB.addParameter("objrep", 1, "Objective value");
+        resultDB.addSet("supplyMap", 3, "Supply connection with level");
         // run multiple parallel jobs
         mutex dbMutex;
         vector<thread> v;
@@ -203,13 +203,9 @@ int main(int argc, char* argv[])
             throw exception();
         // export the result database to a GDX file
         resultDB.doExport("\\tmp\\resultCpp.gdx");
-    }
-    catch (GAMSException ex)
-    {
+    } catch (GAMSException &ex) {
         cout << "GAMSException occured: " << ex.what() << endl;
-    }
-    catch (exception ex)
-    {
+    } catch (exception &ex) {
         cout << ex.what() << endl;
     }
     return status;

@@ -1,8 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -148,6 +148,7 @@ public:
         CouldNotDeleteScratchDir = 112,     ///< Could not delete process/scratch directory
         CouldNotWriteGamsNext = 113,        ///< Could not write the "gamsnext" script
         CouldNotWriteParamFile = 114,       ///< Could not write the "parameter" file
+        CouldNotReadEnvVar = 115,           ///< Could not read environment variable
         CouldNotSpawnGAMScmex = 400,        ///< Could not spawn the GAMS language compiler (gamscmex)
         CurDirNotFound = 401,               ///< Current directory (curdir) does not exist
         CurDirNotSet = 402,                 ///< Cannot set current directory (curdir)

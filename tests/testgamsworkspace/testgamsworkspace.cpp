@@ -1,8 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,6 +41,11 @@ using namespace gams;
 QString TestGAMSWorkspace::classname()  { return "TestGAMSWorkspace"; }
 
 void TestGAMSWorkspace::testDefaultConstructor() {
+#ifndef _WIN32 // fails on Windows, see #3301
+#ifndef WIN32
+// The workspace default constructor calls findGAMS, which gets the path from the registry. Since the system is
+// actually tested for 32 and 64 bit in the same account, one of them will always fail. As temporary workaround
+// we skip this test on Windows.
     // when
     try {
         GAMSWorkspace ws;
@@ -57,6 +62,8 @@ void TestGAMSWorkspace::testDefaultConstructor() {
     } catch (GAMSException &e) {
         QEXPECT_FAIL("", e.what(), Abort); QVERIFY(false);
     }
+#endif
+#endif
 }
 
 
@@ -176,7 +183,11 @@ void TestGAMSWorkspace::testConstructor_DebugLevel() {
            break;
       default:
            break;
-     }
+    }
+    QDir qdir(dir);
+    if (qdir.exists()) {
+        qdir.removeRecursively();
+    }
 }
 
 void TestGAMSWorkspace::testConstructorFromOccupiedWorkingDirectory() {
@@ -989,8 +1000,9 @@ void TestGAMSWorkspace::testAddOptions_OptFile() {
     } else {
        QVERIFY_EXCEPTION_THROWN( ws.addOptions(optfilename.toStdString()), GAMSException);
     }
-    // clean up
-    dir.removeRecursively();
+    // clean up only when working dir is not application dir
+    if (QFileInfo(QCoreApplication::applicationDirPath())!=QFileInfo(dir.canonicalPath()))
+       dir.removeRecursively();
 }
 
 void TestGAMSWorkspace::testRetrievingModelFromLibrary_data() {

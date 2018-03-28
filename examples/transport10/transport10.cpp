@@ -2,8 +2,8 @@
  *
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -166,48 +166,53 @@ GAMSParameter sheetToParameter(QAxObject* sheets, string sheetName
 int main(int argc, char* argv[])
 {
     cout << "---------- Transport 10 --------------" << endl;
+    try {
+        ::CoInitialize(0); // initialize thread to use ActiveX (some systems may need CoInititializeEx)
 
-    ::CoInitialize(0); // initialize thread to use ActiveX (some systems may need CoInititializeEx)
+        GAMSWorkspaceInfo wsInfo;
+        if (argc > 1)
+            wsInfo.setSystemDirectory(argv[1]);
+        GAMSWorkspace ws(wsInfo);
 
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
+        // Creating the GAMSDatabase and fill with the workbook data
+        GAMSDatabase db = ws.addDatabase();
+        QString fileName = QString::fromStdString(ws.systemDirectory())+ cPathSep + "apifiles" + cPathSep + "Data" + cPathSep + "transport.xls";
 
-    // Creating the GAMSDatabase and fill with the workbook data
-    GAMSDatabase db = ws.addDatabase();
-    QString fileName = QString::fromStdString(ws.systemDirectory())+ cPathSep + "apifiles" + cPathSep + "Data" + cPathSep + "transport.xls";
+        QAxObject* excel = new QAxObject( "Excel.Application", 0 );
+        QAxObject* workbooks = excel->querySubObject( "Workbooks" );
+        QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", fileName );
+        QAxObject* sheets = workbook->querySubObject( "Worksheets" );
 
-    QAxObject* excel = new QAxObject( "Excel.Application", 0 );
-    QAxObject* workbooks = excel->querySubObject( "Workbooks" );
-    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", fileName );
-    QAxObject* sheets = workbook->querySubObject( "Worksheets" );
+        GAMSSet i = db.addSet("i", 1, "Plants");
+        GAMSSet j = db.addSet("j", 1, "Markets");
 
-    GAMSSet i = db.addSet("i", 1, "Plants");
-    GAMSSet j = db.addSet("j", 1, "Markets");
+        // read parameters
+        sheetToParameter(sheets, "capacity", db, "a", "Capacity", i);
+        sheetToParameter(sheets, "demand", db, "b", "Demand", j);
+        sheetToParameter(sheets, "distance", db, "d", "Distance", i, j);
 
-    // read parameters
-    sheetToParameter(sheets, "capacity", db, "a", "Capacity", i);
-    sheetToParameter(sheets, "demand", db, "b", "Demand", j);
-    sheetToParameter(sheets, "distance", db, "d", "Distance", i, j);
-
-    // clean up and close up
-    workbook->dynamicCall("Close()");
-    excel->dynamicCall("Quit()");
-
-
-    // Create and run the GAMSJob
-    GAMSOptions opt = ws.addOptions();
-    GAMSJob t10 = ws.addJobFromString(getModelText());
-    opt.setDefine("gdxincname", db.name());
-    opt.setAllModelTypes("xpress");
-    t10.run(opt, db);
-    for (GAMSVariableRecord record : t10.outDB().getVariable("x"))
-        cout << "x(" << record.key(0) << "," << record.key(1) << "): level=" << record.level() <<
-                " marginal=" << record.marginal() << endl;
+        // clean up and close up
+        workbook->dynamicCall("Close()");
+        excel->dynamicCall("Quit()");
 
 
-    ::CoUninitialize();
+        // Create and run the GAMSJob
+        GAMSOptions opt = ws.addOptions();
+        GAMSJob t10 = ws.addJobFromString(getModelText());
+        opt.setDefine("gdxincname", db.name());
+        opt.setAllModelTypes("xpress");
+        t10.run(opt, db);
+        for (GAMSVariableRecord record : t10.outDB().getVariable("x"))
+            cout << "x(" << record.key(0) << "," << record.key(1) << "): level=" << record.level() <<
+                    " marginal=" << record.marginal() << endl;
+
+        ::CoUninitialize();
+
+    } catch (GAMSException &ex) {
+        cout << "GAMSException occured: " << ex.what() << endl;
+    } catch (exception &ex) {
+        cout << ex.what() << endl;
+    }
 
     return 0;
 }

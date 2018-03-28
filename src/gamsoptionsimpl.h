@@ -2,8 +2,8 @@
  *
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -519,6 +519,18 @@ public:
 
     int pySetup();
     void setPySetup(const int value);
+
+    int pyMultInst();
+    void setPyMultInst(const int value);
+
+    std::string fileStemApFromEnv();
+    void setFileStemApFromEnv(const std::string& value);
+
+    int showOSMemory();
+    void setShowOSMemory(const int value);
+
+    int lstTitleLeftAligned();
+    void setLstTitleLeftAligned(const int value);
 
     std::string LP();
     void setLP(const std::string& value);

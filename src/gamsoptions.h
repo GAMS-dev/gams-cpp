@@ -2,8 +2,8 @@
  *
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -314,7 +314,7 @@ public:
         {
             EverythingAllowed = 0,                             ///< Everything allowed
             InteractiveShellsProhibited = 1,                   ///< Interactive shells in $call and execute commands are prohibited
-            CallAndExecuteProhibited = 2,                      ///< All $call and execute commands are prohibited
+            CallAndExecuteProhibited = 2,                      ///< Embedded Code and all $call and execute commands are prohibited
             EchoAndPutOnlyToWorkdir = 3,                       ///< $echo or put commands can only write to directories in or below the working or scratchdir
             EchoAndPutProhibited = 4                           ///< $echo and put commands are not allowed
         };
@@ -505,6 +505,37 @@ public:
         {
             Off = 0,                                           ///< Rely on user setup of Python
             On = 1                                             ///< Use Python installation provided in GAMS system directory
+        };
+    };
+    /// GAMS/Python Multiple Instance Interpreter
+    struct EPyMultInst
+    {
+        /// GAMS/Python Multiple Instance Interpreter
+        enum EPyMultInstEnum
+        {
+            Single = 0,                                        ///< Use a single-session Python interpreter
+            Multi = 1                                          ///< Use a multi-session Python interpreter
+        };
+    };
+    /// Show the memory usage reported by the Operating System instead of the internal counting
+    struct EShowOSMemory
+    {
+        /// Show the memory usage reported by the Operating System instead of the internal counting
+        enum EShowOSMemoryEnum
+        {
+            InternalAccounting = 0,                            ///< Show memory by internal accounting
+            RSS = 1,                                           ///< Show resident set size reported by operating system
+            VSS = 2                                            ///< Show virtual set size reported by operating system
+        };
+    };
+    /// Write title of LST file all left aligned
+    struct ELstTitleLeftAligned
+    {
+        /// Write title of LST file all left aligned
+        enum ELstTitleLeftAlignedEnum
+        {
+            Off = 0,                                           ///< Split LST title into left and right aligned part
+            On = 1                                             ///< Write LST title completely left aligned
         };
     };
 
@@ -1207,6 +1238,30 @@ public:
 
     /// Set GAMS/Python Setup
     void setPySetup(const GAMSOptions::EPySetup::EPySetupEnum value);
+
+    /// Get GAMS/Python Multiple Instance Interpreter
+    GAMSOptions::EPyMultInst::EPyMultInstEnum pyMultInst();
+
+    /// Set GAMS/Python Multiple Instance Interpreter
+    void setPyMultInst(const GAMSOptions::EPyMultInst::EPyMultInstEnum value);
+
+    /// Get Append a string read from an environment variable to the "FileStem"
+    std::string fileStemApFromEnv();
+
+    /// Set Append a string read from an environment variable to the "FileStem"
+    void setFileStemApFromEnv(const std::string& value);
+
+    /// Get Show the memory usage reported by the Operating System instead of the internal counting
+    GAMSOptions::EShowOSMemory::EShowOSMemoryEnum showOSMemory();
+
+    /// Set Show the memory usage reported by the Operating System instead of the internal counting
+    void setShowOSMemory(const GAMSOptions::EShowOSMemory::EShowOSMemoryEnum value);
+
+    /// Get Write title of LST file all left aligned
+    GAMSOptions::ELstTitleLeftAligned::ELstTitleLeftAlignedEnum lstTitleLeftAligned();
+
+    /// Set Write title of LST file all left aligned
+    void setLstTitleLeftAligned(const GAMSOptions::ELstTitleLeftAligned::ELstTitleLeftAlignedEnum value);
 
     /// Get default LP solver
     std::string LP();

@@ -1,8 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -114,7 +114,7 @@ GAMSSymbolImpl::~GAMSSymbolImpl()
 
 bool GAMSSymbolImpl::operator !=(const GAMSSymbolImpl& other)
 {
-    return operator==(other);
+    return !operator==(other);
 }
 
 bool GAMSSymbolImpl::operator ==(const GAMSSymbolImpl& other)

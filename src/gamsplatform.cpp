@@ -1,8 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -161,38 +161,18 @@ void GAMSPlatform::ensureEnvPathSetOnLinux(const char *dirName)
 
 bool GAMSPlatform::interruptOnNonWindows(long pid)
 {
-    QString childListStr = "";
     QProcess proc;
     proc.setProgram("/bin/bash");
-    QStringList s1;
-#ifdef __APPLE__
-    s1 << "-c" << QString("pstree pid ") + QString::number(pid).toUtf8().constData()
-          + QString(" | sed 's/^.*- /(/g' | grep '^(' | cut -f 1 -d ' ' | sed 's/(//g'");
-#else
-
-    s1 << "-c" << QString("pstree -p ") + QString::number(pid).toUtf8().constData()
-          + QString(" | sed 's/(/\\n(/g' | grep '(' | sed 's/(\\(.*\\)).*/\\1/'");
-#endif
-    proc.setArguments(QStringList(s1));
-    proc.start();
-    proc.waitForFinished(-1);
-    QString s(proc.readAllStandardOutput());
-
-    QStringList childList = s.split("\n");
-
-    for(int i=0; i<childList.length(); i++)
-    {
-        childListStr += childList[i].toUtf8().constData();
-        childListStr += " ";
-    }
 
     //start "kill" with List of children PID
     proc.setProgram("/bin/bash");
-    QStringList s2 { "-c", "kill -2 " + childListStr};
+    QStringList s2 { "-c", "kill -2 " + QString::number(pid)};
     proc.setArguments(s2);
     proc.start();
 
-    //Note: In C++ we need to wait for QProcess to terminate, otherwise it will be destroyed since it was created on the stack. Should we do the same in C# to make it consistent?
+    // Note: In C++ we need to wait for QProcess to terminate,
+    // otherwise it will be destroyed since it was created on the stack.
+    // Should we do the same in C# to make it consistent?
     proc.waitForFinished(-1);
     return true;
 }

@@ -2,8 +2,8 @@
  *
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -1706,6 +1706,46 @@ GAMSOptions::EPySetup::EPySetupEnum GAMSOptions::pySetup()
 void GAMSOptions::setPySetup(const GAMSOptions::EPySetup::EPySetupEnum value)
 {
    mImpl->setPySetup(static_cast<int>(value));
+}
+
+GAMSOptions::EPyMultInst::EPyMultInstEnum GAMSOptions::pyMultInst()
+{
+    return static_cast<GAMSOptions::EPyMultInst::EPyMultInstEnum> (mImpl->pyMultInst());
+}
+
+void GAMSOptions::setPyMultInst(const GAMSOptions::EPyMultInst::EPyMultInstEnum value)
+{
+   mImpl->setPyMultInst(static_cast<int>(value));
+}
+
+std::string GAMSOptions::fileStemApFromEnv()
+{
+    return mImpl->fileStemApFromEnv();
+}
+
+void GAMSOptions::setFileStemApFromEnv(const std::string& value)
+{
+    mImpl->setFileStemApFromEnv(value);
+}
+
+GAMSOptions::EShowOSMemory::EShowOSMemoryEnum GAMSOptions::showOSMemory()
+{
+    return static_cast<GAMSOptions::EShowOSMemory::EShowOSMemoryEnum> (mImpl->showOSMemory());
+}
+
+void GAMSOptions::setShowOSMemory(const GAMSOptions::EShowOSMemory::EShowOSMemoryEnum value)
+{
+   mImpl->setShowOSMemory(static_cast<int>(value));
+}
+
+GAMSOptions::ELstTitleLeftAligned::ELstTitleLeftAlignedEnum GAMSOptions::lstTitleLeftAligned()
+{
+    return static_cast<GAMSOptions::ELstTitleLeftAligned::ELstTitleLeftAlignedEnum> (mImpl->lstTitleLeftAligned());
+}
+
+void GAMSOptions::setLstTitleLeftAligned(const GAMSOptions::ELstTitleLeftAligned::ELstTitleLeftAlignedEnum value)
+{
+   mImpl->setLstTitleLeftAligned(static_cast<int>(value));
 }
 
 std::string GAMSOptions::LP()

@@ -2,8 +2,8 @@
  *
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ QString TestGAMSEnum::classname()  { return "TestGAMSEnum"; }
 void  TestGAMSEnum::testGamsReturnCodeToText() {
     // given
     const int valid[] = {0,1,2,3,4,5,6,7,8,9,10,11
-                        ,109,110, 112,113,114
+                        ,109,110, 112,113,114,115
                         ,400,401,402, 404,405,406,407,408,409,410,411,412
                         ,909
                         ,1000,2000,3000,4000,5000};

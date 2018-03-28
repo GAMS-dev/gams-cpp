@@ -1,7 +1,7 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
  * Copyright (c) 2017 Jarungjit Parnjai <jeed@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -40,6 +40,7 @@
 #include <vector>
 #include <map>
 #include <QtTest>
+#include <QDir>
 
 using namespace gams;
 using namespace std;
@@ -59,6 +60,12 @@ void TestGAMSObject::initTestCase() {
 }
 
 void TestGAMSObject::cleanupTestCase() {
+    for (QString dir: testCleanupDirs) {
+        QDir path(dir);
+        if (path.exists() && path.absolutePath().contains("gams-cpp")) {
+            path.removeRecursively();
+        }
+    }
 //    if (tests_Failed == 0) { }
 }
 

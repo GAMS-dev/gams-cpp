@@ -2,8 +2,8 @@
  *
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -90,26 +90,33 @@ int main(int argc, char* argv[])
 {
     cout << "---------- Transport 5 --------------" << endl;
 
-    GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
-        wsInfo.setSystemDirectory(argv[1]);
-    GAMSWorkspace ws(wsInfo);
-    GAMSCheckpoint cp = ws.addCheckpoint();
+    try {
+        GAMSWorkspaceInfo wsInfo;
+        if (argc > 1)
+            wsInfo.setSystemDirectory(argv[1]);
+        GAMSWorkspace ws(wsInfo);
+        GAMSCheckpoint cp = ws.addCheckpoint();
 
-    // initialize a GAMSCheckpoint by running a GAMSJob
-    ws.addJobFromString(getModelText()).run(cp);
+        // initialize a GAMSCheckpoint by running a GAMSJob
+        ws.addJobFromString(getModelText()).run(cp);
 
-    vector<double> bmultlist = { 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3 };
+        vector<double> bmultlist = { 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3 };
 
-    // create a new GAMSJob that is initialized from the GAMSCheckpoint
-    for (double b : bmultlist)
-    {
-        GAMSJob t5 = ws.addJobFromString("bmult=" + to_string(b) + "; solve transport min z use lp; ms=transport.modelstat; ss=transport.solvestat;", cp);
-        t5.run();
-        cout << "Scenario bmult=" << b << ":" << endl;
-        cout << "  Modelstatus: " << t5.outDB().getParameter("ms").findRecord().value() << endl;
-        cout << "  Solvestatus: " << t5.outDB().getParameter("ss").findRecord().value() << endl;
-        cout << "  Obj: " << t5.outDB().getVariable("z").findRecord().level() << endl;
+        // create a new GAMSJob that is initialized from the GAMSCheckpoint
+        for (double b : bmultlist)
+        {
+            GAMSJob t5 = ws.addJobFromString("bmult=" + to_string(b) + "; solve transport min z use lp; ms=transport.modelstat; ss=transport.solvestat;", cp);
+            t5.run();
+            cout << "Scenario bmult=" << b << ":" << endl;
+            cout << "  Modelstatus: " << t5.outDB().getParameter("ms").findRecord().value() << endl;
+            cout << "  Solvestatus: " << t5.outDB().getParameter("ss").findRecord().value() << endl;
+            cout << "  Obj: " << t5.outDB().getVariable("z").findRecord().level() << endl;
+        }
+
+    } catch (GAMSException &ex) {
+        cout << "GAMSException occured: " << ex.what() << endl;
+    } catch (exception &ex) {
+        cout << ex.what() << endl;
     }
 
     return 0;

@@ -2,8 +2,8 @@
  *
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -225,6 +225,7 @@ void TestGAMSSymbol::testEqualToOperator() {
     GAMSSymbol symbol_j = j;
     QVERIFY( symbol_j == j );
     // when, then
+    QVERIFY( symbol_j == db.getSet("j") );
     QVERIFY( !( symbol_j == (GAMSSymbol)db.getSet("i")) );
     QVERIFY( !( symbol_j == (GAMSSymbol)db.getParameter("a")) );
     QVERIFY( !( symbol_j == (GAMSSymbol)db.getVariable("x")) );
@@ -236,6 +237,7 @@ void TestGAMSSymbol::testEqualToOperator() {
     GAMSSymbol symbol_a = a;
     // when, then
     QVERIFY( symbol_a == a );
+    QVERIFY( symbol_a == db.getParameter("a") );
     QVERIFY( !( symbol_a == (GAMSSymbol)db.getSet("j")) );
     QVERIFY( !( symbol_a == (GAMSSymbol)db.getParameter("b")) );
     QVERIFY( !( symbol_a == (GAMSSymbol)db.getVariable("x")) );
@@ -247,6 +249,7 @@ void TestGAMSSymbol::testEqualToOperator() {
     GAMSSymbol symbol_z = z;
     // when, then
     QVERIFY( symbol_z == z );
+    QVERIFY( symbol_z == db.getVariable("z") );
     QVERIFY( !( symbol_z == (GAMSSymbol)db.getSet("i")) );
     QVERIFY( !( symbol_z == (GAMSSymbol)db.getParameter("b")) );
     QVERIFY( !( symbol_z == (GAMSSymbol)db.getVariable("x")) );
@@ -258,6 +261,7 @@ void TestGAMSSymbol::testEqualToOperator() {
     GAMSSymbol symbol_cost = cost;
     // when, then
     QVERIFY( symbol_cost == cost );
+    QVERIFY( symbol_cost == db.getEquation("cost") );
     QVERIFY( !( symbol_cost == (GAMSSymbol)db.getSet("i")) );
     QVERIFY( !( symbol_cost == (GAMSSymbol)db.getParameter("b")) );
     QVERIFY( !( symbol_cost == (GAMSSymbol)db.getVariable("x")) );

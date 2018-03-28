@@ -1,8 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -76,7 +76,7 @@ std::string GAMSEnum::text(GAMSEnum::GAMSExitCode type)
                               ,"BlankInScrDir"};
         return res[type-400];
     } else if (type >= 109) {
-        if (type > 114) {
+        if (type > 115) {
             return "InvalidReturnCode";
         }
         const char * res[] = {"CouldNotCreateScratchDir"
@@ -84,7 +84,8 @@ std::string GAMSEnum::text(GAMSEnum::GAMSExitCode type)
                               ,"InvalidReturnCode"
                               ,"CouldNotDeleteScratchDir"
                               ,"CouldNotWriteGamsNext"
-                              ,"CouldNotWriteParamFile"};
+                              ,"CouldNotWriteParamFile"
+                              ,"CouldNotReadEnvVar"};
         return res[type-109];
     } else {
         int code = type;

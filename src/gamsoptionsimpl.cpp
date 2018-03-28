@@ -2,8 +2,8 @@
  *
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017 GAMS Development Corp. <support@gams.com>
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,7 @@ const char* GAMSOptionsImpl::cGamsBuild = __DATE__ " " __TIME__;
 #if LOCAL_BUILD
 const char* GAMSOptionsImpl::cGamsVersion = "0.0.0";
 #else
-const char* GAMSOptionsImpl::cGamsVersion = "25.0.0";
+const char* GAMSOptionsImpl::cGamsVersion = "25.1.0";
 #endif
 
 GAMSOptionsImpl::GAMSOptionsImpl(GAMSWorkspace& workspace, GAMSOptionsImpl* optFrom)
@@ -1740,6 +1740,47 @@ int GAMSOptionsImpl::pySetup()
 void GAMSOptionsImpl::setPySetup(const int value)
 {
     optSetIntStr(mOPT, "PySetup", value);
+}
+
+int GAMSOptionsImpl::pyMultInst()
+{
+    return optGetIntStr(mOPT, "PyMultInst");
+}
+
+void GAMSOptionsImpl::setPyMultInst(const int value)
+{
+    optSetIntStr(mOPT, "PyMultInst", value);
+}
+
+std::string GAMSOptionsImpl::fileStemApFromEnv()
+{
+    char buf[GMS_SSSIZE];
+    return optGetStrStr(mOPT, "FileStemApFromEnv", buf);
+}
+
+void GAMSOptionsImpl::setFileStemApFromEnv(const std::string& value)
+{
+    optSetStrStr(mOPT, "FileStemApFromEnv", value.c_str());
+}
+
+int GAMSOptionsImpl::showOSMemory()
+{
+    return optGetIntStr(mOPT, "ShowOSMemory");
+}
+
+void GAMSOptionsImpl::setShowOSMemory(const int value)
+{
+    optSetIntStr(mOPT, "ShowOSMemory", value);
+}
+
+int GAMSOptionsImpl::lstTitleLeftAligned()
+{
+    return optGetIntStr(mOPT, "LstTitleLeftAligned");
+}
+
+void GAMSOptionsImpl::setLstTitleLeftAligned(const int value)
+{
+    optSetIntStr(mOPT, "LstTitleLeftAligned", value);
 }
 
 std::string GAMSOptionsImpl::LP()
