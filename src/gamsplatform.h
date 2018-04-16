@@ -53,7 +53,8 @@ struct LIBSPEC GAMSPlatform
 
     /// Interrupt GAMS during processing.
     /// \param pid A process ID.
-    /// \return Returns <c>true</c> on success; otherwise <c>false</c>.
+    /// \return Returns <c>true</c> if the interrupt was called successfully;
+    ///         otherwise <c>false</c>.
     /// \remark On unix like platfoms this function calls gams to execute
     ///         the interrupt and waits unitl gams has finished.
     static bool interrupt(long pid);

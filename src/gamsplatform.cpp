@@ -249,8 +249,6 @@ void GAMSPlatform::ensureEnvPathSetOnWindows(const char *dirName)
 
 bool GAMSPlatform::interruptOnWindows(long pid)
 {
-    Q_UNUSED(pid)
-
 #ifdef _WIN32
     COPYDATASTRUCT cds;
 
@@ -259,15 +257,19 @@ bool GAMSPlatform::interruptOnWindows(long pid)
     string windowName = stem + pidStr;
 
     HWND receiver = FindWindow(nullptr, windowName.c_str());
+    if (!receiver)
+        return false;
 
+    char lpData[] = "GAMS Message Interrupt";
     cds.dwData = 1;
-    cds.lpData = PVOID("GAMS Message Interrupt");
-    cds.cbData = 22 + 1; //TODO(CW): magic numbers: use string length from string above instead
+    cds.lpData = lpData;
+    cds.cbData = sizeof(lpData);
 
     SendMessageA(receiver, WM_COPYDATA, 0, (LPARAM)(LPVOID)&cds);
 
     return true;
 #else
+    Q_UNUSED(pid)
     throw GAMSException("interruptOnWindows only impemented on Windows");
 #endif
 }
