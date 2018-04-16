@@ -26,9 +26,6 @@
 #ifndef GAMSPLATFORM_H
 #define GAMSPLATFORM_H
 
-#include <string>
-#include <vector>
-#include "gamsenum.h"
 #include "gamslib_global.h"
 
 namespace gams {
