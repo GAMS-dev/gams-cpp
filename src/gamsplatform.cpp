@@ -169,9 +169,6 @@ bool GAMSPlatform::interruptOnNonWindows(long pid)
     proc.setArguments(s2);
     proc.start();
 
-    // Note: In C++ we need to wait for QProcess to terminate,
-    // otherwise it will be destroyed since it was created on the stack.
-    // Should we do the same in C# to make it consistent?
     proc.waitForFinished(-1);
     return true;
 }
