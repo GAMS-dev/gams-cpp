@@ -27,7 +27,6 @@
 #define GAMSEXCEPTION_H
 
 #include "gamslib_global.h"
-#include <string>
 #include <stdexcept>
 
 namespace gams {
