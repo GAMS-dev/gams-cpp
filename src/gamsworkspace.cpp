@@ -287,6 +287,18 @@ GAMSJob GAMSWorkspace::addJobFromNoaLib(const std::string& model, const GAMSChec
     return addJobFromFile(model + ".gms", checkpoint, jobName);
 }
 
+GAMSJob GAMSWorkspace::addJobFromPsoptLib(const std::string& model, const std::string& jobName)
+{
+    psoptLib(model);
+    return addJobFromFile(model + ".gms", jobName);
+}
+
+GAMSJob GAMSWorkspace::addJobFromPsoptLib(const std::string& model, const GAMSCheckpoint& checkpoint, const std::string& jobName)
+{
+    psoptLib(model);
+    return addJobFromFile(model + ".gms", checkpoint, jobName);
+}
+
 string GAMSWorkspace::optFileExtension(int optfile)
 {
     return mImpl->optFileExtension(optfile);
@@ -331,6 +343,11 @@ void GAMSWorkspace::finLib(string model)
 void GAMSWorkspace::noaLib(string model)
 {
     mImpl->xxxLib("noa", model);
+}
+
+void GAMSWorkspace::psoptLib(string model)
+{
+    mImpl->xxxLib("psopt", model);
 }
 
 string GAMSWorkspace::systemDirectory() const
