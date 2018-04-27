@@ -835,28 +835,28 @@ void TestGAMSWorkspace::testAddJobFromNoaLibrary() {
     }
 }
 
-void TestGAMSWorkspace::testAddJobFromPsoptLibrary_data() {
-    QTest::addColumn<QString>("modname");
-    QTest::addColumn<bool>("valid");
+//void TestGAMSWorkspace::testAddJobFromPsoptLibrary_data() {
+//    QTest::addColumn<QString>("modname");
+//    QTest::addColumn<bool>("valid");
 
-    // TODO(AF) add test data
-}
+//    // TODO(AF) add test data
+//}
+// TODO(AF) PsoptLibrary lib
+//void TestGAMSWorkspace::testAddJobFromPsoptLibrary() {
+//    // given
+//    QFETCH(QString, modname);
+//    QFETCH(bool, valid);
 
-void TestGAMSWorkspace::testAddJobFromPsoptLibrary() {
-    // given
-    QFETCH(QString, modname);
-    QFETCH(bool, valid);
-
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
-    GAMSWorkspace ws(wsInfo);
-    // when, then
-    if (valid) {
-        GAMSJob job = ws.addJobFromPsoptLib(modname.toStdString());
-        TestGAMSObject::testJobBeforeRun(job, ws);
-    } else {
-        QVERIFY_EXCEPTION_THROWN(ws.addJobFromPsoptLib(modname.toStdString()), GAMSException);
-    }
-}
+//    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+//    GAMSWorkspace ws(wsInfo);
+//    // when, then
+//    if (valid) {
+//        GAMSJob job = ws.addJobFromPsoptLib(modname.toStdString());
+//        TestGAMSObject::testJobBeforeRun(job, ws);
+//    } else {
+//        QVERIFY_EXCEPTION_THROWN(ws.addJobFromPsoptLib(modname.toStdString()), GAMSException);
+//    }
+//}
 
 void TestGAMSWorkspace::testAddJobFromLibrary_Checkpoint_data() {
     TestGAMSObject::getTestData_ModelLibraries();
