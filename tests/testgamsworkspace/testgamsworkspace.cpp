@@ -835,6 +835,30 @@ void TestGAMSWorkspace::testAddJobFromNoaLibrary() {
     }
 }
 
+void TestGAMSWorkspace::testAddJobFromPsoptLibrary_data() {
+    QTest::addColumn<QString>("modname");
+    QTest::addColumn<bool>("valid");
+
+    QTest::newRow("SimpleLP")        << "SimpleLP"   << true;
+    QTest::newRow("Invalid_psoptlib") << "ThisIsAnUnusualModelName" << false;
+}
+
+void TestGAMSWorkspace::testAddJobFromPsoptLibrary() {
+    // given
+    QFETCH(QString, modname);
+    QFETCH(bool, valid);
+
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspace ws(wsInfo);
+    // when, then
+    if (valid) {
+        GAMSJob job = ws.addJobFromPsoptLib(modname.toStdString());
+        TestGAMSObject::testJobBeforeRun(job, ws);
+    } else {
+        QVERIFY_EXCEPTION_THROWN(ws.addJobFromPsoptLib(modname.toStdString()), GAMSException);
+    }
+}
+
 void TestGAMSWorkspace::testAddJobFromLibrary_Checkpoint_data() {
     TestGAMSObject::getTestData_ModelLibraries();
 }

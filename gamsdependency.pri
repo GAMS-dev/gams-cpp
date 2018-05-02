@@ -23,20 +23,21 @@
 # SOFTWARE.
 #
 
+include (version)
 # GAMS_CORE_PATH is Jenkins build switch
 GAMS_CORE_TMP = $$(GAMS_CORE_PATH)
 !exists($$PWD/gamsinclude.pri) {
     equals(GAMS_CORE_TMP, "") {
         macx {
-            GAMSINC = GAMS_DISTRIB=/Applications/GAMS25.1/sysdir \
+            GAMSINC = GAMS_DISTRIB=/Applications/GAMS'$$GAMS_DISTRIB_MAJOR'.'$$GAMS_DISTRIB_MINOR'/sysdir \
                       GAMS_DISTRIB_API=\$$GAMS_DISTRIB/apifiles/C/api
         }
         unix:!macx {
-            GAMSINC = GAMS_DISTRIB=$$(HOME)/gams/gams25.1_linux_x64_64_sfx \
+            GAMSINC = GAMS_DISTRIB=$$(HOME)/gams/gams'$$GAMS_DISTRIB_MAJOR'.'$$GAMS_DISTRIB_MINOR'_linux_x64_64_sfx \
                       GAMS_DISTRIB_API=\$$GAMS_DISTRIB/apifiles/C/api
         }
         win32 {
-            GAMSINC = GAMS_DISTRIB=C:/GAMS/win64/25.1 \
+            GAMSINC = GAMS_DISTRIB=C:/GAMS/win64/'$$GAMS_DISTRIB_MAJOR'.'$$GAMS_DISTRIB_MINOR' \
                       GAMS_DISTRIB_API=\$$GAMS_DISTRIB/apifiles/C/api
         }
         write_file($$PWD/gamsinclude.pri,GAMSINC)
@@ -51,7 +52,7 @@ exists($$PWD/gamsinclude.pri) {
     include($$PWD/gamsinclude.pri)
 }
 
-# GAMS_BULD is GAMS distrib build switch
+# GAMS_BUILD is GAMS distrib build switch
 GAMS_BUILD_ENV = $$(GAMS_BUILD)
 equals(GAMS_BUILD_ENV, "") {
     INCLUDEPATH += $$GAMS_DISTRIB_API

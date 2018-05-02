@@ -89,6 +89,8 @@ class TestGAMSWorkspace: public TestGAMSObject
     void testAddJobFromFinLibrary();
     void testAddJobFromNoaLibrary_data();
     void testAddJobFromNoaLibrary();
+    void testAddJobFromPsoptLibrary_data();
+    void testAddJobFromPsoptLibrary();
     void testAddJobFromTestLibrary_data();
     void testAddJobFromTestLibrary();
     void testAddJobFromLibrary_Checkpoint_data();

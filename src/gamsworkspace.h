@@ -27,7 +27,6 @@
 #define GAMSWORKSPACE_H
 
 #include "gamslib_global.h"
-#include <string>
 #include <memory>
 #include "gamsenum.h"
 #include "gamsworkspaceinfo.h"
@@ -343,6 +342,19 @@ public:
     /// \returns Returns the GAMSJob.
     GAMSJob addJobFromNoaLib(const std::string& model, const GAMSCheckpoint& checkpoint, const std::string& jobName = "");
 
+    /// Create GAMSJob from GAMS Power System Optimization Modelling Library.
+    /// \param model Model name.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
+    GAMSJob addJobFromPsoptLib(const std::string& model, const std::string& jobName = "");
+
+    /// Create GAMSJob from GAMS Power System Optimization Modelling Library.
+    /// \param model Model name.
+    /// \param checkpoint GAMSCheckpoint to initialize GAMSJob from.
+    /// \param jobName Job name (determined automatically if omitted).
+    /// \returns Returns the GAMSJob.
+    GAMSJob addJobFromPsoptLib(const std::string& model, const GAMSCheckpoint& checkpoint, const std::string& jobName = "");
+
     /// Create a default GAMSOptions instance.
     /// \returns Returns default GAMSOptions.
     /// \throws  GAMSException   If GAMSOptions could not be successfully created.
@@ -387,6 +399,10 @@ public:
     /// Retrieves model from Nonlinear Optimization Applications Library.
     /// \param model Model name.
     void noaLib(std::string model);
+
+    /// Retrieves model from Power System Optimization Modelling Library.
+    /// \param model Model name.
+    void psoptLib(std::string model);
 
     /// Get GAMS working directory, anchor for all file-based operations.
     /// \returns GAMS working directory.
