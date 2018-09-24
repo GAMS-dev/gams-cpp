@@ -35,7 +35,6 @@ include(../gamsdependency.pri)
 CONFIG += skip_target_version_ext console c++11 plugin
 CONFIG -= app_bundle
 
-include (../version)
 DEFINES += API_VERSION=\\\"$$VERSION\\\"
 
 DEFINES += GAMS_CPP_LIB MAKELIB
