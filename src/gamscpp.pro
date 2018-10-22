@@ -164,4 +164,7 @@ HEADERS += \
     gamsoptionsimpl.h
 
 
-OTHER_FILES += gamscpp.qmodel coreclasses.qmodel
+OTHER_FILES +=  \
+    gamscpp.qmodel  \
+    coreclasses.qmodel  \
+    ../jenkinsfile
