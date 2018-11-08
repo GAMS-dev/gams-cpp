@@ -32,7 +32,7 @@ TARGET = gamscpp
 
 include(../gamsdependency.pri)
 
-CONFIG += skip_target_version_ext console c++11 plugin
+CONFIG += skip_target_version_ext console c++14 plugin
 CONFIG -= app_bundle
 
 DEFINES += API_VERSION=\\\"$$VERSION\\\"
