@@ -139,7 +139,7 @@ void solveWarehouse(GAMSWorkspace* ws, int numberOfWarehouses, GAMSDatabase* res
             }
         }
     }
-    catch(GAMSExceptionExecution e)
+    catch(GAMSExceptionExecution& e)
     {
         if(e.rc() == GAMSEnum::ExecutionError)
         {
@@ -151,13 +151,13 @@ void solveWarehouse(GAMSWorkspace* ws, int numberOfWarehouses, GAMSDatabase* res
             status = e.rc();
         }
     }
-    catch (GAMSException e)
+    catch (GAMSException& e)
     {
         cout << e.what() << endl;
         lock_guard<mutex> dbLock(*dbMutex);
         status = -1;
     }
-    catch (exception e)
+    catch (exception& e)
     {
         cout << e.what() << endl;
         lock_guard<mutex> dbLock(*dbMutex);
