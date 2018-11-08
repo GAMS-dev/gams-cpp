@@ -32,6 +32,13 @@ TARGET = gamscpp
 
 include(../gamsdependency.pri)
 
+# Do not search GAMS via the Widnows resgistry. This causes
+# trouble if multible GAMS versions are used in parallel.
+NO_WINDOWS_REGISTRY = $$(NO_WINDOWS_REGISTRY)
+equals(NO_WINDOWS_REGISTRY, "1") {
+    DEFINES += NO_WINDOWS_REGISTRY
+}
+
 CONFIG += skip_target_version_ext console c++14 plugin
 CONFIG -= app_bundle
 
