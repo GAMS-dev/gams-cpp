@@ -97,25 +97,25 @@ void TestGAMSSymbolIter::testConstructor_InvalidPosition() {
     GAMSSymbolIter<GAMSSet> it_i(i, 1);
     try {
         GAMSSymbolIter<GAMSSet> it_i(i, i.numberRecords()+1);
-    } catch(GAMSException e) { QVERIFY(true); }
+    } catch(GAMSException&) { QVERIFY(true); }
 
     GAMSParameter b = db.getParameter("b");
     GAMSSymbolIter<GAMSParameter> it_b(b, 1);
     try {
         GAMSSymbolIter<GAMSParameter> it_b(b, b.numberRecords()+1);
-    } catch(GAMSException e) { QVERIFY(true); }
+    } catch(GAMSException&) { QVERIFY(true); }
 
     GAMSEquation supply = db.getEquation("supply");
     GAMSSymbolIter<GAMSEquation> it_supply(supply, 1);
     try {
         GAMSSymbolIter<GAMSEquation> it_supply(supply, supply.numberRecords()+1);
-    } catch(GAMSException e) { QVERIFY(true); }
+    } catch(GAMSException&) { QVERIFY(true); }
 
     GAMSVariable x = db.getVariable("x");
     GAMSSymbolIter<GAMSVariable> it_x(x, 1);
     try {
         GAMSSymbolIter<GAMSVariable> it_x(x, x.numberRecords()+1);
-    } catch(GAMSException e) { QVERIFY(true); }
+    } catch(GAMSException&) { QVERIFY(true); }
 }
 
 void TestGAMSSymbolIter::testConstructor_InvalidSymbol() {
@@ -125,7 +125,7 @@ void TestGAMSSymbolIter::testConstructor_InvalidSymbol() {
     QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSSet> it(set, 100), GAMSException);
     try {
         for(GAMSSetRecord rec : set) { QFAIL("Invalid GAMSSet contains no record!");  }
-    } catch(GAMSException e) { QVERIFY(true); }
+    } catch(GAMSException&) { QVERIFY(true); }
 
     GAMSParameter par;
     QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSParameter> it(par, 0), GAMSException);
@@ -133,7 +133,7 @@ void TestGAMSSymbolIter::testConstructor_InvalidSymbol() {
     QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSParameter> it(par, 100), GAMSException);
     try {
         for(GAMSParameterRecord rec : par) { QFAIL("Invalid GAMSParameter contains no record!");  }
-    } catch(GAMSException e) { QVERIFY(true); }
+    } catch(GAMSException&) { QVERIFY(true); }
 
     GAMSEquation eq;
     QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSEquation> it(eq, 0), GAMSException);
@@ -141,7 +141,7 @@ void TestGAMSSymbolIter::testConstructor_InvalidSymbol() {
     QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSEquation> it(eq, 100), GAMSException);
     try {
         for(GAMSEquationRecord rec : eq) { QFAIL("Invalid GAMSEquation contains no record!");  }
-    } catch(GAMSException e) { QVERIFY(true); }
+    } catch(GAMSException&) { QVERIFY(true); }
 
     GAMSVariable var;
     QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSVariable> it(var, 0), GAMSException);
@@ -149,7 +149,7 @@ void TestGAMSSymbolIter::testConstructor_InvalidSymbol() {
     QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSVariable> it(var, 100), GAMSException);
     try {
         for(GAMSVariableRecord rec : var) { QFAIL("Invalid GAMSVariable contains no record!");  }
-    } catch(GAMSException e) { QVERIFY(true); }
+    } catch(GAMSException&) { QVERIFY(true); }
 
 }
 

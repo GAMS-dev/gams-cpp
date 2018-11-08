@@ -307,7 +307,7 @@ void TestGAMSWorkspace::testAddDatabaseFromGDX1() {
           QCOMPARE( db.getNrSymbols(), 2 );
           QCOMPARE( db.getParameter("demand").numberRecords(), 3) ;
           QCOMPARE( db.getSet("markets").numberRecords(), 3);
-       } catch(GAMSException e) {
+       } catch(GAMSException& e) {
           qDebug() << QString::fromStdString( ws.workingDirectory() );
           QFAIL(qPrintable( "Unexpected GAMSException raised by: "+ QString::fromStdString(e.what()) ));
        }
@@ -340,7 +340,7 @@ void TestGAMSWorkspace::testAddDatabaseFromGDX2() {
        GAMSDatabase db = ws.addDatabaseFromGDX(gdxfilename.toStdString(), QTest::currentDataTag() );
        QCOMPARE( db.name().c_str(),  QTest::currentDataTag() );
        QCOMPARE( db.getNrSymbols(), numberOfSymbols );
-    } catch(GAMSException e) {
+    } catch(GAMSException& e) {
        qDebug() << qPrintable("error adding db from ["+ gdxfilename + "] at ["+  QString::fromStdString( ws.workingDirectory() )+"].");
        QFAIL(qPrintable( "Unexpected GAMSException thrown: "+ QString::fromStdString(e.what()) ));
     }
@@ -371,7 +371,7 @@ void TestGAMSWorkspace::testAddDatabaseFromGDX3() {
        QCOMPARE( db.name().c_str(),  QTest::currentDataTag() );
        // @todo QCOMPARE( db.inModelName(), inModelName );
        QCOMPARE( db.getNrSymbols(), numberOfSymbols );
-    } catch(GAMSException e) {
+    } catch(GAMSException& e) {
        qDebug() << qPrintable("error adding db from ["+ gdxfilename + "] at ["+  QString::fromStdString( ws.workingDirectory() )+"].");
        QFAIL(qPrintable( "Unexpected GAMSException thrown: "+ QString::fromStdString(e.what()) ));
     }
@@ -950,7 +950,7 @@ void TestGAMSWorkspace::testAddOptions() {
     try {
         // when
        GAMSOptions opt = ws.addOptions();
-    } catch(GAMSException )  {
+    } catch(GAMSException& )  {
        QFAIL("Do not expect a GAMSException to be thrown");
     }
 }
@@ -964,7 +964,7 @@ void TestGAMSWorkspace::testAddOptions_OptFrom() {
        opt1.setDefine("gdxincname", "tdata");
        opt1.setDefine("useBig", "1");
        GAMSOptions opt2 = ws.addOptions(opt1);
-    } catch(GAMSException e)  {
+    } catch(GAMSException&)  {
        QFAIL("Do not expect a GAMSException to be thrown");
     }
 }
@@ -1018,7 +1018,7 @@ void TestGAMSWorkspace::testAddOptions_OptFile() {
            QCOMPARE( opt.iterLim(), 1 );
            QCOMPARE( opt.limCol(), 4 );
            QCOMPARE( opt.limRow(), 5 );
-        } catch(GAMSException e) {
+        } catch(GAMSException& e) {
             QFAIL( qPrintable("AddOptions from existing optfile should not fail: "+QString::fromStdString(e.what())) );
         }
     } else {
