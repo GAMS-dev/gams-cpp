@@ -28,6 +28,8 @@
 #endif
 
 #include "gamsplatform.h"
+#include <QDir>
+#include <QStandardPaths>
 #include <QStringList>
 #include <QSettings>
 #include <QProcess>
@@ -213,6 +215,10 @@ void GAMSPlatform::ensureEnvPathSetOnApple(const char *dirName)
 
 std::string GAMSPlatform::findGamsOnWindows(LogId logId)
 {
+#ifdef NO_WINDOWS_REGISTRY
+    QString gamsPath = QFileInfo(QStandardPaths::findExecutable("gams")).absolutePath();
+    return QDir::cleanPath(gamsPath).toStdString();
+#else
     QString firstFound("");
     QStringList locations;
     locations << "HKEY_CURRENT_USER\\" << "HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\";
@@ -237,6 +243,8 @@ std::string GAMSPlatform::findGamsOnWindows(LogId logId)
         }
     }
     return firstFound.toStdString();
+
+#endif
 }
 
 void GAMSPlatform::ensureEnvPathSetOnWindows(const char *dirName)

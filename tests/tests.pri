@@ -22,13 +22,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-CONFIG += console c++11
+CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG += test
 DESTDIR = ../bin
 
 QT += testlib
 QT -= gui
+
+include(../gamsdependency.pri)
 
 unix : LIBS += -ldl -L../../bin -lgamscpp
 win32: LIBS += -L../../bin/ -lgamscpp

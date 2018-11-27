@@ -28,7 +28,6 @@ DESTDIR = ../bin
 TEST = $$PWD/..
 DEP = $$TEST/../dep
 
-include(../../gamsdependency.pri)
 include(../tests.pri)
 
 HEADERS += \

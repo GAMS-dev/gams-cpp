@@ -187,7 +187,7 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     GAMSPath pfFileName = jobFileInfo.suffix(".pf");
     try {
         tmpOpt.writeOptionFile(pfFileName);
-    } catch (GAMSException e) {
+    } catch (GAMSException& e) {
         throw GAMSException(e.what() + (" for GAMSJob " + mJobName));
     }
 

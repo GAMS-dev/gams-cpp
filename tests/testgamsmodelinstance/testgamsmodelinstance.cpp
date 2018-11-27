@@ -149,7 +149,7 @@ void TestGAMSModelInstance::testInstantiate()  {
        mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));
        bmult.addRecord().setValue( modifier );
        mi.solve();
-    } catch(GAMSException) { QVERIFY(false); }
+    } catch(GAMSException&) { QVERIFY(false); }
 }
 
 void TestGAMSModelInstance::testInstantiateBeforeInitializingCP()  {

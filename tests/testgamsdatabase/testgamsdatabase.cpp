@@ -614,7 +614,7 @@ void TestGAMSDatabase::testAddEquation() {
         QCOMPARE(equation.dim(), 1);
         QCOMPARE(equation.equType(), GAMSEnum::EquType::L);
         QCOMPARE(equation.text().c_str(), "observe supply limit at plant i");
-    } catch(GAMSException e) {
+    } catch(GAMSException& e) {
         QFAIL(qPrintable( "Unexpected GAMSException raised by: "+ QString::fromStdString(e.what()) ));
     }
 }
@@ -631,7 +631,7 @@ void TestGAMSDatabase::testGetEquation() {
     try {
         auto getEquation = db.getEquation("s");
         QCOMPARE(initEquation, getEquation);
-    } catch(GAMSException e) {
+    } catch(GAMSException& e) {
         QFAIL(qPrintable( "Unexpected GAMSException raised by: "+ QString::fromStdString(e.what()) ));
     }
 }
@@ -722,7 +722,7 @@ void TestGAMSDatabase::testIterator() {
     // cleanup
     try {
         db.clear();
-    } catch(GAMSException e) {
+    } catch(GAMSException&) {
         QFAIL("Do not expect exception when clearing database");
     }
 }

@@ -103,7 +103,7 @@ GAMSModelInstanceImpl::GAMSModelInstanceImpl(std::shared_ptr<GAMSModelInstanceIm
             else
                 throw GAMSException("Unexpected Symbol as Modifier");
             mModifiers.push_back(*gmp);
-        } catch (std::runtime_error e) {
+        } catch (std::runtime_error& e) {
             cout << "error: " << e.what();
         }
     }

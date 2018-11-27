@@ -187,7 +187,7 @@ void GUSSCall(GAMSSet dict, GAMSModelInstance mi, string solveStatement
 
             try {
                 rec = pscen.firstRecord(filter);
-            } catch (GAMSException) {
+            } catch (GAMSException&) {
                 continue;
             }
 
