@@ -42,8 +42,6 @@ equals(NO_WINDOWS_REGISTRY, "1") {
 CONFIG += skip_target_version_ext console c++14 plugin
 CONFIG -= app_bundle
 
-DEFINES += API_VERSION=\\\"$$VERSION\\\"
-
 DEFINES += GAMS_CPP_LIB MAKELIB
 
 DEFINES -= UNICODE
@@ -171,7 +169,8 @@ HEADERS += \
     gamsoptionsimpl.h
 
 
-OTHER_FILES +=  \
-    gamscpp.qmodel  \
+OTHER_FILES +=          \
+    gamscpp.qmodel      \
     coreclasses.qmodel  \
-    ../jenkinsfile
+    ../jenkinsfile      \
+    ../version
