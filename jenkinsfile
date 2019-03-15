@@ -20,7 +20,7 @@ pipeline {
                     }
                     post {
                         always {
-                            recordIssues enabledForFailure: true, tools: [gcc4(reportEncoding: 'UTF-8')]
+                            recordIssues aggregatingResults: true, enabledForFailure: true, tools: [gcc4(reportEncoding: 'UTF-8')]
                         }
                     }
                 }
@@ -77,7 +77,7 @@ pipeline {
                     }
                     post {
                         always {
-                            recordIssues enabledForFailure: true, tools: [clang(reportEncoding: 'UTF-8')]
+                            recordIssues aggregatingResults: true, enabledForFailure: true, tools: [clang(reportEncoding: 'UTF-8')]
                         }
                     }
                 }
