@@ -17,7 +17,11 @@ pipeline {
                         sh '''
                             qmake gams-cpp.pro && make -j4
                         '''
-                        warnings canComputeNew: false, canResolveRelativePaths: false, categoriesPattern: '', consoleParsers: [[parserName: 'GNU Make + GNU C Compiler (gcc)']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: ''
+                    }
+                    post {
+                        always {
+                            recordIssues enabledForFailure: true, tools: [gcc4(reportEncoding: 'UTF-8')]
+                        }
                     }
                 }
                 stage ('windowsX86') {
@@ -35,7 +39,11 @@ pipeline {
                             qmake gams-cpp.pro "CONFIG+=release"
                             nmake
                         '''
-                        warnings canComputeNew: false, canResolveRelativePaths: false, categoriesPattern: '', consoleParsers: [[parserName: 'GNU Make + GNU C Compiler (gcc)']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: ''
+                    }
+                    post {
+                        always {
+                            recordIssues enabledForFailure: true, tools: [msBuild(reportEncoding: 'UTF-8')]
+                        }
                     }
                 }
                 stage ('windowsX64') {
@@ -53,7 +61,11 @@ pipeline {
                             qmake gams-cpp.pro "CONFIG+=release"
                             nmake
                         '''
-                        warnings canComputeNew: false, canResolveRelativePaths: false, categoriesPattern: '', consoleParsers: [[parserName: 'MSBuild']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: ''
+                    }
+                    post {
+                        always {
+                            recordIssues enabledForFailure: true, tools: [msBuild(reportEncoding: 'UTF-8')]
+                        }
                     }
                 }
                 stage ('macos') {
@@ -62,7 +74,11 @@ pipeline {
                         step([$class: 'WsCleanup'])
                         checkout scm
                         sh 'qmake gams-cpp.pro && make -j4'
-                        warnings canComputeNew: false, canResolveRelativePaths: false, categoriesPattern: '', consoleParsers: [[parserName: 'Clang (LLVM based)']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: ''
+                    }
+                    post {
+                        always {
+                            recordIssues enabledForFailure: true, tools: [clang(reportEncoding: 'UTF-8')]
+                        }
                     }
                 }
             }
