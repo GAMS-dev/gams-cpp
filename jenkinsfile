@@ -20,7 +20,7 @@ pipeline {
                     }
                     post {
                         always {
-                            recordIssues enabledForFailure: true, tools: [gcc4(reportEncoding: 'UTF-8')]
+                            recordIssues aggregatingResults: true, enabledForFailure: true, tools: [gcc4(reportEncoding: 'UTF-8')]
                         }
                     }
                 }
@@ -42,7 +42,7 @@ pipeline {
                     }
                     post {
                         always {
-                            recordIssues enabledForFailure: true, tools: [msBuild(reportEncoding: 'UTF-8')]
+                            recordIssues aggregatingResults: true, enabledForFailure: true, tools: [msBuild(id: 'windowsX86', name: 'MSBuild-x86', reportEncoding: 'UTF-8')]
                         }
                     }
                 }
@@ -64,7 +64,7 @@ pipeline {
                     }
                     post {
                         always {
-                            recordIssues enabledForFailure: true, tools: [msBuild(reportEncoding: 'UTF-8')]
+                            recordIssues aggregatingResults: true, enabledForFailure: true, tools: [msBuild(id: 'windowsX64', name: 'MSBuild-x64', reportEncoding: 'UTF-8')]
                         }
                     }
                 }
@@ -77,7 +77,7 @@ pipeline {
                     }
                     post {
                         always {
-                            recordIssues enabledForFailure: true, tools: [clang(reportEncoding: 'UTF-8')]
+                            recordIssues aggregatingResults: true, enabledForFailure: true, tools: [clang(reportEncoding: 'UTF-8')]
                         }
                     }
                 }
