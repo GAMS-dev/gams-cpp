@@ -538,6 +538,16 @@ public:
             On = 1                                             ///< Write LST title completely left aligned
         };
     };
+    /// Free external resources at the end of each embedded Python code blocks
+    struct EFreeEmbeddedPython
+    {
+        /// Free external resources at the end of each embedded Python code blocks
+        enum EFreeEmbeddedPythonEnum
+        {
+            Off = 0,                                           ///< Keep resources to reuse them potentially
+            On = 1                                             ///< Free resources
+        };
+    };
 
     /// Destructor
     ~GAMSOptions();
@@ -1262,6 +1272,12 @@ public:
 
     /// Set Write title of LST file all left aligned
     void setLstTitleLeftAligned(const GAMSOptions::ELstTitleLeftAligned::ELstTitleLeftAlignedEnum value);
+
+    /// Get Free external resources at the end of each embedded Python code blocks
+    GAMSOptions::EFreeEmbeddedPython::EFreeEmbeddedPythonEnum freeEmbeddedPython();
+
+    /// Set Free external resources at the end of each embedded Python code blocks
+    void setFreeEmbeddedPython(const GAMSOptions::EFreeEmbeddedPython::EFreeEmbeddedPythonEnum value);
 
     /// Get default LP solver
     std::string LP();
