@@ -1748,6 +1748,16 @@ void GAMSOptions::setLstTitleLeftAligned(const GAMSOptions::ELstTitleLeftAligned
    mImpl->setLstTitleLeftAligned(static_cast<int>(value));
 }
 
+GAMSOptions::EFreeEmbeddedPython::EFreeEmbeddedPythonEnum GAMSOptions::freeEmbeddedPython()
+{
+    return static_cast<GAMSOptions::EFreeEmbeddedPython::EFreeEmbeddedPythonEnum> (mImpl->freeEmbeddedPython());
+}
+
+void GAMSOptions::setFreeEmbeddedPython(const GAMSOptions::EFreeEmbeddedPython::EFreeEmbeddedPythonEnum value)
+{
+   mImpl->setFreeEmbeddedPython(static_cast<int>(value));
+}
+
 std::string GAMSOptions::LP()
 {
     return mImpl->LP();

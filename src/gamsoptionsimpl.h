@@ -532,6 +532,9 @@ public:
     int lstTitleLeftAligned();
     void setLstTitleLeftAligned(const int value);
 
+    int freeEmbeddedPython();
+    void setFreeEmbeddedPython(const int value);
+
     std::string LP();
     void setLP(const std::string& value);
 

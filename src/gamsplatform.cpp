@@ -216,6 +216,7 @@ void GAMSPlatform::ensureEnvPathSetOnApple(const char *dirName)
 std::string GAMSPlatform::findGamsOnWindows(LogId logId)
 {
 #ifdef NO_WINDOWS_REGISTRY
+    Q_UNUSED(logId)
     QString gamsPath = QFileInfo(QStandardPaths::findExecutable("gams")).absolutePath();
     return QDir::cleanPath(gamsPath).toStdString();
 #else

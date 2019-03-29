@@ -109,7 +109,9 @@ int main(int argc, char* argv[])
 
         cout << "Content of GDX file 'data.gdx':";
         string command = "gdxdump " + ws.workingDirectory() + cPathSep + "data.gdx";
-        system(command.c_str());
+        int ret = system(command.c_str());
+        if (ret)
+            cerr << "system(" << command.c_str() << ") returned " << ret << endl;
 
         // add a new GAMSDatabase and initialize it from the GDX file just created
         GAMSDatabase db2 = ws.addDatabaseFromGDX("data.gdx");

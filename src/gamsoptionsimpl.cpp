@@ -41,7 +41,7 @@ const char* GAMSOptionsImpl::cGamsBuild = __DATE__ " " __TIME__;
 #if LOCAL_BUILD
 const char* GAMSOptionsImpl::cGamsVersion = "0.0.0";
 #else
-const char* GAMSOptionsImpl::cGamsVersion = "25.2.0";
+const char* GAMSOptionsImpl::cGamsVersion = "27.0.0";
 #endif
 
 GAMSOptionsImpl::GAMSOptionsImpl(GAMSWorkspace& workspace, GAMSOptionsImpl* optFrom)
@@ -1781,6 +1781,16 @@ int GAMSOptionsImpl::lstTitleLeftAligned()
 void GAMSOptionsImpl::setLstTitleLeftAligned(const int value)
 {
     optSetIntStr(mOPT, "LstTitleLeftAligned", value);
+}
+
+int GAMSOptionsImpl::freeEmbeddedPython()
+{
+    return optGetIntStr(mOPT, "FreeEmbeddedPython");
+}
+
+void GAMSOptionsImpl::setFreeEmbeddedPython(const int value)
+{
+    optSetIntStr(mOPT, "FreeEmbeddedPython", value);
 }
 
 std::string GAMSOptionsImpl::LP()

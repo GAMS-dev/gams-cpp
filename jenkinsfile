@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent none
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '5'))
@@ -8,36 +8,47 @@ pipeline {
 
     stages {
         stage('Build') {
-            steps {
-                parallel linux: {
-                    node('master') {
+            parallel {
+                stage ('linux') {
+                    agent { label 'master' }
+                    steps {
                         step([$class: 'WsCleanup'])
                         checkout scm
                         sh '''
                             qmake gams-cpp.pro && make -j4
                         '''
-                        warnings canComputeNew: false, canResolveRelativePaths: false, categoriesPattern: '', consoleParsers: [[parserName: 'GNU Make + GNU C Compiler (gcc)']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: ''
                     }
-                },
-                windowsX86: {
-                    node('windowsX86') {
+                    post {
+                        always {
+                            recordIssues aggregatingResults: true, enabledForFailure: true, tools: [gcc4(reportEncoding: 'UTF-8')]
+                        }
+                    }
+                }
+                stage ('windowsX86') {
+                    agent { label 'windowsX86' }
+                    steps {
                         step([$class: 'WsCleanup'])
                         checkout scm
                         bat '''
                             @echo off
                             echo Setting up environment for VS 2015 usage...
-                            cd "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\bin"
+                            cd "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\VC\\Auxiliary\\Build"
                             call vcvars32.bat
                             set
                             cd %WORKSPACE%
                             qmake gams-cpp.pro "CONFIG+=release"
                             nmake
                         '''
-                        warnings canComputeNew: false, canResolveRelativePaths: false, categoriesPattern: '', consoleParsers: [[parserName: 'GNU Make + GNU C Compiler (gcc)']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: ''
                     }
-                },
-                windowsX64: {
-                    node('windowsX64') {
+                    post {
+                        always {
+                            recordIssues aggregatingResults: true, enabledForFailure: true, tools: [msBuild(id: 'windowsX86', name: 'MSBuild-x86', reportEncoding: 'UTF-8')]
+                        }
+                    }
+                }
+                stage ('windowsX64') {
+                    agent { label 'windowsX64' }
+                    steps {
                         step([$class: 'WsCleanup'])
                         checkout scm
                         bat '''
@@ -50,23 +61,33 @@ pipeline {
                             qmake gams-cpp.pro "CONFIG+=release"
                             nmake
                         '''
-                        warnings canComputeNew: false, canResolveRelativePaths: false, categoriesPattern: '', consoleParsers: [[parserName: 'MSBuild']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: ''
                     }
-                },
-                macos: {
-                    node('macos') {
+                    post {
+                        always {
+                            recordIssues aggregatingResults: true, enabledForFailure: true, tools: [msBuild(id: 'windowsX64', name: 'MSBuild-x64', reportEncoding: 'UTF-8')]
+                        }
+                    }
+                }
+                stage ('macos') {
+                    agent { label 'macos' }
+                    steps {
                         step([$class: 'WsCleanup'])
                         checkout scm
                         sh 'qmake gams-cpp.pro && make -j4'
-                        warnings canComputeNew: false, canResolveRelativePaths: false, categoriesPattern: '', consoleParsers: [[parserName: 'Clang (LLVM based)']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: ''
+                    }
+                    post {
+                        always {
+                            recordIssues aggregatingResults: true, enabledForFailure: true, tools: [clang(reportEncoding: 'UTF-8')]
+                        }
                     }
                 }
             }
         }
         stage('Test') {
-            steps {
-                parallel linux: {
-                    node('master') {
+            parallel {
+                stage ('linux') {
+                    agent { label 'master' }
+                    steps {
                         sh '''
                             mkdir reports
                             export LD_LIBRARY_PATH=$WORKSPACE/bin:$LD_LIBRARY_PATH
@@ -75,34 +96,48 @@ pipeline {
                                 ./$f -xunitxml -o $WORKSPACE/reports/$f.xml
                             done
                         '''
-                        junit allowEmptyResults: true, testResults: 'reports/*.xml'
                     }
-                },
-                windowsX86: {
-                    node('windowsX86') {
-                        bat '''
-                            echo off
-                            mkdir reports
-                            set PATH=%WORKSPACE%/bin;%PATH%
-                            cd tests/bin
-                            for %%f in (*) do %%f -xunitxml -o %WORKSPACE%/reports/%%f.xml
-                        '''
-                        junit allowEmptyResults: true, testResults: 'reports/*.xml'
+                    post {
+                        always {
+                            junit allowEmptyResults: true, testResults: 'reports/*.xml'
+                        }
                     }
-                },
-                windowsX64: {
-                    node('windowsX64') {
+                }
+                stage ('windowsX86') {
+                    agent { label 'windowsX86' }
+                    steps {
                         bat '''
                             mkdir reports
                             set PATH=%WORKSPACE%/bin;%PATH%
                             cd tests/bin
                             for %%f in (*) do %%f -xunitxml -o %WORKSPACE%/reports/%%f.xml
                         '''
-                        junit allowEmptyResults: true, testResults: 'reports/*.xml'
                     }
-                },
-                macos: {
-                    node('macos') {
+                    post {
+                        always {
+                            junit allowEmptyResults: true, testResults: 'reports/*.xml'
+                        }
+                    }
+                }
+                stage ('windowsX64') {
+                    agent { label 'windowsX64' }
+                    steps {
+                        bat '''
+                            mkdir reports
+                            set PATH=%WORKSPACE%/bin;%PATH%
+                            cd tests/bin
+                            for %%f in (*) do %%f -xunitxml -o %WORKSPACE%/reports/%%f.xml
+                        '''
+                    }
+                    post {
+                        always {
+                            junit allowEmptyResults: true, testResults: 'reports/*.xml'
+                        }
+                    }
+                }
+                stage ('macos') {
+                    agent { label 'macos' }
+                    steps {
                         sh '''
                             mkdir reports
                             export DYLD_LIBRARY_PATH=$WORKSPACE/bin:$DYLD_LIBRARY_PATH
@@ -111,7 +146,11 @@ pipeline {
                                 ./$f -xunitxml -o $WORKSPACE/reports/$f.xml
                             done
                         '''
-                        junit allowEmptyResults: true, testResults: 'reports/*.xml'
+                    }
+                    post {
+                        always {
+                            junit allowEmptyResults: true, testResults: 'reports/*.xml'
+                        }
                     }
                 }
             }
