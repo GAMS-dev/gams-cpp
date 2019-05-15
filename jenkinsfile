@@ -2,7 +2,7 @@ pipeline {
     agent none
 
     options {
-        buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '5'))
+        parallelsAlwaysFailFast()
         disableConcurrentBuilds()
     }
 
@@ -21,6 +21,7 @@ pipeline {
                     post {
                         always {
                             recordIssues aggregatingResults: true, enabledForFailure: true, tools: [gcc4(reportEncoding: 'UTF-8')]
+                            recordIssues enabledForFailure: true, tools: [taskScanner(ignoreCase: true, includePattern: '**/*.c, **/*.cpp, **/*.h, **/*.pro, **/*.pri', normalTags: 'TODO')]
                         }
                     }
                 }
@@ -31,7 +32,7 @@ pipeline {
                         checkout scm
                         bat '''
                             @echo off
-                            echo Setting up environment for VS 2015 usage...
+                            echo Setting up environment for VS 2017 usage...
                             cd "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\VC\\Auxiliary\\Build"
                             call vcvars32.bat
                             set
@@ -53,7 +54,7 @@ pipeline {
                         checkout scm
                         bat '''
                             @echo off
-                            echo Setting up environment for VS2014 usage...
+                            echo Setting up environment for VS2017 usage...
                             cd "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Auxiliary\\Build"
                             call vcvars64.bat
                             set
