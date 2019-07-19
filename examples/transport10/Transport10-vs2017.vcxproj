@@ -84,11 +84,11 @@
       <AdditionalIncludeDirectories>$(ProjectDir)..\api;$(Qt32)include;$(Qt32)include\ActiveQt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\lib\vs2015;$(Qt32)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib\vs2017;$(Qt32)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>gamscpp.lib;$(Qt32)lib\Qt5Cored.lib;$(Qt32)lib\Qt5Guid.lib;$(Qt32)lib\Qt5Widgetsd.lib;$(Qt32)lib\Qt5AxBased.lib;$(Qt32)lib\Qt5AxContainerd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(ProjectDir)..\lib\vs2015\*" "$(OutDir)"</Command>
+      <Command>xcopy /Y "$(ProjectDir)..\lib\vs2017\*" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
