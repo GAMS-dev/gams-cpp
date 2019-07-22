@@ -1225,10 +1225,10 @@ public:
     /// Set Prepend GAMS system directory to library load path
     void setPrefixLoadPath(const GAMSOptions::EPrefixLoadPath::EPrefixLoadPathEnum value);
 
-    /// Get Number of threads to be used for asynchronous solve (solveLink=6)
+    /// Get Limit on number of threads to be used for asynchronous solves (solveLink=6)
     int threadsAsync();
 
-    /// Set Number of threads to be used for asynchronous solve (solveLink=6)
+    /// Set Limit on number of threads to be used for asynchronous solves (solveLink=6)
     void setThreadsAsync(const int value);
 
     /// Get Print solution listing when asynchronous solve (Grid or Threads) is used
