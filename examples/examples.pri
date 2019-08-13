@@ -29,7 +29,9 @@ exists($$PWD/../gams-cpp.pro) {
     DESTDIR = ../../bin
     unix : LIBS += -ldl -L../../bin -lgamscpp
     win32: LIBS += -L../../bin/ -lgamscpp
+
     INCLUDEPATH += ../../src/
+    include(../gamsdependency.pri)
 } else {
     unix : LIBS += -ldl -L$$PWD/lib -lgamscpp
     win32: LIBS += -L$$PWD/lib/$$VSVERSION -lgamscpp
