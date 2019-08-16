@@ -104,16 +104,16 @@ equals(GAMS_BUILD_ENV, "") {
         $$(GPRODUCTS)/apiwrap/gmdobj            \
         $$(GPRODUCTS)/apiwrap/joat              \
         $$(GPRODUCTS)/apiwrap/optobj            \
-        $$(GPRODUCTS)/src/apiexamples/C++/api
+        $$(GPRODUCTS)/apiexamples/C++/api
 
     SOURCES += \
-        $$(GPRODUCTS)/gclib/gclgms.c            \
-        $$(GPRODUCTS)/gclib/gcmt.c              \
-        $$(GPRODUCTS)/apiwrap/gmdobj/gmdcc.c    \
-        $$(GPRODUCTS)/apiwrap/joat/cfgmcc.c     \
-        $$(GPRODUCTS)/apiwrap/joat/gevmcc.c     \
-        $$(GPRODUCTS)/apiwrap/joat/gmomcc.c     \
-        $$(GPRODUCTS)/apiwrap/optobj/optcc.c    \
-        $$(GPRODUCTS)/gamsoptions.cpp           \
-        $$(GPRODUCTS)/gamsoptionsimpl.cpp
+        $$(GPRODUCTS)/gclib/gclgms.c                            \
+        $$(GPRODUCTS)/gclib/gcmt.c                              \
+        $$(GPRODUCTS)/apiwrap/gmdobj/gmdcc.c                    \
+        $$(GPRODUCTS)/apiwrap/joat/cfgmcc.c                     \
+        $$(GPRODUCTS)/apiwrap/joat/gevmcc.c                     \
+        $$(GPRODUCTS)/apiwrap/joat/gmomcc.c                     \
+        $$(GPRODUCTS)/apiwrap/optobj/optcc.c                    \
+        $$(GPRODUCTS)/apiexamples/C++/api/gamsoptions.cpp       \
+        $$(GPRODUCTS)/apiexamples/C++/api/gamsoptionsimpl.cpp
 }
