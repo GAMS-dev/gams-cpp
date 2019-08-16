@@ -166,5 +166,6 @@ HEADERS += \
 OTHER_FILES +=          \
     gamscpp.qmodel      \
     coreclasses.qmodel  \
+    ../CHANGELOG        \
     ../jenkinsfile      \
     ../version
