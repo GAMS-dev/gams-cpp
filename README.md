@@ -39,7 +39,7 @@ GAMS_DISTRIB_CPP_API=$$GAMS_DISTRIB/apifiles/C++/api
 ```
 On Unix it will look like:
 ```
-GAMS_DISTRIB=/gams/gams29.0_linux_x64_64_sfx
+GAMS_DISTRIB=$$(HOME)/gams/gams29.0_linux_x64_64_sfx
 GAMS_DISTRIB_C_API=$$GAMS_DISTRIB/apifiles/C/api
 GAMS_DISTRIB_CPP_API=$$GAMS_DISTRIB/apifiles/C++/api
 ```
