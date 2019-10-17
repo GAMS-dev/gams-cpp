@@ -43,7 +43,6 @@ Transport::Transport(GAMSWorkspace ws)
     fDbIn1 = ws.addDatabase("", "dbIn1");
     fDbIn2 = ws.addDatabase("", "dbIn2");
 
-    // TODO(AF) add enum to GAMSOptions
     fopt.setSolveLink(GAMSOptions::ESolveLink::LoadLibrary);
     fopt.setAllModelTypes("Cplex");
     fopt.setDefine("dbOut1", "dbOut1");

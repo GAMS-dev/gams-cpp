@@ -35,20 +35,24 @@ GAMS_CORE_TMP = $$(GAMS_CORE_PATH)
     equals(GAMS_CORE_TMP, "") {
         macx {
             GAMSINC = GAMS_DISTRIB=/Applications/GAMS'$$GAMS_DISTRIB_MAJOR'.'$$GAMS_DISTRIB_MINOR'/sysdir \
-                      GAMS_DISTRIB_API=\$$GAMS_DISTRIB/apifiles/C/api
+                      GAMS_DISTRIB_C_API=\$$GAMS_DISTRIB/apifiles/C/api   \
+                      GAMS_DISTRIB_CPP_API=\$$GAMS_DISTRIB/apifiles/C++/api
         }
         unix:!macx {
             GAMSINC = GAMS_DISTRIB=$$(HOME)/gams/gams'$$GAMS_DISTRIB_MAJOR'.'$$GAMS_DISTRIB_MINOR'_linux_x64_64_sfx \
-                      GAMS_DISTRIB_API=\$$GAMS_DISTRIB/apifiles/C/api
+                      GAMS_DISTRIB_C_API=\$$GAMS_DISTRIB/apifiles/C/api   \
+                      GAMS_DISTRIB_CPP_API=\$$GAMS_DISTRIB/apifiles/C++/api
         }
         win32 {
             GAMSINC = GAMS_DISTRIB=C:/GAMS/win64/'$$GAMS_DISTRIB_MAJOR'.'$$GAMS_DISTRIB_MINOR' \
-                      GAMS_DISTRIB_API=\$$GAMS_DISTRIB/apifiles/C/api
+                      GAMS_DISTRIB_C_API=\$$GAMS_DISTRIB/apifiles/C/api   \
+                      GAMS_DISTRIB_CPP_API=\$$GAMS_DISTRIB/apifiles/C++/api
         }
         write_file($$PWD/gamsinclude.pri,GAMSINC)
     } else {
         GAMSINC = GAMS_DISTRIB=$$(GAMS_CORE_PATH) \
-                  GAMS_DISTRIB_API=\$$GAMS_DISTRIB/apifiles/C/api
+                  GAMS_DISTRIB_C_API=\$$GAMS_DISTRIB/apifiles/C/api   \
+                  GAMS_DISTRIB_CPP_API=\$$GAMS_DISTRIB/apifiles/C++/api
         write_file($$PWD/gamsinclude.pri,GAMSINC)
     }
 }
@@ -60,15 +64,22 @@ exists($$PWD/gamsinclude.pri) {
 # GAMS_BUILD is GAMS distrib build switch
 GAMS_BUILD_ENV = $$(GAMS_BUILD)
 equals(GAMS_BUILD_ENV, "") {
-    INCLUDEPATH += $$GAMS_DISTRIB_API
+    INCLUDEPATH += $$GAMS_DISTRIB_C_API     \
+                   $$GAMS_DISTRIB_CPP_API
 
-    SOURCES += \
-        $$GAMS_DISTRIB_API/gclgms.c \
-        $$GAMS_DISTRIB_API/gmdcc.c  \
-        $$GAMS_DISTRIB_API/cfgmcc.c \
-        $$GAMS_DISTRIB_API/gevmcc.c \
-        $$GAMS_DISTRIB_API/gmomcc.c \
-        $$GAMS_DISTRIB_API/optcc.c
+    SOURCES +=                                      \
+        $$GAMS_DISTRIB_C_API/gclgms.c               \
+        $$GAMS_DISTRIB_C_API/gmdcc.c                \
+        $$GAMS_DISTRIB_C_API/cfgmcc.c               \
+        $$GAMS_DISTRIB_C_API/gevmcc.c               \
+        $$GAMS_DISTRIB_C_API/gmomcc.c               \
+        $$GAMS_DISTRIB_C_API/optcc.c
+
+    equals(USE_GAMS_DISTRIB_CPP_API_SRC, "true") {
+        SOURCES +=                                      \
+            $$GAMS_DISTRIB_CPP_API/gamsoptions.cpp      \
+            $$GAMS_DISTRIB_CPP_API/gamsoptionsimpl.cpp
+    }
 } else {
     DEFINES += HAVE_MUTEX
     GSYS_ENV = $$(GSYS)
@@ -92,14 +103,25 @@ equals(GAMS_BUILD_ENV, "") {
         QMAKE_CXXFLAGS += -Werror-implicit-function-declaration -Wreturn-type -Wmissing-declarations -m64
         QMAKE_CFLAGS += -Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64
     }
-    INCLUDEPATH += $$(GPRODUCTS)/gclib $$(GPRODUCTS)/apiwrap/gmdobj $$(GPRODUCTS)/apiwrap/joat $$(GPRODUCTS)/apiwrap/optobj
+    INCLUDEPATH +=                              \
+        $$(GPRODUCTS)/gclib                     \
+        $$(GPRODUCTS)/apiwrap/gmdobj            \
+        $$(GPRODUCTS)/apiwrap/joat              \
+        $$(GPRODUCTS)/apiwrap/optobj            \
+        $$(GPRODUCTS)/apiexamples/C++/api
 
-    SOURCES += \
-        $$(GPRODUCTS)/gclib/gclgms.c \
-        $$(GPRODUCTS)/gclib/gcmt.c \
-        $$(GPRODUCTS)/apiwrap/gmdobj/gmdcc.c  \
-        $$(GPRODUCTS)/apiwrap/joat/cfgmcc.c \
-        $$(GPRODUCTS)/apiwrap/joat/gevmcc.c \
-        $$(GPRODUCTS)/apiwrap/joat/gmomcc.c \
+    SOURCES +=                                                  \
+        $$(GPRODUCTS)/gclib/gclgms.c                            \
+        $$(GPRODUCTS)/gclib/gcmt.c                              \
+        $$(GPRODUCTS)/apiwrap/gmdobj/gmdcc.c                    \
+        $$(GPRODUCTS)/apiwrap/joat/cfgmcc.c                     \
+        $$(GPRODUCTS)/apiwrap/joat/gevmcc.c                     \
+        $$(GPRODUCTS)/apiwrap/joat/gmomcc.c                     \
         $$(GPRODUCTS)/apiwrap/optobj/optcc.c
+
+    equals(USE_GAMS_DISTRIB_CPP_API_SRC, "true") {
+        SOURCES +=                                                  \
+            $$(GPRODUCTS)/apiexamples/C++/api/gamsoptions.cpp       \
+            $$(GPRODUCTS)/apiexamples/C++/api/gamsoptionsimpl.cpp
+    }
 }

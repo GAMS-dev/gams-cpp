@@ -30,6 +30,7 @@ DESTDIR = ../bin
 
 TARGET = gamscpp
 
+USE_GAMS_DISTRIB_CPP_API_SRC=true
 include(../gamsdependency.pri)
 
 # Do not search GAMS via the Widnows resgistry. This causes
@@ -84,7 +85,6 @@ SOURCES += \
     gamsmodelinstanceoptimpl.cpp \
     gamsmodifier.cpp \
     gamsmodifierimpl.cpp \
-    gamsoptions.cpp \
     gamsparameter.cpp \
     gamsparameterrecord.cpp \
     gamsplatform.cpp \
@@ -113,9 +113,7 @@ SOURCES += \
     gamsdatabaseiter.cpp \
     gamsexceptionexecution.cpp \
     gamsdomainimpl.cpp \
-    gamsworkspaceinfoimpl.cpp \
-    gamsoptionsimpl.cpp
-
+    gamsworkspaceinfoimpl.cpp
 
 HEADERS += \
     gams.h \
@@ -137,7 +135,6 @@ HEADERS += \
     gamsmodelinstanceoptimpl.h \
     gamsmodifier.h \
     gamsmodifierimpl.h \
-    gamsoptions.h \
     gamsparameter.h \
     gamsparameterrecord.h \
     gamsplatform.h \
@@ -165,12 +162,11 @@ HEADERS += \
     gamsdatabaseiter.h \
     gamsexceptionexecution.h \
     gamsdomainimpl.h \
-    gamsworkspaceinfoimpl.h \
-    gamsoptionsimpl.h
-
+    gamsworkspaceinfoimpl.h
 
 OTHER_FILES +=          \
     gamscpp.qmodel      \
     coreclasses.qmodel  \
+    ../CHANGELOG        \
     ../jenkinsfile      \
     ../version
