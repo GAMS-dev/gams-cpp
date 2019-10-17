@@ -30,6 +30,7 @@ DESTDIR = ../bin
 
 TARGET = gamscpp
 
+USE_GAMS_DISTRIB_CPP_API_SRC=true
 include(../gamsdependency.pri)
 
 # Do not search GAMS via the Widnows resgistry. This causes
@@ -166,5 +167,6 @@ HEADERS += \
 OTHER_FILES +=          \
     gamscpp.qmodel      \
     coreclasses.qmodel  \
+    ../CHANGELOG        \
     ../jenkinsfile      \
     ../version
