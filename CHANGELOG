@@ -2,6 +2,5 @@ Version 0.9.6
 ========================
 
 # General
-- generated option files (gamsoptions.h/.cpp, gamsoptionsimpl.h/.cpp) have been moved to apifiles/C++/api of the GAMS distribution.
-- examples configuration update for VS2017
+- macOS Catalina update
 
