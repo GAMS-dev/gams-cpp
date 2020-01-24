@@ -1,8 +1,8 @@
 #
 # GAMS - General Algebraic Modeling System C++ API
 #
-# Copyright (c) 2017-2019 GAMS Software GmbH <support@gams.com>
-# Copyright (c) 2017-2019 GAMS Development Corp. <support@gams.com>
+# Copyright (c) 2017-2020 GAMS Software GmbH <support@gams.com>
+# Copyright (c) 2017-2020 GAMS Development Corp. <support@gams.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-CONFIG += console c++14
+CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG += test
 DESTDIR = ../bin
