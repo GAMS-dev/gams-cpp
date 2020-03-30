@@ -149,7 +149,7 @@ public:
         CouldNotWriteGamsNext = 113,        ///< Could not write the "gamsnext" script
         CouldNotWriteParamFile = 114,       ///< Could not write the "parameter" file
         CouldNotReadEnvVar = 115,           ///< Could not read environment variable
-        CouldNotFindGMSPython = 116,        ///< Could not find directory GMSPython in GAMS system directory. Set pySetup=0 to use external Python installation
+        CouldNotFindGMSPython = 116,        ///< Could not find directory GMSPython in GAMS system directory. Set environment variable GMSPYTHONLIB to use external Python installation
         CouldNotSpawnGAMScmex = 400,        ///< Could not spawn the GAMS language compiler (gamscmex)
         CurDirNotFound = 401,               ///< Current directory (curdir) does not exist
         CurDirNotSet = 402,                 ///< Cannot set current directory (curdir)
