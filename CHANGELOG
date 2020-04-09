@@ -3,6 +3,7 @@ Version 0.9.9
 
 # General
 - The GAMS command line parameter 'pySetup' has been deprecated and was removed from the OO API. Using GAMS Embedded Code with an external Python installation is controlled using the environment variable GMSPYTHONLIB
+- Removed GAMS return code 116 ("Could not find GMSPython") from enum GAMSExitCode
 
 Version 0.9.8
 ========================
