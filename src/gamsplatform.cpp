@@ -222,7 +222,7 @@ std::string GAMSPlatform::findGamsOnWindows(LogId logId)
 #else
     QString firstFound("");
     QStringList locations;
-    locations << "HKEY_CURRENT_USER\\" << "HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\";
+    locations << "HKEY_CURRENT_USER\\Software\\Classes\\" << "HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\";
     for (QString loc: locations) {
         QString gamsPath = QSettings(loc + "gams.location", QSettings::NativeFormat).value(".").toString();
         if (!gamsPath.isEmpty()) {
@@ -236,8 +236,10 @@ std::string GAMSPlatform::findGamsOnWindows(LogId logId)
                 if (firstFound.isEmpty()) {
                     return gamsPath.toStdString();
                 } else if (!gamsPath.isEmpty() && (gamsPath != firstFound)) {
-                    DEB_S(logId) << "--- Warning: Found GAMS system directory " << firstFound.toStdString() << " at HKEY_CURRENT_USER and a different one\n"
-                                 << "---          in HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\ (" << gamsPath.toStdString() << "). The latter is ignored.";
+                    DEB_S(logId) << "--- Warning: Found GAMS system directory " << firstFound.toStdString() << " at "
+                                 << locations.first() << " and a different one\n"
+                                 << "---          in "
+                                 << locations.last() << " (" << gamsPath.toStdString() << "). The latter is ignored.";
                 }
                 return firstFound.toStdString();
             }
