@@ -122,7 +122,7 @@ pipeline {
             agent { label 'master' }
             when {
                 expression { return currentBuild.currentResult == "SUCCESS" }
-                tag pattern: "v\\d+\\.\\d+\\.\\d+", comparator: "REGEXP"
+                tag pattern: "v\\d+\\.\\d+\\.\\d+.*", comparator: "REGEXP"
             }
             steps {
                 withCredentials([string(credentialsId: '18e8f0e0-f27a-4358-b70f-04acec1e9617', variable: 'GITHUB_TOKEN')]) {
