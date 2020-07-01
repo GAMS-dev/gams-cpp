@@ -45,7 +45,7 @@ struct LIBSPEC GAMSPlatform
     /// Get the GAMS path.
     /// \param logId GAMS logging ID.
     /// \return Returns the path to GAMS.
-    static std::string findGams(LogId logId);
+    static std::string findGams(LogId logId = 0);
 
     /// Ensures that the directory name is contained in the environment path.
     /// \param dirName A directory name.
@@ -62,12 +62,9 @@ struct LIBSPEC GAMSPlatform
 private:
     GAMSPlatform() {}
 
-    static std::string findGamsOnApple(LogId logId);
-    static void ensureEnvPathSetOnApple(const char *dirName);
+    static std::string findGamsOnUnix(LogId logId);
+    static void ensureEnvPathSetOnUnix(const char *dirName);
     static bool interruptOnNonWindows(long pid);
-
-    static std::string findGamsOnLinux(LogId logId);
-    static void ensureEnvPathSetOnLinux(const char *dirName);
 
     static std::string findGamsOnWindows(LogId logId);
     static void ensureEnvPathSetOnWindows(const char *dirName);

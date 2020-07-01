@@ -28,10 +28,8 @@
 #endif
 
 #include "gamsplatform.h"
-#include <QDir>
-#include <QSettings>
-#include <QProcess>
 #include <string>
+#include <stdlib.h>
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -73,7 +71,7 @@ const char *cLibSuffix = ".so";
 const char *cLibEnv = "LD_LIBRARY_PATH";
 #else // Windows
 const char cEnvSep = ';';
-const char *cLibEnv = "";                   // JM: unused until now
+const char *cLibEnv = "";
 const char *cPathSep = "\\";
 const char *cCmpFileName = "gmscmpnt.txt";
 const int cExitCodeDiv = 1;
@@ -84,44 +82,32 @@ const char *cLibSuffix = ".dll";
 
 string GAMSPlatform::findGams(LogId logId)
 {
-#ifdef __linux__
-    return findGamsOnLinux(logId);
-#elif __APPLE__
-    return findGamsOnApple(logId);
-#elif __unix__
-    return findGamsOnLinux(logId);
-#else
+#ifdef _WIN32
     return findGamsOnWindows(logId);
+#else
+    return findGamsOnUnix(logId);
 #endif
 }
 
 void GAMSPlatform::ensureEnvPathContains(const char *dirName)
 {
-#ifdef __linux__
-    ensureEnvPathSetOnLinux(dirName);
-#elif __APPLE__
-    ensureEnvPathSetOnApple(dirName);
-#elif __unix__
-    ensureEnvPathSetOnLinux(dirName);
-#else
+#ifdef _WIN32
     ensureEnvPathSetOnWindows(dirName);
+#else
+    ensureEnvPathSetOnUnix(dirName);
 #endif
 }
 
 bool GAMSPlatform::interrupt(long pid)
 {
-#ifdef __linux__
-    return interruptOnNonWindows(pid);
-#elif __APPLE__
-    return interruptOnNonWindows(pid);
-#elif __unix__
-    return interruptOnNonWindows(pid);
-#else
+#ifdef _WIN32
     return interruptOnWindows(pid);
+#else
+    return interruptOnNonWindows(pid);
 #endif
 }
 
-string GAMSPlatform::findGamsOnLinux(LogId logId)
+string GAMSPlatform::findGamsOnUnix(LogId logId)
 {
     string gamsDir;
     string gamsDirLD;
@@ -154,110 +140,76 @@ string GAMSPlatform::findGamsOnLinux(LogId logId)
     return gamsDir;
 }
 
-void GAMSPlatform::ensureEnvPathSetOnLinux(const char *dirName)
+void GAMSPlatform::ensureEnvPathSetOnUnix(const char *dirName)
 {
+    // TODO?
     Q_UNUSED(dirName)
-    // TODO i guess?!
 }
 
 bool GAMSPlatform::interruptOnNonWindows(long pid)
 {
-    QProcess proc;
-    proc.setProgram("/bin/bash");
+    char* proc;
+    sprintf(proc, "/bin/bash -c -kill -2 %ld", pid);
 
-    //start "kill" with List of children PID
-    proc.setProgram("/bin/bash");
-    QStringList s2 { "-c", "kill -2 " + QString::number(pid)};
-    proc.setArguments(s2);
-    proc.start();
-
-    proc.waitForFinished(-1);
+    system(proc);
     return true;
-}
-
-string GAMSPlatform::findGamsOnApple(LogId logId)
-{
-    QString gamsDir;
-    QString gamsDirLD;
-
-    QStringList envSplit = QString(qgetenv("PATH")).split(cEnvSep);
-    for (QString envStr: envSplit) {
-        if ((GAMSPath(envStr) / "gams").exists()) {
-            gamsDir = envStr;
-            break;
-        }
-    }
-    if (!gamsDir.isEmpty() && LoggerPool::instance().debug(logId) == GAMSEnum::DebugLevel::Off)
-        return gamsDir.toStdString();
-
-    envSplit = QString(qgetenv(cLibEnv)).split(cEnvSep);
-    for (QString envStr: envSplit) {
-        if ((GAMSPath(envStr) / "gams").exists()) {
-            gamsDirLD = envStr;
-            break;
-        }
-    }
-    if (gamsDir.isEmpty())
-        return gamsDirLD.toStdString();
-    else if (!gamsDirLD.isEmpty() && gamsDir != gamsDirLD) {
-        DEB_S(logId) << "--- Warning: Found GAMS system directory " << gamsDir << " in PATH and a different one" << endl
-                     << "---          in (DY)LD_LIBRARY_PATH (" << gamsDirLD << "). The latter is ignored.";
-    }
-
-    return gamsDir.toStdString();
-
-}
-
-void GAMSPlatform::ensureEnvPathSetOnApple(const char *dirName)
-{
-    Q_UNUSED(dirName)
 }
 
 string GAMSPlatform::findGamsOnWindows(LogId logId)
 {
-#ifdef NO_WINDOWS_REGISTRY
+//#ifdef NO_WINDOWS_REGISTRY
     Q_UNUSED(logId)
-    QString gamsPath = QFileInfo(QStandardPaths::findExecutable("gams")).absolutePath();
-    return QDir::cleanPath(gamsPath).toStdString();
-#else
-    QString firstFound("");
-    QStringList locations;
-    locations << "HKEY_CURRENT_USER\\Software\\Classes\\" << "HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\";
-    for (QString loc: locations) {
-        QString gamsPath = QSettings(loc + "gams.location", QSettings::NativeFormat).value(".").toString();
-        if (!gamsPath.isEmpty()) {
-
-            if (LoggerPool::instance().debug(logId) == GAMSEnum::DebugLevel::Off) {
-                return gamsPath.toStdString();
-            } else if (firstFound.isNull()) {
-                firstFound = gamsPath;
-            } else {
-                // compare second key
-                if (firstFound.isEmpty()) {
-                    return gamsPath.toStdString();
-                } else if (!gamsPath.isEmpty() && (gamsPath != firstFound)) {
-                    DEB_S(logId) << "--- Warning: Found GAMS system directory " << firstFound.toStdString() << " at "
-                                 << locations.first() << " and a different one\n"
-                                 << "---          in "
-                                 << locations.last() << " (" << gamsPath.toStdString() << "). The latter is ignored.";
-                }
-                return firstFound.toStdString();
-            }
+    string s;
+    stringstream ss(getenv("PATH"));
+    while (getline(ss, s, cEnvSep)) {
+        if ((GAMSPath(s) / "gams").exists()) {
+            return s;
         }
     }
-    return firstFound.toStdString();
+    return "";
+// TODO(RG):
+//#else
+//    QString firstFound("");
+//    QStringList locations;
+//    locations << "HKEY_CURRENT_USER\\Software\\Classes\\" << "HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\";
+//    for (QString loc: locations) {
+//        QString gamsPath = QSettings(loc + "gams.location", QSettings::NativeFormat).value(".").toString();
+//        if (!gamsPath.isEmpty()) {
 
-#endif
+//            if (LoggerPool::instance().debug(logId) == GAMSEnum::DebugLevel::Off) {
+//                return gamsPath.toStdString();
+//            } else if (firstFound.isNull()) {
+//                firstFound = gamsPath;
+//            } else {
+//                // compare second key
+//                if (firstFound.isEmpty()) {
+//                    return gamsPath.toStdString();
+//                } else if (!gamsPath.isEmpty() && (gamsPath != firstFound)) {
+//                    DEB_S(logId) << "--- Warning: Found GAMS system directory " << firstFound.toStdString() << " at "
+//                                 << locations.first() << " and a different one\n"
+//                                 << "---          in "
+//                                 << locations.last() << " (" << gamsPath.toStdString() << "). The latter is ignored.";
+//                }
+//                return firstFound.toStdString();
+//            }
+//        }
+//    }
+//    return firstFound.toStdString();
+
+//#endif
+// TODOend(RG)
 }
 
 void GAMSPlatform::ensureEnvPathSetOnWindows(const char *dirName)
 {
-    QByteArray envPath = qgetenv("PATH");
-    if (!envPath.contains(dirName)) {
-        qputenv("PATH", envPath + ";" + dirName);
+    string g = findGams();
+    if (!g.empty()) {
+        char* p;
+        sprintf(p, "PATH=%s;%s", getenv("PATH"), dirName);
+        // TODO(RG): check string here
+        _putenv(p);
     }
 }
-
 bool GAMSPlatform::interruptOnWindows(long pid)
 {
 #ifdef _WIN32
