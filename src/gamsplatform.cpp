@@ -204,10 +204,14 @@ void GAMSPlatform::ensureEnvPathSetOnWindows(const char *dirName)
 {
     string g = findGams();
     if (!g.empty()) {
-        char* p;
+        char* p = nullptr;
         sprintf(p, "PATH=%s;%s", getenv("PATH"), dirName);
         // TODO(RG): check string here
+#ifdef _WIN32
         _putenv(p);
+#else
+        putenv(p);
+#endif
     }
 }
 bool GAMSPlatform::interruptOnWindows(long pid)

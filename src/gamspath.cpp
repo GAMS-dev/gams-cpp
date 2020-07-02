@@ -25,36 +25,26 @@
 
 #include "gamspath.h"
 #include "gamsexception.h"
-#include <QDir>
-#include <QRegularExpression>
-#include <QTemporaryFile>
-#include <QTemporaryDir>
-#include <QDateTime>
 
+using namespace std;
 namespace gams {
 
 GAMSPath&GAMSPath::operator=(const GAMSPath& other)
 {
-    QFileInfo::operator =(other);
     mBuffer = other.mBuffer;
     return *this;
 }
 
-GAMSPath& GAMSPath::operator<<(const QString &append)
+GAMSPath& GAMSPath::operator<<(const string &append)
 {
     setFile(filePath() + append);
     return *this;
 }
 
-GAMSPath &GAMSPath::operator+=(const QString &append)
+GAMSPath &GAMSPath::operator+=(const string &append)
 {
     setFile(filePath() + append);
     return *this;
-}
-
-GAMSPath GAMSPath::operator +(const QString &append)
-{
-    return GAMSPath(this->filePath() + append);
 }
 
 GAMSPath GAMSPath::operator +(const std::string &append)

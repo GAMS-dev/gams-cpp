@@ -26,7 +26,7 @@
 #ifndef GAMSPATH_H
 #define GAMSPATH_H
 
-#include <QFileInfo>
+#include <filesystem>
 
 namespace gams {
 
@@ -46,17 +46,13 @@ public:
     GAMSPath(const std::string &file) : QFileInfo(QString(file.c_str())) {}
 
     /// Constructs a GAMSPath based on a path or file.
-    /// \param file Path or file.
-    GAMSPath(const QString &file) : QFileInfo(file) {}
-
-    /// Constructs a GAMSPath based on a path or file.
     /// \param file File.
     GAMSPath(const QFile &file) : QFileInfo(file) {}
 
     /// Constructs a GAMSPath based on a path or file.
     /// \param dir Path.
     /// \param file File.
-    GAMSPath(const QDir & dir, const QString &file) : QFileInfo(dir, file) {}
+    GAMSPath(const QDir & dir, const std::string &file) {}
 
     /// Constructs a GAMSPath based on a path or file.
     /// \param fileinfo QFileInfo.
@@ -74,17 +70,12 @@ public:
     /// Appends the string to the GAMSPath.
     /// \param append The string to append.
     /// \return Returns the GAMSPath with the string appended.
-    GAMSPath &operator <<(const QString &append);
+    GAMSPath &operator <<(const std::string &append);
 
     /// Appends the string to the GAMSPath.
     /// \param append The string to append.
     /// \return Returns the GAMSPath with the string appended.
-    GAMSPath &operator +=(const QString &append);
-
-    /// Appends the string to the GAMSPath.
-    /// \param append The string to append.
-    /// \return Returns the GAMSPath with the string appended.
-    GAMSPath operator +(const QString &append);
+    GAMSPath &operator +=(const std::string &append);
 
     /// Appends the string to the GAMSPath.
     /// \param append The string to append.
@@ -104,11 +95,6 @@ public:
     /// Appends a path to the GAMSPath.
     /// \param append The path to append.
     /// \return Returns the GAMSPath with the path appended.
-    GAMSPath operator /(const QString &append);
-
-    /// Appends a path to the GAMSPath.
-    /// \param append The path to append.
-    /// \return Returns the GAMSPath with the path appended.
     GAMSPath operator /(const std::string &append);
 
     /// Appends a path to the GAMSPath.
@@ -119,9 +105,6 @@ public:
     /// Converts a <c>std::string</c> to GAMSPath.
     operator std::string();
 
-    /// Converts a <c>QString</c> to GAMSPath.
-    operator QString();
-
     /// Get the path or file as <c>std::string</c>.
     std::string toStdString();
 
@@ -131,17 +114,17 @@ public:
     /// Create a GAMSPath to a temporary directory.
     /// \param templatePath Template temporary directory.
     /// \return Returns a GAMSPath to the temporary directory.
-    GAMSPath tempDir(const QString &templatePath = QString());
-
-    /// Create a GAMSPath to a temporary file.
-    /// \param templateName Template for temporary file name.
-    /// \return Returns a GAMSPath to the temporary file.
-    GAMSPath tempFile(const QString &templateName = "XXXXXX.tmp");
+    GAMSPath tempDir(const std::string templatePath = std::string());
 
     /// Create a GAMSPath to a temporary file.
     /// \param templateName Template for temporary file name.
     /// \return Returns a GAMSPath to the temporary file.
     GAMSPath tempFile(const std::string &templateName = "XXXXXX.tmp");
+
+    /// Create a GAMSPath to a temporary file.
+    /// \param templateName Template for temporary file name.
+    /// \return Returns a GAMSPath to the temporary file.
+    GAMSPath tempFile(const std::string templateName = "XXXXXX.tmp");
 
     /// Create a GAMSPath to a temporary file.
     /// \param templateName Template for temporary file name.
@@ -154,16 +137,16 @@ public:
 
     /// Add a suffix to the GAMSPath.
     /// \param suffix The suffix to add.
-    void setSuffix(const QString &suffix);
+    void setSuffix(const std::string &suffix);
 
     /// Add a suffix to the GAMSPath.
     /// \param suffix The suffix to add.
-    void setSuffix(const std::string &suffix);
+    void setSuffix(const std::string suffix);
 
     /// Add a suffix.
     /// \param suffix The suffix to add.
     /// \return Returns the GAMSPath with suffix.
-    GAMSPath suffix(const QString &suffix) const;
+    GAMSPath suffix(const std::string suffix) const;
 
     /// Add a suffix.
     /// \param suffix The suffix to add.
@@ -202,11 +185,6 @@ public:
     /// Rename the already set file.
     /// \param newFileName The new file name.
     /// \return Returns <c>true</c> if the rename was successfull; otherwise <c>false</c>.
-    bool rename(const QString &newFileName);
-
-    /// Rename the already set file.
-    /// \param newFileName The new file name.
-    /// \return Returns <c>true</c> if the rename was successfull; otherwise <c>false</c>.
     bool rename(const std::string &newFileName);
 
     /// Rename the already set file.
@@ -217,11 +195,6 @@ public:
     /// Checks if the path exists.
     /// \return Returns <c>true</c> if the path exists; otherwise <c>false</c>.
     bool exists() const;
-
-    /// Checks if the file exists.
-    /// \param file The file name.
-    /// \return Returns <c>true</c> if the file exists; otherwise <c>false</c>.
-    static bool exists(const QString &file);
 
     /// Checks if the file exists.
     /// \param file The file name.
