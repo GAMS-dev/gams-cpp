@@ -37,7 +37,7 @@ equals(NO_WINDOWS_REGISTRY, "1") {
     DEFINES += NO_WINDOWS_REGISTRY
 }
 
-CONFIG += skip_target_version_ext cmdline c++11 plugin
+CONFIG += skip_target_version_ext cmdline c++17 plugin
 CONFIG -= app_bundle
 
 DEFINES += GAMS_CPP_LIB MAKELIB

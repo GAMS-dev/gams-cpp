@@ -26,7 +26,6 @@
 #include "gamspath.h"
 #include "gamsexception.h"
 
-using namespace std;
 namespace gams {
 
 GAMSPath&GAMSPath::operator=(const GAMSPath& other)
@@ -35,95 +34,76 @@ GAMSPath&GAMSPath::operator=(const GAMSPath& other)
     return *this;
 }
 
-GAMSPath& GAMSPath::operator<<(const string &append)
+GAMSPath& GAMSPath::operator<<(const std::string &append)
 {
-    setFile(filePath() + append);
+    this->append(append);
     return *this;
 }
 
-GAMSPath &GAMSPath::operator+=(const string &append)
+GAMSPath &GAMSPath::operator+=(const std::string &append)
 {
-    setFile(filePath() + append);
+    this->append(append);
     return *this;
 }
 
 GAMSPath GAMSPath::operator +(const std::string &append)
 {
-    return GAMSPath(this->filePath() + QString::fromStdString(append));
+    this->append(append);
+    return *this;
 }
 
 GAMSPath GAMSPath::operator +(const char *append)
 {
-    return GAMSPath(this->filePath() + append);
+    this->append(append);
+    return *this;
 }
 
 GAMSPath GAMSPath::operator /(const GAMSPath &append)
 {
-    return GAMSPath(this->filePath() + "/" + append.filePath());
-}
-
-GAMSPath GAMSPath::operator /(const QString &append)
-{
-    return GAMSPath(this->filePath() + "/" + append);
+    return this->append(append.string());
 }
 
 GAMSPath GAMSPath::operator /(const std::string &append)
 {
-    return GAMSPath(this->filePath() + "/" + QString::fromStdString(append));
+    return this->append(append);
 }
 
 GAMSPath GAMSPath::operator /(const char *append)
 {
-    return GAMSPath(this->filePath() + "/" + QString(append));
+    return this->append(append);
 }
 
-GAMSPath::operator std::string()
-{
-    return QDir::toNativeSeparators(filePath()).toStdString();
-}
-
-GAMSPath::operator QString()
-{
-    return filePath();
-}
+// TODO(RG): i dont know what this does
+//GAMSPath::operator QString()
+//{
+//    return filePath();
+//}
 
 void GAMSPath::setSuffix(const char *suffix)
 {
-    setSuffix(QString(suffix));
-}
-
-void GAMSPath::setSuffix(const QString &suffix)
-{
-    int j = filePath().lastIndexOf("/");
-    int i = filePath().lastIndexOf(".");
-    if (i <= j) i = filePath().length();
-    setFile(filePath().left(i) + suffix);
+    replace_extension(suffix);
 }
 
 void GAMSPath::setSuffix(const std::string &suffix)
 {
-    setSuffix(QString::fromStdString(suffix));
+    replace_extension(suffix);
 }
 
-GAMSPath GAMSPath::suffix(const QString &suffix) const
+void GAMSPath::setSuffix(const std::string suffix)
 {
-    GAMSPath p(*this);
-    p.setSuffix(suffix);
-    return p;
+    replace_extension(suffix);
 }
 
 GAMSPath GAMSPath::suffix(const std::string &suffix) const
 {
     GAMSPath p(*this);
-    p.setSuffix(suffix);
-    return p;
+    return p.replace_extension(suffix);
 }
 
 GAMSPath GAMSPath::suffix(const char *suffix) const
 {
     GAMSPath p(*this);
-    p.setSuffix(suffix);
-    return p;
+    return p.replace_extension(suffix);
 }
 
 GAMSPath GAMSPath::up() const
@@ -133,12 +113,9 @@ GAMSPath GAMSPath::up() const
     return GAMSPath(path());
 }
 
-QString GAMSPath::suffix() const
+std::string GAMSPath::suffix() const
 {
-    QString name = fileName();
-    int i = name.lastIndexOf(".");
-    if (i < 0) return "";
-    return name.right(name.length() - i);
+    return extension().string();
 }
 
 GAMSPath GAMSPath::path() const

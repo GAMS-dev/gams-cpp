@@ -142,8 +142,8 @@ string GAMSPlatform::findGamsOnUnix(LogId logId)
 
 void GAMSPlatform::ensureEnvPathSetOnUnix(const char *dirName)
 {
-    // TODO?
-    Q_UNUSED(dirName)
+//    // TODO?
+//    Q_UNUSED(dirName)
 }
 
 bool GAMSPlatform::interruptOnNonWindows(long pid)
@@ -158,7 +158,7 @@ bool GAMSPlatform::interruptOnNonWindows(long pid)
 string GAMSPlatform::findGamsOnWindows(LogId logId)
 {
 //#ifdef NO_WINDOWS_REGISTRY
-    Q_UNUSED(logId)
+//    Q_UNUSED(logId)
     string s;
     stringstream ss(getenv("PATH"));
     while (getline(ss, s, cEnvSep)) {

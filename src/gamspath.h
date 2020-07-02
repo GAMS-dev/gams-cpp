@@ -31,36 +31,32 @@
 namespace gams {
 
 /// Represents the GAMS path to a specific file.
-class GAMSPath: public QFileInfo
+class GAMSPath: public std::filesystem::path
 {
 public:
     /// Standard constructor.
-    GAMSPath() : QFileInfo() {}
+    GAMSPath() : std::filesystem::path() {}
 
     /// Constructs a GAMSPath based on a path or file.
     /// \param file Path or file.
-    GAMSPath(const char *file) : QFileInfo(QString(file)) {}
+    GAMSPath(const char *file) : std::filesystem::path(file) {}
 
     /// Constructs a GAMSPath based on a path or file.
     /// \param file Path or file.
-    GAMSPath(const std::string &file) : QFileInfo(QString(file.c_str())) {}
+    GAMSPath(const std::string &file) : std::filesystem::path(file) {}
 
     /// Constructs a GAMSPath based on a path or file.
     /// \param file File.
-    GAMSPath(const QFile &file) : QFileInfo(file) {}
+    GAMSPath(const std::filesystem::path &file) : std::filesystem::path(file) {}
 
     /// Constructs a GAMSPath based on a path or file.
     /// \param dir Path.
     /// \param file File.
-    GAMSPath(const QDir & dir, const std::string &file) {}
-
-    /// Constructs a GAMSPath based on a path or file.
-    /// \param fileinfo QFileInfo.
-    GAMSPath(const QFileInfo &fileinfo) : QFileInfo(fileinfo) {}
+    GAMSPath(const std::filesystem::path & dir, const std::string &file) : std::filesystem::path(dir / file){ }
 
     /// Constructs a GAMSPath based on a path or file.
     /// \param gpath Another GAMSPath used as data source.
-    GAMSPath(const GAMSPath &gpath) : QFileInfo(gpath.filePath()) {}
+    GAMSPath(const GAMSPath &gpath) : std::filesystem::path(gpath.string()) {}
 
     /// Assigns a GAMSPath.
     /// \param other Another GAMSPath used as data source.
@@ -163,7 +159,7 @@ public:
     GAMSPath up() const;
 
     /// Path suffix.
-    QString suffix() const;
+    std::string suffix() const;
 
     /// Get the GAMSPath.
     GAMSPath path() const;
