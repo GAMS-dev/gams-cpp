@@ -110,22 +110,17 @@ public:
     /// Create a GAMSPath to a temporary directory.
     /// \param templatePath Template temporary directory.
     /// \return Returns a GAMSPath to the temporary directory.
-    GAMSPath tempDir(const std::string templatePath = std::string());
+    GAMSPath tempDir(const std::string tempPath = std::string());
 
     /// Create a GAMSPath to a temporary file.
     /// \param templateName Template for temporary file name.
     /// \return Returns a GAMSPath to the temporary file.
-    GAMSPath tempFile(const std::string &templateName = "XXXXXX.tmp");
+    GAMSPath tempFile(const std::string &tempName = "XXXXXX.tmp");
 
     /// Create a GAMSPath to a temporary file.
     /// \param templateName Template for temporary file name.
     /// \return Returns a GAMSPath to the temporary file.
-    GAMSPath tempFile(const std::string templateName = "XXXXXX.tmp");
-
-    /// Create a GAMSPath to a temporary file.
-    /// \param templateName Template for temporary file name.
-    /// \return Returns a GAMSPath to the temporary file.
-    GAMSPath tempFile(const char* templateName = "XXXXXX.tmp");
+    GAMSPath tempFile(const char* tempName = "XXXXXX.tmp");
 
     /// Add a suffix to the GAMSPath.
     /// \param suffix The suffix to add.
@@ -171,6 +166,7 @@ public:
     /// \return Returns <c>true</c> if the removal was successfull; otherwise <c>false</c>.
     bool rmDirRecurse();
 
+    // TODO(RG): that description cannot be right, from where would the relativ path start?
     /// Optimize the path length, i.e. full path to relative path.
     void pack();
 
@@ -201,9 +197,6 @@ public:
     /// \param file The file name.
     /// \return Returns <c>true</c> if the file exists; otherwise <c>false</c>.
     static bool exists(const char *file);
-
-private:
-    std::string mBuffer;
 };
 
 }

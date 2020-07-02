@@ -25,12 +25,13 @@
 
 #include "gamspath.h"
 #include "gamsexception.h"
+#include <fstream>
 
 namespace gams {
 
 GAMSPath&GAMSPath::operator=(const GAMSPath& other)
 {
-    mBuffer = other.mBuffer;
+    assign(other.string());
     return *this;
 }
 
@@ -120,128 +121,113 @@ std::string GAMSPath::suffix() const
 
 GAMSPath GAMSPath::path() const
 {
-    return GAMSPath(QFileInfo::path());
+    if (has_filename())
+        return parent_path();
+    else
+        return path();
 }
 
 bool GAMSPath::mkDir()
 {
-    if (!isDir()) {
-        QDir dir(*this);
-        dir.mkpath(*this);
-    }
-    return isDir();
+    return create_directory(*this);
 }
 
 bool GAMSPath::rmDirRecurse()
 {
-    if (!isDir()) return !QFileInfo::exists();
-    QDir dir(*this);
-    return dir.removeRecursively();
+    if (has_filename()) return std::filesystem::exists(*this);
+    return std::filesystem::remove_all(*this);
 }
 
 void GAMSPath::pack()
 {
-    QString path = filePath();
-    QRegularExpression xp("/[^/]*/\\.\\.");
-    while (xp.match(path).hasMatch()) {
-        path = path.remove(xp);
-    }
-    setFile(path);
-    setFile(absoluteFilePath());
+    // TODO(RG): check with other APIs what is expected to do here
+    if (exists())
+        this->assign(std::filesystem::canonical(*this));
+    else
+        this->assign(std::filesystem::absolute(*this));
+
+//    QString path = filePath();
+//    QRegularExpression xp("/[^/]*/\\.\\.");
+//    while (xp.match(path).hasMatch()) {
+//        path = path.remove(xp);
+//    }
+//    setFile(path);
+//    setFile(absoluteFilePath());
 }
 
 bool GAMSPath::remove()
 {
-    QFile f(filePath());
-    return f.remove();
-}
-
-bool GAMSPath::rename(const QString &newFileName)
-{
-    QFile f(filePath());
-    bool ok = f.rename(newFileName);
-    if (ok) setFile(newFileName);
-    return ok;
+    return std::filesystem::remove(*this);
 }
 
 bool GAMSPath::rename(const std::string &newFileName)
 {
-    return rename(QString::fromStdString(newFileName));
+    std::error_code err;
+    std::filesystem::rename(this->string(), newFileName, err);
+    if (err.value() == 0)
+        assign(newFileName);
+    return err.value();
 }
 
 bool GAMSPath::rename(const char *newFileName)
 {
-    return rename(QString(newFileName));
+    std::error_code err;
+    std::filesystem::rename(this->string(), newFileName, err);
+    if (err.value() == 0)
+        assign(newFileName);
+    return err.value();
 }
 
 bool GAMSPath::exists() const
 {
-    return (!filePath().isEmpty() && QFileInfo::exists());
-}
-
-bool GAMSPath::exists(const QString &file)
-{
-    return (!file.isEmpty() && QFileInfo::exists(file));
+    return std::filesystem::exists(*this);
 }
 
 bool GAMSPath::exists(const std::string &file)
 {
-    return exists(QString::fromStdString(file));
+    return std::filesystem::exists(file);
 }
 
 bool GAMSPath::exists(const char *file)
 {
-    return exists(QString::fromLatin1(file));
+    return std::filesystem::exists(file);
 }
 
 std::string GAMSPath::toStdString()
 {
-    return QDir::toNativeSeparators(this->filePath()).toStdString();
+    return string();
 }
 
 const char *GAMSPath::c_str()
 {
-    mBuffer = *this;
-    return mBuffer.c_str();
+    return c_str();
 }
 
-static void initSeed()
+GAMSPath GAMSPath::tempDir(const std::string tempPath)
 {
-    // generate seed with timestamp and random number
-    qsrand(static_cast<uint>(QDateTime::currentDateTimeUtc().toMSecsSinceEpoch() + qrand()));
+    GAMSPath baseLocation = tempPath.empty() ? this->path().string() : tempPath;
+    if (!baseLocation.exists()) baseLocation.mkDir();
+
+    GAMSPath tempDir(baseLocation / "gams-cpp");
+
+    if (!std::filesystem::is_directory(tempDir))
+        throw GAMSException("Could not create temporary directory in " + tempDir.string());
+    return tempDir.path();
 }
 
-GAMSPath GAMSPath::tempDir(const QString &templatePath)
+GAMSPath GAMSPath::tempFile(const std::string &tempName)
 {
-    initSeed();
-    QString mask = templatePath.isEmpty() ? absoluteFilePath() : templatePath;
-    if (!QDir(mask).exists()) QDir(mask).mkpath(mask);
-    QTemporaryDir temp(mask + "/gams-cpp");
-    temp.setAutoRemove(false);
-    if (!temp.isValid())
-        throw GAMSException("Could not create temporary directory in " + templatePath.toStdString());
-    return GAMSPath(temp.path());
-}
-
-GAMSPath GAMSPath::tempFile(const QString &templateName)
-{
-    initSeed();
-    QTemporaryFile temp(*this / templateName);
-    temp.setAutoRemove(false);
-    if (!temp.open())
-        throw GAMSException("Could not create temporary file in " + templateName.toStdString());
-    temp.close();
-    return GAMSPath(temp.fileName());
-}
-
-GAMSPath GAMSPath::tempFile(const std::string &templateName)
-{
-    return tempFile(QString::fromStdString(templateName));
+    std::ofstream of;
+    of.open(tempName, std::ofstream::out);
+    if (!of.is_open())
+        throw GAMSException("Could not create temporary file in " + tempName);
+    of.close();
+    return GAMSPath(tempName);
 }
 
 GAMSPath GAMSPath::tempFile(const char* templateName)
 {
-    return tempFile(QString::fromLatin1(templateName));
+    return tempFile(templateName);
 }
 
 
