@@ -37,7 +37,7 @@ GAMSCheckpointImpl::GAMSCheckpointImpl(GAMSWorkspace workspace, const string& ch
 {
     DEB << "---- Entering GAMSCheckpointImpl constructor ----";
     GAMSPath cpFilePath(mName);
-    if (!cpFilePath.isAbsolute())
+    if (!cpFilePath.is_absolute())
       cpFilePath = GAMSPath(mWs.workingDirectory()) / mName;
     cpFilePath.setSuffix(".g00");
     mCheckpointFileName = cpFilePath.toStdString();

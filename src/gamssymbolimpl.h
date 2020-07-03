@@ -30,6 +30,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <cstring>
 #include "gamspath.h"
 #include "gclgms.h"
 #include "gmdcc.h"

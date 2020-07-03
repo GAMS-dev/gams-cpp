@@ -34,8 +34,7 @@
 
 #include <sstream>
 #include <fstream>
-#include <QProcess>
-#include <QDebug>
+#include <iostream>
 
 using namespace std;
 
@@ -192,45 +191,45 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     }
 
     //TODO(CW): we might need to check if the GAMSJob is already running and avoid multiple starts. Also check this in C# an other languages
-    mProc.setProgram(GAMSPath(mWs.systemDirectory()) / "gams" + cExeSuffix);
-    mProc.setArguments(QStringList() << "dummy" << "pf=" + QString::fromStdString(mJobName) + ".pf");
-    mProc.setWorkingDirectory(QString::fromStdString(mWs.workingDirectory()));
+    char* proc = nullptr;
+    sprintf(proc, "cd %s && %s/gams%s dummy pf=%s.pf",
+            mWs.workingDirectory().c_str(),mWs.systemDirectory().c_str(), cExeSuffix, mJobName.c_str());
 
-    QMetaObject::Connection connection;
-    if (output && mWs.debug() >= GAMSEnum::DebugLevel::ShowLog)
-        connection = QObject::connect(&mProc, &QProcess::readyReadStandardOutput, [=] () { MSG << mProc.readAllStandardOutput().toStdString(); });
-    else if (output)
-        connection = QObject::connect(&mProc, &QProcess::readyReadStandardOutput, [=] () { *output << mProc.readAllStandardOutput().toStdString(); });
+//    QMetaObject::Connection connection;
+//    if (output && mWs.debug() >= GAMSEnum::DebugLevel::ShowLog)
+//        connection = QObject::connect(&mProc, &QProcess::readyReadStandardOutput, [=] () { MSG << mProc.readAllStandardOutput().toStdString(); });
+//    else if (output)
+//        connection = QObject::connect(&mProc, &QProcess::readyReadStandardOutput, [=] () { *output << mProc.readAllStandardOutput().toStdString(); });
 
-    mProc.start();
-    if (!mProc.waitForStarted())
-        qDebug() << "Error starting '" << mProc.program() << " " << mProc.arguments().join(" ");
+    // TODO(RG): check error handling here
+    int exitCode = system(proc);
+//    std::cout << "Error starting '" << proc;
 
-    mProc.waitForFinished(-1);
-    QObject::disconnect(connection);
+
+//    QObject::disconnect(connection);
 
     if (createOutDb) {
         //TODO: should we always delete the outDB before a new run? Affects C#, Pytohn and Java as well
         //outdb = nullptr;
         GAMSPath gdxPath(tmpOpt.gdx());
-        if (!gdxPath.isAbsolute())
+        if (!gdxPath.is_absolute())
             gdxPath = GAMSPath(mWs.workingDirectory()) / gdxPath;
         gdxPath.setSuffix(".gdx");
         if (gdxPath.exists()) {
-            mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.toStdString(), gdxPath.suffix("").fileName().toStdString(), "");
+            mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.toStdString(), gdxPath.suffix(""), "");
         }
     }
 
-    if (mProc.exitCode() != 0) {
+    if (exitCode != 0) {
         if ((mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) && mWs.usingTmpWorkingDir())
-            throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(mProc.exitCode()) +
+            throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +
                                          "), set GAMSWorkspace.Debug to KeepFiles or higher or define the \
                                          GAMSWorkspace.WorkingDirectory to receive a listing file with more details",
-                                         mProc.exitCode());
+                                         exitCode);
         else
-            throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(mProc.exitCode()) + "), check " +
+            throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) + "), check " +
                                          (GAMSPath(mWs.workingDirectory()) / tmpOpt.output()).toStdString() +
-                                         " for more details", mProc.exitCode());
+                                         " for more details", exitCode);
     }
 
 
@@ -256,7 +255,7 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
 bool GAMSJobImpl::interrupt()
 {
     //TODO(CW): implement for linux and mac
-    qint64 pid = mProc.processId();
+    /*qint64*/ int pid = 0 /*mProc.processId()*/; // TODO(RG): we need std process handling here
     if(pid == 0)
         return false;
     return GAMSPlatform::interrupt(pid);

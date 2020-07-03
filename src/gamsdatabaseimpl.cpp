@@ -26,7 +26,7 @@
 #include "gamslog.h"
 #include "gamsdatabaseimpl.h"
 #include <iostream>
-#include <cctype> // std::tolower
+#include <algorithm>
 #include "gamsset.h"
 #include "gamsparameter.h"
 #include "gamsvariable.h"
@@ -45,11 +45,12 @@ GAMSDatabaseImpl::GAMSDatabaseImpl(const string& gdxFileName, const GAMSWorkspac
 {
     DEB << "---- Entering GAMSDatabaseImpl constructor ----";
     // assigning databaseName catching nullptr
-    string databaseNameTmp = QString::fromStdString(databaseName).toLower().toStdString();
+    string databaseNameTmp = databaseName;
+    std::transform(databaseNameTmp.begin(), databaseNameTmp.end(), databaseNameTmp.begin(), ::tolower);
     GAMSPath gdxFile(gdxFileName);
     if (databaseNameTmp == gdxFile.suffix("").toStdString())
         throw GAMSException("GAMSDatabase name and gdx file name for initialization must be different (saw " + databaseName + " for both)");
-    if (gdxFile.isAbsolute())
+    if (gdxFile.is_absolute())
         checkForGMDError(gmdInitFromGDX(mGMD, gdxFile.c_str()), __FILE__, __LINE__);
     else
         checkForGMDError(gmdInitFromGDX(mGMD, (GAMSPath(workspace.workingDirectory()) / gdxFileName).c_str()), __FILE__, __LINE__);
@@ -65,7 +66,8 @@ GAMSDatabaseImpl::GAMSDatabaseImpl(GAMSWorkspace workspace, const double specVal
     if (mDatabaseName == "") {
         mDatabaseName = mWs.registerDatabase();
     } else {
-        QString extensionTmp = GAMSPath(mDatabaseName).suffix().toLower();
+        string extensionTmp = GAMSPath(mDatabaseName).suffix();
+        std::transform(extensionTmp.begin(), extensionTmp.end(), extensionTmp.begin(), ::tolower);
         if (extensionTmp == ".gdx")
             mDatabaseName = GAMSPath(mDatabaseName).suffix("").toStdString();
         if (mWs.registerDatabase(mDatabaseName).empty() && !forceName)
@@ -158,7 +160,7 @@ void GAMSDatabaseImpl::doExport(const string& filePath)
     } else {
         GAMSPath filePathTmp(filePath);
         filePathTmp.setSuffix(".gdx");
-        if (filePathTmp.isAbsolute())
+        if (filePathTmp.is_absolute())
             checkForGMDError(gmdWriteGDX(mGMD, filePathTmp.c_str(), mSuppressAutoDomainChecking), __FILE__, __LINE__);
         else
             checkForGMDError(gmdWriteGDX(mGMD, (GAMSPath(mWs.workingDirectory()) / filePathTmp).c_str()
@@ -304,7 +306,7 @@ std::vector<GAMSDatabaseDomainViolation> GAMSDatabaseImpl::getDatabaseDVs(const 
         int maxViolNextSym = maxViolPerSym;
         if (maxViol > 0) {
             if (maxViolNextSym > 0)
-                maxViolNextSym = qMin(maxViol - violAll, maxViolPerSym);
+                maxViolNextSym = min(maxViol - violAll, maxViolPerSym);
             else
                 maxViolNextSym = maxViol - violAll;
         }

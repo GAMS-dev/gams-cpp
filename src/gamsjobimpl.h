@@ -28,7 +28,6 @@
 
 #include <string>
 #include <memory>
-#include <QProcess>
 #include <vector>
 #include "gamsenum.h"
 #include "gamsworkspace.h"
@@ -91,7 +90,6 @@ private:
     GAMSDatabase mOutDb;
     std::string mFileName;
     GAMSCheckpoint* mCheckpointStart = nullptr;
-    QProcess mProc;
 };
 }
 #endif // GAMSJOBIMPL_H

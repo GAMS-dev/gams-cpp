@@ -26,6 +26,7 @@
 #include "gamspath.h"
 #include "gamsexception.h"
 #include <fstream>
+#include <algorithm>
 
 namespace gams {
 
@@ -80,24 +81,28 @@ GAMSPath GAMSPath::operator /(const char *append)
 //    return filePath();
 //}
 
-void GAMSPath::setSuffix(const char *suffix)
-{
-    replace_extension(suffix);
-}
+// TODO(RG): maybe we dont need this function (and similar ones)
+//void GAMSPath::setSuffix(const char *suffix)
+//{
+//    setSuffix(std::string(suffix));
+//}
 
 void GAMSPath::setSuffix(const std::string &suffix)
 {
+    std::transform(suffix.begin(), suffix.end(), suffix.begin(), ::tolower);
     replace_extension(suffix);
 }
 
 void GAMSPath::setSuffix(const std::string suffix)
 {
+    std::transform(suffix.begin(), suffix.end(), suffix.begin(), ::tolower);
     replace_extension(suffix);
 }
 
 GAMSPath GAMSPath::suffix(const std::string &suffix) const
 {
     GAMSPath p(*this);
+    std::transform(suffix.begin(), suffix.end(), suffix.begin(), ::tolower);
     return p.replace_extension(suffix);
 }
 
@@ -200,7 +205,7 @@ std::string GAMSPath::toStdString()
 
 const char *GAMSPath::c_str()
 {
-    return c_str();
+    return toStdString().c_str();
 }
 
 GAMSPath GAMSPath::tempDir(const std::string tempPath)
@@ -225,6 +230,7 @@ GAMSPath GAMSPath::tempFile(const std::string &tempName)
     return GAMSPath(tempName);
 }
 
+// TODO(RG): do we need this function?
 GAMSPath GAMSPath::tempFile(const char* templateName)
 {
     return tempFile(templateName);

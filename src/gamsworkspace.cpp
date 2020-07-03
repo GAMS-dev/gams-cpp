@@ -23,26 +23,21 @@
  * SOFTWARE.
  */
 
-#define NOMINMAX // we need this in ordre for numerical_limits<double>::min() to work
+#define NOMINMAX // we need this in order  for numerical_limits<double>::min() to work
 
-#include "gamslog.h"
-#include "gamsworkspace.h"
-#include "gamsworkspaceimpl.h"
-#include "gamsoptions.h"
-#include "gamsjob.h"
 #include <iostream>
 #include <cstdlib>
 #include <sstream>
 #include <fstream>
 #include <vector>
 #include <string>
-#include <QSettings>
-#include <QProcess>
-#include <QDir>
-#include <QDebug>
-
 #include <limits>
 #include <stdio.h>
+#include "gamslog.h"
+#include "gamsworkspace.h"
+#include "gamsworkspaceimpl.h"
+#include "gamsoptions.h"
+#include "gamsjob.h"
 
 using namespace std;
 
