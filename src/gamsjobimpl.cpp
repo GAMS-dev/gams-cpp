@@ -195,18 +195,29 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     sprintf(proc, "cd %s && %s/gams%s dummy pf=%s.pf",
             mWs.workingDirectory().c_str(),mWs.systemDirectory().c_str(), cExeSuffix, mJobName.c_str());
 
-//    QMetaObject::Connection connection;
-//    if (output && mWs.debug() >= GAMSEnum::DebugLevel::ShowLog)
-//        connection = QObject::connect(&mProc, &QProcess::readyReadStandardOutput, [=] () { MSG << mProc.readAllStandardOutput().toStdString(); });
-//    else if (output)
-//        connection = QObject::connect(&mProc, &QProcess::readyReadStandardOutput, [=] () { *output << mProc.readAllStandardOutput().toStdString(); });
+    string result;
+    FILE* out;
+#ifdef _WIN32
+    out = _popen(proc, "r");
+#elif
+    out = popen(proc, "r");
+#endif
 
-    // TODO(RG): check error handling here
-    int exitCode = system(proc);
-//    std::cout << "Error starting '" << proc;
+    char* buffer = nullptr;
+    while(fgets(buffer, 255, out)) {
+        result += buffer;
+    }
+    int exitCode;
+#ifdef _WIN32
+    exitCode = _pclose(out);
+#elif
+    exitCode = pclose(out);
+#endif
 
-
-//    QObject::disconnect(connection);
+    if (output && mWs.debug() >= GAMSEnum::DebugLevel::ShowLog)
+        MSG << result;
+    else if (output)
+        *output << result;
 
     if (createOutDb) {
         //TODO: should we always delete the outDB before a new run? Affects C#, Pytohn and Java as well

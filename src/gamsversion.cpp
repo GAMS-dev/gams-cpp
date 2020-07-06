@@ -115,14 +115,23 @@ string GAMSVersion::systemVersion(string gamsSystemDir)
     sprintf(proc, "%s/gams.exe audit lo=3", sys.c_str());
 
     string result;
-    FILE* out = popen(proc, "r");
+    FILE* out;
+#ifdef _WIN32
+    out = _popen(proc, "r");
+#elif
+    out = popen(proc, "r");
+#endif
     // if (!out) TODO(RG): error
 
     char* buffer = nullptr;
     while(fgets(buffer, 255, out)) {
         result += buffer;
     }
+#ifdef _WIN32
+    _pclose(out);
+#elif
     pclose(out);
+#endif
 
     regex regex("[0-9]*\\.[][0-9]*\\.[0-9]*");
     smatch match;
