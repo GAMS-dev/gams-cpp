@@ -232,9 +232,6 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
                                          " for more details", exitCode);
     }
 
-
-    //TODO(CW): we reuse the same QProcess for each run of one specific GAMSJob. Do we need to reset it somehow before reusing?
-
     if (tmpCP) {
         GAMSPath implFile(checkpoint->fileName());
         if (implFile.exists()) {
