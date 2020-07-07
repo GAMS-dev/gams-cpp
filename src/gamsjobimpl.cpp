@@ -199,7 +199,7 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     FILE* out;
 #ifdef _WIN32
     out = _popen(proc, "r");
-#elif
+#else
     out = popen(proc, "r");
 #endif
 
@@ -210,7 +210,7 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     int exitCode;
 #ifdef _WIN32
     exitCode = _pclose(out);
-#elif
+#else
     exitCode = pclose(out);
 #endif
 

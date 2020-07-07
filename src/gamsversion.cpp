@@ -118,7 +118,7 @@ string GAMSVersion::systemVersion(string gamsSystemDir)
     FILE* out;
 #ifdef _WIN32
     out = _popen(proc, "r");
-#elif
+#else
     out = popen(proc, "r");
 #endif
     // if (!out) TODO(RG): error
@@ -129,7 +129,7 @@ string GAMSVersion::systemVersion(string gamsSystemDir)
     }
 #ifdef _WIN32
     _pclose(out);
-#elif
+#else
     pclose(out);
 #endif
 

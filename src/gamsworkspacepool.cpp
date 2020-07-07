@@ -41,7 +41,7 @@ void GAMSWorkspacePool::registerWorkspacePath(std::string path)
 
     // Iterate through the paths for the lockfile (throw if exists).
     for (auto iPath = mWorspacePaths.cbegin(); iPath != mWorspacePaths.cend(); ++iPath) {
-        GAMSPath checkFile = GAMSPath(*iPath) / lockPath.fileName();
+        GAMSPath checkFile = GAMSPath(*iPath) / lockPath.string();
         if (checkFile.exists()) {
             lockPath.remove();
             if (path != *iPath)
