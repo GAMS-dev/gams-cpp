@@ -76,10 +76,10 @@ GAMSPath GAMSPath::operator /(const char *append)
 }
 
 // TODO(RG): i dont know what this does
-//GAMSPath::operator QString()
-//{
-//    return filePath();
-//}
+GAMSPath::operator std::string()
+{
+    return string();
+}
 
 // TODO(RG): maybe we dont need this function (and similar ones)
 //void GAMSPath::setSuffix(const char *suffix)
@@ -89,21 +89,24 @@ GAMSPath GAMSPath::operator /(const char *append)
 
 void GAMSPath::setSuffix(const std::string &suffix)
 {
-    std::transform(suffix.begin(), suffix.end(), suffix.begin(), ::tolower);
-    replace_extension(suffix);
+    std::string s = suffix;
+    std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+    replace_extension(s);
 }
 
-void GAMSPath::setSuffix(const std::string suffix)
-{
-    std::transform(suffix.begin(), suffix.end(), suffix.begin(), ::tolower);
-    replace_extension(suffix);
-}
+//void GAMSPath::setSuffix(const std::string suffix)
+//{
+//    std::string s = suffix;
+//    std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+//    replace_extension(s);
+//}
 
 GAMSPath GAMSPath::suffix(const std::string &suffix) const
 {
+    std::string s = suffix;
     GAMSPath p(*this);
-    std::transform(suffix.begin(), suffix.end(), suffix.begin(), ::tolower);
-    return p.replace_extension(suffix);
+    std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+    return p.replace_extension(s);
 }
 
 GAMSPath GAMSPath::suffix(const char *suffix) const
@@ -231,10 +234,9 @@ GAMSPath GAMSPath::tempFile(const std::string &tempName)
 }
 
 // TODO(RG): do we need this function?
-GAMSPath GAMSPath::tempFile(const char* templateName)
-{
-    return tempFile(templateName);
-}
-
+//GAMSPath GAMSPath::tempFile(const char* templateName)
+//{
+//    return tempFile(templateName);
+//}
 
 }

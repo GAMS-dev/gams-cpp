@@ -83,7 +83,7 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     // handle working directory
     mUsingTmpWorkingDir = workingDir.empty();
     if (mUsingTmpWorkingDir) {
-        GAMSPath tempDir = mWorkingDir.tempDir(std::filesystem::temp_directory_path());
+        GAMSPath tempDir = mWorkingDir.tempDir(std::filesystem::temp_directory_path().string());
         if (!tempDir.exists()) {
             throw GAMSException("Cannot create temp-workspace directory: " + tempDir.toStdString());
         }

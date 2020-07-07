@@ -122,17 +122,17 @@ public:
     /// \return Returns a GAMSPath to the temporary file.
     GAMSPath tempFile(const char* tempName = "XXXXXX.tmp");
 
-    /// Add a suffix to the GAMSPath.
-    /// \param suffix The suffix to add.
-    void setSuffix(const char *suffix);
+//    /// Add a suffix to the GAMSPath.
+//    /// \param suffix The suffix to add.
+//    void setSuffix(const char *suffix);
 
     /// Add a suffix to the GAMSPath.
     /// \param suffix The suffix to add.
     void setSuffix(const std::string &suffix);
 
-    /// Add a suffix to the GAMSPath.
-    /// \param suffix The suffix to add.
-    void setSuffix(const std::string suffix);
+//    /// Add a suffix to the GAMSPath.
+//    /// \param suffix The suffix to add.
+//    void setSuffix(const std::string suffix);
 
     /// Add a suffix.
     /// \param suffix The suffix to add.

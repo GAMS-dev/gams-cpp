@@ -218,7 +218,7 @@ bool GAMSPlatform::interruptOnWindows(long pid)
     COPYDATASTRUCT cds;
 
     string stem = "___GAMSMSGWINDOW___";
-    string pidStr = QString::number(pid).toUtf8().constData();
+    string pidStr = std::to_string(pid);
     string windowName = stem + pidStr;
 
     HWND receiver = FindWindow(nullptr, windowName.c_str());
