@@ -30,7 +30,7 @@
 
 namespace gams {
 
-GAMSPath&GAMSPath::operator=(const GAMSPath& other)
+GAMSPath& GAMSPath::operator=(const GAMSPath& other)
 {
     assign(other.string());
     return *this;
@@ -42,7 +42,7 @@ GAMSPath& GAMSPath::operator<<(const std::string &append)
     return *this;
 }
 
-GAMSPath &GAMSPath::operator+=(const std::string &append)
+GAMSPath& GAMSPath::operator+=(const std::string &append)
 {
     this->append(append);
     return *this;
@@ -81,11 +81,10 @@ GAMSPath::operator std::string()
     return string();
 }
 
-// TODO(RG): maybe we dont need this function (and similar ones)
-//void GAMSPath::setSuffix(const char *suffix)
-//{
-//    setSuffix(std::string(suffix));
-//}
+void GAMSPath::setSuffix(const char *suffix)
+{
+    setSuffix(std::string(suffix));
+}
 
 void GAMSPath::setSuffix(const std::string &suffix)
 {
@@ -211,7 +210,7 @@ const char *GAMSPath::c_str()
     return toStdString().c_str();
 }
 
-GAMSPath GAMSPath::tempDir(const std::string tempPath)
+GAMSPath GAMSPath::tempDir(const std::string &tempPath)
 {
     GAMSPath baseLocation = tempPath.empty() ? this->path().string() : tempPath;
     if (!baseLocation.exists()) baseLocation.mkDir();
@@ -233,10 +232,9 @@ GAMSPath GAMSPath::tempFile(const std::string &tempName)
     return GAMSPath(tempName);
 }
 
-// TODO(RG): do we need this function?
-//GAMSPath GAMSPath::tempFile(const char* templateName)
-//{
-//    return tempFile(templateName);
-//}
+GAMSPath GAMSPath::tempFile(const char* templateName)
+{
+    return tempFile(templateName);
+}
 
 }

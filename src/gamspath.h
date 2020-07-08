@@ -31,7 +31,7 @@
 namespace gams {
 
 /// Represents the GAMS path to a specific file.
-class GAMSPath: public std::filesystem::path
+class GAMSPath : public std::filesystem::path
 {
 public:
     /// Standard constructor.
@@ -110,7 +110,7 @@ public:
     /// Create a GAMSPath to a temporary directory.
     /// \param templatePath Template temporary directory.
     /// \return Returns a GAMSPath to the temporary directory.
-    GAMSPath tempDir(const std::string tempPath = std::string());
+    GAMSPath tempDir(const std::string &tempPath = std::string());
 
     /// Create a GAMSPath to a temporary file.
     /// \param templateName Template for temporary file name.
@@ -122,9 +122,9 @@ public:
     /// \return Returns a GAMSPath to the temporary file.
     GAMSPath tempFile(const char* tempName = "XXXXXX.tmp");
 
-//    /// Add a suffix to the GAMSPath.
-//    /// \param suffix The suffix to add.
-//    void setSuffix(const char *suffix);
+    /// Add a suffix to the GAMSPath.
+    /// \param suffix The suffix to add.
+    void setSuffix(const char *suffix);
 
     /// Add a suffix to the GAMSPath.
     /// \param suffix The suffix to add.
@@ -133,11 +133,6 @@ public:
 //    /// Add a suffix to the GAMSPath.
 //    /// \param suffix The suffix to add.
 //    void setSuffix(const std::string suffix);
-
-    /// Add a suffix.
-    /// \param suffix The suffix to add.
-    /// \return Returns the GAMSPath with suffix.
-    GAMSPath suffix(const std::string suffix) const;
 
     /// Add a suffix.
     /// \param suffix The suffix to add.
