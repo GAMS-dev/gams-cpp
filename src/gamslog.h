@@ -79,8 +79,10 @@ public:
     /// \param logId A GAMS logger ID.
     /// \return Returns the GAMS debug level of a certain logger.
     GAMSEnum::DebugLevel debug(const LogId logId) const {
-        // TODO(RG): error check here
-        return mBinds.at(logId).mDebug;
+        if (mBinds.count(logId) > 0)
+            return mBinds.at(logId).mDebug;
+        else
+            return GAMSEnum::DebugLevel::Off;
     }
 
 private:

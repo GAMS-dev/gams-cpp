@@ -56,7 +56,6 @@ void TestGAMSObject::initTestCase() {
 
     tests_Executed = 0;
     tests_Failed = 0;
-//    qDebug() <<  testGAMSVersion << ", " << testDebugLevel.isEmpty();
 }
 
 void TestGAMSObject::cleanupTestCase() {
@@ -66,12 +65,10 @@ void TestGAMSObject::cleanupTestCase() {
             path.removeRecursively();
         }
     }
-//    if (tests_Failed == 0) { }
 }
 
 void TestGAMSObject::init() {
-    // @todo to remove irreleavant files and directories
-
+    // #TODO: remove irreleavant files and directories
 }
 
 void TestGAMSObject::cleanup() {
