@@ -1,4 +1,4 @@
-Version 0.10.0 (*)
+Version 0.10.0
 ========================
 
 - Automatically finding a GAMS installation from the Windows registry has been changed from using
