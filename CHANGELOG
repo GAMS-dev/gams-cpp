@@ -1,3 +1,11 @@
+Version 0.10.0
+========================
+
+- Automatically finding a GAMS installation from the Windows registry has been changed from using
+  `HKEY_CURRENT_USER\gams.location` and `HKEY_LOCAL_MACHINE\Software\Classes\gams.location` to
+  `[HKEY_CURRENT_USER|HKEY_LOCAL_MACHINE]\Software\Classes\gams.location`
+- use the new GAMS.framework structure on macOS
+
 Version 0.9.9
 ========================
 
