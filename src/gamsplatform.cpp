@@ -160,7 +160,7 @@ string GAMSPlatform::findGamsOnWindows(LogId logId)
     string s;
     stringstream ss(getenv("PATH"));
     while (getline(ss, s, cEnvSep)) {
-        if ((GAMSPath(s) / "gams").exists()) {
+        if ((GAMSPath(s) / "gams.exe").exists()) {
             return s;
         }
     }
