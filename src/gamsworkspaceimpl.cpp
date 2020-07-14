@@ -112,6 +112,7 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     DEB << joat64File.string();
     const char* bitsuf = (bitness == 8) ? "64" : "";
 
+    // TODO(RG): can this be removed?
     // if 32 bit
     if (bitness == 4 && joat64File.exists()) {
         ERR << "Expected GAMS system to be 32 bit but found 64 bit instead. System directory: " << mSystemDir.c_str() << endl;
@@ -345,8 +346,8 @@ GAMSDatabase GAMSWorkspaceImpl::addDatabaseFromGMD(GAMSWorkspace& ws, void* gmdP
 
 string GAMSWorkspaceImpl::findGAMS()
 {
-    string GAMSDir = GAMSPlatform::findGams(logID());
-    return GAMSDir;
+    string gamsDir = GAMSPlatform::findGams(logID());
+    return gamsDir;
 }
 
 void GAMSWorkspaceImpl::xxxLib(string libname, string model)
