@@ -34,7 +34,6 @@
 #include <limits>
 #include <QObject>
 #include <QDir>
-#include <QDebug>
 #include <QTest>
 #include <QSet>
 

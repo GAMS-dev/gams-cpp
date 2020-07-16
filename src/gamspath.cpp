@@ -131,7 +131,7 @@ GAMSPath GAMSPath::path() const
     if (has_filename())
         return parent_path();
     else
-        return path();
+        return GAMSPath(string());
 }
 
 bool GAMSPath::mkDir()
@@ -207,7 +207,7 @@ std::string GAMSPath::toStdString()
 
 const char *GAMSPath::c_str()
 {
-    return toStdString().c_str();
+    return string().c_str();
 }
 
 GAMSPath GAMSPath::tempDir(const std::string &tempPath)
@@ -216,6 +216,7 @@ GAMSPath GAMSPath::tempDir(const std::string &tempPath)
     if (!baseLocation.exists()) baseLocation.mkDir();
 
     GAMSPath tempDir(baseLocation / "gams-cpp");
+    tempDir.mkDir();
 
     if (!std::filesystem::is_directory(tempDir))
         throw GAMSException("Could not create temporary directory in " + tempDir.string());
@@ -230,11 +231,6 @@ GAMSPath GAMSPath::tempFile(const std::string &tempName)
         throw GAMSException("Could not create temporary file in " + tempName);
     of.close();
     return GAMSPath(tempName);
-}
-
-GAMSPath GAMSPath::tempFile(const char* templateName)
-{
-    return tempFile(templateName);
 }
 
 }

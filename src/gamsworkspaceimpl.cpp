@@ -66,17 +66,19 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
 
     std::copy(std::begin(CSpecValues), std::end(CSpecValues), std::begin(specValues));
 
-    string envDebug = getenv("GAMSOOAPIDEBUG");
-    if (!envDebug.empty()) {
-        transform(envDebug.begin(), envDebug.end(), envDebug.begin(), ::tolower);
+    char* envDebug = getenv("GAMSOOAPIDEBUG");
+    if (envDebug) {
+        for (uint i = 0; i < (unsigned)strlen(envDebug); i++)
+          envDebug[i] = tolower(envDebug[i]);
+
         DEB << envDebug;
-        if ("off" == envDebug)
+        if (strcmp("off", envDebug))
             mDebug = GAMSEnum::Off;
-        else if ("keepfiles" == envDebug)
+        else if (strcmp("keepfiles", envDebug))
             mDebug = GAMSEnum::KeepFiles;
-        else if ("showlog" == envDebug)
+        else if (strcmp("showlog", envDebug))
             mDebug = GAMSEnum::ShowLog;
-        else if ("verbose" == envDebug)
+        else if (strcmp("verbose", envDebug))
             mDebug = GAMSEnum::Verbose;
     }
 

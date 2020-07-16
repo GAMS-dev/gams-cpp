@@ -27,7 +27,6 @@
 #include "gamslog.h"
 #include "gamspath.h"
 #include "gamsexception.h"
-
 namespace gams {
 
 using namespace std;
