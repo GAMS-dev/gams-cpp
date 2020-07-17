@@ -41,6 +41,9 @@
 #include "gamsoptions.h"
 #include "gamsworkspacepool.h"
 
+// rogo: remove:
+#include <QDebug>
+
 using namespace std;
 
 namespace gams {
@@ -68,7 +71,7 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
 
     char* envDebug = getenv("GAMSOOAPIDEBUG");
     if (envDebug) {
-        for (uint i = 0; i < (unsigned)strlen(envDebug); i++)
+        for (unsigned int i = 0; i < (unsigned)strlen(envDebug); i++)
           envDebug[i] = tolower(envDebug[i]);
 
         DEB << envDebug;
@@ -93,7 +96,7 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     } else {
         mWorkingDir = workingDir;
     }
-    if (!mWorkingDir.mkDir()) {
+    if (!mWorkingDir.exists() && !mWorkingDir.mkDir()) {
         throw GAMSException("Cannot create workspace directory: " + mWorkingDir.toStdString());
     }
     mWorkingDir.pack();
@@ -106,20 +109,26 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     }
     mSystemDir.pack();
 
-    char* lib = nullptr;
-    sprintf(lib, "%sjoatdclib64%s", cLibPrefix, cLibSuffix);
+    ostringstream sstream;
+    sstream << cLibPrefix << "joatdclib64" << cLibSuffix;
+    string lib = sstream.str();
+
+    qDebug() << "mSystemDir vorher" << mSystemDir.string().c_str(); // rogo: delete
     GAMSPath joat64File = mSystemDir / lib;
+    qDebug() << "mSystemDir nchher" << mSystemDir.string(). c_str(); // rogo: delete
+
+    // TODO(RG): can this be removed?
     int bitness = sizeof(int*);
 
     DEB << joat64File.string();
     const char* bitsuf = (bitness == 8) ? "64" : "";
 
     // TODO(RG): can this be removed?
-    // if 32 bit
-    if (bitness == 4 && joat64File.exists()) {
-        ERR << "Expected GAMS system to be 32 bit but found 64 bit instead. System directory: " << mSystemDir.c_str() << endl;
-        throw GAMSException("Expected GAMS system to be 32 bit but found 64 bit instead. System directory: " + mSystemDir.toStdString());
-    }
+//    // if 32 bit
+//    if (bitness == 4 && joat64File.exists()) {
+//        ERR << "Expected GAMS system to be 32 bit but found 64 bit instead. System directory: " << mSystemDir.c_str() << endl;
+//        throw GAMSException("Expected GAMS system to be 32 bit but found 64 bit instead. System directory: " + mSystemDir.toStdString());
+//    }
     // if 64 bit
     if (bitness == 8 && !joat64File.exists()) {
         ERR << "Expected GAMS system to be 64 bit but found 32 bit instead. System directory: " << mSystemDir.c_str() << endl;
@@ -129,8 +138,10 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     if (mSystemDir != mWorkingDir) {
         vector<string> libstems = {"gamsxdc", "gdxdc", "gmdcc", "joatdc", "optdc"};
         for (string lib: libstems) {
-            char* libTmpl = nullptr;
-            sprintf(libTmpl, "%s%slib%s%s", cLibPrefix, lib.c_str(), bitsuf, cLibSuffix);
+            ostringstream libstream;
+            libstream << cLibPrefix << lib << bitsuf << cLibSuffix;
+            string libTmpl = libstream.str();
+
             GAMSPath tmpLib = mWorkingDir / libTmpl;
             if (tmpLib.exists()) {
                 MSG   << "\n--- Warning: Found library " << tmpLib.filename() << " in the Working Directory (" << mWorkingDir.toStdString() << ")."
@@ -141,7 +152,6 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     }
 
     GAMSPlatform::ensureEnvPathContains(mSystemDir.c_str());
-
     // Check GAMS version of the system directory
     string compiledVersion = GAMSVersion::gamsVersion();
     string systemVersion = GAMSVersion::systemVersion(mSystemDir.toStdString());
@@ -154,7 +164,6 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     }
 
     // TODO: all the ProcessStartInfo stuff.
-
 }
 
 GAMSWorkspaceImpl::~GAMSWorkspaceImpl()

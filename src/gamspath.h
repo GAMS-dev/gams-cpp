@@ -61,7 +61,7 @@ public:
     /// Assigns a GAMSPath.
     /// \param other Another GAMSPath used as data source.
     /// \return Returns the assigned GAMSPath (*this).
-    GAMSPath& operator=(const GAMSPath &other);
+    GAMSPath &operator=(const GAMSPath &other);
 
     /// Appends the string to the GAMSPath.
     /// \param append The string to append.

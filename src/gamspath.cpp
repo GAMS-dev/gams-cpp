@@ -56,26 +56,24 @@ GAMSPath GAMSPath::operator +(const std::string &append)
 
 GAMSPath GAMSPath::operator +(const char *append)
 {
-    this->append(append);
-    return *this;
+    return GAMSPath(string() + append);
 }
 
 GAMSPath GAMSPath::operator /(const GAMSPath &append)
 {
-    return this->append(append.string());
+    return GAMSPath(path() / append);
 }
 
 GAMSPath GAMSPath::operator /(const std::string &append)
 {
-    return this->append(append);
+    return GAMSPath(path() / append);
 }
 
 GAMSPath GAMSPath::operator /(const char *append)
 {
-    return this->append(append);
+    return GAMSPath(path() / append);
 }
 
-// TODO(RG): i dont know what this does
 GAMSPath::operator std::string()
 {
     return string();

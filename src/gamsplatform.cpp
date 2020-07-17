@@ -200,18 +200,20 @@ string GAMSPlatform::findGamsOnWindows(LogId logId)
 
 void GAMSPlatform::ensureEnvPathSetOnWindows(const char *dirName)
 {
+#ifdef _WIN32
     string g = findGams();
     if (!g.empty()) {
-        char* p = nullptr;
-        sprintf(p, "PATH=%s;%s", getenv("PATH"), dirName);
-        // TODO(RG): check string here
-#ifdef _WIN32
+        ostringstream ps;
+        ps << "PATH=" << getenv("PATH") << ";" << dirName;
+        const char* p = ps.str().c_str();
+
         _putenv(p);
-#else
-        putenv(p);
-#endif
     }
+#else
+    throw GAMSException("ensureEnvPathSetOnWindows only impemented on Windows");
+#endif
 }
+
 bool GAMSPlatform::interruptOnWindows(long pid)
 {
 #ifdef _WIN32
