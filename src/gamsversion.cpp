@@ -128,7 +128,6 @@ string GAMSVersion::systemVersion(string gamsSystemDir)
     // if (!out) TODO(RG): error
 
     char buffer[255];
-    int i = 0;
     while(fgets(buffer, 255, out)) {
         result += buffer;
     }

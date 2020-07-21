@@ -56,8 +56,8 @@ GAMSPath GAMSPath::operator +(const std::string &append)
 
 GAMSPath GAMSPath::operator +(const char *append)
 {
-    GAMSPath res(path());
-    return res.append(append);
+    this->append(append);
+    return *this;
 }
 
 GAMSPath GAMSPath::operator /(const GAMSPath &append)
@@ -212,12 +212,15 @@ const char *GAMSPath::c_str()
     return string().c_str();
 }
 
+// TODO(RG): refactor this so that default arg creates in temp dir instead of current?
 GAMSPath GAMSPath::tempDir(const std::string &tempPath)
 {
     GAMSPath baseLocation = tempPath.empty() ? this->path().string() : tempPath;
     if (!baseLocation.exists()) baseLocation.mkDir();
 
-    GAMSPath tempDir(baseLocation / "gams-cpp");
+    std::string folderName("gams-cpp");
+    folderName += "-" + std::to_string(rand());
+    GAMSPath tempDir(baseLocation + folderName);
     tempDir.mkDir();
 
     if (!std::filesystem::is_directory(tempDir))

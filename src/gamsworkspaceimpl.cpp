@@ -25,8 +25,6 @@
 
 #define NOMINMAX // we need this in ordre for numerical_limits<double>::min() to work
 
-#include "gamslog.h"
-#include "gamsworkspaceimpl.h"
 #include <iostream>
 #include <cstdlib>
 #include <sstream>
@@ -34,9 +32,12 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-
 #include <limits>
 #include <stdio.h>
+#include <string.h>
+
+#include "gamslog.h"
+#include "gamsworkspaceimpl.h"
 #include "gamsplatform.h"
 #include "gamsoptions.h"
 #include "gamsworkspacepool.h"
@@ -68,17 +69,18 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
 
     char* envDebug = getenv("GAMSOOAPIDEBUG");
     if (envDebug) {
-        for (unsigned int i = 0; i < (unsigned)strlen(envDebug); i++)
-          envDebug[i] = tolower(envDebug[i]);
+        // TODO(RG): remove this if the rest works
+//        envDebug[i] = tolower(envDebug[i]);
+//        for (unsigned int i = 0; i < (unsigned)strlen(envDebug); i++)
 
         DEB << envDebug;
-        if (strcmp("off", envDebug))
+        if (strcasecmp("off", envDebug))
             mDebug = GAMSEnum::Off;
-        else if (strcmp("keepfiles", envDebug))
+        else if (strcasecmp("keepfiles", envDebug))
             mDebug = GAMSEnum::KeepFiles;
-        else if (strcmp("showlog", envDebug))
+        else if (strcasecmp("showlog", envDebug))
             mDebug = GAMSEnum::ShowLog;
-        else if (strcmp("verbose", envDebug))
+        else if (strcasecmp("verbose", envDebug))
             mDebug = GAMSEnum::Verbose;
     }
 
@@ -110,7 +112,7 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     sstream << cLibPrefix << "joatdclib64" << cLibSuffix;
     string lib = sstream.str();
 
-    GAMSPath joat64File = mSystemDir / lib;
+    GAMSPath joat64File = mSystemDir.append(lib);
 
     // TODO(RG): can this be removed?
     int bitness = sizeof(int*);

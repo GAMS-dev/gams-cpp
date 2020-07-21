@@ -58,6 +58,7 @@ public:
     /// \param gpath Another GAMSPath used as data source.
     GAMSPath(const GAMSPath &gpath) : std::filesystem::path(gpath.string()) {}
 
+    // TODO(RG): documentation needs to be updated as itss wrong for some of these behaviors
     /// Assigns a GAMSPath.
     /// \param other Another GAMSPath used as data source.
     /// \return Returns the assigned GAMSPath (*this).
