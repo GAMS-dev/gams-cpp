@@ -46,7 +46,6 @@ void TestGAMSWorkspace::testDefaultConstructor() {
         // then
         TestGAMSObject::testDir( QString::fromStdString(ws.systemDirectory()) );
         QString sdir = QString::fromStdString(ws.systemDirectory());
-        qDebug() << "dirs:" << sdir << testSystemDir; // rogo: delete
         QCOMPARE( testSystemDir, QDir(sdir) );
         TestGAMSObject::testDir( sdir );
 
@@ -1019,8 +1018,6 @@ void TestGAMSWorkspace::testAddOptions_OptFile() {
        QVERIFY_EXCEPTION_THROWN( ws.addOptions(optfilename.toStdString()), GAMSException);
     }
     // clean up only when working dir is not application dir
-    qDebug() << "QCoreApplication::applicationDirPath()" << QCoreApplication::applicationDirPath(); // rogo: delete
-    qDebug() << "dir.canonicalPath()" << dir.canonicalPath(); // rogo: delete
     if (QFileInfo(QCoreApplication::applicationDirPath())!=QFileInfo(dir.canonicalPath()))
        dir.removeRecursively();
 }

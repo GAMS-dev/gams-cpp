@@ -33,9 +33,6 @@
 #include "gamsexception.h"
 #include "gamspath.h"
 
-// rogo: remove
-#include <QDebug>
-
 using namespace std;
 namespace gams {
 
@@ -123,7 +120,6 @@ string GAMSVersion::systemVersion(string gamsSystemDir)
 
     string result;
     FILE* out;
-    qDebug() << "executing" << proc.c_str(); // rogo: delete
 #ifdef _WIN32
     out = _popen(proc.c_str(), "r");
 #else
@@ -134,10 +130,8 @@ string GAMSVersion::systemVersion(string gamsSystemDir)
     char buffer[255];
     int i = 0;
     while(fgets(buffer, 255, out)) {
-        qDebug() << i++ << buffer; // rogo: delete
         result += buffer;
     }
-    qDebug() << "C"; // rogo: delete
 #ifdef _WIN32
     _pclose(out);
 #else

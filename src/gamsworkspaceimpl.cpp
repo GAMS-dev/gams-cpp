@@ -41,9 +41,6 @@
 #include "gamsoptions.h"
 #include "gamsworkspacepool.h"
 
-// rogo: remove:
-#include <QDebug>
-
 using namespace std;
 
 namespace gams {
@@ -113,9 +110,7 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     sstream << cLibPrefix << "joatdclib64" << cLibSuffix;
     string lib = sstream.str();
 
-    qDebug() << "mSystemDir vorher" << mSystemDir.string().c_str(); // rogo: delete
     GAMSPath joat64File = mSystemDir / lib;
-    qDebug() << "mSystemDir nchher" << mSystemDir.string(). c_str(); // rogo: delete
 
     // TODO(RG): can this be removed?
     int bitness = sizeof(int*);
