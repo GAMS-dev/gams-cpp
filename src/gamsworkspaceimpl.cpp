@@ -94,6 +94,7 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     } else {
         mWorkingDir = workingDir;
     }
+
     if (!mWorkingDir.exists() && !mWorkingDir.mkDir()) {
         throw GAMSException("Cannot create workspace directory: " + mWorkingDir.toStdString());
     }
@@ -347,15 +348,16 @@ string GAMSWorkspaceImpl::findGAMS()
 
 void GAMSWorkspaceImpl::xxxLib(string libname, string model)
 {
-    char* proc = nullptr;
-    sprintf(proc, "cd %s && %s/%slib%s", mWorkingDir.c_str(), mSystemDir.c_str(), libname.c_str(), cExeSuffix);
+    ostringstream ssp;
+    ssp << "cd " << mWorkingDir.string() << " && " << mSystemDir.string()
+        << GAMSPath::preferred_separator << libname << cExeSuffix;
 
     string result;
     FILE* out;
 #ifdef _WIN32
-    out = _popen(proc, "r");
+    out = _popen(ssp.str().c_str(), "r");
 #else
-    out = popen(proc, "r");
+    out = popen(ssp.str().c_str(), "r");
 #endif
     int exitCode;
 #ifdef _WIN32
