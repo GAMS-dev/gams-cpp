@@ -50,31 +50,31 @@ GAMSPath& GAMSPath::operator+=(const std::string &append)
 
 GAMSPath GAMSPath::operator +(const std::string &append)
 {
-    this->append(append);
-    return *this;
+    GAMSPath res(*this);
+    return res.append(append);
 }
 
 GAMSPath GAMSPath::operator +(const char *append)
 {
-    this->append(append);
-    return *this;
+    GAMSPath res(*this);
+    return res.append(append);
 }
 
 GAMSPath GAMSPath::operator /(const GAMSPath &append)
 {
-    GAMSPath res(path());
+    GAMSPath res(*this);
     return res.append(append.string());
 }
 
 GAMSPath GAMSPath::operator /(const std::string &append)
 {
-    GAMSPath res(path());
+    GAMSPath res(*this);
     return res.append(append);
 }
 
 GAMSPath GAMSPath::operator /(const char *append)
 {
-    GAMSPath res(path());
+    GAMSPath res(*this);
     return res.append(append);
 }
 
@@ -207,7 +207,8 @@ std::string GAMSPath::toStdString()
     return string();
 }
 
-const char *GAMSPath::c_str()
+// TODO(RG): fix this! its broken
+const char* GAMSPath::c_str()
 {
     return string().c_str();
 }
