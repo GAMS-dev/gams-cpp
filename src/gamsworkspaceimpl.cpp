@@ -69,18 +69,17 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
 
     char* envDebug = getenv("GAMSOOAPIDEBUG");
     if (envDebug) {
-        // TODO(RG): remove this if the rest works
-//        envDebug[i] = tolower(envDebug[i]);
-//        for (unsigned int i = 0; i < (unsigned)strlen(envDebug); i++)
+        for (unsigned int i = 0; i < (unsigned)strlen(envDebug); i++)
+            envDebug[i] = tolower(envDebug[i]);
 
         DEB << envDebug;
-        if (strcasecmp("off", envDebug))
+        if (strcmp("off", envDebug))
             mDebug = GAMSEnum::Off;
-        else if (strcasecmp("keepfiles", envDebug))
+        else if (strcmp("keepfiles", envDebug))
             mDebug = GAMSEnum::KeepFiles;
-        else if (strcasecmp("showlog", envDebug))
+        else if (strcmp("showlog", envDebug))
             mDebug = GAMSEnum::ShowLog;
-        else if (strcasecmp("verbose", envDebug))
+        else if (strcmp("verbose", envDebug))
             mDebug = GAMSEnum::Verbose;
     }
 
