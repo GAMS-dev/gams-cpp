@@ -53,7 +53,8 @@ void TestGAMSWorkspace::testDefaultConstructor() {
         QCOMPARE(ws.debug(), GAMSEnum::DebugLevel::Off);
 
     } catch (GAMSException &e) {
-        QEXPECT_FAIL("", e.what(), Abort); QVERIFY(false);
+        QEXPECT_FAIL("", e.what(), Abort);
+        QVERIFY(false);
     }
 }
 
@@ -152,6 +153,7 @@ void TestGAMSWorkspace::testConstructor_DebugLevel() {
     QString dir;
     // when
     {
+        qDebug() << "testing" << debugLevelEnum; // rogo: delete
         GAMSWorkspace ws("", testSystemDir.path().toStdString(), debugLevelEnum);
         dir = QString::fromStdString(ws.workingDirectory());
     }

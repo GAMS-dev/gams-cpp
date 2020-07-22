@@ -68,7 +68,7 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     std::copy(std::begin(CSpecValues), std::end(CSpecValues), std::begin(specValues));
 
     char* envDebug = getenv("GAMSOOAPIDEBUG");
-    if (envDebug) {
+    if (envDebug && envDebug[0] == '\0') {
         for (unsigned int i = 0; i < (unsigned)strlen(envDebug); i++)
             envDebug[i] = tolower(envDebug[i]);
 

@@ -27,8 +27,7 @@
 #define GAMSLOG_H
 
 #include <sstream>
-#include <set>
-#include <map>
+#include <unordered_set>
 #include "gamsenum.h"
 #include "gamslib_global.h"
 
@@ -43,7 +42,7 @@ class LoggerPool
             mTargets.insert(mTargets.end(), (target ? target : stdout));
         }
         GAMSEnum::DebugLevel mDebug;
-        std::set<FILE*> mTargets;
+        std::unordered_set<FILE*> mTargets;
     };
 
 public:
@@ -66,12 +65,12 @@ public:
     /// \param logId A GAMS logger ID.
     /// \param debug A GAMS debug level.
     /// \return Returns all file targets.
-    std::set<FILE*> targets(const LogId logId, const GAMSEnum::DebugLevel debug) const {
+    std::unordered_set<FILE*> targets(const LogId logId, const GAMSEnum::DebugLevel debug) const {
         if (mBinds.find(logId) == mBinds.end())
-            return std::set<FILE*>();
+            return std::unordered_set<FILE*>();
         TargetSet lc = mBinds.at(logId);
         if (lc.mDebug < debug)
-            return std::set<FILE*>();
+            return std::unordered_set<FILE*>();
         return lc.mTargets;
     }
 
@@ -137,7 +136,7 @@ private:
     std::string mBuffer;
     std::stringstream mBufferStream;
     std::string mWhere;
-    std::set<FILE*> mTargets;
+    std::unordered_set<FILE*> mTargets;
 };
 
 }

@@ -49,7 +49,6 @@ void TestGAMSObject::initTestCase() {
     testSystemDir = QString(qgetenv("GTESTDIR"));
     if (testSystemDir.path() == "")
         testSystemDir = GAMSPlatform::findGams(0).c_str();
-
     QCOMPARE(testSystemDir.path().isEmpty(), false);
     testDebugLevel = qgetenv("GAMSOOAPIDEBUG");
     testGAMSVersion = GAMSOptions::gamsVersion();
@@ -85,7 +84,6 @@ void TestGAMSObject::getTestData_DebugLevel() {
     QTest::newRow("KeepFiles") << QString::number(GAMSEnum::DebugLevel::KeepFiles);
     QTest::newRow("ShowLog") << QString::number(GAMSEnum::DebugLevel::ShowLog);
     QTest::newRow("Verbose") << QString::number(GAMSEnum::DebugLevel::Verbose);
-
 }
 
 void TestGAMSObject::getTestData_ModelLibraries() {
