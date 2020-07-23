@@ -28,6 +28,9 @@
 #include <fstream>
 #include <algorithm>
 
+// TODO(RG): remove:
+#include <QDebug>
+
 namespace gams {
 
 GAMSPath& GAMSPath::operator=(const GAMSPath& other)
@@ -231,12 +234,17 @@ GAMSPath GAMSPath::tempDir(const std::string &tempPath)
 
 GAMSPath GAMSPath::tempFile(const std::string &tempName)
 {
+    GAMSPath tmpFile(tempName);
+    std::filesystem::path ext = tmpFile.extension();
+    tmpFile.replace_filename(tmpFile.stem().string() + "_" + std::to_string(rand()));
+    tmpFile.replace_extension(ext);
+
     std::ofstream of;
-    of.open(tempName, std::ofstream::out);
+    of.open(tmpFile.string(), std::ofstream::out);
     if (!of.is_open())
-        throw GAMSException("Could not create temporary file in " + tempName);
+        throw GAMSException("Could not create temporary file " + tmpFile.string());
     of.close();
-    return GAMSPath(tempName);
+    return tmpFile;
 }
 
 }

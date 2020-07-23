@@ -35,7 +35,7 @@ std::set<std::string> GAMSWorkspacePool::mWorspacePaths;
 void GAMSWorkspacePool::registerWorkspacePath(std::string path)
 {
     // Create unique lockfile in path (throw on missing write access).
-    GAMSPath lockPath = GAMSPath(path).tempFile("gams_XXXXXX.lock");
+    GAMSPath lockPath = GAMSPath(path).tempFile("gams.lock");
     if (!lockPath.exists())
         throw GAMSException("GAMSWorkspacePool: failed to create lockfile in path " + path);
 
