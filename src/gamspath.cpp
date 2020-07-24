@@ -146,8 +146,10 @@ bool GAMSPath::mkDir()
 
 bool GAMSPath::rmDirRecurse()
 {
-    if (has_filename()) return std::filesystem::exists(*this);
-    return std::filesystem::remove_all(*this);
+    if (std::filesystem::is_regular_file(*this))
+        return std::filesystem::exists(*this);
+    else
+        return std::filesystem::remove_all(*this);
 }
 
 void GAMSPath::pack()
