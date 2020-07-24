@@ -348,10 +348,13 @@ string GAMSWorkspaceImpl::findGAMS()
 
 void GAMSWorkspaceImpl::xxxLib(string libname, string model)
 {
-    ostringstream ssp;
-    ssp << "cd " << mWorkingDir.string() << " && " << mSystemDir.string()
-        << GAMSPath::preferred_separator << libname << cExeSuffix;
+    string lib = libname + "lib" + cExeSuffix;
+    GAMSPath libPath(mSystemDir / lib);
 
+    ostringstream ssp;
+    ssp << "cd " << mWorkingDir.string() << " && " << libPath.string() << " " << model;
+
+    string s = ssp.str();
     string result;
     FILE* out;
 #ifdef _WIN32
@@ -359,15 +362,13 @@ void GAMSWorkspaceImpl::xxxLib(string libname, string model)
 #else
     out = popen(ssp.str().c_str(), "r");
 #endif
+
     int exitCode;
 #ifdef _WIN32
     exitCode = _pclose(out);
 #else
     exitCode = pclose(out);
 #endif
-//    if (!proc.waitForStarted())
-//        throw GAMSException(libname + "lib process could not be started");
-
     MSG << out;
 
     if (exitCode != 0)
