@@ -51,6 +51,16 @@ win32-g++:QMAKE_CXXFLAGS += -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DI
 win32-msvc*:QMAKE_CXXFLAGS += -EHsc -GR -c -nologo -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -DHAVE_MUTEX
 unix:!macx:QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\',-rpath,\'\$$ORIGIN/../../..\'"
 
+
+# TODO(RG): we need to find a solution for how to handle generated files...
+#HEADERS += generated/gamsoptions.h      \
+#           generated/gamsoptionsimpl.h
+# we dont need headers included, if they are located in one of the includepath folders
+
+SOURCES += generated/gamsoptions.cpp      \
+           generated/gamsoptionsimpl.cpp
+# ------------------------------------------------------------------------
+
 SOURCES += \
     gamscheckpoint.cpp \
     gamscheckpointimpl.cpp \

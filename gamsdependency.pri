@@ -60,6 +60,8 @@ GAMS_CORE_TMP = $$(GAMS_CORE_PATH)
 exists($$PWD/gamsinclude.pri) {
     include($$PWD/gamsinclude.pri)
 }
+# TODO(RG):  we need to find a solution for how to handle generated files...
+INCLUDEPATH += $$PWD/src/generated/
 
 # GAMS_BUILD is GAMS distrib build switch
 GAMS_BUILD_ENV = $$(GAMS_BUILD)
@@ -75,12 +77,11 @@ equals(GAMS_BUILD_ENV, "") {
         $$GAMS_DISTRIB_C_API/optcc.c
 
     equals(USE_GAMS_DISTRIB_CPP_API_SRC, "true") {
-        HEADERS += $$GAMS_DISTRIB_CPP_API/gamsoptions.h      \
-                   $$GAMS_DISTRIB_CPP_API/gamsoptionsimpl.h
-        SOURCES +=                                      \
-            $$GAMS_DISTRIB_CPP_API/gamsoptions.cpp      \
-            $$GAMS_DISTRIB_CPP_API/gamsoptionsimpl.cpp
-
+#    HEADERS += $$GAMS_DISTRIB_CPP_API/gamsoptions.h      \
+#               $$GAMS_DISTRIB_CPP_API/gamsoptionsimpl.h
+#    SOURCES +=                                      \
+#        $$GAMS_DISTRIB_CPP_API/gamsoptions.cpp      \
+#        $$GAMS_DISTRIB_CPP_API/gamsoptionsimpl.cpp
     }
 } else {
     DEFINES += HAVE_MUTEX
@@ -109,8 +110,7 @@ equals(GAMS_BUILD_ENV, "") {
         $$(GPRODUCTS)/gclib                     \
         $$(GPRODUCTS)/apiwrap/gmdobj            \
         $$(GPRODUCTS)/apiwrap/joat              \
-        $$(GPRODUCTS)/apiwrap/optobj            \
-        $$(GPRODUCTS)/apiexamples/C++/api
+        $$(GPRODUCTS)/apiwrap/optobj
 
     SOURCES +=                                                  \
         $$(GPRODUCTS)/gclib/gclgms.c                            \
@@ -122,8 +122,8 @@ equals(GAMS_BUILD_ENV, "") {
         $$(GPRODUCTS)/apiwrap/optobj/optcc.c
 
     equals(USE_GAMS_DISTRIB_CPP_API_SRC, "true") {
-        SOURCES +=                                                  \
-            $$(GPRODUCTS)/apiexamples/C++/api/gamsoptions.cpp       \
-            $$(GPRODUCTS)/apiexamples/C++/api/gamsoptionsimpl.cpp
+#        SOURCES +=                                                  \
+#            $$(GPRODUCTS)/apiexamples/C++/api/gamsoptions.cpp       \
+#            $$(GPRODUCTS)/apiexamples/C++/api/gamsoptionsimpl.cpp
     }
 }
