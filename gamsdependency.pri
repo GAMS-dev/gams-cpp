@@ -64,8 +64,7 @@ exists($$PWD/gamsinclude.pri) {
 # GAMS_BUILD is GAMS distrib build switch
 GAMS_BUILD_ENV = $$(GAMS_BUILD)
 equals(GAMS_BUILD_ENV, "") {
-    INCLUDEPATH += $$GAMS_DISTRIB_C_API     \
-                   $$GAMS_DISTRIB_CPP_API
+    INCLUDEPATH += $$GAMS_DISTRIB_C_API
 
     SOURCES +=                                      \
         $$GAMS_DISTRIB_C_API/gclgms.c               \
@@ -76,9 +75,12 @@ equals(GAMS_BUILD_ENV, "") {
         $$GAMS_DISTRIB_C_API/optcc.c
 
     equals(USE_GAMS_DISTRIB_CPP_API_SRC, "true") {
+        HEADERS += $$GAMS_DISTRIB_CPP_API/gamsoptions.h      \
+                   $$GAMS_DISTRIB_CPP_API/gamsoptionsimpl.h
         SOURCES +=                                      \
             $$GAMS_DISTRIB_CPP_API/gamsoptions.cpp      \
             $$GAMS_DISTRIB_CPP_API/gamsoptionsimpl.cpp
+
     }
 } else {
     DEFINES += HAVE_MUTEX

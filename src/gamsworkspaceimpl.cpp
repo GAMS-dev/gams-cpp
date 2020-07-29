@@ -35,6 +35,7 @@
 #include <limits>
 #include <stdio.h>
 #include <string.h>
+#include <array>
 
 #include "gamslog.h"
 #include "gamsworkspaceimpl.h"
