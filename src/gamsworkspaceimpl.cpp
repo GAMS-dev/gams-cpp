@@ -42,6 +42,9 @@
 #include "gamsoptions.h"
 #include "gamsworkspacepool.h"
 
+// rogo remove
+#include <QDebug>
+
 using namespace std;
 
 namespace gams {
@@ -332,6 +335,7 @@ GAMSDatabase GAMSWorkspaceImpl::addDatabaseFromGDXForcedName(GAMSWorkspace& ws, 
 
 GAMSDatabase GAMSWorkspaceImpl::addDatabaseFromGDX(GAMSWorkspace& ws, const string& gdxFileName, const string& databaseName, const string& inModelName)
 {
+    qDebug() /*rogo: delete*/ << "GAMSWorkspaceImpl::addDatabaseFromGDX" << gdxFileName.c_str();
     return GAMSDatabase(gdxFileName, ws, specValues, databaseName, inModelName);
 }
 
@@ -352,9 +356,10 @@ void GAMSWorkspaceImpl::xxxLib(string libname, string model)
     GAMSPath libPath(mSystemDir / lib);
 
     ostringstream ssp;
-    ssp << "cd " << mWorkingDir.string() << " && " << libPath.string() << " " << model;
+    ssp << "cd " << mWorkingDir.string() << " && " << libPath.string() << " " << model << " 2>&1";
 
     string s = ssp.str();
+    qDebug() /*rogo: delete*/ << s.c_str();
     string result;
     FILE* out;
 #ifdef _WIN32
@@ -362,6 +367,16 @@ void GAMSWorkspaceImpl::xxxLib(string libname, string model)
 #else
     out = popen(ssp.str().c_str(), "r");
 #endif
+    if (!out) {
+        std::cerr << "Couldn't start command: " << s.c_str() << std::endl;
+        return;
+    }
+
+    std::array<char, 128> buffer;
+    while (fgets(buffer.data(), 128, out))
+        result += buffer.data();
+
+    qDebug() /*rogo: delete*/ << result.c_str();
 
     int exitCode;
 #ifdef _WIN32

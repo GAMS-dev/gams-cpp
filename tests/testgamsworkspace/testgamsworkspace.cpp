@@ -34,6 +34,8 @@
 #include "gamspath.h"
 
 #include <iostream>
+// rogo remove
+#include <QDebug>
 
 using namespace gams;
 
@@ -289,6 +291,8 @@ void TestGAMSWorkspace::testAddDatabaseFromGDX1() {
     QFETCH(QString, fromDataLib);
     QFETCH(bool, valid);
 
+    qDebug() /*rogo: delete*/ << "gdxFilename valid" << gdxfilename << valid;
+
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     if (valid) {
@@ -296,13 +300,14 @@ void TestGAMSWorkspace::testAddDatabaseFromGDX1() {
         ws.dataLib(s);
         // when
         try {
-           GAMSDatabase db = ws.addDatabaseFromGDX(gdxfilename.toStdString() );
-           QCOMPARE( db.getNrSymbols(), 2 );
-           QCOMPARE( db.getParameter("demand").numberRecords(), 3) ;
-           QCOMPARE( db.getSet("markets").numberRecords(), 3);
+            GAMSDatabase db = ws.addDatabaseFromGDX(gdxfilename.toStdString() );
+
+            QCOMPARE( db.getNrSymbols(), 2 );
+            QCOMPARE( db.getParameter("demand").numberRecords(), 3);
+            QCOMPARE( db.getSet("markets").numberRecords(), 3);
         } catch(GAMSException& e) {
-           qDebug() << QString::fromStdString( ws.workingDirectory() );
-           QFAIL(qPrintable( "Unexpected GAMSException raised by: "+ QString::fromStdString(e.what()) ));
+            qDebug() << QString::fromStdString( ws.workingDirectory() );
+            QFAIL(qPrintable( "Unexpected GAMSException raised by: "+ QString::fromStdString(e.what()) ));
         }
     } else {
         // when, then
