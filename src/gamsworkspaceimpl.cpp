@@ -29,6 +29,7 @@
 #include <cstdlib>
 #include <sstream>
 #include <fstream>
+#include <array>
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -43,8 +44,9 @@
 #include "gamsoptions.h"
 #include "gamsworkspacepool.h"
 
-// rogo remove
-#include <QDebug>
+#ifdef _WIN32
+#include <direct.h>
+#endif
 
 using namespace std;
 
@@ -336,7 +338,6 @@ GAMSDatabase GAMSWorkspaceImpl::addDatabaseFromGDXForcedName(GAMSWorkspace& ws, 
 
 GAMSDatabase GAMSWorkspaceImpl::addDatabaseFromGDX(GAMSWorkspace& ws, const string& gdxFileName, const string& databaseName, const string& inModelName)
 {
-    qDebug() /*rogo: delete*/ << "GAMSWorkspaceImpl::addDatabaseFromGDX" << gdxFileName.c_str();
     return GAMSDatabase(gdxFileName, ws, specValues, databaseName, inModelName);
 }
 
@@ -357,27 +358,26 @@ void GAMSWorkspaceImpl::xxxLib(string libname, string model)
     GAMSPath libPath(mSystemDir / lib);
 
     ostringstream ssp;
-    ssp << "cd " << mWorkingDir.string() << " && " << libPath.string() << " " << model << " 2>&1";
-
-    string s = ssp.str();
-    qDebug() /*rogo: delete*/ << s.c_str();
     string result;
     FILE* out;
 #ifdef _WIN32
+    filesystem::path p = filesystem::current_path();
+    ssp << libPath.string() << " " << model;
+    _chdir(mWorkingDir.string().c_str()); // for some reason we need to do this on windows
     out = _popen(ssp.str().c_str(), "r");
+    _chdir(p.string().c_str()); // change back to old working dir
 #else
+    ssp << "cd " << mWorkingDir.string() << " && " << libPath.string() << " " << model;
     out = popen(ssp.str().c_str(), "r");
 #endif
     if (!out) {
-        std::cerr << "Couldn't start command: " << s.c_str() << std::endl;
+        std::cerr << "Couldn't start command: " << ssp.str() << std::endl;
         return;
     }
 
     std::array<char, 128> buffer;
     while (fgets(buffer.data(), 128, out))
         result += buffer.data();
-
-    qDebug() /*rogo: delete*/ << result.c_str();
 
     int exitCode;
 #ifdef _WIN32

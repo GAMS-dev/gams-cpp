@@ -33,6 +33,8 @@
 #include "gamsequation.h"
 #include "gamspath.h"
 #include "gamsdatabasedomainviolation.h"
+// rogo remove
+#include <QDebug>
 
 using namespace std;
 
@@ -53,7 +55,7 @@ GAMSDatabaseImpl::GAMSDatabaseImpl(const string& gdxFileName, const GAMSWorkspac
     if (gdxFile.is_absolute())
         checkForGMDError(gmdInitFromGDX(mGMD, gdxFile.c_str()), __FILE__, __LINE__);
     else
-        checkForGMDError(gmdInitFromGDX(mGMD, (GAMSPath(workspace.workingDirectory()) / gdxFileName).c_str()), __FILE__, __LINE__);
+        checkForGMDError(gmdInitFromGDX(mGMD, (GAMSPath(workspace.workingDirectory()) / gdxFileName).string().c_str()), __FILE__, __LINE__);
 }
 
 

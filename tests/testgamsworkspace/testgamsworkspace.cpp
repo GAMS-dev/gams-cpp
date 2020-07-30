@@ -291,8 +291,6 @@ void TestGAMSWorkspace::testAddDatabaseFromGDX1() {
     QFETCH(QString, fromDataLib);
     QFETCH(bool, valid);
 
-    qDebug() /*rogo: delete*/ << "gdxFilename valid" << gdxfilename << valid;
-
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     if (valid) {
