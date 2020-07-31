@@ -59,6 +59,8 @@ struct LIBSPEC GAMSPlatform
     ///         the interrupt and waits unitl gams has finished.
     static bool interrupt(long pid);
 
+    // TODO(RG): add documentation or move somewhere else
+    static int runProcess(std::string where, std::string what, std::string args);
 private:
     GAMSPlatform() {}
 

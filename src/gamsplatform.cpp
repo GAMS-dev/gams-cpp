@@ -25,6 +25,7 @@
 
 #ifdef _WIN32
 #include "Windows.h"
+#include <direct.h>
 #endif
 
 #include "gamsplatform.h"
@@ -32,7 +33,8 @@
 #include <stdlib.h>
 #include <iostream>
 #include <sstream>
-#include <vector>
+#include <array>
+
 #include "gamspath.h"
 #include "gamsenum.h"
 #include "gamslog.h"
@@ -149,10 +151,9 @@ void GAMSPlatform::ensureEnvPathSetOnUnix(const char *dirName)
 
 bool GAMSPlatform::interruptOnNonWindows(long pid)
 {
-    char* proc = nullptr;
-    sprintf(proc, "/bin/bash -c -kill -2 %ld", pid);
-
-    system(proc);
+    ostringstream s;
+    s << "/bin/bash -c -kill -2 " << pid;
+    system(s.str().c_str());
     return true;
 }
 
@@ -240,6 +241,42 @@ bool GAMSPlatform::interruptOnWindows(long pid)
 #else
     throw GAMSException("interruptOnWindows only impemented on Windows");
 #endif
+}
+
+int GAMSPlatform::runProcess(string where, string what, std::string args)
+{
+    ostringstream ssp;
+    string result;
+    FILE* out;
+#ifdef _WIN32
+    filesystem::path p = filesystem::current_path();
+    ssp << what << " " << args;
+    _chdir(where.c_str()); // for some reason we need to do this on windows
+    out = _popen(ssp.str().c_str(), "r");
+    _chdir(p.string().c_str()); // change back to old working dir
+#else
+    ssp << "cd " << where << " && " << what << " " << args;
+    out = popen(ssp.str().c_str(), "r");
+#endif
+    if (!out) {
+        std::cerr << "Couldn't start command: " << ssp.str() << std::endl;
+        return -1;
+    }
+
+    std::array<char, 128> buffer;
+    while (fgets(buffer.data(), 128, out))
+        result += buffer.data();
+
+    cout << result << endl; // TODO(RG): is that the correct way of giving output here?
+
+    int exitCode;
+#ifdef _WIN32
+    exitCode = _pclose(out);
+#else
+    exitCode = pclose(out);
+#endif
+
+    return exitCode;
 }
 
 } // namespace gams

@@ -44,9 +44,7 @@
 #include "gamsoptions.h"
 #include "gamsworkspacepool.h"
 
-#ifdef _WIN32
-#include <direct.h>
-#endif
+
 
 using namespace std;
 
@@ -357,36 +355,7 @@ void GAMSWorkspaceImpl::xxxLib(string libname, string model)
     string lib = libname + "lib" + cExeSuffix;
     GAMSPath libPath(mSystemDir / lib);
 
-    ostringstream ssp;
-    string result;
-    FILE* out;
-#ifdef _WIN32
-    filesystem::path p = filesystem::current_path();
-    ssp << libPath.string() << " " << model;
-    _chdir(mWorkingDir.string().c_str()); // for some reason we need to do this on windows
-    out = _popen(ssp.str().c_str(), "r");
-    _chdir(p.string().c_str()); // change back to old working dir
-#else
-    ssp << "cd " << mWorkingDir.string() << " && " << libPath.string() << " " << model;
-    out = popen(ssp.str().c_str(), "r");
-#endif
-    if (!out) {
-        std::cerr << "Couldn't start command: " << ssp.str() << std::endl;
-        return;
-    }
-
-    std::array<char, 128> buffer;
-    while (fgets(buffer.data(), 128, out))
-        result += buffer.data();
-
-    int exitCode;
-#ifdef _WIN32
-    exitCode = _pclose(out);
-#else
-    exitCode = pclose(out);
-#endif
-    MSG << out;
-
+    int exitCode = GAMSPlatform::runProcess(mWorkingDir.string(), libPath.string(), model);
     if (exitCode != 0)
         throw GAMSException(libname + "lib return code not 0 (" + std::to_string(exitCode) + ")");
 }

@@ -33,6 +33,9 @@
 #include "cfgmcc.h"
 #include "gmomcc.h"
 
+// rogo remove
+#include <QDebug>
+
 using namespace std;
 
 namespace gams {
@@ -2291,7 +2294,7 @@ void GAMSOptionsImpl::setupOptionsBase()
     GAMSPath defFile = GAMSPath(mWs.systemDirectory()) / "optgams.def";
 
     // TODO: lock(optLock); (c++11 added support for lock, find alternative for older versions)
-    if (optReadDefinition(mOPT, defFile.c_str())) {
+    if (optReadDefinition(mOPT, defFile.string().c_str())) {
         for (int i = 1, itype=0; i <= optMessageCount(mOPT); i++) {
             optGetMessage(mOPT, i, msg, &itype);
             // TODO(AF) log mMsg!
@@ -2304,7 +2307,7 @@ void GAMSOptionsImpl::setupOptionsBase()
         throw GAMSException(msg);
 
     GAMSPath cmpFileFullPath = GAMSPath(mWs.systemDirectory()) / cCmpFileName;
-    if (cfgReadConfigGUC(mCFG, cmpFileFullPath.c_str(), GAMSPath(mWs.systemDirectory()).c_str()) != 0) {
+    if (cfgReadConfigGUC(mCFG, cmpFileFullPath.string().c_str(), GAMSPath(mWs.systemDirectory()).c_str()) != 0) {
         throw GAMSException("Error reading config file " + cmpFileFullPath.toStdString());
     }
 }

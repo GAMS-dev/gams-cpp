@@ -34,8 +34,6 @@
 #include "gamspath.h"
 
 #include <iostream>
-// rogo remove
-#include <QDebug>
 
 using namespace gams;
 

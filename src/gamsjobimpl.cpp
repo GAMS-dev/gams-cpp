@@ -35,6 +35,8 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
+// rogo remove
+#include <QDebug>
 
 using namespace std;
 
@@ -74,6 +76,7 @@ GAMSJobImpl::~GAMSJobImpl() {
         delete mCheckpointStart; // this is intended to only free the wrapper, not the *Impl if used anywhere
 }
 
+// TODO(RG): what are these?
 //   shared_ptr<GAMSJobImpl> GAMSJobImpl::fromString(GAMSWorkspace workspace, string gamsSource, const GAMSCheckpoint *checkpoint, string jobName)
 //   {
 //      shared_ptr<GAMSJobImpl> jobImpl = make_shared<GAMSJobImpl>(workspace, "", "", checkpoint);
@@ -121,7 +124,6 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
                       vector<GAMSDatabase> databases)
 {
     // TODO(JM) backward replacement of pointer logic with instance of gamsOptions
-
     GAMSOptions tmpOpt = GAMSOptions(mWs, gamsOptions);
     GAMSCheckpoint* tmpCP = nullptr;
 
@@ -191,33 +193,12 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     }
 
     //TODO(CW): we might need to check if the GAMSJob is already running and avoid multiple starts. Also check this in C# an other languages
-    char* proc = nullptr;
-    sprintf(proc, "cd %s && %s/gams%s dummy pf=%s.pf",
-            mWs.workingDirectory().c_str(),mWs.systemDirectory().c_str(), cExeSuffix, mJobName.c_str());
 
-    string result;
-    FILE* out;
-#ifdef _WIN32
-    out = _popen(proc, "r");
-#else
-    out = popen(proc, "r");
-#endif
-
-    char* buffer = nullptr;
-    while(fgets(buffer, 255, out)) {
-        result += buffer;
-    }
-    int exitCode;
-#ifdef _WIN32
-    exitCode = _pclose(out);
-#else
-    exitCode = pclose(out);
-#endif
-
-    if (output && mWs.debug() >= GAMSEnum::DebugLevel::ShowLog)
-        MSG << result;
-    else if (output)
-        *output << result;
+// TODO(RG): get result from runProcess
+//    if (output && mWs.debug() >= GAMSEnum::DebugLevel::ShowLog)
+//        MSG << result;
+//    else if (output)
+//        *output << result;
 
     if (createOutDb) {
         //TODO: should we always delete the outDB before a new run? Affects C#, Pytohn and Java as well
@@ -230,7 +211,10 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
             mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.toStdString(), gdxPath.suffix(""), "");
         }
     }
-
+    GAMSPath gamsExe(mWs.systemDirectory());
+    gamsExe / "gams"+cExeSuffix;
+    qDebug() << "gamsexe" << gamsExe.string().c_str(); // rogo: delete
+    int exitCode = GAMSPlatform::runProcess(mWs.workingDirectory(), gamsExe.string(), mJobName);
     if (exitCode != 0) {
         if ((mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) && mWs.usingTmpWorkingDir())
             throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +
