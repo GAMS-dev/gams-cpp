@@ -221,7 +221,7 @@ const char* GAMSPath::c_str()
 // TODO(RG): refactor this so that default arg creates in temp dir instead of current?
 GAMSPath GAMSPath::tempDir(const std::string &tempPath)
 {
-    GAMSPath baseLocation = tempPath.empty() ? string() : tempPath;
+    GAMSPath baseLocation = tempPath.empty() ? path().string() : tempPath;
     if (!baseLocation.exists()) baseLocation.mkDir();
 
     std::string folderName("gams-cpp");

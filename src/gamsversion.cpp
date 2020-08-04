@@ -111,8 +111,12 @@ int GAMSVersion::gamsBuild()
 
 string GAMSVersion::systemVersion(string gamsSystemDir)
 {
-    string gexe = "gams.exe";
+    string gams("gams");
+#ifdef _WIN32
+    gams += ".exe";
+#endif
     GAMSPath sys(gamsSystemDir);
+    sys.append(gams);
 
     ostringstream ps;
     ps << sys.string() << " audit lo=3";

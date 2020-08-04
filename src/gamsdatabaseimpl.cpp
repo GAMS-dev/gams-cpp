@@ -33,8 +33,6 @@
 #include "gamsequation.h"
 #include "gamspath.h"
 #include "gamsdatabasedomainviolation.h"
-// rogo remove
-#include <QDebug>
 
 using namespace std;
 
