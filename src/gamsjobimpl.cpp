@@ -194,13 +194,6 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     }
 
     //TODO(CW): we might need to check if the GAMSJob is already running and avoid multiple starts. Also check this in C# an other languages
-
-// TODO(RG): get result from runProcess
-//    if (output && mWs.debug() >= GAMSEnum::DebugLevel::ShowLog)
-//        MSG << result;
-//    else if (output)
-//        *output << result;
-
     if (createOutDb) {
         //TODO: should we always delete the outDB before a new run? Affects C#, Pytohn and Java as well
         //outdb = nullptr;
@@ -218,6 +211,12 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
 
     string result;
     int exitCode = GAMSPlatform::runProcess(mWs.workingDirectory(), gamsExe.string(), mJobName, result);
+
+    if (output && mWs.debug() >= GAMSEnum::DebugLevel::ShowLog)
+        MSG << result;
+    else if (output)
+        *output << result;
+
     if (exitCode != 0) {
         if ((mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) && mWs.usingTmpWorkingDir())
             throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +
