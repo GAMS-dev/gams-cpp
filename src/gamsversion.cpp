@@ -111,10 +111,9 @@ int GAMSVersion::gamsBuild()
 
 string GAMSVersion::systemVersion(string gamsSystemDir)
 {
-    string gams("gams");
-#ifdef _WIN32
-    gams += ".exe";
-#endif
+    string gams = "gams";
+    gams.append(cExeSuffix);
+
     GAMSPath sys(gamsSystemDir);
     sys.append(gams);
 
