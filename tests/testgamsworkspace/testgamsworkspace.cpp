@@ -984,10 +984,10 @@ void TestGAMSWorkspace::testAddOptions_OptFile_data() {
     QTest::addColumn<bool>("exist");
     QTest::addColumn<QString>("workdir");
 
-    QTest::newRow("valid_optfile")     << "test.pf"                   << true  << workdir1 ;
+    QTest::newRow("valid_optfile")     << "validoptionfile.pf"        << true  << workdir1 ;
     QTest::newRow("invalid_optfile")   << "ThereWillExistThisFile.pf" << false << workdir2 ;
 
-    QString filename="test.pf";
+    QString filename="validoptionfile.pf";
     QFile file( QDir(workdir1).filePath( filename ) );
     if ( file.open(QIODevice::WriteOnly) )  {
       QTextStream stream( &file );
