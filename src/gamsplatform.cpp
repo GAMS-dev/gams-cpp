@@ -243,7 +243,7 @@ bool GAMSPlatform::interruptOnWindows(long pid)
 #endif
 }
 
-int GAMSPlatform::runProcess(string where, string what, std::string args)
+int GAMSPlatform::runProcess(const string where, const string what, const string args, string& output)
 {
     ostringstream ssp;
     string result;
@@ -267,7 +267,7 @@ int GAMSPlatform::runProcess(string where, string what, std::string args)
     while (fgets(buffer.data(), 128, out))
         result += buffer.data();
 
-    cout << result << endl; // TODO(RG): is that the correct way of giving output here?
+    output = result;
 
     int exitCode;
 #ifdef _WIN32

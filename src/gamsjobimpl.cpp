@@ -120,6 +120,7 @@ GAMSJobImpl::~GAMSJobImpl() {
 //      return jobImpl;
 //   }
 
+// TODO(RG): check how "output" parameter was used in original version
 void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostream* output, bool createOutDb,
                       vector<GAMSDatabase> databases)
 {
@@ -214,7 +215,9 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     GAMSPath gamsExe(mWs.systemDirectory());
     gamsExe / "gams"+cExeSuffix;
     qDebug() << "gamsexe" << gamsExe.string().c_str(); // rogo: delete
-    int exitCode = GAMSPlatform::runProcess(mWs.workingDirectory(), gamsExe.string(), mJobName);
+
+    string result;
+    int exitCode = GAMSPlatform::runProcess(mWs.workingDirectory(), gamsExe.string(), mJobName, result);
     if (exitCode != 0) {
         if ((mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) && mWs.usingTmpWorkingDir())
             throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +

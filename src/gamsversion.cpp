@@ -32,7 +32,8 @@
 #include "gamsoptions.h"
 #include "gamsexception.h"
 #include "gamspath.h"
-
+// rogo remove
+#include <QDebug>
 using namespace std;
 namespace gams {
 
@@ -115,31 +116,9 @@ string GAMSVersion::systemVersion(string gamsSystemDir)
     gams.append(cExeSuffix);
 
     GAMSPath sys(gamsSystemDir);
-    sys.append(gams);
-
-    ostringstream ps;
-    ps << sys.string() << " audit lo=3";
-    string proc = ps.str();
 
     string result;
-    FILE* out;
-#ifdef _WIN32
-    out = _popen(proc.c_str(), "r");
-#else
-    out = popen(proc.c_str(), "r");
-#endif
-    // if (!out) TODO(RG): error
-
-    char buffer[255];
-    while(fgets(buffer, 255, out)) {
-        result += buffer;
-    }
-#ifdef _WIN32
-    _pclose(out);
-#else
-    pclose(out);
-#endif
-
+    GAMSPlatform::runProcess(gamsSystemDir, gams, "audit lo=3", result);
     regex regex("[0-9]*\\.[][0-9]*\\.[0-9]*");
     smatch match;
     regex_match(result, match, regex);

@@ -355,7 +355,8 @@ void GAMSWorkspaceImpl::xxxLib(string libname, string model)
     string lib = libname + "lib" + cExeSuffix;
     GAMSPath libPath(mSystemDir / lib);
 
-    int exitCode = GAMSPlatform::runProcess(mWorkingDir.string(), libPath.string(), model);
+    string output;
+    int exitCode = GAMSPlatform::runProcess(mWorkingDir.string(), libPath.string(), model, output);
     if (exitCode != 0)
         throw GAMSException(libname + "lib return code not 0 (" + std::to_string(exitCode) + ")");
 }

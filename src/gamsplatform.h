@@ -60,7 +60,7 @@ struct LIBSPEC GAMSPlatform
     static bool interrupt(long pid);
 
     // TODO(RG): add documentation or move somewhere else
-    static int runProcess(std::string where, std::string what, std::string args);
+    static int runProcess(const std::string where, const std::string what, const std::string args, std::string& output);
 private:
     GAMSPlatform() {}
 
