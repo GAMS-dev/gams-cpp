@@ -42,7 +42,8 @@ class TestGAMSWorkspace: public TestGAMSObject
     void testConstructor_DebugLevel_data();
     void testConstructor_DebugLevel();
     void testConstructorFromOccupiedWorkingDirectory();
-    void testGetVersion();
+    void testGetGAMSVersion();
+    void testGetSystemVersion();
     void testGetAPIVersion();
     void testGetScratchFilePrefix();
     void testSetScratchFilePrefix_data();

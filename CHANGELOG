@@ -1,3 +1,7 @@
+Version 0.10.1
+========================
+- fixed bug where gams-cpp was unable to determine GAMS version on unix systems
+
 Version 0.10.0
 ========================
 
