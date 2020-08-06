@@ -32,8 +32,7 @@
 #include "gamsoptions.h"
 #include "gamsexception.h"
 #include "gamspath.h"
-// rogo remove
-#include <QDebug>
+
 using namespace std;
 namespace gams {
 

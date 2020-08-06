@@ -1021,7 +1021,7 @@ void TestGAMSWorkspace::testAddOptions_OptFile() {
        QVERIFY_EXCEPTION_THROWN( ws.addOptions(optfilename.toStdString()), GAMSException);
     }
     // clean up only when working dir is not application dir
-    if (QFileInfo(QCoreApplication::applicationDirPath())!=QFileInfo(dir.canonicalPath()))
+    if (QFileInfo(QCoreApplication::applicationDirPath()) != QFileInfo(dir.canonicalPath()))
        dir.removeRecursively();
 }
 

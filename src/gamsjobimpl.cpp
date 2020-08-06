@@ -35,8 +35,6 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
-// rogo remove
-#include <QDebug>
 
 using namespace std;
 
@@ -120,7 +118,6 @@ GAMSJobImpl::~GAMSJobImpl() {
 //      return jobImpl;
 //   }
 
-// TODO(RG): check how "output" parameter was used in original version
 void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostream* output, bool createOutDb,
                       vector<GAMSDatabase> databases)
 {
@@ -173,11 +170,6 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
 
     GAMSPath jobFileInfo(GAMSPath(mWs.workingDirectory()) / mJobName);
 
-    // This has been set directly in the constructor
-//    char buffer[GMS_SSSIZE];
-//    for (int i = 1; i < gmoProc_nrofmodeltypes; i++)  // TODO(JM) change type of i to int and adapt casts
-//        optSetStrStr(tmpOpt.optPtr(), cfgModelTypeName(tmpOpt.optPtr(), i, buffer), tmpOpt.SelectedSolvers[i].c_str());
-
     if (createOutDb && tmpOpt.gdx() == "") {
         tmpOpt.setGdx(mWs.nextDatabaseName());
     }
@@ -205,17 +197,20 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
             mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.toStdString(), gdxPath.suffix(""), "");
         }
     }
-    GAMSPath gamsExe(mWs.systemDirectory());
-    gamsExe / "gams"+cExeSuffix;
-    qDebug() << "gamsexe" << gamsExe.string().c_str(); // rogo: delete
+    string gamsExe = mWs.systemDirectory() + "/gams";
+    gamsExe.append(cExeSuffix);
+
+    string args = "dummy pf=" + mJobName + ".pf";
 
     string result;
-    int exitCode = GAMSPlatform::runProcess(mWs.workingDirectory(), gamsExe.string(), mJobName, result);
+    int exitCode = GAMSPlatform::runProcess(mWs.workingDirectory(), gamsExe, args, result);
+    MSG << result.c_str();
 
     if (output && mWs.debug() >= GAMSEnum::DebugLevel::ShowLog)
         MSG << result;
     else if (output)
         *output << result;
+
 
     if (exitCode != 0) {
         if ((mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) && mWs.usingTmpWorkingDir())
@@ -228,7 +223,6 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
                                          (GAMSPath(mWs.workingDirectory()) / tmpOpt.output()).toStdString() +
                                          " for more details", exitCode);
     }
-
     if (tmpCP) {
         GAMSPath implFile(checkpoint->fileName());
         if (implFile.exists()) {
@@ -238,7 +232,6 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
         implFile.rename(checkpoint->fileName());
         delete tmpCP; tmpCP=nullptr;
     }
-
     if (mWs.debug() < GAMSEnum::DebugLevel::KeepFiles)
     {
         try { GAMSPath(pfFileName).remove(); }

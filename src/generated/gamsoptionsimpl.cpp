@@ -26,15 +26,13 @@
  * This file was generated.
  */
 
+#include <algorithm>
 #include "gamsoptionsimpl.h"
 #include "gamspath.h"
 #include "gamsexception.h"
 #include "gamsplatform.h"
 #include "cfgmcc.h"
 #include "gmomcc.h"
-
-// rogo remove
-#include <QDebug>
 
 using namespace std;
 
@@ -68,8 +66,7 @@ GAMSOptionsImpl::GAMSOptionsImpl(GAMSWorkspace& workspace, const std::string& op
 {
     setupOptionsBase();
     if (!optFile.empty()) {
-        GAMSPath optPath(optFile);
-        if (optReadParameterFile(mOPT, optPath.c_str())) {
+        if (optReadParameterFile(mOPT, optFile.c_str())) {
             char msg[GMS_SSSIZE];
             for (int i=1, itype=0; i <= optMessageCount(mOPT); i++) {
                 optGetMessage(mOPT, i, msg, &itype);

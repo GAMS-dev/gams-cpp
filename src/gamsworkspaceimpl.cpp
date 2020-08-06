@@ -44,8 +44,6 @@
 #include "gamsoptions.h"
 #include "gamsworkspacepool.h"
 
-
-
 using namespace std;
 
 namespace gams {
