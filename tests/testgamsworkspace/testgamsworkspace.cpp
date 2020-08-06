@@ -32,6 +32,7 @@
 #include "gamsexception.h"
 #include "testgamsworkspace.h"
 #include "gamspath.h"
+#include "gamsversion.h"
 
 #include <QString>
 #include <iostream>
@@ -199,7 +200,7 @@ void TestGAMSWorkspace::testConstructorFromOccupiedWorkingDirectory() {
     QVERIFY_EXCEPTION_THROWN( GAMSWorkspace ws2(wsInfo), GAMSException);
 }
 
-void TestGAMSWorkspace::testGetVersion() {
+void TestGAMSWorkspace::testGetGAMSVersion() {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -211,6 +212,11 @@ void TestGAMSWorkspace::testGetVersion() {
     QCOMPARE(ws.majorRelNumber(), testGAMSVersionList[0].toInt());
     QCOMPARE(ws.minorRelNumber(), testGAMSVersionList[1].toInt());
     QCOMPARE(ws.goldRelNumber(), testGAMSVersionList[2].toInt());
+}
+
+void TestGAMSWorkspace::testGetSystemVersion() {
+    std::string systemVersion = GAMSVersion::systemVersion(testSystemDir.path().toStdString());
+    QVERIFY2(!systemVersion.empty(), "Unable to determine GAMS version");
 }
 
 void TestGAMSWorkspace::testGetAPIVersion() {
