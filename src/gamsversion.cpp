@@ -104,9 +104,12 @@ int GAMSVersion::gamsBuild()
 
 std::string GAMSVersion::systemVersion(std::string gamsSystemDir)
 {
+    std::string gams = "gams";
+    gams.append(cExeSuffix);
+
     GAMSPath sys(gamsSystemDir);
     QProcess proc;
-    proc.start(sys / "gams.exe", QStringList() << "audit" << "lo=3");
+    proc.start(sys / gams, QStringList() << "audit" << "lo=3");
     proc.waitForFinished();
     QRegExp regex("[0-9]*\\.[][0-9]*\\.[0-9]*");
     regex.indexIn(proc.readAllStandardOutput());
