@@ -35,7 +35,8 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
-
+// rogo remove
+#include <QDebug>
 using namespace std;
 
 namespace gams {
@@ -121,6 +122,7 @@ GAMSJobImpl::~GAMSJobImpl() {
 void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostream* output, bool createOutDb,
                       vector<GAMSDatabase> databases)
 {
+    qDebug() << "createOutDb" << createOutDb; // rogo: delete
     // TODO(JM) backward replacement of pointer logic with instance of gamsOptions
     GAMSOptions tmpOpt = GAMSOptions(mWs, gamsOptions);
     GAMSCheckpoint* tmpCP = nullptr;
@@ -131,8 +133,10 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     if (checkpoint != nullptr) {
         if (mCheckpointStart != checkpoint) {
             tmpCP = new GAMSCheckpoint(mWs, "");
+            qDebug() << "tmpCP->fileName()" << tmpCP->fileName().c_str(); // rogo: delete
             tmpOpt.setSave(tmpCP->fileName());
         } else {
+            qDebug() << "checkpoint->fileName()" << checkpoint->fileName().c_str(); // rogo: delete
             tmpOpt.setSave(checkpoint->fileName());
         }
     }
@@ -171,28 +175,37 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     GAMSPath jobFileInfo(GAMSPath(mWs.workingDirectory()) / mJobName);
 
     if (createOutDb && tmpOpt.gdx() == "") {
+        qDebug() << "setting gdx" << mWs.nextDatabaseName().c_str(); // rogo: delete
         tmpOpt.setGdx(mWs.nextDatabaseName());
     }
-    if (tmpOpt.logFile() == "")
+    if (tmpOpt.logFile() == "") {
+        qDebug() << "jobFileInfo.suffix(.log).toStdString()" << jobFileInfo.suffix(".log").toStdString().c_str(); // rogo: delete
         tmpOpt.setLogFile(jobFileInfo.suffix(".log").toStdString());
+    }
     tmpOpt.setOutput(mJobName + ".lst");
     tmpOpt.setCurDir(mWs.workingDirectory());
+    qDebug() << "tmpOPt.curDir" << tmpOpt.curDir().c_str(); // rogo: delete
     tmpOpt.setInput(mFileName);
+    qDebug() << "tmpOpt.input" << tmpOpt.input().c_str(); // rogo: delete
     GAMSPath pfFileName = jobFileInfo.suffix(".pf");
     try {
         tmpOpt.writeOptionFile(pfFileName);
+        qDebug() << "tmpOpt.writeOptionFile" << pfFileName.c_str(); // rogo: delete
     } catch (GAMSException& e) {
         throw GAMSException(e.what() + (" for GAMSJob " + mJobName));
     }
 
-    //TODO(CW): we might need to check if the GAMSJob is already running and avoid multiple starts. Also check this in C# an other languages
     if (createOutDb) {
         //TODO: should we always delete the outDB before a new run? Affects C#, Pytohn and Java as well
         //outdb = nullptr;
         GAMSPath gdxPath(tmpOpt.gdx());
+        qDebug() << "gdxPath-original" << gdxPath.string().c_str(); // rogo: delete
         if (!gdxPath.is_absolute())
             gdxPath = GAMSPath(mWs.workingDirectory()) / gdxPath;
+        qDebug() << "gdxPath-no extension" << gdxPath.string().c_str(); // rogo: delete
         gdxPath.setSuffix(".gdx");
+        qDebug() << "gdxPath-newextension" << gdxPath.string().c_str(); // rogo: delete
+        qDebug() << "gdxPath exists" << gdxPath.exists(); // rogo: delete
         if (gdxPath.exists()) {
             mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.toStdString(), gdxPath.suffix(""), "");
         }
@@ -241,7 +254,6 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
 
 bool GAMSJobImpl::interrupt()
 {
-    //TODO(CW): implement for linux and mac
     /*qint64*/ int pid = 0 /*mProc.processId()*/; // TODO(RG): we need std process handling here
     if(pid == 0)
         return false;
