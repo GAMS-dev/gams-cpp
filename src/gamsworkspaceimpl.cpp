@@ -43,8 +43,7 @@
 #include "gamsplatform.h"
 #include "gamsoptions.h"
 #include "gamsworkspacepool.h"
-// rogo remove
-#include <QDebug>
+
 using namespace std;
 
 namespace gams {
@@ -284,11 +283,9 @@ GAMSCheckpoint GAMSWorkspaceImpl::addCheckpoint(GAMSWorkspace& ws, const string 
 GAMSJob GAMSWorkspaceImpl::addJobFromFile(GAMSWorkspace& ws, const string& fileName, const string& jobName)
 {
     std::string jName = registerJob(jobName);
-    qDebug() << "jName" << jName.c_str(); // rogo: delete
     if (jName.empty())
        throw GAMSException("Job with name " + jobName + " already exists");
     std::string fName = findSourceFile(fileName);
-    qDebug() << "fName" << fName.c_str(); // rogo: delete
     return GAMSJob(ws, jName, fName, nullptr);
 
 }

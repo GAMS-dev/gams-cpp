@@ -22,11 +22,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 #include "gamscheckpointimpl.h"
 #include "gamslog.h"
 #include "gamspath.h"
 #include "gamsexception.h"
+
 namespace gams {
 
 using namespace std;

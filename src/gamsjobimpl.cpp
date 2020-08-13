@@ -35,8 +35,7 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
-// rogo remove
-#include <QDebug>
+
 using namespace std;
 
 namespace gams {
@@ -122,21 +121,18 @@ GAMSJobImpl::~GAMSJobImpl() {
 void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostream* output, bool createOutDb,
                       vector<GAMSDatabase> databases)
 {
-    qDebug() << "createOutDb" << createOutDb; // rogo: delete
     // TODO(JM) backward replacement of pointer logic with instance of gamsOptions
     GAMSOptions tmpOpt = GAMSOptions(mWs, gamsOptions);
     GAMSCheckpoint* tmpCP = nullptr;
 
-    if (mCheckpointStart != nullptr)
+    if (mCheckpointStart)
         tmpOpt.setRestart(mCheckpointStart->fileName());
 
-    if (checkpoint != nullptr) {
+    if (checkpoint) {
         if (mCheckpointStart != checkpoint) {
             tmpCP = new GAMSCheckpoint(mWs, "");
-            qDebug() << "tmpCP->fileName()" << tmpCP->fileName().c_str(); // rogo: delete
             tmpOpt.setSave(tmpCP->fileName());
         } else {
-            qDebug() << "checkpoint->fileName()" << checkpoint->fileName().c_str(); // rogo: delete
             tmpOpt.setSave(checkpoint->fileName());
         }
     }
@@ -159,38 +155,20 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
                 tmpOpt.setDefine(db.inModelName(), db.name());
         }
     }
-    // TODO: c sharp, solver options
-    //if (tmpOpt.SolverOptions.size() > size_t(0))
-    //{
-    //    for each (tuple<string, int> slvOpt in tmpOpt.SolverOptions)
-    //    {
-    //        string path = workspace.workingDirectory;
-    //        path += PATHSEPERATOR;
-    //        path += get<0>(slvOpt) + OptFileExtension(get<1>(slvOpt));
-    //        optWriteParameterFile(tmpOpt.OPT, path.c_str()); // TODO: which OPT do we need here?
-    //    }
-    //        // TODO: continue: GAMSJob::run [l513]
-    //}
-
     GAMSPath jobFileInfo(GAMSPath(mWs.workingDirectory()) / mJobName);
 
-    if (createOutDb && tmpOpt.gdx() == "") {
-        qDebug() << "setting gdx" << mWs.nextDatabaseName().c_str(); // rogo: delete
+    if (createOutDb && tmpOpt.gdx() == "")
         tmpOpt.setGdx(mWs.nextDatabaseName());
-    }
-    if (tmpOpt.logFile() == "") {
-        qDebug() << "jobFileInfo.suffix(.log).toStdString()" << jobFileInfo.suffix(".log").toStdString().c_str(); // rogo: delete
+
+    if (tmpOpt.logFile() == "")
         tmpOpt.setLogFile(jobFileInfo.suffix(".log").toStdString());
-    }
+
     tmpOpt.setOutput(mJobName + ".lst");
     tmpOpt.setCurDir(mWs.workingDirectory());
-    qDebug() << "tmpOPt.curDir" << tmpOpt.curDir().c_str(); // rogo: delete
     tmpOpt.setInput(mFileName);
-    qDebug() << "tmpOpt.input" << tmpOpt.input().c_str(); // rogo: delete
     GAMSPath pfFileName = jobFileInfo.suffix(".pf");
     try {
         tmpOpt.writeOptionFile(pfFileName);
-        qDebug() << "tmpOpt.writeOptionFile" << pfFileName.c_str(); // rogo: delete
     } catch (GAMSException& e) {
         throw GAMSException(e.what() + (" for GAMSJob " + mJobName));
     }
@@ -199,16 +177,12 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
         //TODO: should we always delete the outDB before a new run? Affects C#, Pytohn and Java as well
         //outdb = nullptr;
         GAMSPath gdxPath(tmpOpt.gdx());
-        qDebug() << "gdxPath-original" << gdxPath.string().c_str(); // rogo: delete
         if (!gdxPath.is_absolute())
             gdxPath = GAMSPath(mWs.workingDirectory()) / gdxPath;
-        qDebug() << "gdxPath-no extension" << gdxPath.string().c_str(); // rogo: delete
+
         gdxPath.setSuffix(".gdx");
-        qDebug() << "gdxPath-newextension" << gdxPath.string().c_str(); // rogo: delete
-        qDebug() << "gdxPath exists" << gdxPath.exists(); // rogo: delete
-        if (gdxPath.exists()) {
+        if (gdxPath.exists())
             mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.toStdString(), gdxPath.suffix(""), "");
-        }
     }
     string gamsExe = mWs.systemDirectory() + "/gams";
     gamsExe.append(cExeSuffix);
@@ -217,13 +191,11 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
 
     string result;
     int exitCode = GAMSPlatform::runProcess(mWs.workingDirectory(), gamsExe, args, result);
-    MSG << result.c_str();
 
     if (output && mWs.debug() >= GAMSEnum::DebugLevel::ShowLog)
         MSG << result;
     else if (output)
         *output << result;
-
 
     if (exitCode != 0) {
         if ((mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) && mWs.usingTmpWorkingDir())
@@ -238,9 +210,9 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     }
     if (tmpCP) {
         GAMSPath implFile(checkpoint->fileName());
-        if (implFile.exists()) {
+        if (implFile.exists())
             implFile.remove();
-        }
+
         implFile = tmpCP->fileName();
         implFile.rename(checkpoint->fileName());
         delete tmpCP; tmpCP=nullptr;

@@ -212,10 +212,9 @@ std::string GAMSPath::toStdString()
     return string();
 }
 
-// TODO(RG): fix this! its broken
 const char* GAMSPath::c_str()
 {
-    return string().c_str();
+    return native().c_str();
 }
 
 // TODO(RG): refactor this so that default arg creates in temp dir instead of current?
