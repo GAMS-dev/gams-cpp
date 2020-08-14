@@ -118,6 +118,7 @@ void TestGAMSDatabase::testBegin() {
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
     GAMSDatabase db = job.outDB();
+    QVERIFY( db.isValid() );
     GAMSDatabaseIter it = db.begin();
     QCOMPARE((*it).name().c_str(), "i");
 }

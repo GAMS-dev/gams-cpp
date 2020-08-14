@@ -74,50 +74,6 @@ GAMSJobImpl::~GAMSJobImpl() {
         delete mCheckpointStart; // this is intended to only free the wrapper, not the *Impl if used anywhere
 }
 
-// TODO(RG): what are these?
-//   shared_ptr<GAMSJobImpl> GAMSJobImpl::fromString(GAMSWorkspace workspace, string gamsSource, const GAMSCheckpoint *checkpoint, string jobName)
-//   {
-//      shared_ptr<GAMSJobImpl> jobImpl = make_shared<GAMSJobImpl>(workspace, "", "", checkpoint);
-//      if (jobName == "")
-//         jobImpl->mJobName = workspace.mImpl->jobAdd();
-//      else
-//      {
-//         jobImpl->mJobName = jobName;
-//         if (!workspace.mImpl->jobAdd(jobImpl->mJobName))
-//            throw GAMSException("Job with name " + jobName + " already exists");
-//      }
-
-//      jobImpl->mFileName = GPath(workspace.workingDirectory()) / (jobImpl->mJobName + ".gms");
-
-//      std::ofstream sourceWriter(jobImpl->mFileName);
-//      sourceWriter << gamsSource;
-//      sourceWriter.close();
-
-//      return jobImpl;
-//   }
-
-//   shared_ptr<GAMSJobImpl> GAMSJobImpl::fromFile(GAMSWorkspace workspace, string fileName, const GAMSCheckpoint *checkpoint, string jobName)
-//   {
-//      shared_ptr<GAMSJobImpl> jobImpl = make_shared<GAMSJobImpl>(workspace, "", "", checkpoint);
-//      if (jobName == "")
-//         jobImpl->mJobName = workspace.mImpl->jobAdd();
-//      else
-//      {
-//         jobImpl->mJobName = jobName;
-//         if (!workspace.mImpl->jobAdd(jobImpl->mJobName))
-//            throw GAMSException("Job with name " + jobName + " already exists");
-//      }
-//      if (GPath(fileName).isAbsolute())
-//         jobImpl->mFileName = fileName;
-//      else
-//         jobImpl->mFileName = GPath(workspace.workingDirectory()) / fileName;
-
-//      if (!GPath::exists(jobImpl->mFileName))
-//         throw GAMSException("Could not create GAMSJob instance from non-existing file [" + jobImpl->mFileName + "]");
-
-//      return jobImpl;
-//   }
-
 void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostream* output, bool createOutDb,
                       vector<GAMSDatabase> databases)
 {
@@ -173,6 +129,14 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
         throw GAMSException(e.what() + (" for GAMSJob " + mJobName));
     }
 
+    string gamsExe = mWs.systemDirectory() + "/gams";
+    gamsExe.append(cExeSuffix);
+
+    string args = "dummy pf=" + mJobName + ".pf";
+
+    string result;
+    int exitCode = GAMSPlatform::runProcess(mWs.workingDirectory(), gamsExe, args, result);
+
     if (createOutDb) {
         //TODO: should we always delete the outDB before a new run? Affects C#, Pytohn and Java as well
         //outdb = nullptr;
@@ -182,21 +146,13 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
 
         gdxPath.setSuffix(".gdx");
         if (gdxPath.exists())
-            mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.toStdString(), gdxPath.suffix(""), "");
+            mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.toStdString(), gdxPath.suffix("").filename(), "");
     }
-    string gamsExe = mWs.systemDirectory() + "/gams";
-    gamsExe.append(cExeSuffix);
-
-    string args = "dummy pf=" + mJobName + ".pf";
-
-    string result;
-    int exitCode = GAMSPlatform::runProcess(mWs.workingDirectory(), gamsExe, args, result);
 
     if (output && mWs.debug() >= GAMSEnum::DebugLevel::ShowLog)
         MSG << result;
     else if (output)
         *output << result;
-
     if (exitCode != 0) {
         if ((mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) && mWs.usingTmpWorkingDir())
             throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +

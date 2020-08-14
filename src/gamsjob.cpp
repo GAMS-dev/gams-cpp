@@ -65,7 +65,6 @@ bool GAMSJob::isValid() const
 void GAMSJob::run()
 {
     if (!mImpl) throw GAMSException("GAMSJob: This job has not been initialized.");
-    //ostream* empty = nullptr;
     mImpl->run();
 }
 

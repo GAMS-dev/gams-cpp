@@ -39,7 +39,6 @@
 #include "gamsenum.h"
 #include "gamslog.h"
 #include "gamsexception.h"
-
 namespace gams {
 
 using namespace std;
@@ -262,7 +261,6 @@ int GAMSPlatform::runProcess(const string where, const string what, const string
         std::cerr << "Couldn't start command: " << ssp.str() << std::endl;
         return -1;
     }
-
     std::array<char, 128> buffer;
     while (fgets(buffer.data(), 128, out))
         result += buffer.data();
