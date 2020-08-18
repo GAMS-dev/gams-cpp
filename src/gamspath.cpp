@@ -28,6 +28,10 @@
 #include <fstream>
 #include <algorithm>
 
+#ifdef _WIN32
+#include <wchar.h>
+#endif
+
 // TODO(RG): remove:
 #include <QDebug>
 
@@ -214,7 +218,16 @@ std::string GAMSPath::toStdString()
 
 const char* GAMSPath::c_str()
 {
+#ifdef _WIN32
+    const wchar_t *w = native().c_str();
+    size_t origsize = wcslen(w) + 1;
+    char *nstring = new char[origsize * 2];
+    wcstombs_s(0, nstring, origsize * 2, w, _TRUNCATE);
+
+    return nstring;
+#else
     return native().c_str();
+#endif
 }
 
 // TODO(RG): refactor this so that default arg creates in temp dir instead of current?

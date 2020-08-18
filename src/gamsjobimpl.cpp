@@ -146,7 +146,7 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
 
         gdxPath.setSuffix(".gdx");
         if (gdxPath.exists())
-            mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.toStdString(), gdxPath.suffix("").filename(), "");
+            mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.toStdString(), gdxPath.suffix("").filename().string(), "");
     }
 
     if (output && mWs.debug() >= GAMSEnum::DebugLevel::ShowLog)

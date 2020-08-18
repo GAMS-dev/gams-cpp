@@ -106,6 +106,7 @@ public:
     std::string toStdString();
 
     /// Get the path or file as character string.
+    /// Warning: This function may behave differently than path::c_str()
     const char* c_str();
 
     /// Create a GAMSPath to a temporary directory.
