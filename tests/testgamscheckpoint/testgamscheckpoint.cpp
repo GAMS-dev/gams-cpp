@@ -34,18 +34,17 @@ using namespace gams;
 QString TestGAMSCheckpoint::classname()  { return "TestGAMSCheckpoint"; }
 
 void TestGAMSCheckpoint::testDefaultConstructor()  {
-// TODO(RG): rethink design of default constructor? why do we need it if it only creates an invalid checkpoint?
-//    GAMSCheckpoint cp;
-//    QVERIFY( ! cp.isValid() );
-//    QVERIFY_EXCEPTION_THROWN( cp.name(), GAMSException );
-//    QVERIFY_EXCEPTION_THROWN( cp.logID(), GAMSException );
-//    QVERIFY_EXCEPTION_THROWN( cp.fileName(), GAMSException );
-//    QVERIFY_EXCEPTION_THROWN( cp.workspace(), GAMSException );
-//    QVERIFY_EXCEPTION_THROWN( cp.addModelInstance(), GAMSException );
+    GAMSCheckpoint cp;
+    QVERIFY( ! cp.isValid() );
+    QVERIFY_EXCEPTION_THROWN( cp.name(), GAMSException );
+    QVERIFY_EXCEPTION_THROWN( cp.logID(), GAMSException );
+    QVERIFY_EXCEPTION_THROWN( cp.fileName(), GAMSException );
+    QVERIFY_EXCEPTION_THROWN( cp.workspace(), GAMSException );
+    QVERIFY_EXCEPTION_THROWN( cp.addModelInstance(), GAMSException );
 
-//    GAMSCheckpoint anothercp = cp;
-//    QVERIFY( ! anothercp.isValid() );
-//    QVERIFY( anothercp == cp );
+    GAMSCheckpoint anothercp = cp;
+    QVERIFY( ! anothercp.isValid() );
+    QVERIFY( anothercp == cp );
 }
 
 void TestGAMSCheckpoint::testConstructor()  {

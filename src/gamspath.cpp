@@ -32,9 +32,6 @@
 #include <wchar.h>
 #endif
 
-// TODO(RG): remove:
-#include <QDebug>
-
 namespace gams {
 
 GAMSPath& GAMSPath::operator=(const GAMSPath& other)
@@ -158,19 +155,10 @@ bool GAMSPath::rmDirRecurse()
 
 void GAMSPath::pack()
 {
-    // TODO(RG): check with other APIs what is expected to do here
     if (exists())
         this->assign(std::filesystem::canonical(*this));
     else
         this->assign(std::filesystem::absolute(*this));
-
-//    QString path = filePath();
-//    QRegularExpression xp("/[^/]*/\\.\\.");
-//    while (xp.match(path).hasMatch()) {
-//        path = path.remove(xp);
-//    }
-//    setFile(path);
-//    setFile(absoluteFilePath());
 }
 
 bool GAMSPath::remove()
