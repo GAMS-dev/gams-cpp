@@ -103,11 +103,11 @@ public:
     operator std::string();
 
     /// Get the path or file as <c>std::string</c>.
-    std::string toStdString();
+    std::string toStdString() const;
 
     /// Get the path or file as character string.
     /// Warning: This function may behave differently than path::c_str()
-    const char* c_str();
+    const char* c_str() const;
 
     /// Create a GAMSPath to a temporary directory.
     /// \param templatePath Template temporary directory.
@@ -126,10 +126,6 @@ public:
     /// Add a suffix to the GAMSPath.
     /// \param suffix The suffix to add.
     void setSuffix(const std::string &suffix);
-
-//    /// Add a suffix to the GAMSPath.
-//    /// \param suffix The suffix to add.
-//    void setSuffix(const std::string suffix);
 
     /// Add a suffix.
     /// \param suffix The suffix to add.
@@ -162,7 +158,7 @@ public:
     /// Optimize the path length, i.e. full path to relative path.
     void pack();
 
-    /// Remmoves the file.
+    /// Removes the file.
     /// \return Returns <c>true</c> if the removal was successfull; otherwise <c>false</c>.
     bool remove();
 

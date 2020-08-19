@@ -140,7 +140,7 @@ GAMSPath GAMSPath::path() const
         return GAMSPath(string());
 }
 
-bool GAMSPath::mkDir()
+bool GAMSPath::mkDir() const
 {
     return create_directory(*this);
 }
@@ -199,12 +199,12 @@ bool GAMSPath::exists(const char *file)
     return std::filesystem::exists(file);
 }
 
-std::string GAMSPath::toStdString()
+std::string GAMSPath::toStdString() const
 {
     return string();
 }
 
-const char* GAMSPath::c_str()
+const char* GAMSPath::c_str() const
 {
 #ifdef _WIN32
     const wchar_t *w = native().c_str();

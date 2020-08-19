@@ -967,24 +967,21 @@ void TestGAMSWorkspace::testAddOptions_OptFile_data() {
     QString currentWorkingPath = QCoreApplication::applicationDirPath();
     QDir dir(currentWorkingPath);
 
-    // TODO(RG) why are there two dirs that are always identical?
-    QString workdir1 = dir.absolutePath();
-    QString workdir2 = dir.absolutePath();
+    QString workdir = dir.absolutePath();
 
     QString finalPath = dir.filePath(TestGAMSWorkspace::classname());
     if (dir.mkpath(finalPath)) {
-        workdir1 = finalPath;
-        workdir2 = finalPath;
+        workdir = finalPath;
     }
     QTest::addColumn<QString>("optfilename");
     QTest::addColumn<bool>("exist");
     QTest::addColumn<QString>("workdir");
 
-    QTest::newRow("valid_optfile")     << "test.pf"                   << true  << workdir1 ;
-    QTest::newRow("invalid_optfile")   << "ThereWillExistThisFile.pf" << false << workdir2 ;
+    QTest::newRow("valid_optfile")     << "test.pf"                   << true  << workdir ;
+    QTest::newRow("invalid_optfile")   << "ThereWillExistThisFile.pf" << false << workdir ;
 
     QString filename="test.pf";
-    QFile file( QDir(workdir1).filePath( filename ) );
+    QFile file( QDir(workdir).filePath( filename ) );
     if ( file.open(QIODevice::WriteOnly) )  {
       QTextStream stream( &file );
       stream << "IterLim=1" << endl;
