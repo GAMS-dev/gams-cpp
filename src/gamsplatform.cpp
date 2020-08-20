@@ -24,8 +24,10 @@
  */
 
 #ifdef _WIN32
-#include "Windows.h"
+#include <windows.h>
 #include <direct.h>
+#include <wchar.h>
+#pragma comment(lib, "advapi32")
 #endif
 
 #include "gamsplatform.h"
@@ -39,6 +41,7 @@
 #include "gamsenum.h"
 #include "gamslog.h"
 #include "gamsexception.h"
+
 namespace gams {
 
 using namespace std;
@@ -150,6 +153,7 @@ void GAMSPlatform::ensureEnvPathSetOnUnix(const char *dirName)
 
 bool GAMSPlatform::interruptOnNonWindows(long pid)
 {
+    // TODO(RG): use GAMSPlatform::runProcess here
     ostringstream s;
     s << "/bin/bash -c -kill -2 " << pid;
     system(s.str().c_str());
@@ -158,7 +162,7 @@ bool GAMSPlatform::interruptOnNonWindows(long pid)
 
 string GAMSPlatform::findGamsOnWindows(LogId logId)
 {
-//#ifdef NO_WINDOWS_REGISTRY
+#ifdef NO_WINDOWS_REGISTRY
     string s;
     stringstream ss(getenv("PATH"));
     while (getline(ss, s, cEnvSep)) {
@@ -167,37 +171,36 @@ string GAMSPlatform::findGamsOnWindows(LogId logId)
         }
     }
     return "";
-// TODO(RG):
-//#else
-//    QString firstFound("");
-//    QStringList locations;
-//    locations << "HKEY_CURRENT_USER\\Software\\Classes\\" << "HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\";
-//    for (QString loc: locations) {
-//        QString gamsPath = QSettings(loc + "gams.location", QSettings::NativeFormat).value(".").toString();
-//        if (!gamsPath.isEmpty()) {
+#else
+    const DWORD SIZE = 1024;
+    string firstFound;
 
-//            if (LoggerPool::instance().debug(logId) == GAMSEnum::DebugLevel::Off) {
-//                return gamsPath.toStdString();
-//            } else if (firstFound.isNull()) {
-//                firstFound = gamsPath;
-//            } else {
-//                // compare second key
-//                if (firstFound.isEmpty()) {
-//                    return gamsPath.toStdString();
-//                } else if (!gamsPath.isEmpty() && (gamsPath != firstFound)) {
-//                    DEB_S(logId) << "--- Warning: Found GAMS system directory " << firstFound.toStdString() << " at "
-//                                 << locations.first() << " and a different one\n"
-//                                 << "---          in "
-//                                 << locations.last() << " (" << gamsPath.toStdString() << "). The latter is ignored.";
-//                }
-//                return firstFound.toStdString();
-//            }
-//        }
-//    }
-//    return firstFound.toStdString();
+    vector<HKEY> locations = {HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE};
+    for (HKEY hkey : locations) {
 
-//#endif
-// TODOend(RG)
+        // TODO(RG): these should be wchars when we decided how to handle paths with gams
+        char inputVal[SIZE];
+        DWORD bufferSize = SIZE;
+        long retCode;
+
+        retCode = RegOpenKeyA(hkey, "Software\\Classes", &hkey);
+        if (retCode != ERROR_SUCCESS) continue;
+
+        retCode = RegGetValueA(hkey, "gams.location", 0, RRF_RT_REG_SZ, nullptr, (LPBYTE) inputVal, &bufferSize);
+        RegCloseKey(hkey);
+        if (retCode != ERROR_SUCCESS) continue;
+
+        // second run, already found something
+        if (!firstFound.empty()) {
+            DEB_S(logId) << "--- Warning: Found GAMS system directory " << firstFound.c_str()
+                         << "at HKEY_CURRENT_USER and a different one\n ---          in "
+                         << "HKEY_LOCAL_MACHINE (" << inputVal << "). The latter is ignored.";
+        } else {
+            firstFound = inputVal;
+        }
+    }
+    return firstFound;
+#endif
 }
 
 void GAMSPlatform::ensureEnvPathSetOnWindows(const char *dirName)
