@@ -45,8 +45,8 @@ DEFINES += GAMS_CPP_LIB MAKELIB
 DEFINES -= UNICODE
 
 LIBS += -lstdc++fs
-unix: {
-    LIBS += -ldl
+unix:LIBS += -ldl
+unix:!macx{
     GCCMAJORVERSION=$$system("gcc -dumpversion")
     lessThan(GCCMAJORVERSION, 8): {
         QMAKE_CC=gcc-8
