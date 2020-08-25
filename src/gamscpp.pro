@@ -27,7 +27,7 @@ DESTDIR = ../bin
 
 TARGET = gamscpp
 
-USE_GAMS_DISTRIB_CPP_API_SRC=true
+USE_GAMS_DISTRIB_CPP_API_SRC=false
 include(../gamsdependency.pri)
 
 # Do not search GAMS via the Widnows resgistry. This causes
@@ -37,23 +37,24 @@ equals(NO_WINDOWS_REGISTRY, "1") {
     DEFINES += NO_WINDOWS_REGISTRY
 }
 
-CONFIG += skip_target_version_ext cmdline c++17 plugin
+CONFIG += skip_target_version_ext cmdline c++1z plugin
 CONFIG -= app_bundle
 
 DEFINES += GAMS_CPP_LIB MAKELIB
 
 DEFINES -= UNICODE
 
+LIBS += -lstdc++fs
 unix:LIBS += -ldl
 win32:LIBS += -luser32
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
 
 win32-g++:QMAKE_CXXFLAGS += -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -DHAVE_MUTEX
 win32-msvc*:QMAKE_CXXFLAGS += -EHsc -GR -c -nologo -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -DHAVE_MUTEX
 unix:!macx:QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\',-rpath,\'\$$ORIGIN/../../..\'"
 
 
-# TODO(RG): we need to find a solution for how to handle generated files...
-#HEADERS += generated/gamsoptions.h      \
+# TODO(RG): we need to find a solution for how to handle generated files... #HEADERS += generated/gamsoptions.h      \
 #           generated/gamsoptionsimpl.h
 # we dont need headers included, if they are located in one of the includepath folders
 
