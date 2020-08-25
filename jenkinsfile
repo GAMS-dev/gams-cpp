@@ -15,8 +15,6 @@ pipeline {
                         step([$class: 'WsCleanup'])
                         checkout scm
                         sh '''
-                            QMAKE_CC = gcc-8
-                            QMAKE_CXX = g++-8
                             qmake gams-cpp.pro && make -j4
                         '''
                     }
