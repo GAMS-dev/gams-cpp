@@ -162,6 +162,7 @@ bool GAMSPlatform::interruptOnNonWindows(long pid)
 
 string GAMSPlatform::findGamsOnWindows(LogId logId)
 {
+#ifdef _WIN32
 #ifdef NO_WINDOWS_REGISTRY
     string s;
     stringstream ss(getenv("PATH"));
@@ -200,6 +201,7 @@ string GAMSPlatform::findGamsOnWindows(LogId logId)
         }
     }
     return firstFound;
+#endif
 #endif
 }
 
