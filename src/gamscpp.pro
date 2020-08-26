@@ -48,6 +48,10 @@ DEFINES -= UNICODE
 win32:LIBS += -luser32
 unix:LIBS += -ldl
 
+win32-g++:QMAKE_CXXFLAGS += -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -DHAVE_MUTEX
+win32-msvc*:QMAKE_CXXFLAGS += -EHsc -GR -c -nologo -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -DHAVE_MUTEX
+unix:!macx:QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\',-rpath,\'\$$ORIGIN/../../..\'"
+
 unix:!macx{
     # set minimum gcc version
     GCCMAJORVERSION=$$system("gcc -dumpversion")
@@ -68,10 +72,6 @@ macx {
 unix:!macx {
     LIBS += -lstdc++fs
 }
-
-win32-g++:QMAKE_CXXFLAGS += -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -DHAVE_MUTEX
-win32-msvc*:QMAKE_CXXFLAGS += -EHsc -GR -c -nologo -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -DHAVE_MUTEX
-unix:!macx:QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\',-rpath,\'\$$ORIGIN/../../..\'"
 
 
 # TODO(RG): we need to find a solution for how to handle generated files... #HEADERS += generated/gamsoptions.h      \
