@@ -44,8 +44,22 @@ DEFINES += GAMS_CPP_LIB MAKELIB
 
 DEFINES -= UNICODE
 
-unix:LIBS += -ldl
+#!win32:LIBS += -lstdc++fs
 win32:LIBS += -luser32
+unix:LIBS += -ldl
+
+unix:!macx{
+    # set minimum gcc version
+    GCCMAJORVERSION=$$system("gcc -dumpversion")
+    message("----- ROGO -----")
+    message($$GCCMAJORVERSION)
+    lessThan(GCCMAJORVERSION, 8): {
+        message("using gcc8")
+        QMAKE_CC=gcc-8
+        QMAKE_CXX=g++-8
+    }
+    message("================")
+}
 
 # TODO (RG) restructure platform sections
 macx {

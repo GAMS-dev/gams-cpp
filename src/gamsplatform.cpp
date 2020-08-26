@@ -202,6 +202,8 @@ string GAMSPlatform::findGamsOnWindows(LogId logId)
     }
     return firstFound;
 #endif
+#else
+    throw GAMSException("interruptOnWindows only impemented on Windows");
 #endif
 }
 
