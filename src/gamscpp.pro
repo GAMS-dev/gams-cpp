@@ -49,11 +49,16 @@ win32:LIBS += -luser32
 unix:LIBS += -ldl
 
 unix:!macx{
+    # set minimum gcc version
     GCCMAJORVERSION=$$system("gcc -dumpversion")
+    message("----- ROGO -----")
+    message($$GCCMAJORVERSION)
     lessThan(GCCMAJORVERSION, 8): {
+        message("using gcc8")
         QMAKE_CC=gcc-8
         QMAKE_CXX=g++-8
     }
+    message("================")
 }
 
 win32-g++:QMAKE_CXXFLAGS += -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -DHAVE_MUTEX
