@@ -48,17 +48,22 @@ DEFINES -= UNICODE
 win32:LIBS += -luser32
 unix:LIBS += -ldl
 
-unix:!macx{
-    GCCMAJORVERSION=$$system("gcc -dumpversion")
-    lessThan(GCCMAJORVERSION, 8): {
-        QMAKE_CC=gcc-8
-        QMAKE_CXX=g++-8
-    }
-}
-
 win32-g++:QMAKE_CXXFLAGS += -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -DHAVE_MUTEX
 win32-msvc*:QMAKE_CXXFLAGS += -EHsc -GR -c -nologo -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -DHAVE_MUTEX
 unix:!macx:QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\',-rpath,\'\$$ORIGIN/../../..\'"
+
+unix:!macx{
+    # set minimum gcc version
+    GCCMAJORVERSION=$$system("gcc -dumpversion")
+    message("----- ROGO -----")
+    message($$GCCMAJORVERSION)
+    lessThan(GCCMAJORVERSION, 8): {
+        message("using gcc8")
+        QMAKE_CC=gcc-8
+        QMAKE_CXX=g++-8
+    }
+    message("================")
+}
 
 
 # TODO(RG): we need to find a solution for how to handle generated files... #HEADERS += generated/gamsoptions.h      \
