@@ -47,19 +47,19 @@ pipeline {
                         }
                     }
                 }
-                //stage ('macos') {
-                //    agent { label 'macos' }
-                //    steps {
-                //        step([$class: 'WsCleanup'])
-                //        checkout scm
-                //        sh 'qmake gams-cpp.pro && make -j4'
-                //    }
-                //    post {
-                //        always {
-                //            recordIssues aggregatingResults: true, enabledForFailure: true, tools: [clang(reportEncoding: 'UTF-8')]
-                //        }
-                //    }
-                //}
+                stage ('macos') {
+                    agent { label 'macos' }
+                    steps {
+                        step([$class: 'WsCleanup'])
+                        checkout scm
+                        sh 'qmake gams-cpp.pro && make -j4'
+                    }
+                    post {
+                        always {
+                            recordIssues aggregatingResults: true, enabledForFailure: true, tools: [clang(reportEncoding: 'UTF-8')]
+                        }
+                    }
+                }
             }
         }
         stage('Test') {
@@ -98,24 +98,24 @@ pipeline {
                         }
                     }
                 }
-                //stage ('macos') {
-                //    agent { label 'macos' }
-                //    steps {
-                //        sh '''
-                //            mkdir reports
-                //            export DYLD_LIBRARY_PATH=$WORKSPACE/bin:$DYLD_LIBRARY_PATH
-                //            cd tests/bin
-                //            for f in *; do
-                //                ./$f -xunitxml -o $WORKSPACE/reports/$f.xml
-                //            done
-                //        '''
-                //    }
-                //    post {
-                //        always {
-                //            junit allowEmptyResults: true, testResults: 'reports/*.xml'
-                //        }
-                //    }
-                //}
+                stage ('macos') {
+                    agent { label 'macos' }
+                    steps {
+                        sh '''
+                            mkdir reports
+                            export DYLD_LIBRARY_PATH=$WORKSPACE/bin:$DYLD_LIBRARY_PATH
+                            cd tests/bin
+                            for f in *; do
+                                ./$f -xunitxml -o $WORKSPACE/reports/$f.xml
+                            done
+                        '''
+                    }
+                    post {
+                        always {
+                            junit allowEmptyResults: true, testResults: 'reports/*.xml'
+                        }
+                    }
+                }
             }
         }
         stage('Deploy') {

@@ -31,17 +31,24 @@ QT += testlib
 QT -= gui
 
 include(../gamsdependency.pri)
-
-# TODO (RG) restructure platform sections
-macx {
-    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
-}
-unix:!macx {
-    LIBS += -lstdc++fs
+win32:{
+    LIBS += -luser32
+    LIBS += -L../../bin/ -lgamscpp
 }
 
-unix : LIBS += -ldl -L../../bin -lgamscpp
-win32: LIBS += -L../../bin/ -lgamscpp
+unix:{
+    LIBS += -ldl -L../../bin -lgamscpp
+    !macx{
+        LIBS += -lstdc++fs
+        # set minimum gcc version
+        GCCMAJORVERSION=$$system("gcc -dumpversion")
+        lessThan(GCCMAJORVERSION, 8): {
+            QMAKE_CC=gcc-8
+            QMAKE_CXX=g++-8
+        }
+    }
+}
+macx:QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
 
 TESTROOT = $$_PRO_FILE_PWD_/..
 
