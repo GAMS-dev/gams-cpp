@@ -44,8 +44,10 @@ DEFINES += GAMS_CPP_LIB MAKELIB
 
 DEFINES -= UNICODE
 
-LIBS += -lstdc++fs
+!win32:LIBS += -lstdc++fs
+win32:LIBS += -luser32
 unix:LIBS += -ldl
+
 unix:!macx{
     GCCMAJORVERSION=$$system("gcc -dumpversion")
     lessThan(GCCMAJORVERSION, 8): {
@@ -53,7 +55,6 @@ unix:!macx{
         QMAKE_CXX=g++-8
     }
 }
-win32:LIBS += -luser32
 
 win32-g++:QMAKE_CXXFLAGS += -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -DHAVE_MUTEX
 win32-msvc*:QMAKE_CXXFLAGS += -EHsc -GR -c -nologo -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -DHAVE_MUTEX
