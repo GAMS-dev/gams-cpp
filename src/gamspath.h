@@ -148,7 +148,7 @@ public:
     GAMSPath path() const;
 
     /// Create the directory.
-    bool mkDir();
+    bool mkDir() const;
 
     /// Removes the direcotry recursively.
     /// \return Returns <c>true</c> if the removal was successfull; otherwise <c>false</c>.

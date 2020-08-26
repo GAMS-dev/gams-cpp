@@ -32,6 +32,14 @@ QT -= gui
 
 include(../gamsdependency.pri)
 
+# TODO (RG) restructure platform sections
+macx {
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
+}
+unix:!macx {
+    LIBS += -lstdc++fs
+}
+
 unix : LIBS += -ldl -L../../bin -lgamscpp
 win32: LIBS += -L../../bin/ -lgamscpp
 

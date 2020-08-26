@@ -44,9 +44,16 @@ DEFINES += GAMS_CPP_LIB MAKELIB
 
 DEFINES -= UNICODE
 
-LIBS += -lstdc++fs
 unix:LIBS += -ldl
 win32:LIBS += -luser32
+
+# TODO (RG) restructure platform sections
+macx {
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
+}
+unix:!macx {
+    LIBS += -lstdc++fs
+}
 
 win32-g++:QMAKE_CXXFLAGS += -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -DHAVE_MUTEX
 win32-msvc*:QMAKE_CXXFLAGS += -EHsc -GR -c -nologo -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS -DHAVE_MUTEX
