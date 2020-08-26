@@ -51,14 +51,13 @@ win32:{
 }
 unix:{
     LIBS += -ldl
+
     !macx{
         LIBS += -lstdc++fs
         QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\',-rpath,\'\$$ORIGIN/../../..\'"
         # set minimum gcc version
         GCCMAJORVERSION=$$system("gcc -dumpversion")
-        message("GCC version: $$GCCMAJORVERSION")
         lessThan(GCCMAJORVERSION, 8): {
-            message("using gcc8")
             QMAKE_CC=gcc-8
             QMAKE_CXX=g++-8
         }
