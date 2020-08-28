@@ -55,11 +55,13 @@ unix:{
     !macx{
         LIBS += -lstdc++fs
         QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\',-rpath,\'\$$ORIGIN/../../..\'"
-        # set minimum gcc version
-        GCCMAJORVERSION=$$system("gcc -dumpversion")
-        lessThan(GCCMAJORVERSION, 8): {
-            QMAKE_CC=gcc-8
-            QMAKE_CXX=g++-8
+        linux-g++ {
+            # set minimum gcc version
+            GCCMAJORVERSION=$$system("gcc -dumpversion")
+            lessThan(GCCMAJORVERSION, 8): {
+                QMAKE_CC=gcc-8
+                QMAKE_CXX=g++-8
+            }
         }
     }
 }
