@@ -59,7 +59,14 @@ struct LIBSPEC GAMSPlatform
     ///         the interrupt and waits unitl gams has finished.
     static bool interrupt(long pid);
 
-    // TODO(RG): add documentation or move somewhere else
+    ///
+    /// Runs a process in a specified location.
+    /// \param where Director of execution.
+    /// \param what Name of process to run.
+    /// \param args Process arguments.
+    /// \param output Process output as string.
+    /// \return Exit code.
+    ///
     static int runProcess(const std::string where, const std::string what, const std::string args, std::string& output);
 private:
     GAMSPlatform() {}

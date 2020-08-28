@@ -58,7 +58,6 @@ public:
     /// \param gpath Another GAMSPath used as data source.
     GAMSPath(const GAMSPath &gpath) : std::filesystem::path(gpath.string()) {}
 
-    // TODO(RG): documentation needs to be updated as its wrong for some of these behaviors
     /// Assigns a GAMSPath.
     /// \param other Another GAMSPath used as data source.
     /// \return Returns the assigned GAMSPath (*this).
@@ -127,11 +126,13 @@ public:
     /// \param suffix The suffix to add.
     void setSuffix(const std::string &suffix);
 
+    // TODO(RG): wrong documentation
     /// Add a suffix.
     /// \param suffix The suffix to add.
     /// \return Returns the GAMSPath with suffix.
     GAMSPath suffix(const std::string &suffix) const;
 
+    // TODO(RG): wrong documentation
     /// Add a suffix.
     /// \param suffix The suffix to add.
     /// \return Returns the GAMSPath with suffix.
@@ -154,8 +155,7 @@ public:
     /// \return Returns <c>true</c> if the removal was successfull; otherwise <c>false</c>.
     bool rmDirRecurse();
 
-    // TODO(RG): that description cannot be right, from where would the relativ path start?
-    /// Optimize the path length, i.e. full path to relative path.
+    /// Normalizes the Path to make it comparable by converting it to it's shortest absolute representation.
     void pack();
 
     /// Removes the file.

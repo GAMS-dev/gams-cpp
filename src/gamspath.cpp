@@ -99,13 +99,6 @@ void GAMSPath::setSuffix(const std::string &suffix)
     replace_extension(s);
 }
 
-//void GAMSPath::setSuffix(const std::string suffix)
-//{
-//    std::string s = suffix;
-//    std::transform(s.begin(), s.end(), s.begin(), ::tolower);
-//    replace_extension(s);
-//}
-
 GAMSPath GAMSPath::suffix(const std::string &suffix) const
 {
     std::string s = suffix;
@@ -218,7 +211,7 @@ const char* GAMSPath::c_str() const
 #endif
 }
 
-// TODO(RG): refactor this so that default arg creates in temp dir instead of current?
+// TODO(RG): these tempdir/tempfile functions create neither in the OS' tmp folder, nor is there any automatic cleanup. so why are they called temp?
 GAMSPath GAMSPath::tempDir(const std::string &tempPath)
 {
     GAMSPath baseLocation = tempPath.empty() ? path().string() : tempPath;

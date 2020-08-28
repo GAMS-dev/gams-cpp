@@ -153,10 +153,8 @@ void GAMSPlatform::ensureEnvPathSetOnUnix(const char *dirName)
 
 bool GAMSPlatform::interruptOnNonWindows(long pid)
 {
-    // TODO(RG): use GAMSPlatform::runProcess here
-    ostringstream s;
-    s << "/bin/bash -c -kill -2 " << pid;
-    system(s.str().c_str());
+    string result;
+    runProcess("", "/bin/bash", "-c -kill -2 " + to_string(pid), result);
     return true;
 }
 
