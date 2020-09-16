@@ -27,6 +27,7 @@
 #define GAMSPLATFORM_H
 
 #include "gamslib_global.h"
+#include <thread>
 
 namespace gams {
 
@@ -61,13 +62,23 @@ struct LIBSPEC GAMSPlatform
 
     ///
     /// Runs a process in a specified location.
-    /// \param where Director of execution.
+    /// \param where Directory of execution.
     /// \param what Name of process to run.
     /// \param args Process arguments.
     /// \param output Process output as string.
     /// \return Exit code.
     ///
     static int runProcess(const std::string where, const std::string what, const std::string args, std::string& output);
+
+    ///
+    /// Runs a process without waiting for it to end. Returns process id of started process.
+    /// \brief runProcessParallel
+    /// \param where Directory of execution.
+    /// \param what Name of process to run.
+    /// \param args Process arguments.
+    /// \return Process ID
+    ///
+    static std::thread runProcessParallel(const std::string executable, const std::string args);
 private:
     GAMSPlatform() {}
 

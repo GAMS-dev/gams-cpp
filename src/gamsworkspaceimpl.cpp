@@ -342,6 +342,7 @@ GAMSDatabase GAMSWorkspaceImpl::addDatabaseFromGMD(GAMSWorkspace& ws, void* gmdP
     return GAMSDatabase(gmdPtr, ws);
 }
 
+// TODO(RG): check if this is uselessly doubled from GAMSPlatform::findGams()
 string GAMSWorkspaceImpl::findGAMS()
 {
     string gamsDir = GAMSPlatform::findGams(logID());

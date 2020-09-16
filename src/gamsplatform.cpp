@@ -36,6 +36,7 @@
 #include <iostream>
 #include <sstream>
 #include <array>
+#include <thread>
 
 #include "gamspath.h"
 #include "gamsenum.h"
@@ -280,6 +281,15 @@ int GAMSPlatform::runProcess(const string where, const string what, const string
 #endif
 
     return exitCode;
+}
+
+thread GAMSPlatform::runProcessParallel(const string executable, const string args) {
+    string call = executable;
+    if (!args.empty()) call += " " + args;
+
+    thread t(system, call.c_str());
+    t.detach();
+    return t;
 }
 
 } // namespace gams
