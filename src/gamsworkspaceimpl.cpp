@@ -104,7 +104,7 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     GAMSWorkspacePool::registerWorkspacePath(mWorkingDir.toStdString());
 
     // handle system directory
-    mSystemDir = systemDir.empty() ? findGAMS() : systemDir;
+    mSystemDir = systemDir.empty() ? GAMSPlatform::findGams(logID()) : systemDir;
     if (!mSystemDir.exists()) {
         throw GAMSException("Invalid GAMS system directory: " + systemDir);
     }
@@ -340,13 +340,6 @@ GAMSDatabase GAMSWorkspaceImpl::addDatabaseFromGDX(GAMSWorkspace& ws, const stri
 GAMSDatabase GAMSWorkspaceImpl::addDatabaseFromGMD(GAMSWorkspace& ws, void* gmdPtr)
 {
     return GAMSDatabase(gmdPtr, ws);
-}
-
-// TODO(RG): check if this is uselessly doubled from GAMSPlatform::findGams()
-string GAMSWorkspaceImpl::findGAMS()
-{
-    string gamsDir = GAMSPlatform::findGams(logID());
-    return gamsDir;
 }
 
 void GAMSWorkspaceImpl::xxxLib(string libname, string model)

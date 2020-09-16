@@ -126,16 +126,14 @@ public:
     /// \param suffix The suffix to add.
     void setSuffix(const std::string &suffix);
 
-    // TODO(RG): wrong documentation
-    /// Add a suffix.
-    /// \param suffix The suffix to add.
-    /// \return Returns the GAMSPath with suffix.
+    /// Constructs a new file path using the current file's basename and adding the given suffix to it.
+    /// \param suffix The suffix of the file to get.
+    /// \return Returns a GAMSPath to a new file of the same name but with a replaced suffix.
     GAMSPath suffix(const std::string &suffix) const;
 
-    // TODO(RG): wrong documentation
-    /// Add a suffix.
-    /// \param suffix The suffix to add.
-    /// \return Returns the GAMSPath with suffix.
+    /// Constructs a new file path using the current file's basename and adding the given suffix to it.
+    /// \param suffix The suffix of the file to get.
+    /// \return Returns a GAMSPath to a new file of the same name but with a replaced suffix.
     GAMSPath suffix(const char *suffix) const;
 
     /// Get the GAMS path as optimized path.
