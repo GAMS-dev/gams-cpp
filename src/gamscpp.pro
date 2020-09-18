@@ -57,6 +57,7 @@ unix:{
         QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\',-rpath,\'\$$ORIGIN/../../..\'"
         linux-g++ {
             # set minimum gcc version
+            # TODO(RG): review this
             GCCMAJORVERSION=$$system("gcc -dumpversion")
             lessThan(GCCMAJORVERSION, 8): {
                 QMAKE_CC=gcc-8

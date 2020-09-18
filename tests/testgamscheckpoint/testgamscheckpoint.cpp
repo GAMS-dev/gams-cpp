@@ -22,12 +22,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 #include "gamscheckpoint.h"
 #include "gamsdatabase.h"
 #include "gamsmodelinstance.h"
 #include "gamsworkspace.h"
 #include "testgamscheckpoint.h"
+
+#include <gtest/gtest.h>
+#include <gmock/gmock-matchers.h>
 
 using namespace gams;
 
@@ -35,7 +37,7 @@ QString TestGAMSCheckpoint::classname()  { return "TestGAMSCheckpoint"; }
 
 void TestGAMSCheckpoint::testDefaultConstructor()  {
     GAMSCheckpoint cp;
-    QVERIFY( ! cp.isValid() );
+    ASSERT_TRUE( ! cp.isValid() );
     QVERIFY_EXCEPTION_THROWN( cp.name(), GAMSException );
     QVERIFY_EXCEPTION_THROWN( cp.logID(), GAMSException );
     QVERIFY_EXCEPTION_THROWN( cp.fileName(), GAMSException );
@@ -43,8 +45,8 @@ void TestGAMSCheckpoint::testDefaultConstructor()  {
     QVERIFY_EXCEPTION_THROWN( cp.addModelInstance(), GAMSException );
 
     GAMSCheckpoint anothercp = cp;
-    QVERIFY( ! anothercp.isValid() );
-    QVERIFY( anothercp == cp );
+    ASSERT_TRUE( ! anothercp.isValid() );
+    ASSERT_TRUE( anothercp == cp );
 }
 
 void TestGAMSCheckpoint::testConstructor()  {
@@ -54,7 +56,7 @@ void TestGAMSCheckpoint::testConstructor()  {
 
     std::string cpname = "mycp";
     GAMSCheckpoint cp(ws, cpname);
-    QVERIFY( cp.isValid() );
+    ASSERT_TRUE( cp.isValid() );
     QCOMPARE( cp.workspace(), ws);
     QCOMPARE( cp.name(), cpname);
 }
@@ -78,7 +80,7 @@ void TestGAMSCheckpoint::testAddModelInstance() {
     GAMSModelInstance mi = cp.addModelInstance();
     // then
     GAMSDatabase db = mi.syncDb();
-    QVERIFY( db.isValid() );
+    ASSERT_TRUE( db.isValid() );
     QCOMPARE( db.getNrSymbols(), 0 );
 }
 
@@ -97,8 +99,8 @@ void TestGAMSCheckpoint::testGetName() {
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     // when, then
-    QVERIFY( ! QString::fromStdString(cp.name()).isEmpty() );
-    QVERIFY( QString::fromStdString(cp.name()).startsWith(defaultScratchFilePrefix.c_str()) );
+    ASSERT_TRUE( ! QString::fromStdString(cp.name()).isEmpty() );
+    ASSERT_TRUE( QString::fromStdString(cp.name()).startsWith(defaultScratchFilePrefix.c_str()) );
 }
 
 void TestGAMSCheckpoint::testGetLogID() {
@@ -109,15 +111,15 @@ void TestGAMSCheckpoint::testGetLogID() {
     GAMSCheckpoint cp2(cp1);
     // when, then
     QCOMPARE( cp1.logID(), cp2.logID() );
-    QVERIFY( cp1.logID()== cp2.logID() );
+    ASSERT_TRUE( cp1.logID()== cp2.logID() );
 
     GAMSCheckpoint cp3 = ws.addCheckpoint("mycp");
-    QVERIFY( cp3.logID() == cp1.logID());
+    ASSERT_TRUE( cp3.logID() == cp1.logID());
 
     GAMSWorkspace anotherws(wsInfo);
     GAMSCheckpoint cp4 = anotherws.addCheckpoint("mycp");
-    QVERIFY( cp4.logID() == anotherws.logID());
-    QVERIFY( cp4.logID() != cp3.logID());
+    ASSERT_TRUE( cp4.logID() == anotherws.logID());
+    ASSERT_TRUE( cp4.logID() != cp3.logID());
 }
 
 void TestGAMSCheckpoint::testEqualToOperator() {
@@ -128,8 +130,8 @@ void TestGAMSCheckpoint::testEqualToOperator() {
     GAMSCheckpoint cp2(cp1);
     GAMSCheckpoint cp3 = ws.addCheckpoint();
     // when, then
-    QVERIFY( cp1 == cp2 );
-    QVERIFY( !(cp1 == cp3) );
+    ASSERT_TRUE( cp1 == cp2 );
+    ASSERT_TRUE( !(cp1 == cp3) );
 }
 
 void TestGAMSCheckpoint::testNotEqualToOperator() {
@@ -140,9 +142,9 @@ void TestGAMSCheckpoint::testNotEqualToOperator() {
     GAMSCheckpoint cp2(cp1);
     GAMSCheckpoint cp3 = ws.addCheckpoint();
     // when, then
-    QVERIFY( ! (cp1 != cp2) );
-    QVERIFY( cp1 != cp3 );
-    QVERIFY( cp2 != cp3 );
+    ASSERT_TRUE( ! (cp1 != cp2) );
+    ASSERT_TRUE( cp1 != cp3 );
+    ASSERT_TRUE( cp2 != cp3 );
 }
 
 void TestGAMSCheckpoint::testCopyConstructor() {
