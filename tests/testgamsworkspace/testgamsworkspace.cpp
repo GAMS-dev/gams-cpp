@@ -54,7 +54,7 @@ void TestGAMSWorkspace::testDefaultConstructor() {
 
     } catch (GAMSException &e) {
         QEXPECT_FAIL("", e.what(), Abort);
-        QVERIFY(false);
+        ASSERT_TRUE(false);
     }
 }
 
@@ -159,19 +159,19 @@ void TestGAMSWorkspace::testConstructor_DebugLevel() {
     // then
     switch(debugLevel.toInt()) {
        case 0: // Off
-           QVERIFY( ! QDir(dir).exists() );
+           ASSERT_TRUE( ! QDir(dir).exists() );
            break;
        case 1: // KeepFiles
-           QVERIFY( QDir(dir).exists() );
-           /* TODO QEXPECT_FAIL("", "More tests to be implemented ", Abort); QVERIFY(false); */
+           ASSERT_TRUE( QDir(dir).exists() );
+           /* TODO QEXPECT_FAIL("", "More tests to be implemented ", Abort); ASSERT_TRUE(false); */
            break;
       case 2: // ShowLog
-           QVERIFY( ! QDir(dir).exists() );
-           /* TODO QEXPECT_FAIL("", "More tests to be implemented ", Abort); QVERIFY(false); */
+           ASSERT_TRUE( ! QDir(dir).exists() );
+           /* TODO QEXPECT_FAIL("", "More tests to be implemented ", Abort); ASSERT_TRUE(false); */
            break;
       case 3: // Verbose
-           QVERIFY( ! QDir(dir).exists() );
-           /* TODO QEXPECT_FAIL("", "More tests to be implemented ", Abort); QVERIFY(false); */
+           ASSERT_TRUE( ! QDir(dir).exists() );
+           /* TODO QEXPECT_FAIL("", "More tests to be implemented ", Abort); ASSERT_TRUE(false); */
            break;
       default:
            break;
@@ -222,7 +222,7 @@ void TestGAMSWorkspace::testGetScratchFilePrefix() {
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     // when, then
-    QVERIFY( ! ws.scratchFilePrefix().empty() );
+    ASSERT_TRUE( ! ws.scratchFilePrefix().empty() );
     QCOMPARE( ws.scratchFilePrefix(), defaultScratchFilePrefix );
 }
 
@@ -417,7 +417,7 @@ void TestGAMSWorkspace::testAddDatabase_Source() {
     // when
     GAMSDatabase db2 = ws.addDatabase(db1);
     // then
-    QVERIFY( db2.isValid() );
+    ASSERT_TRUE( db2.isValid() );
     QCOMPARE( db2.getNrSymbols(), 2 );
 }
 
@@ -435,8 +435,8 @@ void TestGAMSWorkspace::testAddDatabase_SourceAndName() {
     // when
     GAMSDatabase db3 = ws.addDatabase(db1, dbname);
     // then
-    QVERIFY( db3.isValid() );
-    QVERIFY( db3.getNrSymbols() == 2 );
+    ASSERT_TRUE( db3.isValid() );
+    ASSERT_TRUE( db3.getNrSymbols() == 2 );
     QCOMPARE( db3.name(), dbname );
 }
 
@@ -453,7 +453,7 @@ void TestGAMSWorkspace::testAddDatabase_SourceNameAndModelName() {
     // when
     GAMSDatabase db2 = ws.addDatabase(db1, dbname, modname );
     // then
-    QVERIFY( db2.isValid() );
+    ASSERT_TRUE( db2.isValid() );
     QCOMPARE( db2.getNrSymbols(), 2 );
     QCOMPARE( db2.name(), dbname );
 }
@@ -465,8 +465,8 @@ void TestGAMSWorkspace::testAddCheckpoint() {
     // when
     GAMSCheckpoint cp = ws.addCheckpoint();
     // then
-    QVERIFY( ! cp.name().empty() );
-    QVERIFY( QString::fromStdString(cp.name()).startsWith(defaultScratchFilePrefix.c_str()) );
+    ASSERT_TRUE( ! cp.name().empty() );
+    ASSERT_TRUE( QString::fromStdString(cp.name()).startsWith(defaultScratchFilePrefix.c_str()) );
 }
 
 void TestGAMSWorkspace::testAddCheckpoint_Name_data() {
@@ -489,11 +489,11 @@ void TestGAMSWorkspace::testAddCheckpoint_Name() {
     // when
     GAMSCheckpoint cp = ws.addCheckpoint(cpname.toStdString());
     // then
-    QVERIFY( ! cp.name().empty() );
+    ASSERT_TRUE( ! cp.name().empty() );
     if (name_assigned)
        QCOMPARE( cp.name(), cpname.toStdString() );
     else
-       QVERIFY( QString::fromStdString(cp.name()).startsWith(defaultScratchFilePrefix.c_str()) );
+       ASSERT_TRUE( QString::fromStdString(cp.name()).startsWith(defaultScratchFilePrefix.c_str()) );
 }
 
 void TestGAMSWorkspace::testAddJobFromFile() {
@@ -722,8 +722,8 @@ void TestGAMSWorkspace::testAddJobFromTestLibrary() {
     // when, then
     if (valid) {
         GAMSJob job = ws.addJobFromTestLib(modname.toStdString());
-        QVERIFY( ! job.name().empty() );
-        QVERIFY( ! job.outDB().isValid() );
+        ASSERT_TRUE( ! job.name().empty() );
+        ASSERT_TRUE( ! job.outDB().isValid() );
     } else {
         QVERIFY_EXCEPTION_THROWN(ws.addJobFromTestLib(modname.toStdString()), GAMSException);
     }
@@ -748,7 +748,7 @@ void TestGAMSWorkspace::testAddJobFromDataLibrary() {
     // when, then
     if (valid) {
         GAMSJob job = ws.addJobFromDataLib(modname.toStdString());
-        QVERIFY( ! job.name().empty() );
+        ASSERT_TRUE( ! job.name().empty() );
     } else {
         QVERIFY_EXCEPTION_THROWN(ws.addJobFromDataLib(modname.toStdString()), GAMSException);
     }
@@ -773,7 +773,7 @@ void TestGAMSWorkspace::testAddJobFromEmpLibrary() {
     // when, then
     if (valid) {
         GAMSJob job = ws.addJobFromEmpLib(modname.toStdString());
-        QVERIFY( ! job.name().empty() );
+        ASSERT_TRUE( ! job.name().empty() );
     } else {
         QVERIFY_EXCEPTION_THROWN(ws.addJobFromEmpLib(modname.toStdString()), GAMSException);
     }
@@ -798,7 +798,7 @@ void TestGAMSWorkspace::testAddJobFromFinLibrary() {
     // when, then
     if (valid) {
         GAMSJob job = ws.addJobFromFinLib(modname.toStdString());
-        QVERIFY( ! job.name().empty() );
+        ASSERT_TRUE( ! job.name().empty() );
     } else {
         QVERIFY_EXCEPTION_THROWN(ws.addJobFromFinLib(modname.toStdString()), GAMSException);
     }
@@ -1139,12 +1139,12 @@ void TestGAMSWorkspace::testEqualToOperator() {
     GAMSWorkspace ws1(wsInfo);
     GAMSWorkspace ws2(ws1);
     // when, then
-    QVERIFY( ws1 == ws2 );
+    ASSERT_TRUE( ws1 == ws2 );
 
     GAMSWorkspace ws3(wsInfo);
     // when, then
-    QVERIFY(!(ws3 == ws2));
-    QVERIFY(!(ws3 == ws1) );
+    ASSERT_TRUE(!(ws3 == ws2));
+    ASSERT_TRUE(!(ws3 == ws1) );
 }
 
 void TestGAMSWorkspace::testNotEqualToOperator() {
@@ -1153,12 +1153,12 @@ void TestGAMSWorkspace::testNotEqualToOperator() {
     GAMSWorkspace ws1(wsInfo);
     GAMSWorkspace ws2(ws1);
     // when, then
-    QVERIFY( !(ws1 != ws2) );
+    ASSERT_TRUE( !(ws1 != ws2) );
 
     GAMSWorkspace ws3(wsInfo);
     // when, then
-    QVERIFY( ws3 != ws2);
-    QVERIFY( ws3 != ws1 );
+    ASSERT_TRUE( ws3 != ws2);
+    ASSERT_TRUE( ws3 != ws1 );
 }
 
 void TestGAMSWorkspace::testGetDebug() {
@@ -1166,8 +1166,8 @@ void TestGAMSWorkspace::testGetDebug() {
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     // when, then
-    QVERIFY( ws.debug() >= GAMSEnum::DebugLevel::Off );
-    QVERIFY( ws.debug() <= GAMSEnum::DebugLevel::Verbose );
+    ASSERT_TRUE( ws.debug() >= GAMSEnum::DebugLevel::Off );
+    ASSERT_TRUE( ws.debug() <= GAMSEnum::DebugLevel::Verbose );
 }
 
 void TestGAMSWorkspace::testGetLogID() {
@@ -1177,11 +1177,11 @@ void TestGAMSWorkspace::testGetLogID() {
     GAMSWorkspace ws2(ws1);
     // when, then
     QCOMPARE( ws1.logID(), ws2.logID() );
-    QVERIFY( ws1.logID()== ws2.logID() );
+    ASSERT_TRUE( ws1.logID()== ws2.logID() );
 
     GAMSWorkspace ws3(wsInfo);
     // when, then
-    QVERIFY( ws1.logID() != ws3.logID());
+    ASSERT_TRUE( ws1.logID() != ws3.logID());
 }
 
 void TestGAMSWorkspace::testGetSpecValues_data() {
@@ -1197,16 +1197,16 @@ void TestGAMSWorkspace::testGetSpecValues() {
 
     switch(index) {
         case 1: // NA
-            QVERIFY( std::isnan( ws.specValues()[index] ) );
+            ASSERT_TRUE( std::isnan( ws.specValues()[index] ) );
             break;
         case 2: // PINF
-            QVERIFY( std::isinf( ws.specValues()[index] ) );
+            ASSERT_TRUE( std::isinf( ws.specValues()[index] ) );
             break;
         case 3: // MINF
-            QVERIFY( std::isinf( - ws.specValues()[index] ) );
+            ASSERT_TRUE( std::isinf( - ws.specValues()[index] ) );
             break;
         default:
-            QVERIFY( (ws.specValues()[index] - value) < std::numeric_limits<double>::min() );
+            ASSERT_TRUE( (ws.specValues()[index] - value) < std::numeric_limits<double>::min() );
             break;
     }
 }

@@ -42,7 +42,7 @@ void TestGAMSSymbol::testDefaultConstructor() {
     // when
     GAMSSymbol symbol;
     // then
-    QVERIFY( ! symbol.isValid() );
+    ASSERT_TRUE( ! symbol.isValid() );
     QVERIFY_EXCEPTION_THROWN( symbol.clear(), GAMSException);
 }
 
@@ -56,7 +56,7 @@ void TestGAMSSymbol::testCopyConstructor() {
         // when
         GAMSSymbol symbol( db.getSet("i") );
         // then
-        QVERIFY( symbol.isValid() );
+        ASSERT_TRUE( symbol.isValid() );
         QCOMPARE( symbol.name(), db.getSet("i").name() );
         QCOMPARE( symbol.numberRecords(), db.getSet("i").numberRecords() );
     } catch (GAMSException &e) {
@@ -169,45 +169,45 @@ void TestGAMSSymbol::testNotEqualToOperator() {
     // given
     GAMSSet j = db.getSet("j");
     GAMSSymbol symbol_j = j;
-    QVERIFY( ! (symbol_j != j) );
+    ASSERT_TRUE( ! (symbol_j != j) );
     // when, then
-    QVERIFY(  symbol_j != (GAMSSymbol)db.getSet("i") );
-    QVERIFY(  symbol_j != (GAMSSymbol)db.getParameter("a") );
-    QVERIFY(  symbol_j != (GAMSSymbol)db.getVariable("x") );
-    QVERIFY(  symbol_j != (GAMSSymbol)db.getEquation("cost") );
+    ASSERT_TRUE(  symbol_j != (GAMSSymbol)db.getSet("i") );
+    ASSERT_TRUE(  symbol_j != (GAMSSymbol)db.getParameter("a") );
+    ASSERT_TRUE(  symbol_j != (GAMSSymbol)db.getVariable("x") );
+    ASSERT_TRUE(  symbol_j != (GAMSSymbol)db.getEquation("cost") );
     QCOMPARE( db.getNrSymbols(), numberOfSymbols );
 
     // given
     GAMSParameter a = db.getParameter("a");
     GAMSSymbol symbol_a = a;
     // when, then
-    QVERIFY( !( symbol_a != a ) );
-    QVERIFY( symbol_a != (GAMSSymbol)db.getSet("j") );
-    QVERIFY( symbol_a != (GAMSSymbol)db.getParameter("b") );
-    QVERIFY( symbol_a != (GAMSSymbol)db.getVariable("x") );
-    QVERIFY( symbol_a != (GAMSSymbol)db.getEquation("cost") );
+    ASSERT_TRUE( !( symbol_a != a ) );
+    ASSERT_TRUE( symbol_a != (GAMSSymbol)db.getSet("j") );
+    ASSERT_TRUE( symbol_a != (GAMSSymbol)db.getParameter("b") );
+    ASSERT_TRUE( symbol_a != (GAMSSymbol)db.getVariable("x") );
+    ASSERT_TRUE( symbol_a != (GAMSSymbol)db.getEquation("cost") );
     QCOMPARE( db.getNrSymbols(), numberOfSymbols );
 
     // given
     GAMSVariable z = db.getVariable("z");
     GAMSSymbol symbol_z = z;
     // when, then
-    QVERIFY( !( symbol_z != z) );
-    QVERIFY( symbol_z != (GAMSSymbol)db.getSet("i") );
-    QVERIFY( symbol_z != (GAMSSymbol)db.getParameter("b") );
-    QVERIFY( symbol_z != (GAMSSymbol)db.getVariable("x") );
-    QVERIFY( symbol_z != (GAMSSymbol)db.getEquation("cost") );
+    ASSERT_TRUE( !( symbol_z != z) );
+    ASSERT_TRUE( symbol_z != (GAMSSymbol)db.getSet("i") );
+    ASSERT_TRUE( symbol_z != (GAMSSymbol)db.getParameter("b") );
+    ASSERT_TRUE( symbol_z != (GAMSSymbol)db.getVariable("x") );
+    ASSERT_TRUE( symbol_z != (GAMSSymbol)db.getEquation("cost") );
     QCOMPARE( db.getNrSymbols(), numberOfSymbols );
 
     // given
     GAMSEquation cost = db.getEquation("cost");
     GAMSSymbol symbol_cost = cost;
     // when, then
-    QVERIFY( !( symbol_cost != cost) );
-    QVERIFY( symbol_cost != (GAMSSymbol)db.getSet("i") );
-    QVERIFY( symbol_cost != (GAMSSymbol)db.getParameter("b") );
-    QVERIFY( symbol_cost != (GAMSSymbol)db.getVariable("x") );
-    QVERIFY( symbol_cost != (GAMSSymbol)db.getEquation("demand") );
+    ASSERT_TRUE( !( symbol_cost != cost) );
+    ASSERT_TRUE( symbol_cost != (GAMSSymbol)db.getSet("i") );
+    ASSERT_TRUE( symbol_cost != (GAMSSymbol)db.getParameter("b") );
+    ASSERT_TRUE( symbol_cost != (GAMSSymbol)db.getVariable("x") );
+    ASSERT_TRUE( symbol_cost != (GAMSSymbol)db.getEquation("demand") );
     QCOMPARE( db.getNrSymbols(), numberOfSymbols );
 }
 
@@ -223,49 +223,49 @@ void TestGAMSSymbol::testEqualToOperator() {
     // given
     GAMSSet j = db.getSet("j");
     GAMSSymbol symbol_j = j;
-    QVERIFY( symbol_j == j );
+    ASSERT_TRUE( symbol_j == j );
     // when, then
-    QVERIFY( symbol_j == db.getSet("j") );
-    QVERIFY( !( symbol_j == (GAMSSymbol)db.getSet("i")) );
-    QVERIFY( !( symbol_j == (GAMSSymbol)db.getParameter("a")) );
-    QVERIFY( !( symbol_j == (GAMSSymbol)db.getVariable("x")) );
-    QVERIFY( !( symbol_j == (GAMSSymbol)db.getEquation("cost")) );
+    ASSERT_TRUE( symbol_j == db.getSet("j") );
+    ASSERT_TRUE( !( symbol_j == (GAMSSymbol)db.getSet("i")) );
+    ASSERT_TRUE( !( symbol_j == (GAMSSymbol)db.getParameter("a")) );
+    ASSERT_TRUE( !( symbol_j == (GAMSSymbol)db.getVariable("x")) );
+    ASSERT_TRUE( !( symbol_j == (GAMSSymbol)db.getEquation("cost")) );
     QCOMPARE( db.getNrSymbols(), numberOfSymbols );
 
     // given
     GAMSParameter a = db.getParameter("a");
     GAMSSymbol symbol_a = a;
     // when, then
-    QVERIFY( symbol_a == a );
-    QVERIFY( symbol_a == db.getParameter("a") );
-    QVERIFY( !( symbol_a == (GAMSSymbol)db.getSet("j")) );
-    QVERIFY( !( symbol_a == (GAMSSymbol)db.getParameter("b")) );
-    QVERIFY( !( symbol_a == (GAMSSymbol)db.getVariable("x")) );
-    QVERIFY( !( symbol_a == (GAMSSymbol)db.getEquation("cost")) );
+    ASSERT_TRUE( symbol_a == a );
+    ASSERT_TRUE( symbol_a == db.getParameter("a") );
+    ASSERT_TRUE( !( symbol_a == (GAMSSymbol)db.getSet("j")) );
+    ASSERT_TRUE( !( symbol_a == (GAMSSymbol)db.getParameter("b")) );
+    ASSERT_TRUE( !( symbol_a == (GAMSSymbol)db.getVariable("x")) );
+    ASSERT_TRUE( !( symbol_a == (GAMSSymbol)db.getEquation("cost")) );
     QCOMPARE( db.getNrSymbols(), numberOfSymbols );
 
     // given
     GAMSVariable z = db.getVariable("z");
     GAMSSymbol symbol_z = z;
     // when, then
-    QVERIFY( symbol_z == z );
-    QVERIFY( symbol_z == db.getVariable("z") );
-    QVERIFY( !( symbol_z == (GAMSSymbol)db.getSet("i")) );
-    QVERIFY( !( symbol_z == (GAMSSymbol)db.getParameter("b")) );
-    QVERIFY( !( symbol_z == (GAMSSymbol)db.getVariable("x")) );
-    QVERIFY( !( symbol_z == (GAMSSymbol)db.getEquation("cost")) );
+    ASSERT_TRUE( symbol_z == z );
+    ASSERT_TRUE( symbol_z == db.getVariable("z") );
+    ASSERT_TRUE( !( symbol_z == (GAMSSymbol)db.getSet("i")) );
+    ASSERT_TRUE( !( symbol_z == (GAMSSymbol)db.getParameter("b")) );
+    ASSERT_TRUE( !( symbol_z == (GAMSSymbol)db.getVariable("x")) );
+    ASSERT_TRUE( !( symbol_z == (GAMSSymbol)db.getEquation("cost")) );
     QCOMPARE( db.getNrSymbols(), numberOfSymbols );
 
     // given
     GAMSEquation cost = db.getEquation("cost");
     GAMSSymbol symbol_cost = cost;
     // when, then
-    QVERIFY( symbol_cost == cost );
-    QVERIFY( symbol_cost == db.getEquation("cost") );
-    QVERIFY( !( symbol_cost == (GAMSSymbol)db.getSet("i")) );
-    QVERIFY( !( symbol_cost == (GAMSSymbol)db.getParameter("b")) );
-    QVERIFY( !( symbol_cost == (GAMSSymbol)db.getVariable("x")) );
-    QVERIFY( !( symbol_cost == (GAMSSymbol)db.getEquation("demand")) );
+    ASSERT_TRUE( symbol_cost == cost );
+    ASSERT_TRUE( symbol_cost == db.getEquation("cost") );
+    ASSERT_TRUE( !( symbol_cost == (GAMSSymbol)db.getSet("i")) );
+    ASSERT_TRUE( !( symbol_cost == (GAMSSymbol)db.getParameter("b")) );
+    ASSERT_TRUE( !( symbol_cost == (GAMSSymbol)db.getVariable("x")) );
+    ASSERT_TRUE( !( symbol_cost == (GAMSSymbol)db.getEquation("demand")) );
     QCOMPARE( db.getNrSymbols(), numberOfSymbols );
 }
 
@@ -279,7 +279,7 @@ void TestGAMSSymbol::testIsValid() {
 
     int numberOfSymbols = 0;
     for(GAMSSymbol symbol : db) {
-        QVERIFY( symbol.isValid() );
+        ASSERT_TRUE( symbol.isValid() );
         ++numberOfSymbols;
     }
     QCOMPARE( db.getNrSymbols(), numberOfSymbols );
@@ -297,25 +297,25 @@ void TestGAMSSymbol::testBegin() {
     // when
     GAMSSymbolIter<GAMSSet> it_i = i.begin();
     // then
-    QVERIFY( (*it_i) == i.firstRecord() );
+    ASSERT_TRUE( (*it_i) == i.firstRecord() );
 
     GAMSParameter d = db.getParameter("d");
     // when
     GAMSSymbolIter<GAMSParameter> it_d = d.begin();
     // then
-    QVERIFY( (*it_d) == d.firstRecord() );
+    ASSERT_TRUE( (*it_d) == d.firstRecord() );
 
     GAMSEquation supply = db.getEquation("supply");
     // when
     GAMSSymbolIter<GAMSEquation> it_supply = supply.begin();
     // then
-    QVERIFY( (*it_supply) == supply.firstRecord() );
+    ASSERT_TRUE( (*it_supply) == supply.firstRecord() );
 
     GAMSVariable z = db.getVariable("z");
     // when
     GAMSSymbolIter<GAMSVariable> it_z = z.begin();
     // then
-    QVERIFY( (*it_z) == z.firstRecord() );
+    ASSERT_TRUE( (*it_z) == z.firstRecord() );
 }
 
 void TestGAMSSymbol::testEnd() {
@@ -330,25 +330,25 @@ void TestGAMSSymbol::testEnd() {
     // when
     GAMSSymbolIter<GAMSSet> it_i = i.end();
     // then
-    QVERIFY(it_i == i.end());
+    ASSERT_TRUE(it_i == i.end());
 
     GAMSParameter d = db.getParameter("d");
     // when
     GAMSSymbolIter<GAMSParameter> it_d = d.end();
     // then
-    QVERIFY( it_d == d.end() );
+    ASSERT_TRUE( it_d == d.end() );
 
     GAMSEquation supply = db.getEquation("supply");
     // when
     GAMSSymbolIter<GAMSEquation> it_supply = supply.end();
     // then
-    QVERIFY( it_supply == supply.end() );
+    ASSERT_TRUE( it_supply == supply.end() );
 
     GAMSVariable z = db.getVariable("z");
     // when
     GAMSSymbolIter<GAMSVariable> it_z = z.end();
     // then
-    QVERIFY( it_z == z.end() );
+    ASSERT_TRUE( it_z == z.end() );
 }
 
 void TestGAMSSymbol::testAddRecord() {
@@ -364,21 +364,21 @@ void TestGAMSSymbol::testAddRecord() {
     int numberOfRecords = i.numberRecords();
     i.addRecord("Albuquerque");
     QCOMPARE( i.numberRecords(), numberOfRecords+1);
-    QVERIFY( i.findRecord("Albuquerque").isValid() );
+    ASSERT_TRUE( i.findRecord("Albuquerque").isValid() );
 
     // when, then
     GAMSSymbol a = db.getParameter("a");
     numberOfRecords = a.numberRecords();
     a.addRecord("Florida");
     QCOMPARE( a.numberRecords(), numberOfRecords+1);
-    QVERIFY( a.findRecord("Florida").isValid() );
+    ASSERT_TRUE( a.findRecord("Florida").isValid() );
 
     // when, then
     GAMSSymbol d = db.getParameter("d");
     numberOfRecords = d.numberRecords();
     d.addRecord("Albuquerque", "Florida");
     QCOMPARE( d.numberRecords(), numberOfRecords+1);
-    QVERIFY( d.findRecord("Albuquerque", "Florida").isValid() );
+    ASSERT_TRUE( d.findRecord("Albuquerque", "Florida").isValid() );
 
     // when, then
     GAMSSymbol f = db.getParameter("f");
@@ -390,14 +390,14 @@ void TestGAMSSymbol::testAddRecord() {
     numberOfRecords = supply.numberRecords();
     supply.addRecord("Albuquerque");
     QCOMPARE( supply.numberRecords(), numberOfRecords+1);
-    QVERIFY( supply.findRecord("Albuquerque").isValid() );
+    ASSERT_TRUE( supply.findRecord("Albuquerque").isValid() );
 
     // when, then
     GAMSSymbol x = db.getVariable("x");
     numberOfRecords = x.numberRecords();
     x.addRecord("Albuquerque", "Florida");
     QCOMPARE( x.numberRecords(), numberOfRecords+1);
-    QVERIFY( x.findRecord("Albuquerque", "Florida").isValid() );
+    ASSERT_TRUE( x.findRecord("Albuquerque", "Florida").isValid() );
 }
 
 void TestGAMSSymbol::testAddRecord_DuplicatedKeys() {
@@ -691,7 +691,7 @@ void TestGAMSSymbol::testGetDomains_set() {
     QCOMPARE(i.domains().size(), size_t(1)); // there is always the universe ("*") domain.
 
     for(GAMSDomain dom : i.domains()) {
-        QVERIFY( dom.isValid() );
+        ASSERT_TRUE( dom.isValid() );
         QVERIFY_EXCEPTION_THROWN( dom.getSet().name(), GAMSException);
     }
 
@@ -699,7 +699,7 @@ void TestGAMSSymbol::testGetDomains_set() {
     std::map<std::string, bool> domainMap;
     for(GAMSDomain dom : ii.domains()) {
         domainMap[dom.getSet().name()] = dom.isRelaxed();
-        QVERIFY( dom.isValid() );
+        ASSERT_TRUE( dom.isValid() );
     }
     // then
     QCOMPARE( domainMap.size(), size_t(1) );
@@ -722,7 +722,7 @@ void TestGAMSSymbol::testGetDomains() {
     GAMSSet ii = db.addSet("ii",  "canning plants", i);
     for(GAMSDomain dom : ii.domains()) {
         domainMap[dom.getSet().name()] = dom.isRelaxed();
-        QVERIFY( dom.isValid() );
+        ASSERT_TRUE( dom.isValid() );
     }
     // then
     QCOMPARE( domainMap.size(), size_t(1) );
@@ -732,7 +732,7 @@ void TestGAMSSymbol::testGetDomains() {
     GAMSParameter d = db.getParameter("d");
     for(GAMSDomain dom : d.domains()) {
         domainMap[dom.getSet().name()] = dom.isRelaxed();
-        QVERIFY( dom.isValid() );
+        ASSERT_TRUE( dom.isValid() );
     }
     // then
     QCOMPARE( domainMap.size(), size_t(2) );
@@ -742,13 +742,13 @@ void TestGAMSSymbol::testGetDomains() {
 
     GAMSParameter f = db.getParameter("f");
     for(GAMSDomain dom : f.domains()) {
-       QVERIFY(false);
+       ASSERT_TRUE(false);
     }
 
     GAMSVariable x = db.getVariable("x");
     for(GAMSDomain dom : x.domains()) {
         domainMap[dom.getSet().name()] = dom.isRelaxed();
-        QVERIFY( dom.isValid() );
+        ASSERT_TRUE( dom.isValid() );
     }
     // then
     QCOMPARE( domainMap.size(), size_t(2) );
@@ -759,7 +759,7 @@ void TestGAMSSymbol::testGetDomains() {
     GAMSEquation supply = db.getEquation("supply");
     for(GAMSDomain dom : supply.domains()) {
         domainMap[dom.getSet().name()] = dom.isRelaxed();
-        QVERIFY( dom.isValid() );
+        ASSERT_TRUE( dom.isValid() );
     }
     // then
     QCOMPARE( domainMap.size(), size_t(1) );
@@ -768,7 +768,7 @@ void TestGAMSSymbol::testGetDomains() {
 
     GAMSVariable z = db.getVariable("z");
     for(GAMSDomain dom : z.domains()) {
-       QVERIFY(false);
+       ASSERT_TRUE(false);
     }
 }
 
@@ -785,24 +785,24 @@ void TestGAMSSymbol::testCheckDomains() {
       a.addRecord("Seattle").setValue(350.0);
       a.addRecord("San-Diego").setValue(600.0);
       // when, then
-      QVERIFY( a.checkDomains() );
+      ASSERT_TRUE( a.checkDomains() );
       QCOMPARE( a.getSymbolDVs(0).size(), size_t(0));
 
       a.addRecord("Alburqurque").setValue(123.45);
       // when, then
-      QVERIFY( ! a.checkDomains() );
+      ASSERT_TRUE( ! a.checkDomains() );
       QCOMPARE( a.getSymbolDVs(0).size(), size_t(1));
     }
     { // relaxed domain
       GAMSParameter b = db.addParameter("b", "demand at market j in cases", GAMSDomain("j"));
       b.addRecord("New-York").setValue(325.0);
       // when, then
-      QVERIFY( b.checkDomains() );
+      ASSERT_TRUE( b.checkDomains() );
       QCOMPARE( b.getSymbolDVs(0).size(), size_t(0));
 
       b.addRecord("Alburqurque").setValue(123.45);
       // when, then
-      QVERIFY(  b.checkDomains() );
+      ASSERT_TRUE(  b.checkDomains() );
       QCOMPARE( b.getSymbolDVs(0).size(), size_t(0));
     }
     { // no domain info
@@ -810,7 +810,7 @@ void TestGAMSSymbol::testCheckDomains() {
       d.addRecord("Alburqurque","New-York").setValue(123.45);
 
       // when, then
-      QVERIFY( d.checkDomains() );
+      ASSERT_TRUE( d.checkDomains() );
       QCOMPARE( d.getSymbolDVs(0).size(), size_t(0));
     }
 }
@@ -828,15 +828,15 @@ void TestGAMSSymbol::testGetSymbolDVs() {
    {  GAMSParameter a = db.getParameter("a");
       a.addRecord("Alburquerque").setValue(123.45);
       a.addRecord("SantaFe").setValue(123.45);
-      QVERIFY( ! a.checkDomains() );
+      ASSERT_TRUE( ! a.checkDomains() );
       // when, then
       QCOMPARE( a.getSymbolDVs(0).size(), size_t(2) );
       std::map<std::string, size_t> recordCounter;
       for(GAMSSymbolDomainViolation dom : a.getSymbolDVs(0)) {
-          QVERIFY( dom.isValid() );
+          ASSERT_TRUE( dom.isValid() );
           recordCounter[dom.violRec().key(0)]++;
           QCOMPARE( dom.violInd().size(), size_t(1) );
-          QVERIFY( dom.violInd().at(0) );
+          ASSERT_TRUE( dom.violInd().at(0) );
       }
       QCOMPARE( recordCounter.size(), size_t(2) );
       QCOMPARE( recordCounter["Alburquerque"], size_t(1) );
@@ -848,11 +848,11 @@ void TestGAMSSymbol::testGetSymbolDVs() {
       // when, then
       QCOMPARE( a.getSymbolDVs(0).size(), size_t(3) );
       for(GAMSSymbolDomainViolation dom : a.getSymbolDVs(2)) {
-          QVERIFY( dom.isValid() );
+          ASSERT_TRUE( dom.isValid() );
           QCOMPARE( dom.violRec().type(), GAMSEnum::SymbolType::SymTypePar );
           recordCounter[dom.violRec().key(0)]++;
           QCOMPARE( dom.violInd().size(), size_t(1) );
-          QVERIFY( dom.violInd().at(0) );
+          ASSERT_TRUE( dom.violInd().at(0) );
       }
       QCOMPARE( recordCounter.size(), size_t(2) );
       QCOMPARE( recordCounter["Alburquerque"], size_t(1) );
@@ -866,11 +866,11 @@ void TestGAMSSymbol::testGetSymbolDVs() {
        QCOMPARE( supply.getSymbolDVs(0).size(), size_t(2) );
        std::map<std::string, size_t> recordCounter;
        for(GAMSSymbolDomainViolation dom : supply.getSymbolDVs(5)) {
-           QVERIFY( dom.isValid() );
+           ASSERT_TRUE( dom.isValid() );
            QCOMPARE( dom.violRec().type(), GAMSEnum::SymbolType::SymTypeEqu );
            recordCounter[dom.violRec().key(0)]++;
            QCOMPARE( dom.violInd().size(), size_t(1) );
-           QVERIFY( dom.violInd().at(0) );
+           ASSERT_TRUE( dom.violInd().at(0) );
        }
        QCOMPARE( recordCounter.size(), size_t(2) );
        QCOMPARE( recordCounter["Alburquerque"], size_t(1) );
@@ -885,21 +885,21 @@ void TestGAMSSymbol::testGetSymbolDVs() {
        QCOMPARE( x.getSymbolDVs(0).size(), size_t(2) );
        std::map<std::string, int> recordMap;
        for(GAMSSymbolDomainViolation dom : x.getSymbolDVs(5)) {
-           QVERIFY( dom.isValid() );
+           ASSERT_TRUE( dom.isValid() );
            QCOMPARE( dom.violRec().type(), GAMSEnum::SymbolType::SymTypeVar );
 
            if (dom.violRec().key(0).compare("seattle")==0 ) {
-               QVERIFY( dom.violRec().key(1).compare("Alburquerque")==0 );
+               ASSERT_TRUE( dom.violRec().key(1).compare("Alburquerque")==0 );
                std::vector<bool> vi = dom.violInd();
                QCOMPARE( vi.size(), size_t(2) );
-               QVERIFY( ! vi[0] );
-               QVERIFY( vi[1] );
+               ASSERT_TRUE( ! vi[0] );
+               ASSERT_TRUE( vi[1] );
            } else if (dom.violRec().key(0).compare("Alburquerque")==0 ) {
-               QVERIFY(dom.violRec().key(1).compare("topeka")==0);
+               ASSERT_TRUE(dom.violRec().key(1).compare("topeka")==0);
                std::vector<bool> vi = dom.violInd();
                QCOMPARE( vi.size(), size_t(2) );
-               QVERIFY( vi[0] );
-               QVERIFY( ! vi[1] );
+               ASSERT_TRUE( vi[0] );
+               ASSERT_TRUE( ! vi[1] );
            }
            std::stringstream ss;
            ss << dom.violRec().key(0) << "_" << dom.violRec().key(1) ;
@@ -907,8 +907,8 @@ void TestGAMSSymbol::testGetSymbolDVs() {
 
        }
        QCOMPARE( recordMap.size(), size_t(2) );
-       QVERIFY( equals( recordMap["seattle_Alburquerque"], size_t(1)) );
-       QVERIFY( equals( recordMap["Alburquerque_topeka"], size_t(1)) );
+       ASSERT_TRUE( equals( recordMap["seattle_Alburquerque"], size_t(1)) );
+       ASSERT_TRUE( equals( recordMap["Alburquerque_topeka"], size_t(1)) );
     }
 }
 
@@ -935,7 +935,7 @@ void TestGAMSSymbol::testGetFirstRecord() {
 
     // when, then
     GAMSSymbol f( db.getParameter("f") );
-    QVERIFY( f.firstRecord().isValid() );
+    ASSERT_TRUE( f.firstRecord().isValid() );
 
     // when, then
     GAMSSymbol supply( db.getEquation("supply") );
@@ -1059,7 +1059,7 @@ void TestGAMSSymbol::testGetLastRecord() {
 
     // when, then
     GAMSSymbol f( db.getParameter("f") );
-    QVERIFY( f.lastRecord().isValid() );
+    ASSERT_TRUE( f.lastRecord().isValid() );
 
     // when, then
     GAMSSymbol supply( db.getEquation("supply") );
@@ -1170,32 +1170,32 @@ void TestGAMSSymbol::testFindRecord() {
 
     // when, then
     GAMSSymbol i = db.getSet("i");
-    QVERIFY( i.findRecord("san-diego").isValid() );
+    ASSERT_TRUE( i.findRecord("san-diego").isValid() );
     QCOMPARE( i.findRecord("san-diego").key(0).c_str(), "san-diego");
 
     // when, then
     GAMSSymbol b = db.getParameter("b");
-    QVERIFY( b.findRecord("chicago").isValid() );
+    ASSERT_TRUE( b.findRecord("chicago").isValid() );
     QCOMPARE( b.findRecord("chicago").key(0).c_str(), "chicago");
 
     // when, then
     GAMSSymbol d =  db.getParameter("d");
-    QVERIFY( d.findRecord("seattle", "chicago").isValid() );
+    ASSERT_TRUE( d.findRecord("seattle", "chicago").isValid() );
     QCOMPARE( d.findRecord("seattle", "chicago").key(0).c_str(), "seattle");
     QCOMPARE( d.findRecord("seattle", "chicago").key(1).c_str(), "chicago");
 
     // when, then
     GAMSSymbol f = db.getParameter("f");
-    QVERIFY( f.findRecord().isValid() );
+    ASSERT_TRUE( f.findRecord().isValid() );
 
     // when, then
     GAMSSymbol supply = db.getEquation("supply");
-    QVERIFY( supply.findRecord("seattle").isValid() );
+    ASSERT_TRUE( supply.findRecord("seattle").isValid() );
     QCOMPARE( supply.findRecord("seattle").key(0).c_str(), "seattle");
 
     // when, then
     GAMSSymbol x  = db.getVariable("x");
-    QVERIFY( x.findRecord("seattle", "topeka").isValid() );
+    ASSERT_TRUE( x.findRecord("seattle", "topeka").isValid() );
     QCOMPARE( x.findRecord("seattle", "topeka").key(0).c_str(), "seattle");
     QCOMPARE( x.findRecord("seattle", "topeka").key(1).c_str(), "topeka");
 }
@@ -1374,7 +1374,7 @@ void TestGAMSSymbol::testGetDatabase() {
     TestGAMSObject::getTestData_Parameter_capacity_a( db );
     GAMSSymbol i( db.getSet("i") );
     // when, then
-    QVERIFY( i.database() == db );
+    ASSERT_TRUE( i.database() == db );
     QCOMPARE( i.database().getNrSymbols(), db.getNrSymbols());
 }
 

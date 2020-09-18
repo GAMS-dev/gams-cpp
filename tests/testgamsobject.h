@@ -30,6 +30,8 @@
 #include "gamsjob.h"
 #include "gamsworkspace.h"
 
+#include <gtest/gtest.h>
+#include <gmock/gmock-matchers.h>
 #include <cmath>
 #include <limits>
 #include <QObject>

@@ -37,7 +37,7 @@ void TestGAMSDatabaseDomainViolation::testDefaultConstructor() {
     // when,
     GAMSDatabaseDomainViolation domViolation;
     // then
-    QVERIFY( ! domViolation.isValid() );
+    ASSERT_TRUE( ! domViolation.isValid() );
     QVERIFY_EXCEPTION_THROWN( domViolation.violSym(), GAMSException );
     QVERIFY_EXCEPTION_THROWN( domViolation.violRecs(), GAMSException );
 }
@@ -55,7 +55,7 @@ void TestGAMSDatabaseDomainViolation::testCopyConstructor() {
         GAMSDatabaseDomainViolation dv( domViol );
         QCOMPARE( dv.violSym(), domViol.violSym() );
         QCOMPARE( dv.violRecs().size(), domViol.violRecs().size() );
-        QVERIFY( dv == domViol );
+        ASSERT_TRUE( dv == domViol );
 
     }
 }
@@ -70,7 +70,7 @@ void TestGAMSDatabaseDomainViolation::testIsValid() {
     // when, then
     QCOMPARE( db.getDatabaseDVs(0, 5).size(), size_t(2) );
     for(GAMSDatabaseDomainViolation domViol : db.getDatabaseDVs(0, 5)){
-        QVERIFY( domViol.isValid() );
+        ASSERT_TRUE( domViol.isValid() );
     }
 }
 
@@ -107,9 +107,9 @@ void TestGAMSDatabaseDomainViolation::testEqualToOperator() {
     for(size_t i=size_t(0); i< db.getDatabaseDVs(0, 2).size(); i++) {
         // when, then
         if (i==size_t(0)) {
-            QVERIFY( db.getDatabaseDVs(0, 2)[i] != domViol0 );
+            ASSERT_TRUE( db.getDatabaseDVs(0, 2)[i] != domViol0 );
         } else if (i==size_t(1)) {
-            QVERIFY( db.getDatabaseDVs(0, 2)[i] != domViol1 );
+            ASSERT_TRUE( db.getDatabaseDVs(0, 2)[i] != domViol1 );
         } else {
             QFAIL("do not expect more than 2 database domain violation");
         }
@@ -129,9 +129,9 @@ void TestGAMSDatabaseDomainViolation::testNotEqualToOperator() {
     for(size_t i=size_t(0); i< db.getDatabaseDVs(0, 2).size(); i++) {
         // when, then
         if (i==size_t(0)) {
-            QVERIFY( db.getDatabaseDVs(0, 2)[i] != domViol1 );
+            ASSERT_TRUE( db.getDatabaseDVs(0, 2)[i] != domViol1 );
         } else if (i==size_t(1)) {
-            QVERIFY( db.getDatabaseDVs(0, 2)[i] != domViol0 );
+            ASSERT_TRUE( db.getDatabaseDVs(0, 2)[i] != domViol0 );
         } else {
             QFAIL("do not expect more than 2 database domain violation");
         }

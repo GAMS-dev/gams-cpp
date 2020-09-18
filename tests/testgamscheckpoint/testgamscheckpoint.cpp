@@ -28,9 +28,6 @@
 #include "gamsworkspace.h"
 #include "testgamscheckpoint.h"
 
-#include <gtest/gtest.h>
-#include <gmock/gmock-matchers.h>
-
 using namespace gams;
 
 QString TestGAMSCheckpoint::classname()  { return "TestGAMSCheckpoint"; }

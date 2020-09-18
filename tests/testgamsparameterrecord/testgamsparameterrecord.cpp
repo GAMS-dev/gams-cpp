@@ -42,7 +42,7 @@ void TestGAMSParameterRecord::testDefaultConstructor() {
     // when
     GAMSParameterRecord rec;
     // then
-    QVERIFY( ! rec.isValid() );
+    ASSERT_TRUE( ! rec.isValid() );
     QVERIFY_EXCEPTION_THROWN( rec.type(), GAMSException );
     QVERIFY_EXCEPTION_THROWN( rec.logID(), GAMSException );
     QVERIFY_EXCEPTION_THROWN( rec.setValue( 0.0 ), GAMSException );
@@ -85,7 +85,7 @@ void TestGAMSParameterRecord::testAssignmentOperator() {
     // when
     GAMSParameterRecord newRecord = rec;
     QCOMPARE( newRecord, rec );
-    QVERIFY( newRecord == rec );
+    ASSERT_TRUE( newRecord == rec );
 }
 
 void TestGAMSParameterRecord::testIncorrectType_data() {
@@ -147,15 +147,15 @@ void TestGAMSParameterRecord::testGetValue() {
     TestGAMSObject::getTestData_Parameter_distance_d( db );
 
     GAMSParameter param = db.getParameter("d");
-    QVERIFY( equals(param.findRecord("seattle", "new-york").value(), 2.5) );
-    QVERIFY( equals(param.findRecord("seattle", "chicago").value(), 1.7) );
-    QVERIFY( equals(param.findRecord("seattle", "topeka").value(), 1.8) );
-    QVERIFY( equals(param.findRecord("san-diego", "new-york").value(), 2.5) );
-    QVERIFY( equals(param.findRecord("san-diego", "chicago").value(), 1.8) );
-    QVERIFY( equals(param.findRecord("san-diego", "topeka").value(), 1.4) );
+    ASSERT_TRUE( equals(param.findRecord("seattle", "new-york").value(), 2.5) );
+    ASSERT_TRUE( equals(param.findRecord("seattle", "chicago").value(), 1.7) );
+    ASSERT_TRUE( equals(param.findRecord("seattle", "topeka").value(), 1.8) );
+    ASSERT_TRUE( equals(param.findRecord("san-diego", "new-york").value(), 2.5) );
+    ASSERT_TRUE( equals(param.findRecord("san-diego", "chicago").value(), 1.8) );
+    ASSERT_TRUE( equals(param.findRecord("san-diego", "topeka").value(), 1.4) );
 
     param.addRecord("alburquerque", "topeka");
-    QVERIFY( equals(param.findRecord("alburquerque", "topeka").value(), 0.0) );
+    ASSERT_TRUE( equals(param.findRecord("alburquerque", "topeka").value(), 0.0) );
 }
 
 void TestGAMSParameterRecord::testSetValue() {
@@ -167,10 +167,10 @@ void TestGAMSParameterRecord::testSetValue() {
 
     GAMSParameter param = db.getParameter("b");
     param.findRecord("new-york").setValue( 3.2 );
-    QVERIFY( equals(param.findRecord("new-york").value(), 3.2) );
+    ASSERT_TRUE( equals(param.findRecord("new-york").value(), 3.2) );
 
     param.addRecord("alburquerque").setValue( 4.2 );
-    QVERIFY( equals(param.findRecord("alburquerque").value(), 4.2) );
+    ASSERT_TRUE( equals(param.findRecord("alburquerque").value(), 4.2) );
 }
 
 QTEST_MAIN(TestGAMSParameterRecord)

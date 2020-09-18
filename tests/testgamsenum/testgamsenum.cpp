@@ -44,7 +44,7 @@ void  TestGAMSEnum::testGamsReturnCodeToText() {
         std::string code = GAMSEnum::text(static_cast<GAMSEnum::GAMSExitCode>(i));
         // then
         if (std::find(std::begin(valid), std::end(valid), i) != std::end(valid)) {
-            QVERIFY(invalid.compare(code) != 0);
+            ASSERT_TRUE(invalid.compare(code) != 0);
         } else {
             QCOMPARE(code, invalid);
         }

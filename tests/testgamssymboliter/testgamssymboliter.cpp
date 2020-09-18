@@ -64,12 +64,12 @@ void TestGAMSSymbolIter::testConstructor() {
         }
         // then
         QCOMPARE( recordMap.size(), size_t(6) );
-        QVERIFY( equals( recordMap["seattle_new-york"], 2.5) );
-        QVERIFY( equals( recordMap["seattle_chicago"], 1.7) );
-        QVERIFY( equals( recordMap["seattle_topeka"], 1.8) );
-        QVERIFY( equals( recordMap["san-diego_new-york"], 2.5) );
-        QVERIFY( equals( recordMap["san-diego_chicago"], 1.8) );
-        QVERIFY( equals( recordMap["san-diego_topeka"], 1.4) );
+        ASSERT_TRUE( equals( recordMap["seattle_new-york"], 2.5) );
+        ASSERT_TRUE( equals( recordMap["seattle_chicago"], 1.7) );
+        ASSERT_TRUE( equals( recordMap["seattle_topeka"], 1.8) );
+        ASSERT_TRUE( equals( recordMap["san-diego_new-york"], 2.5) );
+        ASSERT_TRUE( equals( recordMap["san-diego_chicago"], 1.8) );
+        ASSERT_TRUE( equals( recordMap["san-diego_topeka"], 1.4) );
     }
     { std::map<std::string, size_t> recordCounter;
         // when
@@ -97,25 +97,25 @@ void TestGAMSSymbolIter::testConstructor_InvalidPosition() {
     GAMSSymbolIter<GAMSSet> it_i(i, 1);
     try {
         GAMSSymbolIter<GAMSSet> it_i(i, i.numberRecords()+1);
-    } catch(GAMSException&) { QVERIFY(true); }
+    } catch(GAMSException&) { ASSERT_TRUE(true); }
 
     GAMSParameter b = db.getParameter("b");
     GAMSSymbolIter<GAMSParameter> it_b(b, 1);
     try {
         GAMSSymbolIter<GAMSParameter> it_b(b, b.numberRecords()+1);
-    } catch(GAMSException&) { QVERIFY(true); }
+    } catch(GAMSException&) { ASSERT_TRUE(true); }
 
     GAMSEquation supply = db.getEquation("supply");
     GAMSSymbolIter<GAMSEquation> it_supply(supply, 1);
     try {
         GAMSSymbolIter<GAMSEquation> it_supply(supply, supply.numberRecords()+1);
-    } catch(GAMSException&) { QVERIFY(true); }
+    } catch(GAMSException&) { ASSERT_TRUE(true); }
 
     GAMSVariable x = db.getVariable("x");
     GAMSSymbolIter<GAMSVariable> it_x(x, 1);
     try {
         GAMSSymbolIter<GAMSVariable> it_x(x, x.numberRecords()+1);
-    } catch(GAMSException&) { QVERIFY(true); }
+    } catch(GAMSException&) { ASSERT_TRUE(true); }
 }
 
 void TestGAMSSymbolIter::testConstructor_InvalidSymbol() {
@@ -125,7 +125,7 @@ void TestGAMSSymbolIter::testConstructor_InvalidSymbol() {
     QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSSet> it(set, 100), GAMSException);
     try {
         for(GAMSSetRecord rec : set) { QFAIL("Invalid GAMSSet contains no record!");  }
-    } catch(GAMSException&) { QVERIFY(true); }
+    } catch(GAMSException&) { ASSERT_TRUE(true); }
 
     GAMSParameter par;
     QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSParameter> it(par, 0), GAMSException);
@@ -133,7 +133,7 @@ void TestGAMSSymbolIter::testConstructor_InvalidSymbol() {
     QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSParameter> it(par, 100), GAMSException);
     try {
         for(GAMSParameterRecord rec : par) { QFAIL("Invalid GAMSParameter contains no record!");  }
-    } catch(GAMSException&) { QVERIFY(true); }
+    } catch(GAMSException&) { ASSERT_TRUE(true); }
 
     GAMSEquation eq;
     QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSEquation> it(eq, 0), GAMSException);
@@ -141,7 +141,7 @@ void TestGAMSSymbolIter::testConstructor_InvalidSymbol() {
     QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSEquation> it(eq, 100), GAMSException);
     try {
         for(GAMSEquationRecord rec : eq) { QFAIL("Invalid GAMSEquation contains no record!");  }
-    } catch(GAMSException&) { QVERIFY(true); }
+    } catch(GAMSException&) { ASSERT_TRUE(true); }
 
     GAMSVariable var;
     QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSVariable> it(var, 0), GAMSException);
@@ -149,7 +149,7 @@ void TestGAMSSymbolIter::testConstructor_InvalidSymbol() {
     QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSVariable> it(var, 100), GAMSException);
     try {
         for(GAMSVariableRecord rec : var) { QFAIL("Invalid GAMSVariable contains no record!");  }
-    } catch(GAMSException&) { QVERIFY(true); }
+    } catch(GAMSException&) { ASSERT_TRUE(true); }
 
 }
 
@@ -166,88 +166,88 @@ void TestGAMSSymbolIter::testEqualToOperator() {
         GAMSSymbolIter<GAMSSet> it_i1(set_i, 0);
         GAMSSymbolIter<GAMSSet> it_i2(set_i, 0);
         // then
-        QVERIFY( it_i1 == it_i2 );
+        ASSERT_TRUE( it_i1 == it_i2 );
 
         GAMSSet i = db.getSet("i");
         // when
         GAMSSymbolIter<GAMSSet> it_i3(i, 0);
         // then
-        QVERIFY( it_i1 == it_i3 );
+        ASSERT_TRUE( it_i1 == it_i3 );
 
         ++it_i3;
         // then
-        QVERIFY( !(it_i1 == it_i3) );
+        ASSERT_TRUE( !(it_i1 == it_i3) );
         // when
         GAMSSymbolIter<GAMSSet> it_i4(i, i.numberRecords());
         // then
-        QVERIFY( !(it_i1 == it_i4) );
-        QVERIFY( !(it_i3 == it_i4) );
+        ASSERT_TRUE( !(it_i1 == it_i4) );
+        ASSERT_TRUE( !(it_i3 == it_i4) );
     }
     {  GAMSParameter par_d = db.getParameter("d");
         // when
         GAMSSymbolIter<GAMSParameter> it_d1(par_d, 0);
         GAMSSymbolIter<GAMSParameter> it_d2(par_d, 0);
         // then
-        QVERIFY( it_d1 == it_d2 );
+        ASSERT_TRUE( it_d1 == it_d2 );
 
         GAMSParameter d = db.getParameter("d");
         // when
         GAMSSymbolIter<GAMSParameter> it_d3(d, 0);
         // then
-        QVERIFY( it_d1 == it_d3 );
+        ASSERT_TRUE( it_d1 == it_d3 );
 
         ++it_d3;
         // then
-        QVERIFY( !(it_d1 == it_d3) );
+        ASSERT_TRUE( !(it_d1 == it_d3) );
         // when
         GAMSSymbolIter<GAMSParameter> it_d4(d, d.numberRecords());
         // then
-        QVERIFY( !(it_d1 == it_d4) );
-        QVERIFY( !(it_d3 == it_d4) );
+        ASSERT_TRUE( !(it_d1 == it_d4) );
+        ASSERT_TRUE( !(it_d3 == it_d4) );
     }
     {  GAMSEquation eq_supply = db.getEquation("supply");
         // when
         GAMSSymbolIter<GAMSEquation> it_s1(eq_supply, 0);
         GAMSSymbolIter<GAMSEquation> it_s2(eq_supply, 0);
         // then
-        QVERIFY( it_s1 == it_s2 );
+        ASSERT_TRUE( it_s1 == it_s2 );
 
         GAMSEquation supply = db.getEquation("supply");
         // when
         GAMSSymbolIter<GAMSEquation> it_s3(supply, 0);
         // then
-        QVERIFY( it_s1 == it_s3 );
+        ASSERT_TRUE( it_s1 == it_s3 );
 
         ++it_s3;
         // then
-        QVERIFY( !(it_s1 == it_s3) );
+        ASSERT_TRUE( !(it_s1 == it_s3) );
         // when
         GAMSSymbolIter<GAMSEquation> it_s4(supply, supply.numberRecords());
         // then
-        QVERIFY( !(it_s1 == it_s4) );
-        QVERIFY( !(it_s3 == it_s4) );
+        ASSERT_TRUE( !(it_s1 == it_s4) );
+        ASSERT_TRUE( !(it_s3 == it_s4) );
     }
     {  GAMSVariable var_x = db.getVariable("x");
         // when
         GAMSSymbolIter<GAMSVariable> it_x1(var_x, 0);
         GAMSSymbolIter<GAMSVariable> it_x2(var_x, 0);
         // then
-        QVERIFY( it_x1 == it_x2 );
+        ASSERT_TRUE( it_x1 == it_x2 );
 
         GAMSVariable x = db.getVariable("x");
         // when
         GAMSSymbolIter<GAMSVariable> it_x3(x, 0);
         // then
-        QVERIFY( it_x1 == it_x3 );
+        ASSERT_TRUE( it_x1 == it_x3 );
 
         ++it_x3;
         // then
-        QVERIFY( !(it_x1 == it_x3) );
+        ASSERT_TRUE( !(it_x1 == it_x3) );
         // when
         GAMSSymbolIter<GAMSVariable> it_x4(x, x.numberRecords());
         // then
-        QVERIFY( !(it_x1 == it_x4) );
-        QVERIFY( !(it_x3 == it_x4) );
+        ASSERT_TRUE( !(it_x1 == it_x4) );
+        ASSERT_TRUE( !(it_x3 == it_x4) );
     }
 }
 
@@ -265,17 +265,17 @@ void TestGAMSSymbolIter::testNotEqualToOperator() {
         GAMSSymbolIter<GAMSSet> it_i(set_i, 0);
         GAMSSymbolIter<GAMSSet> it_j1(set_j, 0);
         // then
-        QVERIFY( it_i != it_j1 );
+        ASSERT_TRUE( it_i != it_j1 );
 
         ++it_i;
         ++it_j1;
         // then
-        QVERIFY( it_i != it_j1 );
+        ASSERT_TRUE( it_i != it_j1 );
         // when
 
         GAMSSymbolIter<GAMSSet> it_j2(set_j, set_j.numberRecords());
         // then
-        QVERIFY( it_j1 != it_j2 );
+        ASSERT_TRUE( it_j1 != it_j2 );
     }
     { GAMSParameter par_a = db.getParameter("a");
         GAMSParameter par_b = db.getParameter("b");
@@ -283,17 +283,17 @@ void TestGAMSSymbolIter::testNotEqualToOperator() {
         GAMSSymbolIter<GAMSParameter> it_a(par_a, 0);
         GAMSSymbolIter<GAMSParameter> it_b1(par_b, 0);
         // then
-        QVERIFY( it_a != it_b1 );
+        ASSERT_TRUE( it_a != it_b1 );
 
         ++it_a;
         ++it_b1;
         // then
-        QVERIFY( it_a != it_b1 );
+        ASSERT_TRUE( it_a != it_b1 );
         // when
 
         GAMSSymbolIter<GAMSParameter> it_b2(par_b, par_b.numberRecords());
         // then
-        QVERIFY( it_b1 != it_b2 );
+        ASSERT_TRUE( it_b1 != it_b2 );
     }
     { GAMSVariable var_z= db.getVariable("z");
         GAMSVariable var_x = db.getVariable("x");
@@ -301,16 +301,16 @@ void TestGAMSSymbolIter::testNotEqualToOperator() {
         GAMSSymbolIter<GAMSVariable> it_z(var_z, 0);
         GAMSSymbolIter<GAMSVariable> it_x1(var_x, 0);
         // then
-        QVERIFY( it_z != it_x1 );
+        ASSERT_TRUE( it_z != it_x1 );
 
         ++it_x1;
         // then
-        QVERIFY( it_z != it_x1 );
+        ASSERT_TRUE( it_z != it_x1 );
         // when
 
         GAMSSymbolIter<GAMSVariable> it_x2(var_x, var_x.numberRecords());
         // then
-        QVERIFY( it_x1 != it_x2 );
+        ASSERT_TRUE( it_x1 != it_x2 );
     }
 }
 
@@ -348,14 +348,14 @@ void TestGAMSSymbolIter::testPointerOperator() {
         // when
         GAMSSymbolIter<GAMSVariable> it_z(var_z, 0);
         // then
-        QVERIFY( equals((*it_z).level(), 153.675) );
+        ASSERT_TRUE( equals((*it_z).level(), 153.675) );
     }
 
     { GAMSEquation eq_demand = db.getEquation("demand");
         // when
         GAMSSymbolIter<GAMSEquation> it_demand(eq_demand, 0);
         // then
-        QVERIFY( equals((*it_demand).level(), 325.0) );
+        ASSERT_TRUE( equals((*it_demand).level(), 325.0) );
     }
 }
 

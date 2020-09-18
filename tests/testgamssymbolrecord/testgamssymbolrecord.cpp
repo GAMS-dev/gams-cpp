@@ -46,7 +46,7 @@ void TestGAMSSymbolRecord::testDefaultConstructor() {
     // when
     GAMSSymbolRecord rec;
     // then
-    QVERIFY( ! rec.isValid() );
+    ASSERT_TRUE( ! rec.isValid() );
     QVERIFY_EXCEPTION_THROWN( rec.moveNext(), GAMSException);
 }
 
@@ -210,15 +210,15 @@ void TestGAMSSymbolRecord::testEqualToOperator() {
       GAMSSymbolRecord rec2 = symbol.firstRecord();
       GAMSSymbolRecord rec3 = symbol.findRecord("seattle");
       // then
-      QVERIFY( rec1 == rec2 );
-      QVERIFY( rec1 == rec3 );
+      ASSERT_TRUE( rec1 == rec2 );
+      ASSERT_TRUE( rec1 == rec3 );
     }
     // when
     { GAMSSymbol symbol = db.getParameter( "f" );
       GAMSSymbolRecord rec1 = symbol.firstRecord();
       GAMSSymbolRecord rec2 = symbol.lastRecord();
       // then
-      QVERIFY( rec1 == rec2 );
+      ASSERT_TRUE( rec1 == rec2 );
     }
 }
 
@@ -235,9 +235,9 @@ void TestGAMSSymbolRecord::testNotEqualToOperator() {
       GAMSSymbolRecord rec2 = symbol.lastRecord();
       GAMSSymbolRecord rec3 = symbol.findRecord("seattle");
       // then
-      QVERIFY( rec1 != rec2 );
-      QVERIFY( rec1 == rec3 );
-      QVERIFY( rec2 != rec3 );
+      ASSERT_TRUE( rec1 != rec2 );
+      ASSERT_TRUE( rec1 == rec3 );
+      ASSERT_TRUE( rec2 != rec3 );
     }
 }
 
@@ -251,31 +251,31 @@ void TestGAMSSymbolRecord::testIsValid() {
 
     // when, then
     { GAMSSymbolRecord rec;
-      QVERIFY( ! rec.isValid() );
+      ASSERT_TRUE( ! rec.isValid() );
     }
     // when, then
     for(GAMSSymbolRecord rec : db.getSet("j")) {
-        QVERIFY( rec.isValid() );
+        ASSERT_TRUE( rec.isValid() );
     }
 
     // when, then
     for(GAMSSymbolRecord rec : db.getParameter("b")) {
-       QVERIFY( rec.isValid() );
+       ASSERT_TRUE( rec.isValid() );
     }
 
     // when, then
     for(GAMSSymbolRecord rec : db.getParameter("f")) {
-       QVERIFY( rec.isValid() );
+       ASSERT_TRUE( rec.isValid() );
     }
 
     // when, then
     for(GAMSSymbolRecord rec : db.getVariable("x")) {
-       QVERIFY( rec.isValid() );
+       ASSERT_TRUE( rec.isValid() );
     }
 
     // when, then
     for(GAMSSymbolRecord rec : db.getEquation("demand")) {
-       QVERIFY( rec.isValid() );
+       ASSERT_TRUE( rec.isValid() );
     }
 }
 

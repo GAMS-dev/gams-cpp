@@ -43,7 +43,7 @@ void TestGAMSVariable::testDefaultConstructor() {
     // when
     GAMSVariable v;
     // then
-    QVERIFY( ! v.isValid() );
+    ASSERT_TRUE( ! v.isValid() );
 
     QVERIFY_EXCEPTION_THROWN( v.type(), GAMSException );
     QVERIFY_EXCEPTION_THROWN( v.logID(), GAMSException);
@@ -77,7 +77,7 @@ void TestGAMSVariable::testCopyConstructor() {
     // when
     x.addRecord("seattle", "Albuquerque");
     // then
-    QVERIFY( equals(var.findRecord("seattle", "Albuquerque").level(), 0.0) );
+    ASSERT_TRUE( equals(var.findRecord("seattle", "Albuquerque").level(), 0.0) );
     QCOMPARE( var.numberRecords(), x.numberRecords() );
 }
 
@@ -111,12 +111,12 @@ void TestGAMSVariable::testIterator() {
     }
     // then
     QCOMPARE( symbolMap.size(), size_t(6) );
-    QVERIFY( equals(symbolMap["seattle_new-york"], 50.0) );
-    QVERIFY( equals(symbolMap["seattle_chicago"], 300.0) );
-    QVERIFY( equals(symbolMap["seattle_topeka"], 0.0) );
-    QVERIFY( equals(symbolMap["san-diego_new-york"], 275.0) );
-    QVERIFY( equals(symbolMap["san-diego_chicago"], 0.0) );
-    QVERIFY( equals(symbolMap["san-diego_topeka"], 275.0) );
+    ASSERT_TRUE( equals(symbolMap["seattle_new-york"], 50.0) );
+    ASSERT_TRUE( equals(symbolMap["seattle_chicago"], 300.0) );
+    ASSERT_TRUE( equals(symbolMap["seattle_topeka"], 0.0) );
+    ASSERT_TRUE( equals(symbolMap["san-diego_new-york"], 275.0) );
+    ASSERT_TRUE( equals(symbolMap["san-diego_chicago"], 0.0) );
+    ASSERT_TRUE( equals(symbolMap["san-diego_topeka"], 275.0) );
 }
 
 void TestGAMSVariable::testAssignmentOperator() {
@@ -132,7 +132,7 @@ void TestGAMSVariable::testAssignmentOperator() {
     // when, then
     GAMSVariable var = x;
     QCOMPARE( var, x );
-    QVERIFY( var == x );
+    ASSERT_TRUE( var == x );
     QCOMPARE( db.getNrSymbols(), numberOfSymbols );
 }
 
@@ -163,12 +163,12 @@ void TestGAMSVariable::testGetFirstRecord() {
       QCOMPARE( rec.keys().size(), size_t(2) );
       QCOMPARE( rec.key(0).c_str(), "seattle" );
       QCOMPARE( rec.key(1).c_str(), "new-york" );
-      QVERIFY( equals(rec.level(), 50.0) );
+      ASSERT_TRUE( equals(rec.level(), 50.0) );
     }
     // when, then
     { GAMSVariableRecord rec = db.getVariable("z").firstRecord();
       QCOMPARE( rec.keys().size(), size_t(0) );
-      QVERIFY( equals(rec.level(), 153.675) );
+      ASSERT_TRUE( equals(rec.level(), 153.675) );
     }
 }
 
@@ -185,14 +185,14 @@ void TestGAMSVariable::testGetFirstRecordSlice() {
       QCOMPARE( rec.keys().size(), size_t(2) );
       QCOMPARE( rec.key(0).c_str(), "seattle" );
       QCOMPARE( rec.key(1).c_str(), "chicago" );
-      QVERIFY( equals(rec.level(), 300.0) );
+      ASSERT_TRUE( equals(rec.level(), 300.0) );
     }
     // when, then
     { GAMSVariableRecord rec = db.getVariable("x").firstRecord("san-diego", "topeka");
       QCOMPARE( rec.keys().size(), size_t(2) );
       QCOMPARE( rec.key(0).c_str(), "san-diego" );
       QCOMPARE( rec.key(1).c_str(), "topeka" );
-      QVERIFY( equals(rec.level(), 275.0) );
+      ASSERT_TRUE( equals(rec.level(), 275.0) );
     }
 }
 
@@ -229,12 +229,12 @@ void TestGAMSVariable::testGetLastRecord() {
       QCOMPARE( rec.keys().size(), size_t(2) );
       QCOMPARE( rec.key(0).c_str(), "san-diego" );
       QCOMPARE( rec.key(1).c_str(), "topeka" );
-      QVERIFY( equals(rec.level(), 275.0) );
+      ASSERT_TRUE( equals(rec.level(), 275.0) );
     }
     // when, then
     { GAMSVariableRecord rec = db.getVariable("z").lastRecord();
       QCOMPARE( rec.keys().size(), size_t(0) );
-      QVERIFY( equals(rec.level(), 153.675) );
+      ASSERT_TRUE( equals(rec.level(), 153.675) );
     }
 }
 
@@ -252,14 +252,14 @@ void TestGAMSVariable::testGetLastRecordSlice() {
       QCOMPARE( rec.keys().size(), size_t(2) );
       QCOMPARE( rec.key(0).c_str(), "san-diego" );
       QCOMPARE( rec.key(1).c_str(), "new-york" );
-      QVERIFY( equals(rec.level(), 275.0) );
+      ASSERT_TRUE( equals(rec.level(), 275.0) );
     }
     // when, then
     { GAMSVariableRecord rec = db.getVariable("x").lastRecord("seattle", "chicago");
       QCOMPARE( rec.keys().size(), size_t(2) );
       QCOMPARE( rec.key(0).c_str(), "seattle" );
       QCOMPARE( rec.key(1).c_str(), "chicago" );
-      QVERIFY( equals(rec.level(), 300.0) );
+      ASSERT_TRUE( equals(rec.level(), 300.0) );
     }
 }
 
@@ -289,10 +289,10 @@ void TestGAMSVariable::testFindRecord() {
 
     // when, then
     GAMSVariableRecord rec = db.getVariable("x").findRecord("seattle", "chicago");
-    QVERIFY( rec.isValid() );
+    ASSERT_TRUE( rec.isValid() );
     QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "seattle", Qt::CaseSensitive ), 0 );
     QCOMPARE( QString::compare( QString::fromStdString(rec.key(1)), "chicago", Qt::CaseSensitive ), 0 );
-    QVERIFY( equals(rec.level(), 300.0) );
+    ASSERT_TRUE( equals(rec.level(), 300.0) );
 }
 
 void TestGAMSVariable::testFindRecord_InsensitiveCaseKeys() {
@@ -305,10 +305,10 @@ void TestGAMSVariable::testFindRecord_InsensitiveCaseKeys() {
 
     // when, then
     GAMSVariableRecord rec = db.getVariable("x").findRecord("SAN-DIEGO", "TOPEKA");
-    QVERIFY( rec.isValid() );
+    ASSERT_TRUE( rec.isValid() );
     QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "san-diego", Qt::CaseInsensitive ), 0 );
     QCOMPARE( QString::compare( QString::fromStdString(rec.key(1)), "topeka", Qt::CaseInsensitive ), 0 );
-    QVERIFY( equals(rec.level(), 275.0) );
+    ASSERT_TRUE( equals(rec.level(), 275.0) );
 
 }
 
@@ -325,8 +325,8 @@ void TestGAMSVariable::testAddRecord() {
     // when
     GAMSVariableRecord rec = x.addRecord("seattle", "alburquerque");
     QCOMPARE( x.numberRecords(), numberOfRecords+1 );
-    QVERIFY( rec.isValid() );
-    QVERIFY( equals(rec.level(), 0.0) );
+    ASSERT_TRUE( rec.isValid() );
+    ASSERT_TRUE( equals(rec.level(), 0.0) );
 
 }
 
@@ -366,7 +366,7 @@ void TestGAMSVariable::testMergeExistingRecord() {
       // then
       QCOMPARE( z.numberRecords(), numberOfRecords );
       QCOMPARE( rec.keys().size(), size_t(0) );
-      QVERIFY( equals(rec.level(), z_rec.level()) );
+      ASSERT_TRUE( equals(rec.level(), z_rec.level()) );
     }
     {
       GAMSVariable x = db.getVariable("x");
@@ -380,7 +380,7 @@ void TestGAMSVariable::testMergeExistingRecord() {
       QCOMPARE( rec.keys().size(), size_t(2) );
       QCOMPARE( rec.key(0).c_str(), "seattle" );
       QCOMPARE( rec.key(1).c_str(), "topeka" );
-      QVERIFY( equals(rec.level(), x_rec.level()) );
+      ASSERT_TRUE( equals(rec.level(), x_rec.level()) );
     }
 }
 
@@ -402,7 +402,7 @@ void TestGAMSVariable::testMergeNonExistingRecord() {
     QCOMPARE( rec.keys().size(), size_t(2) );
     QCOMPARE( rec.key(0).c_str(), "seattle" );
     QCOMPARE( rec.key(1).c_str(), "alburquerque" );
-    QVERIFY( equals(rec.level(), 0.0) );
+    ASSERT_TRUE( equals(rec.level(), 0.0) );
 }
 
 

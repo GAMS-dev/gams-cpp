@@ -40,7 +40,7 @@ void TestGAMSSet::testDefaultConstructor() {
     GAMSSet s;
 
     // then
-    QVERIFY( ! s.isValid() );
+    ASSERT_TRUE( ! s.isValid() );
     QVERIFY_EXCEPTION_THROWN( s.type(), GAMSException );
     QVERIFY_EXCEPTION_THROWN( s.logID(), GAMSException);
     QVERIFY_EXCEPTION_THROWN( s.dim(), GAMSException);
@@ -122,7 +122,7 @@ void TestGAMSSet::testAssignmentOperator() {
 
     // when, then
     QCOMPARE( market, j );
-    QVERIFY( market == j );
+    ASSERT_TRUE( market == j );
     QCOMPARE( db.getNrSymbols(), numberOfSymbols );
 }
 
@@ -229,7 +229,7 @@ void TestGAMSSet::testFindRecord() {
 
     // when, then
     GAMSSetRecord rec = db.getSet("j").findRecord("Topeka");
-    QVERIFY( rec.isValid() );
+    ASSERT_TRUE( rec.isValid() );
     QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseInsensitive ), 0 );
 }
 
@@ -259,7 +259,7 @@ void TestGAMSSet::testAddRecord() {
       i.addRecord("Albuquerque");
       // then
       QCOMPARE( i.numberRecords(), numberOfRecords+1);
-      QVERIFY( i.findRecord("Albuquerque").isValid() );
+      ASSERT_TRUE( i.findRecord("Albuquerque").isValid() );
     }
     {
       TestGAMSObject::getTestData_Set_markets_j( db );

@@ -42,7 +42,7 @@ void TestGAMSVariableRecord::testDefaultConstructor() {
     // when
     GAMSVariableRecord rec;
     // then
-    QVERIFY( ! rec.isValid() );
+    ASSERT_TRUE( ! rec.isValid() );
     QVERIFY_EXCEPTION_THROWN( rec.type(), GAMSException );
     QVERIFY_EXCEPTION_THROWN( rec.logID(), GAMSException );
     QVERIFY_EXCEPTION_THROWN( rec.upper(), GAMSException );
@@ -66,7 +66,7 @@ void TestGAMSVariableRecord::testCopyConstructor() {
     GAMSVariableRecord newRecord( rec );
     // then
     QCOMPARE( newRecord, rec );
-    QVERIFY( newRecord == rec );
+    ASSERT_TRUE( newRecord == rec );
     QCOMPARE( x.numberRecords(), numberOfRecords );
 }
 
@@ -94,7 +94,7 @@ void TestGAMSVariableRecord::testAssignmentOperator() {
     // when
     GAMSVariableRecord newRecord = rec;
     QCOMPARE( newRecord, rec );
-    QVERIFY( newRecord == rec );
+    ASSERT_TRUE( newRecord == rec );
 }
 
 void TestGAMSVariableRecord::testIncorrectType_data() {
@@ -154,19 +154,19 @@ void TestGAMSVariableRecord::testGetSetLevel() {
     GAMSDatabase db = job.outDB();
     // when, then
     GAMSVariable varx = db.getVariable("x");
-    QVERIFY( equals(varx.findRecord("seattle", "new-york").level(), 50.0) );
-    QVERIFY( equals(varx.findRecord("seattle", "chicago").level(), 300.0) );
-    QVERIFY( equals(varx.findRecord("seattle", "topeka").level(), 0.0) );
-    QVERIFY( equals(varx.findRecord("san-diego", "new-york").level(), 275.0) );
-    QVERIFY( equals(varx.findRecord("san-diego", "chicago").level(), 0.0) );
-    QVERIFY( equals(varx.findRecord("san-diego", "topeka").level(), 275.0) );
+    ASSERT_TRUE( equals(varx.findRecord("seattle", "new-york").level(), 50.0) );
+    ASSERT_TRUE( equals(varx.findRecord("seattle", "chicago").level(), 300.0) );
+    ASSERT_TRUE( equals(varx.findRecord("seattle", "topeka").level(), 0.0) );
+    ASSERT_TRUE( equals(varx.findRecord("san-diego", "new-york").level(), 275.0) );
+    ASSERT_TRUE( equals(varx.findRecord("san-diego", "chicago").level(), 0.0) );
+    ASSERT_TRUE( equals(varx.findRecord("san-diego", "topeka").level(), 275.0) );
 
     varx.addRecord("alburquerque", "topeka");
-    QVERIFY( equals(varx.findRecord("alburquerque", "topeka").level(), 0.0) );
+    ASSERT_TRUE( equals(varx.findRecord("alburquerque", "topeka").level(), 0.0) );
     // when, then
     GAMSVariable varz = db.getVariable("z");
     varz.firstRecord().setLevel( 123.45 );
-    QVERIFY( equals(varz.firstRecord().level(), 123.45) );
+    ASSERT_TRUE( equals(varz.firstRecord().level(), 123.45) );
 }
 
 void TestGAMSVariableRecord::testGetSetMarginal() {
@@ -178,20 +178,20 @@ void TestGAMSVariableRecord::testGetSetMarginal() {
     GAMSDatabase db = job.outDB();
     // when, then
     GAMSVariable varx = db.getVariable("x");
-    QVERIFY( equals(varx.findRecord("seattle", "new-york").marginal(), 0.0) );
-    QVERIFY( equals(varx.findRecord("seattle", "chicago").marginal(), 0.0)  );
-    QVERIFY( equals(varx.findRecord("seattle", "topeka").marginal(), 0.036) );
-    QVERIFY( equals(varx.findRecord("san-diego", "new-york").marginal(), 0.0) );
-    QVERIFY( equals(varx.findRecord("san-diego", "chicago").marginal(), 0.00900000000000001) );
-    QVERIFY( equals(varx.findRecord("san-diego", "topeka").marginal(), 0.0) );
+    ASSERT_TRUE( equals(varx.findRecord("seattle", "new-york").marginal(), 0.0) );
+    ASSERT_TRUE( equals(varx.findRecord("seattle", "chicago").marginal(), 0.0)  );
+    ASSERT_TRUE( equals(varx.findRecord("seattle", "topeka").marginal(), 0.036) );
+    ASSERT_TRUE( equals(varx.findRecord("san-diego", "new-york").marginal(), 0.0) );
+    ASSERT_TRUE( equals(varx.findRecord("san-diego", "chicago").marginal(), 0.00900000000000001) );
+    ASSERT_TRUE( equals(varx.findRecord("san-diego", "topeka").marginal(), 0.0) );
 
     varx.addRecord("alburquerque", "topeka");
-    QVERIFY( equals(varx.findRecord("alburquerque", "topeka").level(), 0.0) );
+    ASSERT_TRUE( equals(varx.findRecord("alburquerque", "topeka").level(), 0.0) );
 
     // when, then
     GAMSVariable varz = db.getVariable("z");
     varz.firstRecord().setMarginal( 0.036 );
-    QVERIFY( equals(varz.firstRecord().marginal(), 0.036) );
+    ASSERT_TRUE( equals(varz.firstRecord().marginal(), 0.036) );
 }
 
 void TestGAMSVariableRecord::testGetSetUpper() {
@@ -204,22 +204,22 @@ void TestGAMSVariableRecord::testGetSetUpper() {
     GAMSVariable varz = db.getVariable("z");
     GAMSVariable varx = db.getVariable("x");
     { // when get default Upper Bound on free variable record, then pinf is expected
-      QVERIFY( std::isinf(varz.firstRecord().upper()) );
-      QVERIFY( std::isinf(varx.firstRecord().upper()) );
+      ASSERT_TRUE( std::isinf(varz.firstRecord().upper()) );
+      ASSERT_TRUE( std::isinf(varx.firstRecord().upper()) );
 
       // when get default Lower Bound on positive variable recrod,  then
-      QVERIFY( std::isinf(varx.findRecord("seattle", "new-york").upper()) );
-      QVERIFY( std::isinf(varx.findRecord("seattle", "chicago").upper()) );
-      QVERIFY( std::isinf(varx.findRecord("san-diego", "new-york").upper()) );
-      QVERIFY( std::isinf(varx.findRecord("san-diego", "chicago").upper()) );
-      QVERIFY( std::isinf(varx.findRecord("san-diego", "topeka").upper()) );
+      ASSERT_TRUE( std::isinf(varx.findRecord("seattle", "new-york").upper()) );
+      ASSERT_TRUE( std::isinf(varx.findRecord("seattle", "chicago").upper()) );
+      ASSERT_TRUE( std::isinf(varx.findRecord("san-diego", "new-york").upper()) );
+      ASSERT_TRUE( std::isinf(varx.findRecord("san-diego", "chicago").upper()) );
+      ASSERT_TRUE( std::isinf(varx.findRecord("san-diego", "topeka").upper()) );
     }
     { // when, then
       varz.firstRecord().setUpper( 0.036 );
-      QVERIFY( equals(varz.firstRecord().upper(), 0.036) );
+      ASSERT_TRUE( equals(varz.firstRecord().upper(), 0.036) );
       // when, then
       varx.firstRecord().setUpper( -1 );
-      QVERIFY( equals(varx.firstRecord().upper(), -1) );
+      ASSERT_TRUE( equals(varx.firstRecord().upper(), -1) );
     }
 }
 
@@ -233,26 +233,26 @@ void TestGAMSVariableRecord::testGetSetLower() {
     GAMSVariable varz = db.getVariable("z");
     GAMSVariable varx = db.getVariable("x");
     { // when get default Lower Bound on free variable record,  then minf is expected
-      QVERIFY( std::isinf(-varz.firstRecord().lower()) );
+      ASSERT_TRUE( std::isinf(-varz.firstRecord().lower()) );
       // when get default Lower Bound on positive variable record,  then 0.0 is expected
-      QVERIFY( equals(varx.firstRecord().lower(), 0.0) );
+      ASSERT_TRUE( equals(varx.firstRecord().lower(), 0.0) );
 
       // when get default Lower Bound on positive variable recrod,  then
-      QVERIFY( equals(varx.findRecord("seattle", "new-york").lower(), 0.0) );
-      QVERIFY( equals(varx.findRecord("seattle", "chicago").lower(), 0.0) );
-      QVERIFY( equals(varx.findRecord("san-diego", "new-york").lower(), 0.0) );
-      QVERIFY( equals(varx.findRecord("san-diego", "chicago").lower(), 0.0) );
-      QVERIFY( equals(varx.findRecord("san-diego", "topeka").lower(), 0.0) );
+      ASSERT_TRUE( equals(varx.findRecord("seattle", "new-york").lower(), 0.0) );
+      ASSERT_TRUE( equals(varx.findRecord("seattle", "chicago").lower(), 0.0) );
+      ASSERT_TRUE( equals(varx.findRecord("san-diego", "new-york").lower(), 0.0) );
+      ASSERT_TRUE( equals(varx.findRecord("san-diego", "chicago").lower(), 0.0) );
+      ASSERT_TRUE( equals(varx.findRecord("san-diego", "topeka").lower(), 0.0) );
     }
     { // when, then
       varz.firstRecord().setLower( 0.036 );
-      QVERIFY( equals(varz.firstRecord().lower(), 0.036) );
+      ASSERT_TRUE( equals(varz.firstRecord().lower(), 0.036) );
       // when set lower level on free var to minf, then
       varz.firstRecord().setLower( defaultMINF );
-      QVERIFY( std::isinf(-varz.firstRecord().lower()) );
+      ASSERT_TRUE( std::isinf(-varz.firstRecord().lower()) );
       // when set lower level on positive var to negative value, then
       varx.firstRecord().setLower( -1 );
-      QVERIFY( equals(varx.firstRecord().lower(), -1) );
+      ASSERT_TRUE( equals(varx.firstRecord().lower(), -1) );
     }
 }
 
@@ -265,19 +265,19 @@ void TestGAMSVariableRecord::testGetSetScale() {
     GAMSDatabase db = job.outDB();
     // when, then
     GAMSVariable varx = db.getVariable("x");
-    QVERIFY( equals(varx.findRecord("seattle", "new-york").scale(), 1.0) );
-    QVERIFY( equals(varx.findRecord("seattle", "chicago").scale(), 1.0) );
-    QVERIFY( equals(varx.findRecord("seattle", "topeka").scale(), 1.0) );
-    QVERIFY( equals(varx.findRecord("san-diego", "new-york").scale(), 1.0) );
-    QVERIFY( equals(varx.findRecord("san-diego", "chicago").scale(), 1.0) );
-    QVERIFY( equals(varx.findRecord("san-diego", "topeka").scale(), 1.0) );
+    ASSERT_TRUE( equals(varx.findRecord("seattle", "new-york").scale(), 1.0) );
+    ASSERT_TRUE( equals(varx.findRecord("seattle", "chicago").scale(), 1.0) );
+    ASSERT_TRUE( equals(varx.findRecord("seattle", "topeka").scale(), 1.0) );
+    ASSERT_TRUE( equals(varx.findRecord("san-diego", "new-york").scale(), 1.0) );
+    ASSERT_TRUE( equals(varx.findRecord("san-diego", "chicago").scale(), 1.0) );
+    ASSERT_TRUE( equals(varx.findRecord("san-diego", "topeka").scale(), 1.0) );
 
     varx.addRecord("alburquerque", "topeka");
-    QVERIFY( equals(varx.findRecord("alburquerque", "topeka").scale(), 1.0) );
+    ASSERT_TRUE( equals(varx.findRecord("alburquerque", "topeka").scale(), 1.0) );
     // when, then
     GAMSVariable varz = db.getVariable("z");
     varz.firstRecord().setScale( 2.0 );
-    QVERIFY( equals(varz.firstRecord().scale(), 2.0) );
+    ASSERT_TRUE( equals(varz.firstRecord().scale(), 2.0) );
 }
 
 QTEST_MAIN(TestGAMSVariableRecord)

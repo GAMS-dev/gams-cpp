@@ -40,7 +40,7 @@ void TestGAMSModifier::testDefaultConstructor() {
      // when
      GAMSModifier mod;
      // then
-     QVERIFY( ! mod.isValid() );
+     ASSERT_TRUE( ! mod.isValid() );
      QVERIFY_EXCEPTION_THROWN( mod.dataSymbol(), GAMSException );
      QVERIFY_EXCEPTION_THROWN( mod.gamsSymbol(), GAMSException );
      QVERIFY_EXCEPTION_THROWN( mod.updAction(), GAMSException );
@@ -60,9 +60,9 @@ void TestGAMSModifier::testConstructor_Par() {
     { // when
       GAMSModifier mod( db.getParameter("a") );
       // then
-      QVERIFY( mod.isParameter() );
+      ASSERT_TRUE( mod.isParameter() );
       QCOMPARE( mod.updType(), GAMSEnum::SymbolUpdateType::Inherit );
-      QVERIFY( mod.gamsSymbol() == db.getParameter("a") );
+      ASSERT_TRUE( mod.gamsSymbol() == db.getParameter("a") );
       QCOMPARE( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
                                 QString("Seattle"),
                                 Qt::CaseInsensitive ), 0 );
@@ -70,9 +70,9 @@ void TestGAMSModifier::testConstructor_Par() {
     { // when
       GAMSModifier mod( db.getParameter("b"), GAMSEnum::SymbolUpdateType::BaseCase );
       // then
-      QVERIFY( mod.isParameter() );
+      ASSERT_TRUE( mod.isParameter() );
       QCOMPARE( mod.updType(), GAMSEnum::SymbolUpdateType::BaseCase );
-      QVERIFY( mod.gamsSymbol() == db.getParameter("b") );
+      ASSERT_TRUE( mod.gamsSymbol() == db.getParameter("b") );
       QCOMPARE( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
                                 QString("New-York"),
                                 Qt::CaseInsensitive ), 0 );
@@ -89,9 +89,9 @@ void TestGAMSModifier::testConstructor_Var() {
     { // when
       GAMSModifier mod( db.getVariable("x"), GAMSEnum::SymbolUpdateAction::Param,  db.getParameter("d") );
       // then
-      QVERIFY( mod.isVariable() );
+      ASSERT_TRUE( mod.isVariable() );
       QCOMPARE( mod.updType(), GAMSEnum::SymbolUpdateType::Inherit );
-      QVERIFY( mod.gamsSymbol() == db.getVariable("x") );
+      ASSERT_TRUE( mod.gamsSymbol() == db.getVariable("x") );
       QCOMPARE( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
                                 QString("Seattle"),
                                 Qt::CaseInsensitive ), 0 );
@@ -103,10 +103,10 @@ void TestGAMSModifier::testConstructor_Var() {
       GAMSModifier mod( db.getVariable("x"), GAMSEnum::SymbolUpdateAction::Fixed,  db.getParameter("d"),
                         GAMSEnum::SymbolUpdateType::BaseCase );
       // then
-      QVERIFY( mod.isVariable() );
+      ASSERT_TRUE( mod.isVariable() );
       QCOMPARE( mod.updAction(), GAMSEnum::SymbolUpdateAction::Fixed );
       QCOMPARE( mod.updType(), GAMSEnum::SymbolUpdateType::BaseCase );
-      QVERIFY( mod.gamsSymbol() == db.getVariable("x") );
+      ASSERT_TRUE( mod.gamsSymbol() == db.getVariable("x") );
       QCOMPARE( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
                                 QString("Seattle"),
                                 Qt::CaseInsensitive ), 0 );
@@ -134,10 +134,10 @@ void TestGAMSModifier::testConstructor_Equ() {
     { // when
       GAMSModifier mod( db.getEquation("supply"), GAMSEnum::SymbolUpdateAction::Param, db.getParameter("a") );
       // then
-      QVERIFY( mod.isEquation());
+      ASSERT_TRUE( mod.isEquation());
       QCOMPARE( mod.updType(), GAMSEnum::SymbolUpdateType::Inherit );
-      QVERIFY( mod.dataSymbol() == db.getParameter("a") );
-      QVERIFY( mod.gamsSymbol() == db.getEquation("supply") );
+      ASSERT_TRUE( mod.dataSymbol() == db.getParameter("a") );
+      ASSERT_TRUE( mod.gamsSymbol() == db.getEquation("supply") );
       QCOMPARE( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
                                   QString("Seattle"),
                                   Qt::CaseInsensitive ), 0 );
@@ -146,11 +146,11 @@ void TestGAMSModifier::testConstructor_Equ() {
       GAMSModifier mod( db.getEquation("demand"), GAMSEnum::SymbolUpdateAction::Dual, db.getParameter("b"),
                         GAMSEnum::SymbolUpdateType::Accumulate );
       // then
-      QVERIFY( mod.isEquation());
+      ASSERT_TRUE( mod.isEquation());
       QCOMPARE( mod.updType(), GAMSEnum::SymbolUpdateType::Accumulate );
       QCOMPARE( mod.updAction(), GAMSEnum::SymbolUpdateAction::Dual );
-      QVERIFY( mod.dataSymbol() == db.getParameter("b") );
-      QVERIFY( mod.gamsSymbol() == db.getEquation("demand") );
+      ASSERT_TRUE( mod.dataSymbol() == db.getParameter("b") );
+      ASSERT_TRUE( mod.gamsSymbol() == db.getEquation("demand") );
       QCOMPARE( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
                                   QString("New-York"),
                                   Qt::CaseInsensitive ), 0 );
@@ -189,27 +189,27 @@ void TestGAMSModifier::testAssignmentOperator_Par() {
     GAMSModifier eqmod_supply( db.getEquation("supply"), GAMSEnum::SymbolUpdateAction::Param, db.getParameter("a") );
     // when, then
     { GAMSModifier mod = parmod_a;
-      QVERIFY( mod.isValid() );
-      QVERIFY( mod.isParameter() );
+      ASSERT_TRUE( mod.isValid() );
+      ASSERT_TRUE( mod.isParameter() );
       QCOMPARE(mod, parmod_a);
     }
     // when, then
     { parmod_b = parmod_a;
-      QVERIFY( parmod_b.gamsSymbol() == db.getParameter("a") );
+      ASSERT_TRUE( parmod_b.gamsSymbol() == db.getParameter("a") );
     }
     // when, then
     { parmod_a = varmod_x;
-      QVERIFY( ! varmod_x.isParameter() );
-      QVERIFY( varmod_x.isVariable() );
-      QVERIFY( varmod_x.gamsSymbol() != db.getParameter("a") );
-      QVERIFY( varmod_x.gamsSymbol() == db.getVariable("x") );
+      ASSERT_TRUE( ! varmod_x.isParameter() );
+      ASSERT_TRUE( varmod_x.isVariable() );
+      ASSERT_TRUE( varmod_x.gamsSymbol() != db.getParameter("a") );
+      ASSERT_TRUE( varmod_x.gamsSymbol() == db.getVariable("x") );
     }
     // when, then
     { parmod_a = eqmod_supply;
-      QVERIFY( ! parmod_a.isParameter() );
-      QVERIFY( parmod_a.isEquation() );
-      QVERIFY( parmod_a.gamsSymbol() != db.getParameter("a") );
-      QVERIFY( parmod_a.gamsSymbol() == db.getEquation("supply") );
+      ASSERT_TRUE( ! parmod_a.isParameter() );
+      ASSERT_TRUE( parmod_a.isEquation() );
+      ASSERT_TRUE( parmod_a.gamsSymbol() != db.getParameter("a") );
+      ASSERT_TRUE( parmod_a.gamsSymbol() == db.getEquation("supply") );
     }
 }
 
@@ -226,27 +226,27 @@ void TestGAMSModifier::testAssignmentOperator_Var() {
     GAMSModifier eqmod_supply( db.getEquation("supply"), GAMSEnum::SymbolUpdateAction::Param, db.getParameter("a") );
     // when, then
     { GAMSModifier mod = varmod_x1;
-      QVERIFY( mod.isValid() );
-      QVERIFY( mod.isVariable() );
+      ASSERT_TRUE( mod.isValid() );
+      ASSERT_TRUE( mod.isVariable() );
       QCOMPARE(mod, varmod_x1);
     }
     // when, then
     { varmod_x1 = varmod_x2;
-      QVERIFY( varmod_x1.gamsSymbol() == db.getVariable("x") );
+      ASSERT_TRUE( varmod_x1.gamsSymbol() == db.getVariable("x") );
     }
     // when, then
     { varmod_x1 = parmod_a;
-      QVERIFY( varmod_x1.isParameter() );
-      QVERIFY( ! varmod_x1.isVariable() );
-      QVERIFY( varmod_x1.gamsSymbol() == db.getParameter("a") );
-      QVERIFY( varmod_x1.gamsSymbol() != db.getVariable("x") );
+      ASSERT_TRUE( varmod_x1.isParameter() );
+      ASSERT_TRUE( ! varmod_x1.isVariable() );
+      ASSERT_TRUE( varmod_x1.gamsSymbol() == db.getParameter("a") );
+      ASSERT_TRUE( varmod_x1.gamsSymbol() != db.getVariable("x") );
     }
     // when, then
     { varmod_x1 = eqmod_supply;
-      QVERIFY( varmod_x1.isEquation() );
-      QVERIFY( ! varmod_x1.isVariable() );
-      QVERIFY( varmod_x1.gamsSymbol() == db.getEquation("supply") );
-      QVERIFY( varmod_x1.gamsSymbol() != db.getVariable("x") );
+      ASSERT_TRUE( varmod_x1.isEquation() );
+      ASSERT_TRUE( ! varmod_x1.isVariable() );
+      ASSERT_TRUE( varmod_x1.gamsSymbol() == db.getEquation("supply") );
+      ASSERT_TRUE( varmod_x1.gamsSymbol() != db.getVariable("x") );
     }
 }
 
@@ -263,27 +263,27 @@ void TestGAMSModifier::testAssignmentOperator_Equ() {
     GAMSModifier eqmod_demand( db.getEquation("demand"), GAMSEnum::SymbolUpdateAction::Param, db.getParameter("b") );
     // when, then
     { GAMSModifier mod = eqmod_supply;
-      QVERIFY( mod.isValid() );
-      QVERIFY( mod.isEquation() );
+      ASSERT_TRUE( mod.isValid() );
+      ASSERT_TRUE( mod.isEquation() );
       QCOMPARE(mod, eqmod_supply);
     }
     // when, then
     { eqmod_supply = eqmod_demand;
-      QVERIFY( eqmod_supply.gamsSymbol() == db.getEquation("demand") );
+      ASSERT_TRUE( eqmod_supply.gamsSymbol() == db.getEquation("demand") );
     }
     // when, then
     { eqmod_supply = parmod_a;
-      QVERIFY( eqmod_supply.isParameter() );
-      QVERIFY( ! eqmod_supply.isEquation() );
-      QVERIFY( eqmod_supply.gamsSymbol() == db.getParameter("a") );
-      QVERIFY( eqmod_supply.gamsSymbol() != db.getEquation("supply") );
+      ASSERT_TRUE( eqmod_supply.isParameter() );
+      ASSERT_TRUE( ! eqmod_supply.isEquation() );
+      ASSERT_TRUE( eqmod_supply.gamsSymbol() == db.getParameter("a") );
+      ASSERT_TRUE( eqmod_supply.gamsSymbol() != db.getEquation("supply") );
     }
     // when, then
     { eqmod_supply = varmod_x ;
-      QVERIFY( eqmod_supply.isVariable() );
-      QVERIFY( ! eqmod_supply.isEquation() );
-      QVERIFY( eqmod_supply.gamsSymbol() == db.getVariable("x") );
-      QVERIFY( eqmod_supply.gamsSymbol() != db.getEquation("supply") );
+      ASSERT_TRUE( eqmod_supply.isVariable() );
+      ASSERT_TRUE( ! eqmod_supply.isEquation() );
+      ASSERT_TRUE( eqmod_supply.gamsSymbol() == db.getVariable("x") );
+      ASSERT_TRUE( eqmod_supply.gamsSymbol() != db.getEquation("supply") );
     }
 }
 
@@ -301,19 +301,19 @@ void TestGAMSModifier::testEqualToOperator() {
     GAMSModifier eqmod_supply1( db.getEquation("supply"), GAMSEnum::SymbolUpdateAction::Param, db.getParameter("a") );
     GAMSModifier eqmod_supply2( db.getEquation("supply"), GAMSEnum::SymbolUpdateAction::Param, db.getParameter("a") );
     // when, then
-    {   QVERIFY( parmod_a1 == parmod_a2 );
+    {   ASSERT_TRUE( parmod_a1 == parmod_a2 );
         GAMSModifier mod = parmod_a1;
-        QVERIFY( mod == parmod_a2 );
+        ASSERT_TRUE( mod == parmod_a2 );
     }
     // when, then
-    {   QVERIFY( varmod_x1 == varmod_x2 );
+    {   ASSERT_TRUE( varmod_x1 == varmod_x2 );
         GAMSModifier mod = varmod_x1;
-        QVERIFY( mod == varmod_x2 );
+        ASSERT_TRUE( mod == varmod_x2 );
     }
     // when, then
-    {   QVERIFY( eqmod_supply1 == eqmod_supply2 );
+    {   ASSERT_TRUE( eqmod_supply1 == eqmod_supply2 );
         GAMSModifier mod = eqmod_supply1;
-        QVERIFY( mod == eqmod_supply2 );
+        ASSERT_TRUE( mod == eqmod_supply2 );
     }
 }
 
@@ -331,25 +331,25 @@ void TestGAMSModifier::testNotEqualToOperator() {
     GAMSModifier eqmod_supply1( db.getEquation("supply"), GAMSEnum::SymbolUpdateAction::Primal, db.getParameter("a") );
     GAMSModifier eqmod_supply2( db.getEquation("supply"), GAMSEnum::SymbolUpdateAction::Dual, db.getParameter("a") );
     // when, then
-    {   QVERIFY( parmod_a1 != varmod_x1 );
-        QVERIFY( parmod_a1 != varmod_x2 );
-        QVERIFY( parmod_a1 != parmod_a2 );
-        QVERIFY( parmod_a1 != eqmod_supply1 );
-        QVERIFY( parmod_a1 != eqmod_supply2 );
+    {   ASSERT_TRUE( parmod_a1 != varmod_x1 );
+        ASSERT_TRUE( parmod_a1 != varmod_x2 );
+        ASSERT_TRUE( parmod_a1 != parmod_a2 );
+        ASSERT_TRUE( parmod_a1 != eqmod_supply1 );
+        ASSERT_TRUE( parmod_a1 != eqmod_supply2 );
 
-        QVERIFY( parmod_a2 != varmod_x1 );
-        QVERIFY( parmod_a2 != varmod_x2 );
-        QVERIFY( parmod_a2 != eqmod_supply1 );
-        QVERIFY( parmod_a2 != eqmod_supply2 );
+        ASSERT_TRUE( parmod_a2 != varmod_x1 );
+        ASSERT_TRUE( parmod_a2 != varmod_x2 );
+        ASSERT_TRUE( parmod_a2 != eqmod_supply1 );
+        ASSERT_TRUE( parmod_a2 != eqmod_supply2 );
 
-        QVERIFY( varmod_x1 != varmod_x2 );
-        QVERIFY( varmod_x1 != eqmod_supply1 );
-        QVERIFY( varmod_x1 != eqmod_supply2 );
+        ASSERT_TRUE( varmod_x1 != varmod_x2 );
+        ASSERT_TRUE( varmod_x1 != eqmod_supply1 );
+        ASSERT_TRUE( varmod_x1 != eqmod_supply2 );
 
-        QVERIFY( varmod_x2 != eqmod_supply1 );
-        QVERIFY( varmod_x2 != eqmod_supply2 );
+        ASSERT_TRUE( varmod_x2 != eqmod_supply1 );
+        ASSERT_TRUE( varmod_x2 != eqmod_supply2 );
 
-        QVERIFY( eqmod_supply1 != eqmod_supply2 );
+        ASSERT_TRUE( eqmod_supply1 != eqmod_supply2 );
     }
 }
 
@@ -362,15 +362,15 @@ void TestGAMSModifier::testIsValid() {
     GAMSDatabase db = job.outDB();
     // when, then
     {  GAMSModifier mod( db.getParameter("a") );
-       QVERIFY( mod.isValid() );
+       ASSERT_TRUE( mod.isValid() );
     }
     // when, then
     {  GAMSModifier mod( db.getParameter("a") );
-       QVERIFY( mod.isValid() );
+       ASSERT_TRUE( mod.isValid() );
     }
     // when, then
     {  GAMSModifier mod( db.getVariable("x"), GAMSEnum::SymbolUpdateAction::Param,  db.getParameter("d") );
-       QVERIFY( mod.isValid() );
+       ASSERT_TRUE( mod.isValid() );
     }
 }
 
@@ -385,9 +385,9 @@ void TestGAMSModifier::testGetGamsSymbol() {
     GAMSModifier varmod_x( db.getVariable("x"), GAMSEnum::SymbolUpdateAction::Param,  db.getParameter("d") );
     GAMSModifier eqmod_supply( db.getEquation("supply"), GAMSEnum::SymbolUpdateAction::Param, db.getParameter("a") );
     // when, then
-    QVERIFY( parmod_a.gamsSymbol() == db.getParameter("a") );
-    QVERIFY( varmod_x.gamsSymbol() == db.getVariable("x") );
-    QVERIFY( eqmod_supply.gamsSymbol() == db.getEquation("supply") );
+    ASSERT_TRUE( parmod_a.gamsSymbol() == db.getParameter("a") );
+    ASSERT_TRUE( varmod_x.gamsSymbol() == db.getVariable("x") );
+    ASSERT_TRUE( eqmod_supply.gamsSymbol() == db.getEquation("supply") );
 }
 
 void TestGAMSModifier::testGetDataSymbol() {
@@ -401,9 +401,9 @@ void TestGAMSModifier::testGetDataSymbol() {
     GAMSModifier varmod_x( db.getVariable("x"), GAMSEnum::SymbolUpdateAction::Param,  db.getParameter("d") );
     GAMSModifier eqmod_supply( db.getEquation("supply"), GAMSEnum::SymbolUpdateAction::Param, db.getParameter("a") );
     // when, then
-    QVERIFY( parmod_a.dataSymbol() == db.getParameter("a") );
-    QVERIFY( varmod_x.dataSymbol() == db.getParameter("d"));
-    QVERIFY( eqmod_supply.dataSymbol() == db.getParameter("a") );
+    ASSERT_TRUE( parmod_a.dataSymbol() == db.getParameter("a") );
+    ASSERT_TRUE( varmod_x.dataSymbol() == db.getParameter("d"));
+    ASSERT_TRUE( eqmod_supply.dataSymbol() == db.getParameter("a") );
 }
 
 void TestGAMSModifier::testGetUpdAction() {
@@ -456,21 +456,21 @@ void TestGAMSModifier::testIsParameter_Variable_Equation() {
     GAMSDatabase db = job.outDB();
     // when, then
     { GAMSModifier mod( db.getParameter("d") );
-      QVERIFY( mod.isParameter() );
-      QVERIFY( ! mod.isVariable() );
-      QVERIFY( ! mod.isEquation() );
+      ASSERT_TRUE( mod.isParameter() );
+      ASSERT_TRUE( ! mod.isVariable() );
+      ASSERT_TRUE( ! mod.isEquation() );
     }
     // when, then
     { GAMSModifier mod( db.getVariable("x"), GAMSEnum::SymbolUpdateAction::Param,  db.getParameter("d") );
-      QVERIFY( mod.isVariable() );
-      QVERIFY( ! mod.isParameter() );
-      QVERIFY( ! mod.isEquation() );
+      ASSERT_TRUE( mod.isVariable() );
+      ASSERT_TRUE( ! mod.isParameter() );
+      ASSERT_TRUE( ! mod.isEquation() );
     }
     // when, then
     { GAMSModifier mod( db.getEquation("supply"), GAMSEnum::SymbolUpdateAction::Param, db.getParameter("a") );
-      QVERIFY( mod.isEquation() );
-      QVERIFY( ! mod.isVariable() );
-      QVERIFY( ! mod.isParameter() );
+      ASSERT_TRUE( mod.isEquation() );
+      ASSERT_TRUE( ! mod.isVariable() );
+      ASSERT_TRUE( ! mod.isParameter() );
     }
 }
 

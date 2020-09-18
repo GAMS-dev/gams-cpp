@@ -216,21 +216,21 @@ void TestGAMSObject::getTestData_Database_DomainViolations(GAMSDatabase db) {
 }
 
 void TestGAMSObject::testDir(QString dir) {
-    QVERIFY( ! dir.isNull() );
-    QVERIFY( ! dir.isEmpty() );
-    QVERIFY( QDir(dir).exists() );
+    ASSERT_TRUE( ! dir.isNull() );
+    ASSERT_TRUE( ! dir.isEmpty() );
+    ASSERT_TRUE( QDir(dir).exists() );
 }
 
 void TestGAMSObject::testJobBeforeRun(GAMSJob job, GAMSWorkspace ws) {
-    QVERIFY( ! job.name().empty() );
-    QVERIFY( ! job.outDB().isValid() );
-    QVERIFY( job.workspace() == ws );
+    ASSERT_TRUE( ! job.name().empty() );
+    ASSERT_TRUE( ! job.outDB().isValid() );
+    ASSERT_TRUE( job.workspace() == ws );
 }
 
 void TestGAMSObject::testEmptyDatabase(gams::GAMSDatabase db, gams::GAMSWorkspace ws) {
-    QVERIFY( db.isValid() );
+    ASSERT_TRUE( db.isValid() );
     QCOMPARE( db.getNrSymbols(), 0 );
-    QVERIFY( db.workspace() == ws );
+    ASSERT_TRUE( db.workspace() == ws );
 
     for (gams::GAMSDatabaseIter it = db.begin(); it != db.end(); ++it)
         QFAIL("does not expect a symbol in a newly created database.");

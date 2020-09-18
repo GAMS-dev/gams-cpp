@@ -35,12 +35,12 @@ void TestGAMSSymbolDomainViolation::testDefaultConstructor() {
     // when,
     GAMSSymbolDomainViolation dv;
     // then
-    QVERIFY( ! dv.isValid() );
+    ASSERT_TRUE( ! dv.isValid() );
     QVERIFY_EXCEPTION_THROWN( dv.violInd(), GAMSException );
     QVERIFY_EXCEPTION_THROWN( dv.violRec(), GAMSException );
 
     GAMSSymbolDomainViolation dv1;
-    QVERIFY( dv == dv1 );
+    ASSERT_TRUE( dv == dv1 );
 }
 
 void TestGAMSSymbolDomainViolation::testCopyConstructor() {
@@ -58,7 +58,7 @@ void TestGAMSSymbolDomainViolation::testCopyConstructor() {
         GAMSSymbolDomainViolation dv( domViol );
         QCOMPARE( dv.violInd().size(), domViol.violInd().size() );
         QCOMPARE( dv.violRec(), domViol.violRec() );
-        QVERIFY( dv == domViol );
+        ASSERT_TRUE( dv == domViol );
     }
 }
 
@@ -94,9 +94,9 @@ void TestGAMSSymbolDomainViolation::testEqualToOperator() {
     for(size_t i=size_t(0); i<a.getSymbolDVs(2).size(); i++) {
          // when, then
          if (i==size_t(0)) {
-             QVERIFY( a.getSymbolDVs(2)[i] != dv0 );
+             ASSERT_TRUE( a.getSymbolDVs(2)[i] != dv0 );
          } else if (i==size_t(1)) {
-                    QVERIFY(a.getSymbolDVs(2)[i] != dv1 );
+                    ASSERT_TRUE(a.getSymbolDVs(2)[i] != dv1 );
          } else {
              QFAIL("do not expect more than 2 database domain violation");
          }
@@ -119,9 +119,9 @@ void TestGAMSSymbolDomainViolation::testNotEqualToOperator() {
     for(size_t i=size_t(0); i<a.getSymbolDVs(2).size(); i++) {
          // when, then
          if (i==size_t(0)) {
-             QVERIFY( a.getSymbolDVs(2)[i] != dv1 );
+             ASSERT_TRUE( a.getSymbolDVs(2)[i] != dv1 );
          } else if (i==size_t(1)) {
-                    QVERIFY(a.getSymbolDVs(2)[i] != dv0 );
+                    ASSERT_TRUE(a.getSymbolDVs(2)[i] != dv0 );
          } else {
              QFAIL("do not expect more than 2 database domain violation");
          }
@@ -174,7 +174,7 @@ void TestGAMSSymbolDomainViolation::testViolInd() {
           // when, then
           std::vector<bool> vi = dv.violInd();
           QCOMPARE( vi.size(), size_t(1) );
-          QVERIFY( vi[0] );
+          ASSERT_TRUE( vi[0] );
       }
     }
 
@@ -187,8 +187,8 @@ void TestGAMSSymbolDomainViolation::testViolInd() {
            // when ,then
            std::vector<bool> vi = dv.violInd();
            QCOMPARE( vi.size(), size_t(2) );
-           QVERIFY( ! vi[0] );
-           QVERIFY( vi[1] );
+           ASSERT_TRUE( ! vi[0] );
+           ASSERT_TRUE( vi[1] );
        }
     }
 }

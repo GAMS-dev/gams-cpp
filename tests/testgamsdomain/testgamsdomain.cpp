@@ -44,8 +44,8 @@ void TestGAMSDomain::testConstructor_Set() {
     { GAMSSet i = db.getSet("i");
       GAMSDomain domain( i );
       QCOMPARE( domain.name(), i.name() );
-      QVERIFY( ! domain.isRelaxed() );
-      QVERIFY( domain.getSet() == i );
+      ASSERT_TRUE( ! domain.isRelaxed() );
+      ASSERT_TRUE( domain.getSet() == i );
     }
 }
 
@@ -54,7 +54,7 @@ void TestGAMSDomain::testConstructor_StringRelaxedName() {
    std::string setName = "x";
    // when, then
    GAMSDomain domain( setName );
-   QVERIFY( domain.isRelaxed() );
+   ASSERT_TRUE( domain.isRelaxed() );
    QCOMPARE( domain.name(), setName );
    QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
 }
@@ -63,7 +63,7 @@ void TestGAMSDomain::testConstructor_CharPtrRelaxedName() {
     // given
     GAMSDomain domain( "x" );
     // when, then
-    QVERIFY( domain.isRelaxed() );
+    ASSERT_TRUE( domain.isRelaxed() );
     QCOMPARE( domain.name().c_str(), "x" );
     QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
 }
@@ -84,15 +84,15 @@ void TestGAMSDomain::testCopyConstructor() {
 
     // when, then
     { GAMSDomain domain( domain_i );
-      QVERIFY( ! domain.isRelaxed() );
-      QVERIFY( domain.getSet() == domain_i.getSet() );
+      ASSERT_TRUE( ! domain.isRelaxed() );
+      ASSERT_TRUE( domain.getSet() == domain_i.getSet() );
     }
     { GAMSDomain domain( domain_j );
-      QVERIFY( domain.isRelaxed() );
+      ASSERT_TRUE( domain.isRelaxed() );
       QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
     }
     { GAMSDomain domain( domain_k );
-      QVERIFY( domain.isRelaxed() );
+      ASSERT_TRUE( domain.isRelaxed() );
       QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
     }
 }
@@ -106,9 +106,9 @@ void TestGAMSDomain::testAssignmentOperator_Set() {
     GAMSSet i = db.getSet( "i" );
     // when, then
     { GAMSDomain domain_i = i;
-      QVERIFY( domain_i.getSet() == i );
+      ASSERT_TRUE( domain_i.getSet() == i );
       QCOMPARE( domain_i.name(), i.name() );
-      QVERIFY( ! domain_i.isRelaxed() );
+      ASSERT_TRUE( ! domain_i.isRelaxed() );
     }
     { GAMSSet j;
       QVERIFY_EXCEPTION_THROWN( GAMSDomain domain_j = j, GAMSException);
@@ -119,7 +119,7 @@ void TestGAMSDomain::testAssignmentOperator_StringReleaxedName() {
     // given, when, then
     std::string setName = "i";
     GAMSDomain domain = setName;
-    QVERIFY( domain.isRelaxed() );
+    ASSERT_TRUE( domain.isRelaxed() );
     QCOMPARE( domain.name(), setName );
     QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
 }
@@ -127,7 +127,7 @@ void TestGAMSDomain::testAssignmentOperator_StringReleaxedName() {
 void TestGAMSDomain::testAssignmentOperator_CharPtrReleaxedName() {
     // given, when, then
     GAMSDomain domain = "i";
-    QVERIFY( domain.isRelaxed() );
+    ASSERT_TRUE( domain.isRelaxed() );
     QCOMPARE( domain.name().c_str(), "i" );
     QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
 }
@@ -142,22 +142,22 @@ void TestGAMSDomain::testAssignmentOperator_GAMSDomain() {
     { GAMSSet i = db.getSet( "i" );
       GAMSDomain domain_i( i );
       GAMSDomain domain = domain_i;
-      QVERIFY( domain.getSet() == i );
-      QVERIFY( domain.getSet() == domain_i.getSet() );
-      QVERIFY( ! domain.isRelaxed() );
+      ASSERT_TRUE( domain.getSet() == i );
+      ASSERT_TRUE( domain.getSet() == domain_i.getSet() );
+      ASSERT_TRUE( ! domain.isRelaxed() );
     }
     { std::string setName = "i";
       GAMSDomain domain_i( setName );
       GAMSDomain domain = domain_i;
       QCOMPARE( domain.name(), setName );
       QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
-      QVERIFY( domain.isRelaxed() );
+      ASSERT_TRUE( domain.isRelaxed() );
     }
     { GAMSDomain domain_i( "i" );
       GAMSDomain domain = domain_i;
       QCOMPARE( domain.name().c_str(), "i" );
       QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
-      QVERIFY( domain.isRelaxed() );
+      ASSERT_TRUE( domain.isRelaxed() );
     }
 }
 
@@ -192,7 +192,7 @@ void TestGAMSDomain::testGetSet() {
       GAMSDomain domain( i );
       QCOMPARE( domain.getSet().name(), i.name() );
       QCOMPARE( domain.getSet().numberRecords(), i.numberRecords() );
-      QVERIFY( domain.getSet() == i );
+      ASSERT_TRUE( domain.getSet() == i );
     }
     { std::string dom = "i";
       GAMSDomain domain( dom );
@@ -213,14 +213,14 @@ void TestGAMSDomain::testIsRelaxed() {
     // when, then
     { GAMSSet i = db.getSet("i");
       GAMSDomain domain( i );
-      QVERIFY( ! domain.isRelaxed() );
+      ASSERT_TRUE( ! domain.isRelaxed() );
     }
     { std::string dom = "i";
       GAMSDomain domain( dom );
-      QVERIFY( domain.isRelaxed() );
+      ASSERT_TRUE( domain.isRelaxed() );
     }
     { GAMSDomain domain("i");
-      QVERIFY( domain.isRelaxed() );
+      ASSERT_TRUE( domain.isRelaxed() );
     }
 }
 

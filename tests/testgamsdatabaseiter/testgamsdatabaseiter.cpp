@@ -45,7 +45,7 @@ void TestGAMSDatabaseIter::testConstructor() {
     { // when
         GAMSDatabaseIter it = db.begin();
         // then
-        QVERIFY( (*it) == db.getSet("i") );
+        ASSERT_TRUE( (*it) == db.getSet("i") );
     }
 }
 
@@ -97,7 +97,7 @@ void TestGAMSDatabaseIter::testEqualToOperator_EmptyDatabase() {
         // when
         GAMSDatabaseIter it1 = emptydb1.begin();
         GAMSDatabaseIter it2 = emptydb1.begin();
-        QVERIFY( it1 == it2 );
+        ASSERT_TRUE( it1 == it2 );
     }
 
     {
@@ -105,7 +105,7 @@ void TestGAMSDatabaseIter::testEqualToOperator_EmptyDatabase() {
         GAMSDatabaseIter it1 = emptydb1.end();
         GAMSDatabaseIter it2 = emptydb1.end();
         // then
-        QVERIFY( it1 == it2 );
+        ASSERT_TRUE( it1 == it2 );
     }
 
     {
@@ -113,7 +113,7 @@ void TestGAMSDatabaseIter::testEqualToOperator_EmptyDatabase() {
         GAMSDatabaseIter it1 = emptydb1.begin();
         GAMSDatabaseIter it2 = emptydb2.begin();
         // then, they are different because ws.addDatabase() creates a new object
-        QVERIFY( it1 != it2 );
+        ASSERT_TRUE( it1 != it2 );
     }
 }
 
@@ -130,11 +130,11 @@ void TestGAMSDatabaseIter::testEqualToOperator() {
         GAMSDatabaseIter it1 = db.begin();
         GAMSDatabaseIter it2 = db.begin();
         // then
-        QVERIFY( it1 == it2 );
+        ASSERT_TRUE( it1 == it2 );
         while( it1 != db.end() || it2 !=db.end() ) {
             ++it1;
             ++it2;
-            QVERIFY( it1 == it2 );
+            ASSERT_TRUE( it1 == it2 );
         }
     }
 
@@ -143,17 +143,17 @@ void TestGAMSDatabaseIter::testEqualToOperator() {
         GAMSDatabaseIter it1 = db.end();
         GAMSDatabaseIter it2 = db.end();
         // then
-        QVERIFY( it1 == it2 );
+        ASSERT_TRUE( it1 == it2 );
 
         // when
         ++it1;
         // then
-        QVERIFY( it1 != it2 );
+        ASSERT_TRUE( it1 != it2 );
 
         // when
         ++it2;
         // then
-        QVERIFY( it1 == it2 );
+        ASSERT_TRUE( it1 == it2 );
     }
 }
 
@@ -170,13 +170,13 @@ void TestGAMSDatabaseIter::testNotEqualToOperator() {
         GAMSDatabaseIter it1 = db.begin();
         GAMSDatabaseIter it2 = emptydb.begin();
         // then
-        QVERIFY( it1 != it2 );
+        ASSERT_TRUE( it1 != it2 );
     }
     {  // when
         GAMSDatabaseIter it1 = db.end();
         GAMSDatabaseIter it2 = emptydb.end();
         // then
-        QVERIFY( it1 != it2 );
+        ASSERT_TRUE( it1 != it2 );
     }
     {  // when
         GAMSDatabaseIter it1 = db.begin();
@@ -184,13 +184,13 @@ void TestGAMSDatabaseIter::testNotEqualToOperator() {
         while( it1 != db.end() ) {
             ++it1;
             // then
-            QVERIFY( it1 != it2 );
+            ASSERT_TRUE( it1 != it2 );
         }
         // when
         ++it2;
         while( it2 != db.end() ) {
             // then
-            QVERIFY( it1 != it2 );
+            ASSERT_TRUE( it1 != it2 );
             ++it2;
         }
     }

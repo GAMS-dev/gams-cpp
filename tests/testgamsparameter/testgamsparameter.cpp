@@ -41,7 +41,7 @@ void TestGAMSParameter::testDefaultConstructor() {
     // when
     GAMSParameter p;
     // then
-    QVERIFY( ! p.isValid() );
+    ASSERT_TRUE( ! p.isValid() );
     QVERIFY_EXCEPTION_THROWN( p.type(), GAMSException );
     QVERIFY_EXCEPTION_THROWN( p.logID(), GAMSException);
     QVERIFY_EXCEPTION_THROWN( p.dim(), GAMSException);
@@ -122,7 +122,7 @@ void TestGAMSParameter::testAssignmentOperator() {
     // when, then
     GAMSParameter capacity = a;
     QCOMPARE( capacity, a );
-    QVERIFY( capacity == a );
+    ASSERT_TRUE( capacity == a );
     QCOMPARE( db.getNrSymbols(), numberOfSymbols );
 }
 
@@ -150,7 +150,7 @@ void TestGAMSParameter::testGetFirstRecord() {
     // when, then
     GAMSParameterRecord rec = a.firstRecord();
     QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "Seattle", Qt::CaseSensitive ), 0 );
-    QVERIFY( equals(rec.value(), 350.0) );
+    ASSERT_TRUE( equals(rec.value(), 350.0) );
 }
 
 void TestGAMSParameter::testGetFirstRecordSlice() {
@@ -164,7 +164,7 @@ void TestGAMSParameter::testGetFirstRecordSlice() {
     // when, then
     GAMSParameterRecord rec = b.firstRecord("Chicago");
     QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "Chicago", Qt::CaseSensitive ), 0 );
-    QVERIFY( equals(rec.value(), 300.0) );
+    ASSERT_TRUE( equals(rec.value(), 300.0) );
 }
 
 void TestGAMSParameter::testGetFirstRecordSlice_InvalidKeys_IncorrectDimension() {
@@ -233,9 +233,9 @@ void TestGAMSParameter::testFindRecord() {
 
     // when, then
     GAMSParameterRecord rec = db.getParameter("b").findRecord("Topeka");
-    QVERIFY( rec.isValid() );
+    ASSERT_TRUE( rec.isValid() );
     QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "Topeka", Qt::CaseSensitive ), 0 );
-    QVERIFY( equals(rec.value(), 275.0) );
+    ASSERT_TRUE( equals(rec.value(), 275.0) );
 }
 
 void TestGAMSParameter::testFindRecord_InsensitiveCaseKeys() {
@@ -249,7 +249,7 @@ void TestGAMSParameter::testFindRecord_InsensitiveCaseKeys() {
     GAMSParameterRecord rec = db.getParameter("b").findRecord("CHICAGO");
     // then
     QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "chicago", Qt::CaseInsensitive ), 0 );
-    QVERIFY( equals(rec.value(), 300.0) );
+    ASSERT_TRUE( equals(rec.value(), 300.0) );
 }
 
 void TestGAMSParameter::testAddRecord() {
@@ -266,8 +266,8 @@ void TestGAMSParameter::testAddRecord() {
 
     // then
     QCOMPARE( b.numberRecords(), numberOfRecords+ 1);
-    QVERIFY( b.findRecord("Albuquerque").isValid() );
-    QVERIFY( b.findRecord("Albuquerque").value() - 0.0 <= defaultEPS );
+    ASSERT_TRUE( b.findRecord("Albuquerque").isValid() );
+    ASSERT_TRUE( b.findRecord("Albuquerque").value() - 0.0 <= defaultEPS );
 
     // when
     { TestGAMSObject::getTestData_Parameter_freightcost_f( db );

@@ -39,7 +39,7 @@ void  TestGAMSEquation::testDefaultConstructor() {
     // when
     GAMSEquation eq;
     // then
-    QVERIFY( ! eq.isValid() );
+    ASSERT_TRUE( ! eq.isValid() );
     QVERIFY_EXCEPTION_THROWN( eq.type(), GAMSException );
     QVERIFY_EXCEPTION_THROWN( eq.logID(), GAMSException);
     QVERIFY_EXCEPTION_THROWN( eq.equType(), GAMSException );
@@ -70,7 +70,7 @@ void TestGAMSEquation::testCopyConstructor() {
     // when
     supply.addRecord("Albuquerque");
     // then
-    QVERIFY( equals(eq.findRecord("Albuquerque").level(), 0.0) );
+    ASSERT_TRUE( equals(eq.findRecord("Albuquerque").level(), 0.0) );
     QCOMPARE( eq.findRecord("Albuquerque").key(0).c_str(), "Albuquerque" );
     QCOMPARE( eq.numberRecords(), supply.numberRecords() );
 }
@@ -108,9 +108,9 @@ void TestGAMSEquation::testIterator() {
     }
     // then
     QCOMPARE( symbolMap.size(), size_t(3) );
-    QVERIFY( equals(symbolMap["new-york"], 325.0) );
-    QVERIFY( equals(symbolMap["chicago"], 300.0) );
-    QVERIFY( equals(symbolMap["topeka"], 275.0) );
+    ASSERT_TRUE( equals(symbolMap["new-york"], 325.0) );
+    ASSERT_TRUE( equals(symbolMap["chicago"], 300.0) );
+    ASSERT_TRUE( equals(symbolMap["topeka"], 275.0) );
 }
 
 void TestGAMSEquation::testAssignmentOperator() {
@@ -154,12 +154,12 @@ void TestGAMSEquation::testGetFirstRecord() {
 
     // when, then
     { GAMSEquationRecord rec = db.getEquation("cost").firstRecord();
-      QVERIFY( equals(rec.marginal(), 1.0) );
+      ASSERT_TRUE( equals(rec.marginal(), 1.0) );
     }
     // when, then
     { GAMSEquationRecord rec = db.getEquation("demand").firstRecord();
       QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "new-york", Qt::CaseSensitive ), 0 );
-      QVERIFY( equals(rec.level(), 325.0) );
+      ASSERT_TRUE( equals(rec.level(), 325.0) );
     }
 }
 
@@ -174,12 +174,12 @@ void TestGAMSEquation::testGetFirstRecordSlice() {
     // when, then
     { GAMSEquationRecord rec = db.getEquation("supply").firstRecord("san-diego");
       QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "san-diego", Qt::CaseSensitive ), 0 );
-      QVERIFY( equals(rec.level(), 550.0) );
+      ASSERT_TRUE( equals(rec.level(), 550.0) );
     }
     // when, then
     { GAMSEquationRecord rec = db.getEquation("demand").firstRecord("topeka");
       QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseSensitive ), 0 );
-      QVERIFY( equals(rec.level(), 275.0) );
+      ASSERT_TRUE( equals(rec.level(), 275.0) );
     }
 }
 
@@ -211,12 +211,12 @@ void TestGAMSEquation::testGetLastRecord() {
 
     // when, then
     { GAMSEquationRecord rec = db.getEquation("cost").lastRecord();
-      QVERIFY( equals(rec.marginal(), 1.0) );
+      ASSERT_TRUE( equals(rec.marginal(), 1.0) );
     }
     // when, then
     { GAMSEquationRecord rec = db.getEquation("demand").lastRecord();
       QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseSensitive ), 0 );
-      QVERIFY( equals(rec.level(), 275.0) );
+      ASSERT_TRUE( equals(rec.level(), 275.0) );
     }
 }
 
@@ -231,12 +231,12 @@ void TestGAMSEquation::testGetLastRecordSlice() {
     // when, then
     { GAMSEquationRecord rec = db.getEquation("supply").lastRecord("seattle");
       QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "seattle", Qt::CaseSensitive ), 0 );
-      QVERIFY( equals(rec.level(), 350.0) );
+      ASSERT_TRUE( equals(rec.level(), 350.0) );
     }
     // when, then
     { GAMSEquationRecord rec = db.getEquation("demand").lastRecord("chicago");
       QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "chicago", Qt::CaseSensitive ), 0 );
-      QVERIFY( equals(rec.level(), 300.0) );
+      ASSERT_TRUE( equals(rec.level(), 300.0) );
     }
 }
 
@@ -268,9 +268,9 @@ void TestGAMSEquation::testFindRecord() {
 
     // when, then
     GAMSEquationRecord rec = db.getEquation("supply").findRecord("san-diego");
-    QVERIFY( rec.isValid() );
+    ASSERT_TRUE( rec.isValid() );
     QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "san-diego", Qt::CaseSensitive ), 0 );
-    QVERIFY( equals(rec.level(), 550.0) );
+    ASSERT_TRUE( equals(rec.level(), 550.0) );
 }
 
 void TestGAMSEquation::testFindRecord_InsensitiveCaseKeys() {
@@ -285,7 +285,7 @@ void TestGAMSEquation::testFindRecord_InsensitiveCaseKeys() {
     GAMSEquationRecord rec = db.getEquation("demand").findRecord("TOPEKA");
     // then
     QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseInsensitive ), 0 );
-    QVERIFY( equals(rec.level(), 275.0) );
+    ASSERT_TRUE( equals(rec.level(), 275.0) );
 }
 
 void TestGAMSEquation::testAddRecord() {
@@ -301,8 +301,8 @@ void TestGAMSEquation::testAddRecord() {
     // when
     GAMSEquationRecord rec = demand.addRecord("Albuquerque");
     QCOMPARE( demand.numberRecords(), numberOfRecords+1 );
-    QVERIFY( rec.isValid() );
-    QVERIFY( equals(rec.level(), 0.0)  );
+    ASSERT_TRUE( rec.isValid() );
+    ASSERT_TRUE( equals(rec.level(), 0.0)  );
 }
 
 void TestGAMSEquation::testAddRecord_DuplicatedKeys_IncorrectDimension() {
@@ -338,7 +338,7 @@ void TestGAMSEquation::testMergeExistingRecord() {
     GAMSEquationRecord rec = eq.mergeRecord("chicago");
     QCOMPARE( eq.numberRecords(), numberOfRecords );
     QCOMPARE( rec.key(0), chicago_rec.key(0) );
-    QVERIFY( equals(rec.level(), chicago_rec.level()) );
+    ASSERT_TRUE( equals(rec.level(), chicago_rec.level()) );
 }
 
 void TestGAMSEquation::testMergeNonExistingRecord() {
@@ -355,7 +355,7 @@ void TestGAMSEquation::testMergeNonExistingRecord() {
     // then
     QCOMPARE( eq.numberRecords(), numberOfRecords+1 );
     QCOMPARE( rec.key(0).c_str(), "Albuquerque" );
-    QVERIFY( equals(rec.level(), 0.0) );
+    ASSERT_TRUE( equals(rec.level(), 0.0) );
 }
 
 void TestGAMSEquation::testGetEquType() {

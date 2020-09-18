@@ -40,7 +40,7 @@ void TestGAMSJob::testDefaultConstructor() {
     // when
     GAMSJob job;
     // then
-    QVERIFY( ! job.isValid() );
+    ASSERT_TRUE( ! job.isValid() );
     QVERIFY_EXCEPTION_THROWN( job.run(), GAMSException);
 }
 
@@ -52,8 +52,8 @@ void TestGAMSJob::testNotEqualToOperator() {
     GAMSJob job1 = ws.addJobFromGamsLib("trnsport");
     GAMSJob job2 = ws.addJobFromString("scalar x;");
     // when, then
-    QVERIFY(job != job1);
-    QVERIFY(job1 != job2);
+    ASSERT_TRUE(job != job1);
+    ASSERT_TRUE(job1 != job2);
 }
 
 void TestGAMSJob::testEqualToOperator() {
@@ -64,12 +64,12 @@ void TestGAMSJob::testEqualToOperator() {
     GAMSJob job2 = ws.addJobFromGamsLib("trnsport");
     GAMSJob job3 = job1;
     // when, then
-    QVERIFY( !( job1 == job2) );
-    QVERIFY( job3 == job1 );
+    ASSERT_TRUE( !( job1 == job2) );
+    ASSERT_TRUE( job3 == job1 );
     // when
     job1.run();
     // then
-    QVERIFY( job3 == job1 );
+    ASSERT_TRUE( job3 == job1 );
 }
 
 void TestGAMSJob::testIsValid() {
@@ -77,10 +77,10 @@ void TestGAMSJob::testIsValid() {
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSJob job1 = ws.addJobFromGamsLib("trnsport");
-    QVERIFY( job1.isValid() );
+    ASSERT_TRUE( job1.isValid() );
 
     GAMSJob job2 = ws.addJobFromString("scalar x;");
-    QVERIFY( job2.isValid() );
+    ASSERT_TRUE( job2.isValid() );
 }
 
 void TestGAMSJob::testRun() {
@@ -91,10 +91,10 @@ void TestGAMSJob::testRun() {
     // when
     job.run();
     // then
-    QVERIFY( job.outDB().isValid() );
+    ASSERT_TRUE( job.outDB().isValid() );
     QCOMPARE( job.outDB().getNrSymbols(), 12 );
     GAMSVariable z = job.outDB().getVariable("z");
-    QVERIFY( equals(z.firstRecord().level(), 153.675) );
+    ASSERT_TRUE( equals(z.firstRecord().level(), 153.675) );
 }
 
 void TestGAMSJob::testRunJobFromEmptyString() {
@@ -117,9 +117,9 @@ void TestGAMSJob::testOutDB() {
     // when
     GAMSDatabase db = job.outDB();
     // then
-    QVERIFY( db.isValid() );
+    ASSERT_TRUE( db.isValid() );
     QCOMPARE( db.getNrSymbols(), 6);
-    QVERIFY( db.workspace() == ws );
+    ASSERT_TRUE( db.workspace() == ws );
 
     QCOMPARE( db.getSet("i").numberRecords(), 2 );
     QCOMPARE( db.getSet("j").numberRecords(), 3 );
@@ -138,7 +138,7 @@ void TestGAMSJob::testOutDB_BeforeRun() {
     // when
     GAMSDatabase db = job.outDB();
     // then
-    QVERIFY( ! db.isValid() );
+    ASSERT_TRUE( ! db.isValid() );
     QVERIFY_EXCEPTION_THROWN( db.getNrSymbols(), GAMSException );
 }
 
@@ -150,9 +150,9 @@ void TestGAMSJob::testGetName() {
     // when
     QString name = QString::fromStdString(job.name());
     // then
-    QVERIFY( ! name.isNull() );
-    QVERIFY( ! name.isEmpty() );
-    QVERIFY( name.startsWith(defaultScratchFilePrefix.c_str()) );
+    ASSERT_TRUE( ! name.isNull() );
+    ASSERT_TRUE( ! name.isEmpty() );
+    ASSERT_TRUE( name.startsWith(defaultScratchFilePrefix.c_str()) );
 }
 
 void TestGAMSJob::testGetWorkspace() {
@@ -174,8 +174,8 @@ void TestGAMSJob::testGetLogID() {
 
     // we have on logID per workspace,
     // so the logID's of all jobs shall be the same
-    QVERIFY( job1.logID() == job2.logID() );
-    QVERIFY( job2.logID() == job3.logID() );
+    ASSERT_TRUE( job1.logID() == job2.logID() );
+    ASSERT_TRUE( job2.logID() == job3.logID() );
 }
 
 QTEST_MAIN(TestGAMSJob)

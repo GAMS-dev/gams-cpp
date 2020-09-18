@@ -77,9 +77,7 @@ isEmpty(GOOGLETEST_DIR) {
     !isEmpty(GTEST_SRCDIR): message("Using gtest from system")
 }
 
-message($$GTEST_SRCDIR)
 requires(exists($$GTEST_SRCDIR):exists($$GMOCK_SRCDIR))
-
 
 !isEmpty(GTEST_SRCDIR) {
     INCLUDEPATH *= \

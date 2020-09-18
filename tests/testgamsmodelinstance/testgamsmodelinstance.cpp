@@ -37,7 +37,7 @@ QString TestGAMSModelInstance::classname()  { return "TestGAMSModelInstance"; }
 
 void TestGAMSModelInstance::testDefaultConstructor()  {
      GAMSModelInstance mi;
-     QVERIFY( ! mi.isValid() );
+     ASSERT_TRUE( ! mi.isValid() );
      GAMSModifier mod;
 
      QVERIFY_EXCEPTION_THROWN( mi.name(), GAMSException );
@@ -53,12 +53,12 @@ void TestGAMSModelInstance::testDefaultConstructor()  {
      QVERIFY_EXCEPTION_THROWN( mi.logID(), GAMSException );
 
      GAMSModelInstance anothermi;
-     QVERIFY( ! anothermi.isValid() );
-     QVERIFY( anothermi == mi );
+     ASSERT_TRUE( ! anothermi.isValid() );
+     ASSERT_TRUE( anothermi == mi );
 
      anothermi = mi;
-     QVERIFY( ! anothermi.isValid() );
-     QVERIFY( mi == anothermi );
+     ASSERT_TRUE( ! anothermi.isValid() );
+     ASSERT_TRUE( mi == anothermi );
 }
 
 void TestGAMSModelInstance::testAssignmentOperator()  {
@@ -68,12 +68,12 @@ void TestGAMSModelInstance::testAssignmentOperator()  {
     GAMSModelInstance mi1 = ws.addCheckpoint().addModelInstance();
 
     GAMSModelInstance mi2 = mi1;
-    QVERIFY( mi2 == mi1 );
+    ASSERT_TRUE( mi2 == mi1 );
 
     GAMSModelInstance mi3;
     mi1 = mi3;
-    QVERIFY( mi1 == mi3 );
-    QVERIFY( mi1 != mi2 );
+    ASSERT_TRUE( mi1 == mi3 );
+    ASSERT_TRUE( mi1 != mi2 );
 }
 
 void TestGAMSModelInstance::testEqualToOperator()  {
@@ -83,11 +83,11 @@ void TestGAMSModelInstance::testEqualToOperator()  {
     GAMSModelInstance mi1 = ws.addCheckpoint().addModelInstance();
 
     GAMSModelInstance mi2 = mi1;
-    QVERIFY( mi2 == mi1 );
+    ASSERT_TRUE( mi2 == mi1 );
 
     GAMSModelInstance mi3;
     mi1 = mi3;
-    QVERIFY( mi1 == mi3 );
+    ASSERT_TRUE( mi1 == mi3 );
 }
 
 void TestGAMSModelInstance::testNotEqualToOperator()  {
@@ -98,10 +98,10 @@ void TestGAMSModelInstance::testNotEqualToOperator()  {
     GAMSModelInstance mi1 = cp.addModelInstance();
 
     GAMSModelInstance mi2 = cp.addModelInstance();
-    QVERIFY( mi2 != mi1 );
+    ASSERT_TRUE( mi2 != mi1 );
 
     GAMSModelInstance mi3 = ws.addCheckpoint().addModelInstance();
-    QVERIFY( mi1 != mi3 );
+    ASSERT_TRUE( mi1 != mi3 );
 }
 
 
@@ -111,7 +111,7 @@ void TestGAMSModelInstance::testIsValid()  {
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     // when, then
-    QVERIFY( cp.isValid() );
+    ASSERT_TRUE( cp.isValid() );
 }
 
 void TestGAMSModelInstance::testGetSyncDb()  {
@@ -127,7 +127,7 @@ void TestGAMSModelInstance::testGetSyncDb()  {
     GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
     // when, then
     QCOMPARE( mi.syncDb().getNrSymbols(), 1);
-    QVERIFY( mi.syncDb().getParameter("bmult") == bmult );
+    ASSERT_TRUE( mi.syncDb().getParameter("bmult") == bmult );
 }
 
 void TestGAMSModelInstance::testInstantiate_data()  { getTestData(); }
@@ -149,7 +149,7 @@ void TestGAMSModelInstance::testInstantiate()  {
        mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));
        bmult.addRecord().setValue( modifier );
        mi.solve();
-    } catch(GAMSException&) { QVERIFY(false); }
+    } catch(GAMSException&) { ASSERT_TRUE(false); }
 }
 
 void TestGAMSModelInstance::testInstantiateBeforeInitializingCP()  {
@@ -194,9 +194,9 @@ void TestGAMSModelInstance::testSolve()  {
     // when
     mi.solve();
     // then
-    QVERIFY( mi.solveStatus() == SolveStatus );
-    QVERIFY( mi.modelStatus() == ModelStatus );
-    QVERIFY( equals( mi.syncDb().getVariable("z").findRecord().level(), obj) );
+    ASSERT_TRUE( mi.solveStatus() == SolveStatus );
+    ASSERT_TRUE( mi.modelStatus() == ModelStatus );
+    ASSERT_TRUE( equals( mi.syncDb().getVariable("z").findRecord().level(), obj) );
 }
 
 void TestGAMSModelInstance::testSolveBeforeInstantiate()  {
@@ -240,9 +240,9 @@ void TestGAMSModelInstance::testGetModelSolveStatus()  {
     // when
     mi.solve();
     // then
-    QVERIFY( mi.solveStatus() == SolveStatus );
+    ASSERT_TRUE( mi.solveStatus() == SolveStatus );
     QCOMPARE( QString::fromStdString(mi.solveStatusAsString()).trimmed(), SolveStatusStr );
-    QVERIFY( mi.modelStatus() == ModelStatus );
+    ASSERT_TRUE( mi.modelStatus() == ModelStatus );
     QCOMPARE( QString::fromStdString(mi.modelStatusAsString()).trimmed(), ModelStatusStr );
 }
 
@@ -261,7 +261,7 @@ void TestGAMSModelInstance::testCopyModelInstance() {
     // when
     GAMSModelInstance newmi = mi.copyModelInstance("new transport mi");
     // then
-    QVERIFY( newmi.isValid() );
+    ASSERT_TRUE( newmi.isValid() );
     QCOMPARE( mi.syncDb().getNrSymbols(), newmi.syncDb().getNrSymbols() );
     QCOMPARE( newmi.syncDb().getParameter("bmult").numberRecords(), mi.syncDb().getParameter("bmult").numberRecords() );
 }
@@ -289,16 +289,16 @@ void TestGAMSModelInstance::testGetName()  {
 
     // when, then
     GAMSModelInstance mi2 = cp.addModelInstance("");
-    QVERIFY( mi2.name().find(defaultScratchFilePrefix) == 0 );
+    ASSERT_TRUE( mi2.name().find(defaultScratchFilePrefix) == 0 );
 
     // when, then
     GAMSModelInstance mi3 = cp.addModelInstance();
-    QVERIFY( mi3.name().find(defaultScratchFilePrefix) == 0 );
+    ASSERT_TRUE( mi3.name().find(defaultScratchFilePrefix) == 0 );
 
     // when, then
     GAMSModelInstance mi4 = cp.addModelInstance();
-    QVERIFY( mi4.name().find(defaultScratchFilePrefix) == 0 );
-    QVERIFY( mi4.name() != mi3.name() );
+    ASSERT_TRUE( mi4.name().find(defaultScratchFilePrefix) == 0 );
+    ASSERT_TRUE( mi4.name() != mi3.name() );
 }
 
 void TestGAMSModelInstance::testGetLogID()  {
@@ -310,18 +310,18 @@ void TestGAMSModelInstance::testGetLogID()  {
      GAMSModelInstance mi1 = cp.addModelInstance(cpname);
      GAMSModelInstance mi2 = mi1;
      // when, then
-     QVERIFY( mi1.logID() == mi2.logID() );
+     ASSERT_TRUE( mi1.logID() == mi2.logID() );
 
      GAMSCheckpoint cp3 = ws.addCheckpoint(cpname);
      GAMSModelInstance mi3 = cp3.addModelInstance();
-     QVERIFY( mi3.logID() == mi1.logID());
+     ASSERT_TRUE( mi3.logID() == mi1.logID());
 
      GAMSWorkspaceInfo anotherWsInfo("", testSystemDir.path().toStdString());
      GAMSWorkspace anotherWs(anotherWsInfo);
      GAMSCheckpoint cp4 = anotherWs.addCheckpoint(cpname);
      GAMSModelInstance mi4 = cp4.addModelInstance();
-     QVERIFY(mi4.logID() == anotherWs.logID());
-     QVERIFY(mi4.logID() != mi3.logID());
+     ASSERT_TRUE(mi4.logID() == anotherWs.logID());
+     ASSERT_TRUE(mi4.logID() != mi3.logID());
 }
 
 void TestGAMSModelInstance::getTestData() {

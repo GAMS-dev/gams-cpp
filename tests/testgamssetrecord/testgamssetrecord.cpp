@@ -42,7 +42,7 @@ void TestGAMSSetRecord::testDefaultConstructor() {
     // when
     GAMSSetRecord rec;
     // then
-    QVERIFY( ! rec.isValid() );
+    ASSERT_TRUE( ! rec.isValid() );
     QVERIFY_EXCEPTION_THROWN( rec.type(), GAMSException );
     QVERIFY_EXCEPTION_THROWN( rec.logID(), GAMSException );
     QVERIFY_EXCEPTION_THROWN( rec.setText("x"), GAMSException );
@@ -87,7 +87,7 @@ void TestGAMSSetRecord::testAssignmentOperator() {
     // when, then
     GAMSSetRecord newRecord = rec;
     QCOMPARE( newRecord, rec );
-    QVERIFY( newRecord == rec );
+    ASSERT_TRUE( newRecord == rec );
 }
 
 void TestGAMSSetRecord::testIncorrectType_data() {
@@ -153,7 +153,7 @@ void TestGAMSSetRecord::testGetSetText() {
 
     GAMSSet j = db.addSet("j", "set j");
     j.addRecord("j1").setText("");
-    QVERIFY(j.lastRecord().text().empty());
+    ASSERT_TRUE(j.lastRecord().text().empty());
 }
 
 QTEST_MAIN(TestGAMSSetRecord)

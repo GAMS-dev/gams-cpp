@@ -33,10 +33,10 @@ QString TestGAMSModelInstanceOpt::classname()  { return "TestGAMSModelInstanceOp
 
 void TestGAMSModelInstanceOpt::testDefaultConstructor()  {
     GAMSModelInstanceOpt miopt;
-    QVERIFY( miopt.solver().empty() );
+    ASSERT_TRUE( miopt.solver().empty() );
     QCOMPARE( miopt.optFile(), -1 );
     QCOMPARE( miopt.noMatchLimit(), 0);
-    QVERIFY( ! miopt.debug() );
+    ASSERT_TRUE( ! miopt.debug() );
 }
 
 void TestGAMSModelInstanceOpt::testConstructor()  {
@@ -44,18 +44,18 @@ void TestGAMSModelInstanceOpt::testConstructor()  {
     QCOMPARE( miopt.solver().c_str(), "x" );
     QCOMPARE( miopt.noMatchLimit(), 1 );
     QCOMPARE( miopt.optFile(), 1 );
-    QVERIFY( miopt.debug() );
+    ASSERT_TRUE( miopt.debug() );
 }
 
 void TestGAMSModelInstanceOpt::testAssignmentOperator()  {
     GAMSModelInstanceOpt miopt1;
 
     GAMSModelInstanceOpt miopt = miopt1;
-    QVERIFY( miopt == miopt1 );
+    ASSERT_TRUE( miopt == miopt1 );
 
     GAMSModelInstanceOpt miopt2("x", 1, 0, true);
     miopt = miopt2;
-    QVERIFY( miopt == miopt2 );
+    ASSERT_TRUE( miopt == miopt2 );
 }
 
 void TestGAMSModelInstanceOpt::testEqualToOperator()  {
@@ -66,7 +66,7 @@ void TestGAMSModelInstanceOpt::testEqualToOperator()  {
     QCOMPARE( miopt.noMatchLimit(), miopt1.noMatchLimit() );
     QCOMPARE( miopt.optFile(), miopt1.optFile() );
     QCOMPARE( miopt.debug(), miopt1.debug() );
-    QVERIFY( miopt == miopt1 );
+    ASSERT_TRUE( miopt == miopt1 );
 
     GAMSModelInstanceOpt miopt2("x", 1, 0, true);
     miopt = miopt2;
@@ -74,7 +74,7 @@ void TestGAMSModelInstanceOpt::testEqualToOperator()  {
     QCOMPARE( miopt.noMatchLimit(), miopt2.noMatchLimit() );
     QCOMPARE( miopt.optFile(), miopt2.optFile() );
     QCOMPARE( miopt.debug(), miopt2.debug() );
-    QVERIFY( miopt == miopt2 );
+    ASSERT_TRUE( miopt == miopt2 );
 }
 
 void TestGAMSModelInstanceOpt::testGetSetSolver_data()  {
@@ -144,14 +144,14 @@ void TestGAMSModelInstanceOpt::testGetSetDebug()  {
     QFETCH(bool, debug);
 
     GAMSModelInstanceOpt miopt1("x", 1, 0, debug);
-    QVERIFY( debug ? miopt1.debug() : ! miopt1.debug() );
+    ASSERT_TRUE( debug ? miopt1.debug() : ! miopt1.debug() );
 
     miopt1.setDebug( debug );
-    QVERIFY( debug ? miopt1.debug() : ! miopt1.debug() );
+    ASSERT_TRUE( debug ? miopt1.debug() : ! miopt1.debug() );
 
     GAMSModelInstanceOpt miopt2;
     miopt2.setDebug( debug );
-    QVERIFY( debug ? miopt2.debug() : ! miopt2.debug() );
+    ASSERT_TRUE( debug ? miopt2.debug() : ! miopt2.debug() );
 }
 
 QTEST_MAIN(TestGAMSModelInstanceOpt)

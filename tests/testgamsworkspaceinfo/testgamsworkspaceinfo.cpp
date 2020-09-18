@@ -39,8 +39,8 @@ void TestGAMSWorkspaceInfo::testConstructorDefaultValue()
     // when
     GAMSWorkspaceInfo wsInfo;
     // then
-    QVERIFY(QString::fromStdString(wsInfo.systemDirectory()).isEmpty());
-    QVERIFY(QString::fromStdString(wsInfo.workingDirectory()).isEmpty());
+    ASSERT_TRUE(QString::fromStdString(wsInfo.systemDirectory()).isEmpty());
+    ASSERT_TRUE(QString::fromStdString(wsInfo.workingDirectory()).isEmpty());
     QCOMPARE(wsInfo.debug(), GAMSEnum::DebugLevel::Off);
 
 }

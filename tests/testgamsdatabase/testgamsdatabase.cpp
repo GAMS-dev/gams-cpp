@@ -47,7 +47,7 @@ void TestGAMSDatabase::testDefaultConstructor() {
     // when
     GAMSDatabase db;
     // then
-    QVERIFY(! db.isValid() );
+    ASSERT_TRUE(! db.isValid() );
     QVERIFY_EXCEPTION_THROWN( db.name(), GAMSException );
     QVERIFY_EXCEPTION_THROWN( db.getNrSymbols(), GAMSException );
     QVERIFY_EXCEPTION_THROWN( db.clear(), GAMSException );
@@ -92,7 +92,7 @@ void TestGAMSDatabase::testOutOfScopeDatabaseAssignement()  {
          db1 = db2;
     }
     // then
-    QVERIFY( db1.isValid() );
+    ASSERT_TRUE( db1.isValid() );
     QCOMPARE( db1.getNrSymbols(), 2 );
     QCOMPARE( db1.getSet("i").numberRecords(), 2 );
     QCOMPARE( db1.getParameter("a").numberRecords(), 2 );
@@ -105,10 +105,10 @@ void TestGAMSDatabase::testIsValid()  {
     GAMSWorkspace ws(wsInfo);
     // when, then
     GAMSDatabase db;
-    QVERIFY( ! db.isValid() );
+    ASSERT_TRUE( ! db.isValid() );
     // when, then
     db = ws.addDatabase();
-    QVERIFY( db.isValid() );
+    ASSERT_TRUE( db.isValid() );
 }
 
 void TestGAMSDatabase::testBegin() {
@@ -118,7 +118,7 @@ void TestGAMSDatabase::testBegin() {
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
     GAMSDatabase db = job.outDB();
-    QVERIFY( db.isValid() );
+    ASSERT_TRUE( db.isValid() );
     GAMSDatabaseIter it = db.begin();
     QCOMPARE((*it).name().c_str(), "i");
 }
@@ -136,7 +136,7 @@ void TestGAMSDatabase::testEnd()  {
     for(int i=0; i<db.getNrSymbols(); i++) {
         ++it;
     }
-    QVERIFY( it == it_end );
+    ASSERT_TRUE( it == it_end );
 }
 
 void TestGAMSDatabase::testLogID() {
@@ -152,7 +152,7 @@ void TestGAMSDatabase::testLogID() {
     GAMSWorkspaceInfo anotherWsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace anotherws(anotherWsInfo);
     GAMSDatabase db3 = anotherws.addDatabase();
-    QVERIFY( db3.logID() != db2.logID());
+    ASSERT_TRUE( db3.logID() != db2.logID());
 }
 
 void TestGAMSDatabase::testGetNrSymbols() {
@@ -202,7 +202,7 @@ void TestGAMSDatabase::testSetSuppressAutoDomainChecking() {
         db.doExport();
         QFileInfo gdxfile(QDir(ws.workingDirectory().c_str()),
                           QString::fromStdString(db.name())+QString::fromStdString(".gdx"));
-        QVERIFY( gdxfile.exists() );
+        ASSERT_TRUE( gdxfile.exists() );
     }  else {
         QVERIFY_EXCEPTION_THROWN( db.doExport( gdxfilename.toStdString() ), GAMSException );
     }
@@ -230,8 +230,8 @@ void TestGAMSDatabase::testGetName() {
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db1 = ws.addDatabase();
     // when, then
-    QVERIFY( ! QString::fromStdString(db1.name()).isNull() );
-    QVERIFY( ! QString::fromStdString(db1.name()).isEmpty() );
+    ASSERT_TRUE( ! QString::fromStdString(db1.name()).isNull() );
+    ASSERT_TRUE( ! QString::fromStdString(db1.name()).isEmpty() );
 
     // when, then
     std::string dbname = "myDatabase";
@@ -259,7 +259,7 @@ void TestGAMSDatabase::testDoExport() {
     // then
     QFileInfo gdxfile(QDir(ws.workingDirectory().c_str()),
                       QString::fromStdString(db.name())+QString::fromStdString(".gdx"));
-    QVERIFY( gdxfile.exists() );
+    ASSERT_TRUE( gdxfile.exists() );
     // @todo more check on gdxfile
 }
 
@@ -274,7 +274,7 @@ void TestGAMSDatabase::testDoExportWithName() {
     // then
     QFileInfo gdxfile(QDir(ws.workingDirectory().c_str()),
                       QString::fromStdString(db.name())+QString::fromStdString(".gdx"));
-    QVERIFY( gdxfile.exists() );
+    ASSERT_TRUE( gdxfile.exists() );
     // @todo more check on gdxfile
 }
 
@@ -302,17 +302,17 @@ void TestGAMSDatabase::testCheckDomains() {
 
     // when, then
     GAMSSet i = db.addSet("i", "");
-    QVERIFY( db.checkDomains() );
+    ASSERT_TRUE( db.checkDomains() );
 
     // when, then
     i.addRecord("i1");
     GAMSParameter a = db.addParameter("x", "", i);
     a.addRecord("i1").setValue( 0.5 ); ;
-    QVERIFY( db.checkDomains() );
+    ASSERT_TRUE( db.checkDomains() );
 
     // when, then
     a.addRecord("i2").setValue( 0.5 ); ;
-    QVERIFY( ! db.checkDomains() );
+    ASSERT_TRUE( ! db.checkDomains() );
 }
 
 void TestGAMSDatabase::testGetSymbol_data() {
@@ -822,15 +822,15 @@ void TestGAMSDatabase::testEqualToOperator() {
 
     // when, then
     GAMSDatabase db2 = db1;
-    QVERIFY( db2 == db1 );
+    ASSERT_TRUE( db2 == db1 );
 
     // when, then
     GAMSDatabase db3 = ws.addDatabase();
-    QVERIFY( ! (db3 == db1) );
+    ASSERT_TRUE( ! (db3 == db1) );
 
     // when, then
     GAMSDatabase db4 = ws.addDatabase(db1);
-    QVERIFY( ! (db4 == db1) );
+    ASSERT_TRUE( ! (db4 == db1) );
 
 }
 
@@ -843,15 +843,15 @@ void TestGAMSDatabase::testNotEqualToOperator() {
 
     // when, then
     GAMSDatabase db2 = db1;
-    QVERIFY( !( db2 != db1) );
+    ASSERT_TRUE( !( db2 != db1) );
 
     // when, then
     GAMSDatabase db3 = ws.addDatabase();
-    QVERIFY( db3 != db1 );
+    ASSERT_TRUE( db3 != db1 );
 
     // when, then
     GAMSDatabase db4 = ws.addDatabase(db1);
-    QVERIFY( db4 != db1 );
+    ASSERT_TRUE( db4 != db1 );
 }
 
 void TestGAMSDatabase::testClear() {
