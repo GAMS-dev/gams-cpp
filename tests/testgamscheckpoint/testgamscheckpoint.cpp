@@ -22,17 +22,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+#include "testgamsobject.h"
 #include "gamscheckpoint.h"
 #include "gamsdatabase.h"
 #include "gamsmodelinstance.h"
 #include "gamsworkspace.h"
-#include "testgamscheckpoint.h"
+#include "gamsjob.h"
+#include "gamsplatform.h"
+#include "gamsoptions.h"
+#include "gamsversion.h"
 
+#include <gtest/gtest.h>
+#include <gmock/gmock-matchers.h>
 using namespace gams;
 
-QString TestGAMSCheckpoint::classname()  { return "TestGAMSCheckpoint"; }
+class TestGAMSCheckpoint: public TestGAMSObject
+{
+};
 
-void TestGAMSCheckpoint::testDefaultConstructor()  {
+TEST_F(TestGAMSCheckpoint, testDefaultConstructor) {
     GAMSCheckpoint cp;
     ASSERT_TRUE( ! cp.isValid() );
     QVERIFY_EXCEPTION_THROWN( cp.name(), GAMSException );
@@ -46,7 +54,7 @@ void TestGAMSCheckpoint::testDefaultConstructor()  {
     ASSERT_TRUE( anothercp == cp );
 }
 
-void TestGAMSCheckpoint::testConstructor()  {
+TEST_F(TestGAMSCheckpoint, testConstructor) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -58,7 +66,7 @@ void TestGAMSCheckpoint::testConstructor()  {
     QCOMPARE( cp.name(), cpname);
 }
 
-void TestGAMSCheckpoint::testAssignmentOperator()  {
+TEST_F(TestGAMSCheckpoint, testAssignmentOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -68,20 +76,20 @@ void TestGAMSCheckpoint::testAssignmentOperator()  {
     QCOMPARE( cp2, cp1 );
 }
 
-void TestGAMSCheckpoint::testAddModelInstance() {
+TEST_F(TestGAMSCheckpoint, testAddModelInstance) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
-    GAMSWorkspace ws(wsInfo);
-    GAMSCheckpoint cp = ws.addCheckpoint();
-    // when
-    GAMSModelInstance mi = cp.addModelInstance();
-    // then
-    GAMSDatabase db = mi.syncDb();
-    ASSERT_TRUE( db.isValid() );
-    QCOMPARE( db.getNrSymbols(), 0 );
+        GAMSWorkspace ws(wsInfo);
+        GAMSCheckpoint cp = ws.addCheckpoint();
+        // when
+        GAMSModelInstance mi = cp.addModelInstance();
+        // then
+        GAMSDatabase db = mi.syncDb();
+        ASSERT_TRUE( db.isValid() );
+        QCOMPARE( db.getNrSymbols(), 0 );
 }
 
-void TestGAMSCheckpoint::testGetWorkspace() {
+TEST_F(TestGAMSCheckpoint, testGetWorkspace) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -90,7 +98,7 @@ void TestGAMSCheckpoint::testGetWorkspace() {
     QCOMPARE(cp.workspace(), ws);
 }
 
-void TestGAMSCheckpoint::testGetName() {
+TEST_F(TestGAMSCheckpoint, testGetName) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -100,7 +108,7 @@ void TestGAMSCheckpoint::testGetName() {
     ASSERT_TRUE( QString::fromStdString(cp.name()).startsWith(defaultScratchFilePrefix.c_str()) );
 }
 
-void TestGAMSCheckpoint::testGetLogID() {
+TEST_F(TestGAMSCheckpoint, testGetLogID) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -119,7 +127,7 @@ void TestGAMSCheckpoint::testGetLogID() {
     ASSERT_TRUE( cp4.logID() != cp3.logID());
 }
 
-void TestGAMSCheckpoint::testEqualToOperator() {
+TEST_F(TestGAMSCheckpoint, testEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -131,7 +139,7 @@ void TestGAMSCheckpoint::testEqualToOperator() {
     ASSERT_TRUE( !(cp1 == cp3) );
 }
 
-void TestGAMSCheckpoint::testNotEqualToOperator() {
+TEST_F(TestGAMSCheckpoint, testNotEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -144,7 +152,7 @@ void TestGAMSCheckpoint::testNotEqualToOperator() {
     ASSERT_TRUE( cp2 != cp3 );
 }
 
-void TestGAMSCheckpoint::testCopyConstructor() {
+TEST_F(TestGAMSCheckpoint, testCopyConstructor) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -156,7 +164,7 @@ void TestGAMSCheckpoint::testCopyConstructor() {
     QCOMPARE(cp2, cp1);
 }
 
-void TestGAMSCheckpoint::testUninitializedCheckpoint() {
+TEST_F(TestGAMSCheckpoint, testUninitializedCheckpoint) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -169,7 +177,5 @@ void TestGAMSCheckpoint::testUninitializedCheckpoint() {
     ws.addJobFromString("Scalar s 'my scalar' /1/;").run(cp);
     // then
     GAMSJob job = ws.addJobFromString("display s;", cp);
-    TestGAMSObject::testJobBeforeRun(job, ws);
+    testJobBeforeRun(job, ws);
 }
-
-QTEST_MAIN(TestGAMSCheckpoint)

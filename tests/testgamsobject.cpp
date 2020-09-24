@@ -45,7 +45,7 @@
 using namespace gams;
 using namespace std;
 
-void TestGAMSObject::initTestCase() {
+void TestGAMSObject::SetUp() {
     testSystemDir = QString(qgetenv("GTESTDIR"));
     if (testSystemDir.path() == "")
         testSystemDir = GAMSPlatform::findGams(0).c_str();
@@ -58,7 +58,7 @@ void TestGAMSObject::initTestCase() {
     tests_Failed = 0;
 }
 
-void TestGAMSObject::cleanupTestCase() {
+void TestGAMSObject::TearDown() {
     for (QString dir: testCleanupDirs) {
         QDir path(dir);
         if (path.exists() && path.absolutePath().contains("gams-cpp")) {
@@ -68,7 +68,7 @@ void TestGAMSObject::cleanupTestCase() {
 }
 
 void TestGAMSObject::init() {
-    // #TODO: remove irreleavant files and directories
+    // TODO: remove irreleavant files and directories
 }
 
 void TestGAMSObject::cleanup() {
@@ -333,3 +333,7 @@ std::string TestGAMSObject::getDataText()
     return data;
 }
 
+int main(int argc, char **argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

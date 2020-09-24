@@ -27,25 +27,4 @@
 #ifndef TESTGAMSCHECKPOINT_H
 #define TESTGAMSCHECKPOINT_H
 
-#include "testgamsobject.h"
-
-class TestGAMSCheckpoint: public TestGAMSObject
-{
-  Q_OBJECT
-  private slots:
-    void testDefaultConstructor();
-    void testCopyConstructor();
-    void testConstructor();
-    void testAssignmentOperator();
-    void testEqualToOperator();
-    void testNotEqualToOperator();
-    void testAddModelInstance();
-    void testGetWorkspace();
-    void testGetName();
-    void testGetLogID();
-    void testUninitializedCheckpoint();
-protected:
-  QString classname();
-
-};
 #endif // TESTGAMSCHECKPOINT_H

@@ -55,11 +55,9 @@ TESTROOT = $$_PRO_FILE_PWD_/..
 INCLUDEPATH += $$TESTROOT $$TESTROOT/../src/
 
 # GoogleTest:
-# TODO(RG): make dynamic
-GOOGLETEST_DIR = D:\Download\googletest-release-1.10.0\googletest-release-1.10.0
+GOOGLETEST_DIR = $$_PRO_FILE_PWD_/../../googletest
 
 isEmpty(GOOGLETEST_DIR):GOOGLETEST_DIR=$$(GOOGLETEST_DIR)
-
 isEmpty(GOOGLETEST_DIR) {
     GOOGLETEST_DIR =
     !isEmpty(GOOGLETEST_DIR) {
