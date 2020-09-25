@@ -86,11 +86,12 @@ requires(exists($$GTEST_SRCDIR):exists($$GMOCK_SRCDIR))
         $$GTEST_SRCDIR/src/gtest-all.cc
 }
 
-!isEmpty(GMOCK_SRCDIR) {
-    INCLUDEPATH *= \
-        $$GMOCK_SRCDIR \
-        $$GMOCK_SRCDIR/include
+# Mocks not used for now
+#!isEmpty(GMOCK_SRCDIR) {
+#    INCLUDEPATH *= \
+#        $$GMOCK_SRCDIR \
+#        $$GMOCK_SRCDIR/include
 
-    SOURCES += \
-        $$GMOCK_SRCDIR/src/gmock-all.cc
-}
+#    SOURCES += \
+#        $$GMOCK_SRCDIR/src/gmock-all.cc
+#}

@@ -27,7 +27,6 @@
 #define TESTGAMSCPP_H
 
 #include <gtest/gtest.h>
-#include <gmock/gmock-matchers.h>
 
 #include <cmath>
 #include <limits>

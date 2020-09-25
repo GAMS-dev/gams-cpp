@@ -34,35 +34,37 @@
 #include "gamsset.h"
 #include "gamssymboldomainviolation.h"
 #include "gamsvariable.h"
-#include "testgamsdatabase.h"
+#include "testgamsobject.h"
 
 #include <sstream>
 #include <string>
 
 using namespace gams;
 
-QString TestGAMSDatabase::classname()  { return "TestGAMSDatabase"; }
+class TestGAMSDatabase: public TestGAMSObject
+{
+};
 
-void TestGAMSDatabase::testDefaultConstructor() {
+TEST_F(TestGAMSDatabase, testDefaultConstructor) {
     // when
     GAMSDatabase db;
     // then
     ASSERT_TRUE(! db.isValid() );
-    QVERIFY_EXCEPTION_THROWN( db.name(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( db.getNrSymbols(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( db.clear(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( db.begin(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( db.end(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( db.getSet("x"), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( db.getParameter("x"), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( db.getEquation("x"), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( db.getVariable("x"), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( db.doExport(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( db.logID(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( db.workspace(), GAMSException );
+    EXPECT_THROW( db.name(), GAMSException );
+    EXPECT_THROW( db.getNrSymbols(), GAMSException );
+    EXPECT_THROW( db.clear(), GAMSException );
+    EXPECT_THROW( db.begin(), GAMSException );
+    EXPECT_THROW( db.end(), GAMSException );
+    EXPECT_THROW( db.getSet("x"), GAMSException );
+    EXPECT_THROW( db.getParameter("x"), GAMSException );
+    EXPECT_THROW( db.getEquation("x"), GAMSException );
+    EXPECT_THROW( db.getVariable("x"), GAMSException );
+    EXPECT_THROW( db.doExport(), GAMSException );
+    EXPECT_THROW( db.logID(), GAMSException );
+    EXPECT_THROW( db.workspace(), GAMSException );
 }
 
-void TestGAMSDatabase::testAssignmentOperator()  {
+TEST_F(TestGAMSDatabase, testAssignmentOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -72,13 +74,13 @@ void TestGAMSDatabase::testAssignmentOperator()  {
     TestGAMSDatabase::getTestData_Parameter_distance_d(db1);
     // when
     GAMSDatabase db2 = db1;
-    QCOMPARE( db2.getNrSymbols(), db1.getNrSymbols());
-    QCOMPARE( db2.getSet("i").numberRecords(), 2 );
-    QCOMPARE( db2.getParameter("d").numberRecords(), 6 );
-    QCOMPARE( db2.logID(), db1.logID() );
+    EXPECT_EQ( db2.getNrSymbols(), db1.getNrSymbols());
+    EXPECT_EQ( db2.getSet("i").numberRecords(), 2 );
+    EXPECT_EQ( db2.getParameter("d").numberRecords(), 6 );
+    EXPECT_EQ( db2.logID(), db1.logID() );
 }
 
-void TestGAMSDatabase::testOutOfScopeDatabaseAssignement()  {
+TEST_F(TestGAMSDatabase, testOutOfScopeDatabaseAssignement) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -88,18 +90,18 @@ void TestGAMSDatabase::testOutOfScopeDatabaseAssignement()  {
          GAMSDatabase db2 = ws.addDatabase();
          TestGAMSObject::getTestData_Set_plants_i( db2 );
          TestGAMSObject::getTestData_Parameter_capacity_a( db2 );
-         QCOMPARE( db2.getNrSymbols(), 2 );
+         EXPECT_EQ( db2.getNrSymbols(), 2 );
          db1 = db2;
     }
     // then
     ASSERT_TRUE( db1.isValid() );
-    QCOMPARE( db1.getNrSymbols(), 2 );
-    QCOMPARE( db1.getSet("i").numberRecords(), 2 );
-    QCOMPARE( db1.getParameter("a").numberRecords(), 2 );
-    QVERIFY_EXCEPTION_THROWN( db1.getSet( "x" ), GAMSException );
+    EXPECT_EQ( db1.getNrSymbols(), 2 );
+    EXPECT_EQ( db1.getSet("i").numberRecords(), 2 );
+    EXPECT_EQ( db1.getParameter("a").numberRecords(), 2 );
+    EXPECT_THROW( db1.getSet( "x" ), GAMSException );
 }
 
-void TestGAMSDatabase::testIsValid()  {
+TEST_F(TestGAMSDatabase, testIsValid) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -111,7 +113,7 @@ void TestGAMSDatabase::testIsValid()  {
     ASSERT_TRUE( db.isValid() );
 }
 
-void TestGAMSDatabase::testBegin() {
+TEST_F(TestGAMSDatabase, testBegin) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -120,10 +122,10 @@ void TestGAMSDatabase::testBegin() {
     GAMSDatabase db = job.outDB();
     ASSERT_TRUE( db.isValid() );
     GAMSDatabaseIter it = db.begin();
-    QCOMPARE((*it).name().c_str(), "i");
+    EXPECT_EQ((*it).name().c_str(), "i");
 }
 
-void TestGAMSDatabase::testEnd()  {
+TEST_F(TestGAMSDatabase, testEnd) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -139,7 +141,7 @@ void TestGAMSDatabase::testEnd()  {
     ASSERT_TRUE( it == it_end );
 }
 
-void TestGAMSDatabase::testLogID() {
+TEST_F(TestGAMSDatabase, testLogID) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -147,7 +149,7 @@ void TestGAMSDatabase::testLogID() {
     GAMSDatabase db2 = ws.addDatabase();
 
     // when, then
-    QCOMPARE( db1.logID(), db2.logID() );
+    EXPECT_EQ( db1.logID(), db2.logID() );
 
     GAMSWorkspaceInfo anotherWsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace anotherws(anotherWsInfo);
@@ -155,25 +157,25 @@ void TestGAMSDatabase::testLogID() {
     ASSERT_TRUE( db3.logID() != db2.logID());
 }
 
-void TestGAMSDatabase::testGetNrSymbols() {
+TEST_F(TestGAMSDatabase, testGetNrSymbols) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     // when, then
     GAMSDatabase db = ws.addDatabase();
-    QCOMPARE( db.getNrSymbols(), 0 );
+    EXPECT_EQ( db.getNrSymbols(), 0 );
     // when, then
     TestGAMSObject::getTestData_Set_markets_j(db);
-    QCOMPARE( db.getNrSymbols(), 1 );
+    EXPECT_EQ( db.getNrSymbols(), 1 );
     // when, then
     TestGAMSObject::getTestData_Set_plants_i(db);
-    QCOMPARE( db.getNrSymbols(), 2 );
+    EXPECT_EQ( db.getNrSymbols(), 2 );
     // when, then
     TestGAMSObject::getTestData_Parameter_freightcost_f(db);
-    QCOMPARE( db.getNrSymbols(), 3 );
+    EXPECT_EQ( db.getNrSymbols(), 3 );
 }
 
-void TestGAMSDatabase::testSetSuppressAutoDomainChecking_data() {
+TEST_F(TestGAMSDatabase, testSetSuppressAutoDomainChecking_data) {
     QTest::addColumn<bool>("suppressed");
     QTest::addColumn<QString>("gdxfilename");
 
@@ -181,7 +183,7 @@ void TestGAMSDatabase::testSetSuppressAutoDomainChecking_data() {
     QTest::newRow("UnsuppressedAutoDomainChecking") << false << "unsuppressed.gdx" ;
 }
 
-void TestGAMSDatabase::testSetSuppressAutoDomainChecking() {
+TEST_F(TestGAMSDatabase, testSetSuppressAutoDomainChecking) {
     QFETCH(bool, suppressed);
     QFETCH(QString, gdxfilename);
 
@@ -204,11 +206,11 @@ void TestGAMSDatabase::testSetSuppressAutoDomainChecking() {
                           QString::fromStdString(db.name())+QString::fromStdString(".gdx"));
         ASSERT_TRUE( gdxfile.exists() );
     }  else {
-        QVERIFY_EXCEPTION_THROWN( db.doExport( gdxfilename.toStdString() ), GAMSException );
+        EXPECT_THROW( db.doExport( gdxfilename.toStdString() ), GAMSException );
     }
 }
 
-void TestGAMSDatabase::testGetSuppressAutoDomainChecking() {
+TEST_F(TestGAMSDatabase, testGetSuppressAutoDomainChecking) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -216,15 +218,15 @@ void TestGAMSDatabase::testGetSuppressAutoDomainChecking() {
     // when
     db.setSuppressAutoDomainChecking( true );
     // then
-    QCOMPARE( db.suppressAutoDomainChecking() , true );
+    EXPECT_EQ( db.suppressAutoDomainChecking() , true );
 
     // when
     db.setSuppressAutoDomainChecking( false );
     // then
-    QCOMPARE( db.suppressAutoDomainChecking() , false );
+    EXPECT_EQ( db.suppressAutoDomainChecking() , false );
 }
 
-void TestGAMSDatabase::testGetName() {
+TEST_F(TestGAMSDatabase, testGetName) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -236,19 +238,19 @@ void TestGAMSDatabase::testGetName() {
     // when, then
     std::string dbname = "myDatabase";
     GAMSDatabase db2 = ws.addDatabase(dbname);
-    QCOMPARE( db2.name(), dbname );
+    EXPECT_EQ( db2.name(), dbname );
 }
 
-void TestGAMSDatabase::testGetWorkspace() {
+TEST_F(TestGAMSDatabase, testGetWorkspace) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
-    QCOMPARE( db.workspace(), ws );
+    EXPECT_EQ( db.workspace(), ws );
 }
 
-void TestGAMSDatabase::testDoExport() {
+TEST_F(TestGAMSDatabase, testDoExport) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -260,10 +262,10 @@ void TestGAMSDatabase::testDoExport() {
     QFileInfo gdxfile(QDir(ws.workingDirectory().c_str()),
                       QString::fromStdString(db.name())+QString::fromStdString(".gdx"));
     ASSERT_TRUE( gdxfile.exists() );
-    // @todo more check on gdxfile
+    // TODO: more check on gdxfile
 }
 
-void TestGAMSDatabase::testDoExportWithName() {
+TEST_F(TestGAMSDatabase, testDoExportWithName) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -278,7 +280,7 @@ void TestGAMSDatabase::testDoExportWithName() {
     // @todo more check on gdxfile
 }
 
-void TestGAMSDatabase::testDoExportWithDomainViolation() {
+TEST_F(TestGAMSDatabase, testDoExportWithDomainViolation) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -291,10 +293,10 @@ void TestGAMSDatabase::testDoExportWithDomainViolation() {
     // when
     a.addRecord("i2").setValue( 0.5 );
     // then
-    QVERIFY_EXCEPTION_THROWN( db.doExport("domain.gdx"), GAMSException );
+    EXPECT_THROW( db.doExport("domain.gdx"), GAMSException );
 }
 
-void TestGAMSDatabase::testCheckDomains() {
+TEST_F(TestGAMSDatabase, testCheckDomains) {
     // when
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -315,7 +317,7 @@ void TestGAMSDatabase::testCheckDomains() {
     ASSERT_TRUE( ! db.checkDomains() );
 }
 
-void TestGAMSDatabase::testGetSymbol_data() {
+TEST_F(TestGAMSDatabase, testGetSymbol_data) {
     QTest::addColumn<int>("symbolType");
     QTest::addColumn<QString>("symbolID");
     QTest::addColumn<int>("dimension");
@@ -335,7 +337,7 @@ void TestGAMSDatabase::testGetSymbol_data() {
     QTest::newRow("demand")        << 3 << "demand"  << 1 << "satisfy demand at market j" << 3 ;
 }
 
-void TestGAMSDatabase::testGetSymbol() {
+TEST_F(TestGAMSDatabase, testGetSymbol) {
     QFETCH(int, symbolType);
     QFETCH(QString, symbolID);
     QFETCH(int, dimension);
@@ -354,52 +356,52 @@ void TestGAMSDatabase::testGetSymbol() {
       case GAMSEnum::SymbolType::SymTypeSet :
         {
           GAMSSet set = db.getSet( symbolID.toStdString() );
-          QCOMPARE( set.dim(), dimension );
-          QCOMPARE( set.text(), text.toStdString() );
-          QCOMPARE( set.numberRecords(), numberOfRecords );
-          QVERIFY_EXCEPTION_THROWN( db.getParameter( symbolID.toStdString() ), GAMSException);
-          QVERIFY_EXCEPTION_THROWN( db.getEquation( symbolID.toStdString() ), GAMSException);
-          QVERIFY_EXCEPTION_THROWN( db.getVariable( symbolID.toStdString() ), GAMSException);
+          EXPECT_EQ( set.dim(), dimension );
+          EXPECT_EQ( set.text(), text.toStdString() );
+          EXPECT_EQ( set.numberRecords(), numberOfRecords );
+          EXPECT_THROW( db.getParameter( symbolID.toStdString() ), GAMSException);
+          EXPECT_THROW( db.getEquation( symbolID.toStdString() ), GAMSException);
+          EXPECT_THROW( db.getVariable( symbolID.toStdString() ), GAMSException);
         }
         break;
       case GAMSEnum::SymbolType::SymTypePar :
         {
           GAMSParameter param = db.getParameter( symbolID.toStdString() );
-          QCOMPARE( param.dim(), dimension );
-          QCOMPARE( param.text(), text.toStdString() );
-          QCOMPARE( param.numberRecords(), numberOfRecords );
-          QVERIFY_EXCEPTION_THROWN( db.getSet( symbolID.toStdString() ), GAMSException);
-          QVERIFY_EXCEPTION_THROWN( db.getEquation( symbolID.toStdString() ), GAMSException);
-          QVERIFY_EXCEPTION_THROWN( db.getVariable( symbolID.toStdString() ), GAMSException);
+          EXPECT_EQ( param.dim(), dimension );
+          EXPECT_EQ( param.text(), text.toStdString() );
+          EXPECT_EQ( param.numberRecords(), numberOfRecords );
+          EXPECT_THROW( db.getSet( symbolID.toStdString() ), GAMSException);
+          EXPECT_THROW( db.getEquation( symbolID.toStdString() ), GAMSException);
+          EXPECT_THROW( db.getVariable( symbolID.toStdString() ), GAMSException);
           break;
         }
       case GAMSEnum::SymbolType::SymTypeVar :
         {
           GAMSVariable var = db.getVariable( symbolID.toStdString() );
-          QCOMPARE( var.dim(), dimension );
-          QCOMPARE( var.text(), text.toStdString() );
-          QCOMPARE( var.numberRecords(), numberOfRecords );
-          QVERIFY_EXCEPTION_THROWN( db.getSet( symbolID.toStdString() ), GAMSException);
-          QVERIFY_EXCEPTION_THROWN( db.getEquation( symbolID.toStdString() ), GAMSException);
-          QVERIFY_EXCEPTION_THROWN( db.getParameter( symbolID.toStdString() ), GAMSException);
+          EXPECT_EQ( var.dim(), dimension );
+          EXPECT_EQ( var.text(), text.toStdString() );
+          EXPECT_EQ( var.numberRecords(), numberOfRecords );
+          EXPECT_THROW( db.getSet( symbolID.toStdString() ), GAMSException);
+          EXPECT_THROW( db.getEquation( symbolID.toStdString() ), GAMSException);
+          EXPECT_THROW( db.getParameter( symbolID.toStdString() ), GAMSException);
           break;
         }
       case GAMSEnum::SymbolType::SymTypeEqu :
         {
           GAMSEquation eq = db.getEquation( symbolID.toStdString() );
-          QCOMPARE( eq.dim(),  dimension );
-          QCOMPARE( eq.text(), text.toStdString() );
-          QCOMPARE( eq.numberRecords(), numberOfRecords );
-          QVERIFY_EXCEPTION_THROWN( db.getSet( symbolID.toStdString() ), GAMSException);
-          QVERIFY_EXCEPTION_THROWN( db.getParameter( symbolID.toStdString() ), GAMSException);
-          QVERIFY_EXCEPTION_THROWN( db.getVariable( symbolID.toStdString() ), GAMSException);
+          EXPECT_EQ( eq.dim(),  dimension );
+          EXPECT_EQ( eq.text(), text.toStdString() );
+          EXPECT_EQ( eq.numberRecords(), numberOfRecords );
+          EXPECT_THROW( db.getSet( symbolID.toStdString() ), GAMSException);
+          EXPECT_THROW( db.getParameter( symbolID.toStdString() ), GAMSException);
+          EXPECT_THROW( db.getVariable( symbolID.toStdString() ), GAMSException);
           break;
         }
       default: break;
     }
 }
 
-void TestGAMSDatabase::testAddSet() {
+TEST_F(TestGAMSDatabase, testAddSet) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -407,64 +409,64 @@ void TestGAMSDatabase::testAddSet() {
     // when
     db.addSet("j", 1, "markets");
     // then
-    QCOMPARE( db.getSet("j").name().c_str(), "j" );
-    QCOMPARE( db.getSet("j").dim(), 1 );
-    QCOMPARE( db.getSet("j").text().c_str(), "markets" );
-    QVERIFY_EXCEPTION_THROWN( db.addSet("j", 2), GAMSException);
+    EXPECT_EQ( db.getSet("j").name().c_str(), "j" );
+    EXPECT_EQ( db.getSet("j").dim(), 1 );
+    EXPECT_EQ( db.getSet("j").text().c_str(), "markets" );
+    EXPECT_THROW( db.addSet("j", 2), GAMSException);
 }
 
-void TestGAMSDatabase::testAddSet_NonPositiveDimension() {
+TEST_F(TestGAMSDatabase, testAddSet_NonPositiveDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
-    QVERIFY_EXCEPTION_THROWN( db.addSet("i", 0, "set i"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addSet("i", -1, "set i"), GAMSException);
+    EXPECT_THROW( db.addSet("i", 0, "set i"), GAMSException);
+    EXPECT_THROW( db.addSet("i", -1, "set i"), GAMSException);
 }
 
-void TestGAMSDatabase::testAddSet_ExceedingMaxDimension() {
+TEST_F(TestGAMSDatabase, testAddSet_ExceedingMaxDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
-    QVERIFY_EXCEPTION_THROWN( db.addSet("i", GLOBAL_MAX_INDEX_DIM + 1, "set i"), GAMSException);
+    EXPECT_THROW( db.addSet("i", GLOBAL_MAX_INDEX_DIM + 1, "set i"), GAMSException);
 
     // when
     int max_dim = GLOBAL_MAX_INDEX_DIM;
     GAMSSet max = db.addSet("max", max_dim, "set with maximum dimension");
     // then
-    QCOMPARE( max.dim(), max_dim ) ;
+    EXPECT_EQ( max.dim(), max_dim ) ;
 }
 
-void TestGAMSDatabase::testAddSet_DuplicateIdentifier() {
+TEST_F(TestGAMSDatabase, testAddSet_DuplicateIdentifier) {
      GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
      GAMSWorkspace ws(wsInfo);
 
      GAMSDatabase db = ws.addDatabase();
      GAMSSet i = db.addSet("i", 1, "canning plants");
 
-     QVERIFY_EXCEPTION_THROWN( db.addSet(i.name(), i.dim(),  i.text()), GAMSException);
-     QVERIFY_EXCEPTION_THROWN( db.addSet(i.name(), 2, i.text()), GAMSException);
-     QVERIFY_EXCEPTION_THROWN( db.addSet(i.name(), i.dim(),  "new canning plants"), GAMSException);
+     EXPECT_THROW( db.addSet(i.name(), i.dim(),  i.text()), GAMSException);
+     EXPECT_THROW( db.addSet(i.name(), 2, i.text()), GAMSException);
+     EXPECT_THROW( db.addSet(i.name(), i.dim(),  "new canning plants"), GAMSException);
  }
 
-void TestGAMSDatabase::testAddSet_InvalidStringIdentifier() {
+TEST_F(TestGAMSDatabase, testAddSet_InvalidStringIdentifier) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
-    QVERIFY_EXCEPTION_THROWN( db.addSet("", 1, "empty set"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addSet("*", 1, "star/univerise"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addSet("i j", 1, "white space"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addSet("i*j", 1, "star/universe"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addSet("n!", 1, "exclamation marks"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addSet("n/", 1, "slash"), GAMSException);
+    EXPECT_THROW( db.addSet("", 1, "empty set"), GAMSException);
+    EXPECT_THROW( db.addSet("*", 1, "star/univerise"), GAMSException);
+    EXPECT_THROW( db.addSet("i j", 1, "white space"), GAMSException);
+    EXPECT_THROW( db.addSet("i*j", 1, "star/universe"), GAMSException);
+    EXPECT_THROW( db.addSet("n!", 1, "exclamation marks"), GAMSException);
+    EXPECT_THROW( db.addSet("n/", 1, "slash"), GAMSException);
 }
 
-void TestGAMSDatabase::testAddParameter() {
+TEST_F(TestGAMSDatabase, testAddParameter) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -472,64 +474,64 @@ void TestGAMSDatabase::testAddParameter() {
     // when
     db.addParameter("b", 1, "demand at market j in cases");
     // then
-    QCOMPARE( db.getParameter("b").name().c_str(), "b" );
-    QCOMPARE( db.getParameter("b").dim(), 1 );
-    QCOMPARE( db.getParameter("b").text().c_str(),"demand at market j in cases" );
+    EXPECT_EQ( db.getParameter("b").name().c_str(), "b" );
+    EXPECT_EQ( db.getParameter("b").dim(), 1 );
+    EXPECT_EQ( db.getParameter("b").text().c_str(),"demand at market j in cases" );
 }
 
-void TestGAMSDatabase::testAddParameter_NegativeDimension() {
+TEST_F(TestGAMSDatabase, testAddParameter_NegativeDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
-    QVERIFY_EXCEPTION_THROWN( db.addParameter("p", -1, "parameter p"), GAMSException);
+    EXPECT_THROW( db.addParameter("p", -1, "parameter p"), GAMSException);
 
     // when
     GAMSParameter p = db.addParameter("p", 0, "parameter p");
     // then
-    QCOMPARE( p.dim(), 0 ) ;
+    EXPECT_EQ( p.dim(), 0 ) ;
 }
 
-void TestGAMSDatabase::testAddParameter_ExceedingMaxDimension() {
+TEST_F(TestGAMSDatabase, testAddParameter_ExceedingMaxDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
-    QVERIFY_EXCEPTION_THROWN( db.addParameter("p2", GLOBAL_MAX_INDEX_DIM + 1, "parameter p2"), GAMSException);
+    EXPECT_THROW( db.addParameter("p2", GLOBAL_MAX_INDEX_DIM + 1, "parameter p2"), GAMSException);
 
     // when
     int max_dim = GLOBAL_MAX_INDEX_DIM;
     GAMSParameter max = db.addParameter("max", max_dim, "parameter with maximum dimension");
-    QCOMPARE( max.dim(), max_dim );
+    EXPECT_EQ( max.dim(), max_dim );
 }
 
-void TestGAMSDatabase::testAddParameter_DuplicateIdentifier() {
+TEST_F(TestGAMSDatabase, testAddParameter_DuplicateIdentifier) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     db.addParameter("p", 1, "parameter p");
     // when, then
-    QVERIFY_EXCEPTION_THROWN( db.addParameter("p", 2, "parameter p1"), GAMSException);
+    EXPECT_THROW( db.addParameter("p", 2, "parameter p1"), GAMSException);
 }
 
-void TestGAMSDatabase::testAddParameter_InvalidStringIdentifier() {
+TEST_F(TestGAMSDatabase, testAddParameter_InvalidStringIdentifier) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
 
     // when, then
-    QVERIFY_EXCEPTION_THROWN( db.addParameter("", 1, "empty string"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addParameter("*", 1, "star/univerise"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addParameter("i*j", 1, "star/univerise"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addParameter("n!", 1, "exclamation mark"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addParameter("n/", 1, "slash"), GAMSException);
+    EXPECT_THROW( db.addParameter("", 1, "empty string"), GAMSException);
+    EXPECT_THROW( db.addParameter("*", 1, "star/univerise"), GAMSException);
+    EXPECT_THROW( db.addParameter("i*j", 1, "star/univerise"), GAMSException);
+    EXPECT_THROW( db.addParameter("n!", 1, "exclamation mark"), GAMSException);
+    EXPECT_THROW( db.addParameter("n/", 1, "slash"), GAMSException);
 }
 
-void TestGAMSDatabase::testAddVariable() {
+TEST_F(TestGAMSDatabase, testAddVariable) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -537,70 +539,70 @@ void TestGAMSDatabase::testAddVariable() {
     // when
     db.addVariable("x", 2, GAMSEnum::VarType::Positive, "shipment quantities in cases");
     // then
-    QCOMPARE( db.getVariable("x").name().c_str(), "x" );
-    QCOMPARE( db.getVariable("x").dim(), 2 );
-    QCOMPARE( db.getVariable("x").varType(),  GAMSEnum::VarType::Positive);
-    QCOMPARE( db.getVariable("x").text().c_str(),"shipment quantities in cases" );
+    EXPECT_EQ( db.getVariable("x").name().c_str(), "x" );
+    EXPECT_EQ( db.getVariable("x").dim(), 2 );
+    EXPECT_EQ( db.getVariable("x").varType(),  GAMSEnum::VarType::Positive);
+    EXPECT_EQ( db.getVariable("x").text().c_str(),"shipment quantities in cases" );
 
     // when
     int max_dimension = GLOBAL_MAX_INDEX_DIM;
     db.addVariable("y", max_dimension, GAMSEnum::VarType::Positive, "variable y");
-    QCOMPARE( db.getVariable("y").dim(), max_dimension );
+    EXPECT_EQ( db.getVariable("y").dim(), max_dimension );
 }
 
-void TestGAMSDatabase::testAddVariable_NegativeDimension() {
+TEST_F(TestGAMSDatabase, testAddVariable_NegativeDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
-    QVERIFY_EXCEPTION_THROWN( db.addVariable("x",  -1, GAMSEnum::VarType::Positive, "variable x"), GAMSException);
+    EXPECT_THROW( db.addVariable("x",  -1, GAMSEnum::VarType::Positive, "variable x"), GAMSException);
 
     // when
     GAMSVariable x = db.addVariable("x",  0, GAMSEnum::VarType::Positive, "variable x");
     // then
-    QCOMPARE( x.dim(), 0 ) ;
+    EXPECT_EQ( x.dim(), 0 ) ;
 }
 
-void TestGAMSDatabase::testAddVariable_ExceedingMaxDimension() {
+TEST_F(TestGAMSDatabase, testAddVariable_ExceedingMaxDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
-    QVERIFY_EXCEPTION_THROWN( db.addVariable("x",  GLOBAL_MAX_INDEX_DIM + 1, GAMSEnum::VarType::Positive, "variable x")
+    EXPECT_THROW( db.addVariable("x",  GLOBAL_MAX_INDEX_DIM + 1, GAMSEnum::VarType::Positive, "variable x")
                               , GAMSException);
 
     // when
     int max_dim = GLOBAL_MAX_INDEX_DIM;
     GAMSVariable max = db.addVariable("max", max_dim, GAMSEnum::VarType::Positive,"variable with maximum dimension");
-    QCOMPARE( max.dim(), max_dim ) ;
+    EXPECT_EQ( max.dim(), max_dim ) ;
 }
 
-void TestGAMSDatabase::testAddVariable_DuplicateIdentifier() {
+TEST_F(TestGAMSDatabase, testAddVariable_DuplicateIdentifier) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     db.addVariable("x", 1,  GAMSEnum::VarType::Positive, "variable x");
     // when, then
-    QVERIFY_EXCEPTION_THROWN( db.addVariable("x", 2, GAMSEnum::VarType::Free, "new variable x"), GAMSException);
+    EXPECT_THROW( db.addVariable("x", 2, GAMSEnum::VarType::Free, "new variable x"), GAMSException);
 }
 
-void TestGAMSDatabase::testAddVariable_InvalidStringIdentifier() {
+TEST_F(TestGAMSDatabase, testAddVariable_InvalidStringIdentifier) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
-    QVERIFY_EXCEPTION_THROWN( db.addVariable("", 1, GAMSEnum::VarType::Free, "empty string"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addVariable("*", 1, GAMSEnum::VarType::Free, "whitespace"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addVariable("i j", 1, GAMSEnum::VarType::Free, "variable x"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addVariable("n!", 1, GAMSEnum::VarType::Free, "exclamation mark"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addVariable("n/", 1, GAMSEnum::VarType::Free, "slash"), GAMSException);
+    EXPECT_THROW( db.addVariable("", 1, GAMSEnum::VarType::Free, "empty string"), GAMSException);
+    EXPECT_THROW( db.addVariable("*", 1, GAMSEnum::VarType::Free, "whitespace"), GAMSException);
+    EXPECT_THROW( db.addVariable("i j", 1, GAMSEnum::VarType::Free, "variable x"), GAMSException);
+    EXPECT_THROW( db.addVariable("n!", 1, GAMSEnum::VarType::Free, "exclamation mark"), GAMSException);
+    EXPECT_THROW( db.addVariable("n/", 1, GAMSEnum::VarType::Free, "slash"), GAMSException);
 }
 
-void TestGAMSDatabase::testAddEquation() {
+TEST_F(TestGAMSDatabase, testAddEquation) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -608,18 +610,18 @@ void TestGAMSDatabase::testAddEquation() {
     // when
     auto equation = db.addEquation("s", 1, GAMSEnum::EquType::L, "observe supply limit at plant i");
     // then
-    QCOMPARE( db.getNrSymbols(), 1);
+    EXPECT_EQ( db.getNrSymbols(), 1);
     try {
-        QCOMPARE(equation.name().c_str(), "s");
-        QCOMPARE(equation.dim(), 1);
-        QCOMPARE(equation.equType(), GAMSEnum::EquType::L);
-        QCOMPARE(equation.text().c_str(), "observe supply limit at plant i");
+        EXPECT_EQ(equation.name().c_str(), "s");
+        EXPECT_EQ(equation.dim(), 1);
+        EXPECT_EQ(equation.equType(), GAMSEnum::EquType::L);
+        EXPECT_EQ(equation.text().c_str(), "observe supply limit at plant i");
     } catch(GAMSException& e) {
         QFAIL(qPrintable( "Unexpected GAMSException raised by: "+ QString::fromStdString(e.what()) ));
     }
 }
 
-void TestGAMSDatabase::testGetEquation() {
+TEST_F(TestGAMSDatabase, testGetEquation) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -627,68 +629,68 @@ void TestGAMSDatabase::testGetEquation() {
     // when
     auto initEquation = db.addEquation("s", 1, GAMSEnum::EquType::L, "observe supply limit at plant i");
     // then
-    QCOMPARE( db.getNrSymbols(), 1);
+    EXPECT_EQ( db.getNrSymbols(), 1);
     try {
         auto getEquation = db.getEquation("s");
-        QCOMPARE(initEquation, getEquation);
+        EXPECT_EQ(initEquation, getEquation);
     } catch(GAMSException& e) {
         QFAIL(qPrintable( "Unexpected GAMSException raised by: "+ QString::fromStdString(e.what()) ));
     }
 }
 
-void TestGAMSDatabase::testAddEquation_NegativeDimension() {
+TEST_F(TestGAMSDatabase, testAddEquation_NegativeDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
-    QVERIFY_EXCEPTION_THROWN( db.addEquation("eq",  -1, GAMSEnum::EquType::E, "equation eq")
+    EXPECT_THROW( db.addEquation("eq",  -1, GAMSEnum::EquType::E, "equation eq")
                               , GAMSException);
 
     // when
     GAMSEquation eq = db.addEquation("eq", 0, GAMSEnum::EquType::E, "equation eq");
     // then
-    QCOMPARE( eq.dim(), 0 ) ;
+    EXPECT_EQ( eq.dim(), 0 ) ;
 }
 
-void TestGAMSDatabase::testAddEquation_ExceedingMaxDimension() {
+TEST_F(TestGAMSDatabase, testAddEquation_ExceedingMaxDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
-    QVERIFY_EXCEPTION_THROWN( db.addEquation("eq",  GLOBAL_MAX_INDEX_DIM+1, GAMSEnum::EquType::E, "equation eq")
+    EXPECT_THROW( db.addEquation("eq",  GLOBAL_MAX_INDEX_DIM+1, GAMSEnum::EquType::E, "equation eq")
                               , GAMSException);
     // when
     int max_dim = GLOBAL_MAX_INDEX_DIM;
     GAMSEquation max = db.addEquation("max", max_dim, GAMSEnum::EquType::E, "equation with maximum dimension");
-    QCOMPARE( max.dim(), max_dim ) ;
+    EXPECT_EQ( max.dim(), max_dim ) ;
 }
 
-void TestGAMSDatabase::testAddEquation_DuplicateIdentifier() {
+TEST_F(TestGAMSDatabase, testAddEquation_DuplicateIdentifier) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     db.addEquation("s", 1, GAMSEnum::EquType::L, "observe supply limit at plant i");
     // when, then
-    QVERIFY_EXCEPTION_THROWN( db.addEquation("s", 2, GAMSEnum::EquType::E, "new equation s"), GAMSException);
+    EXPECT_THROW( db.addEquation("s", 2, GAMSEnum::EquType::E, "new equation s"), GAMSException);
 }
 
-void TestGAMSDatabase::testAddEquation_InvalidStringIdentifier() {
+TEST_F(TestGAMSDatabase, testAddEquation_InvalidStringIdentifier) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
-    QVERIFY_EXCEPTION_THROWN( db.addEquation("", 1, GAMSEnum::EquType::E, "new equation"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addEquation("*", 1, GAMSEnum::EquType::L, "whitespace"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addEquation("i j", 1, GAMSEnum::EquType::G, "variable x"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addEquation("n!", 1, GAMSEnum::EquType::E, "exclamation mark"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.addEquation("n/", 1, GAMSEnum::EquType::L, "slash"), GAMSException);
+    EXPECT_THROW( db.addEquation("", 1, GAMSEnum::EquType::E, "new equation"), GAMSException);
+    EXPECT_THROW( db.addEquation("*", 1, GAMSEnum::EquType::L, "whitespace"), GAMSException);
+    EXPECT_THROW( db.addEquation("i j", 1, GAMSEnum::EquType::G, "variable x"), GAMSException);
+    EXPECT_THROW( db.addEquation("n!", 1, GAMSEnum::EquType::E, "exclamation mark"), GAMSException);
+    EXPECT_THROW( db.addEquation("n/", 1, GAMSEnum::EquType::L, "slash"), GAMSException);
 }
 
-void TestGAMSDatabase::testIterator() {
+TEST_F(TestGAMSDatabase, testIterator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -717,8 +719,8 @@ void TestGAMSDatabase::testIterator() {
        }
     }
     // then
-    QCOMPARE( symbolCounter["GAMSSet"], 2 );
-    QCOMPARE( symbolCounter["GAMSParameter"], 4 );
+    EXPECT_EQ( symbolCounter["GAMSSet"], 2 );
+    EXPECT_EQ( symbolCounter["GAMSParameter"], 4 );
     // cleanup
     try {
         db.clear();
@@ -727,7 +729,7 @@ void TestGAMSDatabase::testIterator() {
     }
 }
 
-void TestGAMSDatabase::testGetDatabaseDVs() {
+TEST_F(TestGAMSDatabase, testGetDatabaseDVs) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -735,7 +737,7 @@ void TestGAMSDatabase::testGetDatabaseDVs() {
     TestGAMSObject::getTestData_Database_DomainViolations( db );
 
     // when, then
-    QCOMPARE( db.getDatabaseDVs(0, 5).size(), size_t(2) );
+    EXPECT_EQ( db.getDatabaseDVs(0, 5).size(), size_t(2) );
 
     std::map<std::string, size_t> symbolCounter;
     std::map<std::string, size_t> recordCounter;
@@ -747,16 +749,16 @@ void TestGAMSDatabase::testGetDatabaseDVs() {
             recordCounter[ss.str()]++;
         }
     }
-    QCOMPARE( symbolCounter.size(), size_t(2) );
-    QCOMPARE( symbolCounter["a"], size_t(2) );
-    QCOMPARE( symbolCounter["b"], size_t(1) );
-    QCOMPARE( recordCounter.size(), size_t(3) );
-    QCOMPARE( recordCounter["a_Alburquerque"], size_t(1) );
-    QCOMPARE( recordCounter["a_Sanfrancisco"], size_t(1) );
-    QCOMPARE( recordCounter["b_Braunschweig"], size_t(1) );
+    EXPECT_EQ( symbolCounter.size(), size_t(2) );
+    EXPECT_EQ( symbolCounter["a"], size_t(2) );
+    EXPECT_EQ( symbolCounter["b"], size_t(1) );
+    EXPECT_EQ( recordCounter.size(), size_t(3) );
+    EXPECT_EQ( recordCounter["a_Alburquerque"], size_t(1) );
+    EXPECT_EQ( recordCounter["a_Sanfrancisco"], size_t(1) );
+    EXPECT_EQ( recordCounter["b_Braunschweig"], size_t(1) );
 }
 
-void TestGAMSDatabase::testGetDatabaseDVs_MaxViolation() {
+TEST_F(TestGAMSDatabase, testGetDatabaseDVs_MaxViolation) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -764,7 +766,7 @@ void TestGAMSDatabase::testGetDatabaseDVs_MaxViolation() {
     TestGAMSObject::getTestData_Database_DomainViolations( db );
 
     // when, then
-    { QCOMPARE( db.getDatabaseDVs(1, 1).size(), size_t(1) );
+    { EXPECT_EQ( db.getDatabaseDVs(1, 1).size(), size_t(1) );
       std::map<std::string, size_t> symbolCounter;
       std::map<std::string, size_t> recordCounter;
       for(GAMSDatabaseDomainViolation domViol : db.getDatabaseDVs(1, 1)){
@@ -773,47 +775,47 @@ void TestGAMSDatabase::testGetDatabaseDVs_MaxViolation() {
               recordCounter[rec.violRec().key(0)]++;
           }
       }
-      QCOMPARE( symbolCounter.size(), size_t(1) );
-      QCOMPARE( symbolCounter["a"] + symbolCounter["b"], size_t(1) );
-      QCOMPARE( recordCounter.size(), size_t(1) );
+      EXPECT_EQ( symbolCounter.size(), size_t(1) );
+      EXPECT_EQ( symbolCounter["a"] + symbolCounter["b"], size_t(1) );
+      EXPECT_EQ( recordCounter.size(), size_t(1) );
     }
 
     // when, then
     for(auto &item : db.getDatabaseDVs(3, 1)){
-       QCOMPARE(item.violRecs().size(), size_t(1));
+       EXPECT_EQ(item.violRecs().size(), size_t(1));
     }
-    QCOMPARE(db.getDatabaseDVs(3, 1).size(), size_t(2));
+    EXPECT_EQ(db.getDatabaseDVs(3, 1).size(), size_t(2));
 
 
     for(auto &item : db.getDatabaseDVs(2, 1)){
-       QCOMPARE(item.violRecs().size(), size_t(1));
+       EXPECT_EQ(item.violRecs().size(), size_t(1));
     }
-    QCOMPARE(db.getDatabaseDVs(2, 1).size(), size_t(2));
+    EXPECT_EQ(db.getDatabaseDVs(2, 1).size(), size_t(2));
 
 
     int counter = 0;
     for(auto &item : db.getDatabaseDVs(0, 5)){
         switch (counter) {
             case 0:
-                QCOMPARE(item.violRecs().size(), size_t(2));
+                EXPECT_EQ(item.violRecs().size(), size_t(2));
             break;
             case 1:
-                QCOMPARE(item.violRecs().size(), size_t(1));
+                EXPECT_EQ(item.violRecs().size(), size_t(1));
             break;
         }
         counter++;
     }
-    QCOMPARE(db.getDatabaseDVs(0, 5).size(), size_t(2));
+    EXPECT_EQ(db.getDatabaseDVs(0, 5).size(), size_t(2));
 
 
     for(auto &item : db.getDatabaseDVs(2, 0)){
-       QCOMPARE(item.violRecs().size(), size_t(2));
+       EXPECT_EQ(item.violRecs().size(), size_t(2));
     }
-    QCOMPARE(db.getDatabaseDVs(2, 0).size(), size_t(1));
+    EXPECT_EQ(db.getDatabaseDVs(2, 0).size(), size_t(1));
 }
 
 
-void TestGAMSDatabase::testEqualToOperator() {
+TEST_F(TestGAMSDatabase, testEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -834,7 +836,7 @@ void TestGAMSDatabase::testEqualToOperator() {
 
 }
 
-void TestGAMSDatabase::testNotEqualToOperator() {
+TEST_F(TestGAMSDatabase, testNotEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -854,7 +856,7 @@ void TestGAMSDatabase::testNotEqualToOperator() {
     ASSERT_TRUE( db4 != db1 );
 }
 
-void TestGAMSDatabase::testClear() {
+TEST_F(TestGAMSDatabase, testClear) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -864,16 +866,16 @@ void TestGAMSDatabase::testClear() {
     // when
     db.clear();
     // then
-    QCOMPARE( db.getNrSymbols(), numberOfSymbols );
-    QCOMPARE( db.getSet("i").numberRecords(), 0 );
-    QCOMPARE( db.getSet("j").numberRecords(), 0 );
-    QCOMPARE( db.getParameter("a").numberRecords(), 0 );
-    QCOMPARE( db.getParameter("b").numberRecords(), 0 );
-    QCOMPARE( db.getParameter("d").numberRecords(), 0 );
-    QCOMPARE( db.getParameter("f").numberRecords(), 0 );
+    EXPECT_EQ( db.getNrSymbols(), numberOfSymbols );
+    EXPECT_EQ( db.getSet("i").numberRecords(), 0 );
+    EXPECT_EQ( db.getSet("j").numberRecords(), 0 );
+    EXPECT_EQ( db.getParameter("a").numberRecords(), 0 );
+    EXPECT_EQ( db.getParameter("b").numberRecords(), 0 );
+    EXPECT_EQ( db.getParameter("d").numberRecords(), 0 );
+    EXPECT_EQ( db.getParameter("f").numberRecords(), 0 );
 }
 
-void TestGAMSDatabase::testClearOutOfScopedDatabase() {
+TEST_F(TestGAMSDatabase, testClearOutOfScopedDatabase) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
     GAMSWorkspace ws(wsInfo);
@@ -886,12 +888,11 @@ void TestGAMSDatabase::testClearOutOfScopedDatabase() {
        db2.clear();
     }
     // then
-    QCOMPARE( db1.getNrSymbols(), numberOfSymbols );
-    QCOMPARE( db1.getSet("i").numberRecords(), 0 );
-    QCOMPARE( db1.getSet("j").numberRecords(), 0 );
-    QCOMPARE( db1.getParameter("a").numberRecords(), 0 );
-    QCOMPARE( db1.getParameter("b").numberRecords(), 0 );
-    QCOMPARE( db1.getParameter("d").numberRecords(), 0 );
-    QCOMPARE( db1.getParameter("f").numberRecords(), 0 );
+    EXPECT_EQ( db1.getNrSymbols(), numberOfSymbols );
+    EXPECT_EQ( db1.getSet("i").numberRecords(), 0 );
+    EXPECT_EQ( db1.getSet("j").numberRecords(), 0 );
+    EXPECT_EQ( db1.getParameter("a").numberRecords(), 0 );
+    EXPECT_EQ( db1.getParameter("b").numberRecords(), 0 );
+    EXPECT_EQ( db1.getParameter("d").numberRecords(), 0 );
+    EXPECT_EQ( db1.getParameter("f").numberRecords(), 0 );
 }
-QTEST_MAIN(TestGAMSDatabase)

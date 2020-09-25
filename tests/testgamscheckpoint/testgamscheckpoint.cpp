@@ -32,8 +32,6 @@
 #include "gamsoptions.h"
 #include "gamsversion.h"
 
-#include <gtest/gtest.h>
-#include <gmock/gmock-matchers.h>
 using namespace gams;
 
 class TestGAMSCheckpoint: public TestGAMSObject
@@ -62,8 +60,8 @@ TEST_F(TestGAMSCheckpoint, testConstructor) {
     std::string cpname = "mycp";
     GAMSCheckpoint cp(ws, cpname);
     ASSERT_TRUE( cp.isValid() );
-    QCOMPARE( cp.workspace(), ws);
-    QCOMPARE( cp.name(), cpname);
+    EXPECT_EQ( cp.workspace(), ws);
+    EXPECT_EQ( cp.name(), cpname);
 }
 
 TEST_F(TestGAMSCheckpoint, testAssignmentOperator) {
@@ -73,20 +71,20 @@ TEST_F(TestGAMSCheckpoint, testAssignmentOperator) {
     GAMSCheckpoint cp1 = ws.addCheckpoint();
 
     GAMSCheckpoint cp2 = cp1;
-    QCOMPARE( cp2, cp1 );
+    EXPECT_EQ( cp2, cp1 );
 }
 
 TEST_F(TestGAMSCheckpoint, testAddModelInstance) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
-        GAMSWorkspace ws(wsInfo);
-        GAMSCheckpoint cp = ws.addCheckpoint();
-        // when
-        GAMSModelInstance mi = cp.addModelInstance();
-        // then
-        GAMSDatabase db = mi.syncDb();
-        ASSERT_TRUE( db.isValid() );
-        QCOMPARE( db.getNrSymbols(), 0 );
+    GAMSWorkspace ws(wsInfo);
+    GAMSCheckpoint cp = ws.addCheckpoint();
+    // when
+    GAMSModelInstance mi = cp.addModelInstance();
+    // then
+    GAMSDatabase db = mi.syncDb();
+    ASSERT_TRUE( db.isValid() );
+    EXPECT_EQ( db.getNrSymbols(), 0 );
 }
 
 TEST_F(TestGAMSCheckpoint, testGetWorkspace) {
@@ -95,7 +93,7 @@ TEST_F(TestGAMSCheckpoint, testGetWorkspace) {
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     // when, then
-    QCOMPARE(cp.workspace(), ws);
+    EXPECT_EQ(cp.workspace(), ws);
 }
 
 TEST_F(TestGAMSCheckpoint, testGetName) {
@@ -115,7 +113,7 @@ TEST_F(TestGAMSCheckpoint, testGetLogID) {
     GAMSCheckpoint cp1 = ws.addCheckpoint();
     GAMSCheckpoint cp2(cp1);
     // when, then
-    QCOMPARE( cp1.logID(), cp2.logID() );
+    EXPECT_EQ( cp1.logID(), cp2.logID() );
     ASSERT_TRUE( cp1.logID()== cp2.logID() );
 
     GAMSCheckpoint cp3 = ws.addCheckpoint("mycp");
@@ -161,7 +159,7 @@ TEST_F(TestGAMSCheckpoint, testCopyConstructor) {
     // when
     GAMSCheckpoint cp2(cp1);
     // then
-    QCOMPARE(cp2, cp1);
+    EXPECT_EQ(cp2, cp1);
 }
 
 TEST_F(TestGAMSCheckpoint, testUninitializedCheckpoint) {

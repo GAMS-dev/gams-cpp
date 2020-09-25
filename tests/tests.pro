@@ -25,7 +25,7 @@
 TEMPLATE = subdirs
 
 SUBDIRS += testgamscheckpoint
-#SUBDIRS += testgamsdatabase
+SUBDIRS += testgamsdatabase
 #SUBDIRS += testgamsdatabasedomainviolation
 #SUBDIRS += testgamsdatabaseiter
 #SUBDIRS += testgamsdomain
