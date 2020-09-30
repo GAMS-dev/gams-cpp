@@ -89,6 +89,8 @@ string GAMSPlatform::findGams(LogId logId)
 {
 #ifdef _WIN32
     return findGamsOnWindows(logId);
+#elif __APPLE__
+    return findGamsOnApple(logId);
 #else
     return findGamsOnUnix(logId);
 #endif
@@ -98,6 +100,8 @@ void GAMSPlatform::ensureEnvPathContains(const char *dirName)
 {
 #ifdef _WIN32
     ensureEnvPathSetOnWindows(dirName);
+#elif __APPLE__
+    ensureEnvPathSetOnApple(dirName);
 #else
     ensureEnvPathSetOnUnix(dirName);
 #endif
@@ -110,6 +114,14 @@ bool GAMSPlatform::interrupt(long pid)
 #else
     return interruptOnNonWindows(pid);
 #endif
+}
+
+string GAMSPlatform::findGamsOnApple(LogId logId)
+{
+    string path = findGamsOnUnix(logId);
+    if (!path.empty())
+        return path;
+    return "/Library/Frameworks/GAMS.framework/Versions/Current/Resources";
 }
 
 string GAMSPlatform::findGamsOnUnix(LogId logId)
@@ -148,6 +160,11 @@ string GAMSPlatform::findGamsOnUnix(LogId logId)
 }
 
 void GAMSPlatform::ensureEnvPathSetOnUnix(const char *dirName)
+{
+    // TODO?
+}
+
+void GAMSPlatform::ensureEnvPathSetOnApple(const char *dirName)
 {
     // TODO?
 }
