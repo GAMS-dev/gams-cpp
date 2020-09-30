@@ -58,9 +58,9 @@ unix:{
         linux-g++ {
             # set minimum gcc version
             GCCMAJORVERSION=$$system("gcc -dumpversion")
-            lessThan(GCCMAJORVERSION, 8): {
-                QMAKE_CC=gcc-8
-                QMAKE_CXX=g++-8
+            lessThan(GCCMAJORVERSION, 9): {
+                QMAKE_CC=gcc-9
+                QMAKE_CXX=g++-9
             }
         }
     }
