@@ -122,7 +122,7 @@ TEST_F(TestGAMSDatabase, testBegin) {
     GAMSDatabase db = job.outDB();
     ASSERT_TRUE( db.isValid() );
     GAMSDatabaseIter it = db.begin();
-    EXPECT_EQ((*it).name().c_str(), "i");
+    EXPECT_STREQ((*it).name().c_str(), "i");
 }
 
 TEST_F(TestGAMSDatabase, testEnd) {
@@ -173,41 +173,6 @@ TEST_F(TestGAMSDatabase, testGetNrSymbols) {
     // when, then
     TestGAMSObject::getTestData_Parameter_freightcost_f(db);
     EXPECT_EQ( db.getNrSymbols(), 3 );
-}
-
-TEST_F(TestGAMSDatabase, testSetSuppressAutoDomainChecking_data) {
-    QTest::addColumn<bool>("suppressed");
-    QTest::addColumn<QString>("gdxfilename");
-
-    QTest::newRow("SuppressedAutoDomainChecking")   << true  << "suppressed.gdx";
-    QTest::newRow("UnsuppressedAutoDomainChecking") << false << "unsuppressed.gdx" ;
-}
-
-TEST_F(TestGAMSDatabase, testSetSuppressAutoDomainChecking) {
-    QFETCH(bool, suppressed);
-    QFETCH(QString, gdxfilename);
-
-    // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
-    GAMSWorkspace ws(wsInfo);
-
-    GAMSDatabase db = ws.addDatabase();
-    GAMSSet i = db.addSet("i", "");
-    i.addRecord("i1");
-    GAMSParameter a = db.addParameter("x", "", i);
-    a.addRecord("i1").setValue( 0.5 );
-    a.addRecord("i2").setValue( 1.2 );
-    // when
-    db.setSuppressAutoDomainChecking(suppressed);
-    // then
-    if (suppressed) {
-        db.doExport();
-        QFileInfo gdxfile(QDir(ws.workingDirectory().c_str()),
-                          QString::fromStdString(db.name())+QString::fromStdString(".gdx"));
-        ASSERT_TRUE( gdxfile.exists() );
-    }  else {
-        EXPECT_THROW( db.doExport( gdxfilename.toStdString() ), GAMSException );
-    }
 }
 
 TEST_F(TestGAMSDatabase, testGetSuppressAutoDomainChecking) {
@@ -317,90 +282,6 @@ TEST_F(TestGAMSDatabase, testCheckDomains) {
     ASSERT_TRUE( ! db.checkDomains() );
 }
 
-TEST_F(TestGAMSDatabase, testGetSymbol_data) {
-    QTest::addColumn<int>("symbolType");
-    QTest::addColumn<QString>("symbolID");
-    QTest::addColumn<int>("dimension");
-    QTest::addColumn<QString>("text");
-    QTest::addColumn<int>("numberOfRecords");
-
-    QTest::newRow("markets_i")     << 0 << "i"       << 1 << "canning plants" << 2 ;
-    QTest::newRow("plants_j")      << 0 << "j"       << 1 << "markets"        << 3 ;
-    QTest::newRow("capacity_a")    << 1 << "a"       << 1 << "capacity of plant i in cases" << 2 ;
-    QTest::newRow("demand_b")      << 1 << "b"       << 1 << "demand at market j in cases"  << 3 ;
-    QTest::newRow("distance_d")    << 1 << "d"       << 2 << "distance in thousands of miles"  << 6 ;
-    QTest::newRow("freightcost_f") << 1 << "f"       << 0 << "freight in dollars per case per thousand miles"  << 1 ;
-    QTest::newRow("cost_c")        << 1 << "c"       << 2 << "transport cost in thousands of dollars per case" << 6 ;
-    QTest::newRow("shipment_x")    << 2 << "x"       << 2 << "shipment quantities in cases" << 6 ;
-    QTest::newRow("obj_z")         << 2 << "z"       << 0 << "total transportation costs in thousands of dollars" << 1 ;
-    QTest::newRow("supply")        << 3 << "supply"  << 1 << "observe supply limit at plant i" << 2 ;
-    QTest::newRow("demand")        << 3 << "demand"  << 1 << "satisfy demand at market j" << 3 ;
-}
-
-TEST_F(TestGAMSDatabase, testGetSymbol) {
-    QFETCH(int, symbolType);
-    QFETCH(QString, symbolID);
-    QFETCH(int, dimension);
-    QFETCH(QString, text);
-    QFETCH(int, numberOfRecords);
-
-    // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
-    GAMSWorkspace ws(wsInfo);
-    GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
-    job.run();
-    GAMSDatabase db = job.outDB();
-
-    // when, then
-    switch(symbolType) {
-      case GAMSEnum::SymbolType::SymTypeSet :
-        {
-          GAMSSet set = db.getSet( symbolID.toStdString() );
-          EXPECT_EQ( set.dim(), dimension );
-          EXPECT_EQ( set.text(), text.toStdString() );
-          EXPECT_EQ( set.numberRecords(), numberOfRecords );
-          EXPECT_THROW( db.getParameter( symbolID.toStdString() ), GAMSException);
-          EXPECT_THROW( db.getEquation( symbolID.toStdString() ), GAMSException);
-          EXPECT_THROW( db.getVariable( symbolID.toStdString() ), GAMSException);
-        }
-        break;
-      case GAMSEnum::SymbolType::SymTypePar :
-        {
-          GAMSParameter param = db.getParameter( symbolID.toStdString() );
-          EXPECT_EQ( param.dim(), dimension );
-          EXPECT_EQ( param.text(), text.toStdString() );
-          EXPECT_EQ( param.numberRecords(), numberOfRecords );
-          EXPECT_THROW( db.getSet( symbolID.toStdString() ), GAMSException);
-          EXPECT_THROW( db.getEquation( symbolID.toStdString() ), GAMSException);
-          EXPECT_THROW( db.getVariable( symbolID.toStdString() ), GAMSException);
-          break;
-        }
-      case GAMSEnum::SymbolType::SymTypeVar :
-        {
-          GAMSVariable var = db.getVariable( symbolID.toStdString() );
-          EXPECT_EQ( var.dim(), dimension );
-          EXPECT_EQ( var.text(), text.toStdString() );
-          EXPECT_EQ( var.numberRecords(), numberOfRecords );
-          EXPECT_THROW( db.getSet( symbolID.toStdString() ), GAMSException);
-          EXPECT_THROW( db.getEquation( symbolID.toStdString() ), GAMSException);
-          EXPECT_THROW( db.getParameter( symbolID.toStdString() ), GAMSException);
-          break;
-        }
-      case GAMSEnum::SymbolType::SymTypeEqu :
-        {
-          GAMSEquation eq = db.getEquation( symbolID.toStdString() );
-          EXPECT_EQ( eq.dim(),  dimension );
-          EXPECT_EQ( eq.text(), text.toStdString() );
-          EXPECT_EQ( eq.numberRecords(), numberOfRecords );
-          EXPECT_THROW( db.getSet( symbolID.toStdString() ), GAMSException);
-          EXPECT_THROW( db.getParameter( symbolID.toStdString() ), GAMSException);
-          EXPECT_THROW( db.getVariable( symbolID.toStdString() ), GAMSException);
-          break;
-        }
-      default: break;
-    }
-}
-
 TEST_F(TestGAMSDatabase, testAddSet) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
@@ -409,9 +290,9 @@ TEST_F(TestGAMSDatabase, testAddSet) {
     // when
     db.addSet("j", 1, "markets");
     // then
-    EXPECT_EQ( db.getSet("j").name().c_str(), "j" );
+    EXPECT_STREQ( db.getSet("j").name().c_str(), "j" );
     EXPECT_EQ( db.getSet("j").dim(), 1 );
-    EXPECT_EQ( db.getSet("j").text().c_str(), "markets" );
+    EXPECT_STREQ( db.getSet("j").text().c_str(), "markets" );
     EXPECT_THROW( db.addSet("j", 2), GAMSException);
 }
 
@@ -474,9 +355,9 @@ TEST_F(TestGAMSDatabase, testAddParameter) {
     // when
     db.addParameter("b", 1, "demand at market j in cases");
     // then
-    EXPECT_EQ( db.getParameter("b").name().c_str(), "b" );
+    EXPECT_STREQ( db.getParameter("b").name().c_str(), "b" );
     EXPECT_EQ( db.getParameter("b").dim(), 1 );
-    EXPECT_EQ( db.getParameter("b").text().c_str(),"demand at market j in cases" );
+    EXPECT_STREQ( db.getParameter("b").text().c_str(),"demand at market j in cases" );
 }
 
 TEST_F(TestGAMSDatabase, testAddParameter_NegativeDimension) {
@@ -539,10 +420,10 @@ TEST_F(TestGAMSDatabase, testAddVariable) {
     // when
     db.addVariable("x", 2, GAMSEnum::VarType::Positive, "shipment quantities in cases");
     // then
-    EXPECT_EQ( db.getVariable("x").name().c_str(), "x" );
+    EXPECT_STREQ( db.getVariable("x").name().c_str(), "x" );
     EXPECT_EQ( db.getVariable("x").dim(), 2 );
     EXPECT_EQ( db.getVariable("x").varType(),  GAMSEnum::VarType::Positive);
-    EXPECT_EQ( db.getVariable("x").text().c_str(),"shipment quantities in cases" );
+    EXPECT_STREQ( db.getVariable("x").text().c_str(),"shipment quantities in cases" );
 
     // when
     int max_dimension = GLOBAL_MAX_INDEX_DIM;
@@ -612,10 +493,10 @@ TEST_F(TestGAMSDatabase, testAddEquation) {
     // then
     EXPECT_EQ( db.getNrSymbols(), 1);
     try {
-        EXPECT_EQ(equation.name().c_str(), "s");
+        EXPECT_STREQ(equation.name().c_str(), "s");
         EXPECT_EQ(equation.dim(), 1);
         EXPECT_EQ(equation.equType(), GAMSEnum::EquType::L);
-        EXPECT_EQ(equation.text().c_str(), "observe supply limit at plant i");
+        EXPECT_STREQ(equation.text().c_str(), "observe supply limit at plant i");
     } catch(GAMSException& e) {
         QFAIL(qPrintable( "Unexpected GAMSException raised by: "+ QString::fromStdString(e.what()) ));
     }
@@ -895,4 +776,126 @@ TEST_F(TestGAMSDatabase, testClearOutOfScopedDatabase) {
     EXPECT_EQ( db1.getParameter("b").numberRecords(), 0 );
     EXPECT_EQ( db1.getParameter("d").numberRecords(), 0 );
     EXPECT_EQ( db1.getParameter("f").numberRecords(), 0 );
+}
+
+// data driven tests: TODO(RG):
+//TEST_F(TestGAMSDatabase, testSetSuppressAutoDomainChecking_data) {
+//    QTest::addColumn<bool>("suppressed");
+//    QTest::addColumn<QString>("gdxfilename");
+
+//    QTest::newRow("SuppressedAutoDomainChecking")   << true  << "suppressed.gdx";
+//    QTest::newRow("UnsuppressedAutoDomainChecking") << false << "unsuppressed.gdx" ;
+//}
+
+//TEST_F(TestGAMSDatabase, testSetSuppressAutoDomainChecking) {
+//    QFETCH(bool, suppressed);
+//    QFETCH(QString, gdxfilename);
+
+//    // given
+//    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+//    GAMSWorkspace ws(wsInfo);
+
+//    GAMSDatabase db = ws.addDatabase();
+//    GAMSSet i = db.addSet("i", "");
+//    i.addRecord("i1");
+//    GAMSParameter a = db.addParameter("x", "", i);
+//    a.addRecord("i1").setValue( 0.5 );
+//    a.addRecord("i2").setValue( 1.2 );
+//    // when
+//    db.setSuppressAutoDomainChecking(suppressed);
+//    // then
+//    if (suppressed) {
+//        db.doExport();
+//        QFileInfo gdxfile(QDir(ws.workingDirectory().c_str()),
+//                          QString::fromStdString(db.name())+QString::fromStdString(".gdx"));
+//        ASSERT_TRUE( gdxfile.exists() );
+//    }  else {
+//        EXPECT_THROW( db.doExport( gdxfilename.toStdString() ), GAMSException );
+//    }
+//}
+
+class ParameterizedTestGAMSDatabaseSymbol
+        : public ::testing::WithParamInterface<std::tuple<const char*, int, const char*, int, const char*, int>>,
+          public TestGAMSDatabase {
+};
+
+INSTANTIATE_TEST_SUITE_P(testGetSymbol,
+                        ParameterizedTestGAMSDatabaseSymbol,
+                        ::testing::Values (
+                            std::make_tuple("markets_i",     0, "i",      1, "canning plants", 2),
+                            std::make_tuple("plants_j",      0, "j",      1, "markets", 3),
+                            std::make_tuple("capacity_a",    1, "a",      1, "capacity of plant i in cases", 2),
+                            std::make_tuple("demand_b",      1, "b",      1, "demand at market j in cases", 3),
+                            std::make_tuple("distance_d",    1, "d",      2, "distance in thousands of miles", 6),
+                            std::make_tuple("freightcost_f", 1, "f",      0, "freight in dollars per case per thousand miles", 1),
+                            std::make_tuple("cost_c",        1, "c",      2, "transport cost in thousands of dollars per case", 6),
+                            std::make_tuple("shipment_x",    2, "x",      2, "shipment quantities in cases", 6),
+                            std::make_tuple("obj_z",         2, "z",      0, "total transportation costs in thousands of dollars", 1),
+                            std::make_tuple("supply",        3, "supply", 1, "observe supply limit at plant i", 2),
+                            std::make_tuple("demand",        3, "demand", 1, "satisfy demand at market j", 3)
+                        ));
+
+TEST_P(ParameterizedTestGAMSDatabaseSymbol, testGetSymbol) {
+    std::string description = std::get<0>(GetParam());
+    int symbolType          = std::get<1>(GetParam());
+    std::string symbolID    = std::get<2>(GetParam());
+    int dimension           = std::get<3>(GetParam());
+    std::string text        = std::get<4>(GetParam());
+    int numberOfRecords     = std::get<5>(GetParam());
+
+    // given
+    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspace ws(wsInfo);
+    GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
+    job.run();
+    GAMSDatabase db = job.outDB();
+
+    // when, then
+    switch(symbolType) {
+      case GAMSEnum::SymbolType::SymTypeSet :
+        {
+          GAMSSet set = db.getSet( symbolID );
+          EXPECT_EQ( set.dim(), dimension );
+          EXPECT_EQ( set.text(), text );
+          EXPECT_EQ( set.numberRecords(), numberOfRecords );
+          EXPECT_THROW( db.getParameter( symbolID ), GAMSException);
+          EXPECT_THROW( db.getEquation( symbolID ), GAMSException);
+          EXPECT_THROW( db.getVariable( symbolID ), GAMSException);
+        }
+        break;
+      case GAMSEnum::SymbolType::SymTypePar :
+        {
+          GAMSParameter param = db.getParameter( symbolID );
+          EXPECT_EQ( param.dim(), dimension );
+          EXPECT_EQ( param.text(), text );
+          EXPECT_EQ( param.numberRecords(), numberOfRecords );
+          EXPECT_THROW( db.getSet( symbolID ), GAMSException);
+          EXPECT_THROW( db.getEquation( symbolID ), GAMSException);
+          EXPECT_THROW( db.getVariable( symbolID ), GAMSException);
+          break;
+        }
+      case GAMSEnum::SymbolType::SymTypeVar :
+        {
+          GAMSVariable var = db.getVariable( symbolID );
+          EXPECT_EQ( var.dim(), dimension );
+          EXPECT_EQ( var.text(), text );
+          EXPECT_EQ( var.numberRecords(), numberOfRecords );
+          EXPECT_THROW( db.getSet( symbolID ), GAMSException);
+          EXPECT_THROW( db.getEquation( symbolID ), GAMSException);
+          EXPECT_THROW( db.getParameter( symbolID ), GAMSException);
+          break;
+        }
+      case GAMSEnum::SymbolType::SymTypeEqu :
+        {
+          GAMSEquation eq = db.getEquation( symbolID );
+          EXPECT_EQ( eq.dim(),  dimension );
+          EXPECT_EQ( eq.text(), text );
+          EXPECT_EQ( eq.numberRecords(), numberOfRecords );
+          EXPECT_THROW( db.getSet( symbolID ), GAMSException);
+          EXPECT_THROW( db.getParameter( symbolID ), GAMSException);
+          EXPECT_THROW( db.getVariable( symbolID ), GAMSException);
+          break;
+        }
+      default: break;
+    }
 }
