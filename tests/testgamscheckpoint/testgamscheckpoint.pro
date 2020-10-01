@@ -29,8 +29,10 @@ DESTDIR = ../bin
 include(../tests.pri)
 
 HEADERS += \
-    ../testgamsobject.h
+    ../testgamsobject.h \
+    ../../src/gamspath.h
 
 SOURCES += \
     ../testgamsobject.cpp \
-    testgamscheckpoint.cpp
+    testgamscheckpoint.cpp \
+    ../../src/gamspath.cpp

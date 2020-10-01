@@ -36,6 +36,7 @@
 #include "gamsoptions.h"
 #include "gamsplatform.h"
 #include "gamsversion.h"
+#include "gamspath.h"
 
 #include <vector>
 #include <map>
@@ -46,25 +47,25 @@ using namespace gams;
 using namespace std;
 
 void TestGAMSObject::SetUp() {
-    testSystemDir = QString(qgetenv("GTESTDIR"));
-    if (testSystemDir.path() == "")
-        testSystemDir = GAMSPlatform::findGams(0).c_str();
-    QCOMPARE(testSystemDir.path().isEmpty(), false);
-    testDebugLevel = qgetenv("GAMSOOAPIDEBUG");
-    testGAMSVersion = GAMSOptions::gamsVersion();
-    testAPIVersion = GAMSVersion::api();
+//    testSystemDir = GAMSPath(getenv("GTESTDIR"));
+//    if (testSystemDir.path() == "")
+//        testSystemDir = GAMSPath(GAMSPlatform::findGams(0));
+//    ASSERT_FALSE(testSystemDir.path().empty());
+//    testDebugLevel = GAMSPath(getenv("GAMSOOAPIDEBUG"));
+//    testGAMSVersion = GAMSOptions::gamsVersion();
+//    testAPIVersion = GAMSVersion::api();
 
-    tests_Executed = 0;
-    tests_Failed = 0;
+//    tests_Executed = 0;
+//    tests_Failed = 0;
 }
 
 void TestGAMSObject::TearDown() {
-    for (QString dir: testCleanupDirs) {
-        QDir path(dir);
-        if (path.exists() && path.absolutePath().contains("gams-cpp")) {
-            path.removeRecursively();
-        }
-    }
+//    for (std::string dir: testCleanupDirs) {
+//        GAMSPath path(dir);
+//        if (path.exists() && path.string().find("gams-cpp") != std::string::npos) {
+//            path.remove();
+//        }
+//    }
 }
 
 void TestGAMSObject::init() {
@@ -73,68 +74,68 @@ void TestGAMSObject::init() {
 
 void TestGAMSObject::cleanup() {
     tests_Executed++;
-    if (QTest::currentTestFailed())
+    if (::testing::Test::HasFailure())
         tests_Failed++;
 }
 
-void TestGAMSObject::getTestData_DebugLevel() {
-    QTest::addColumn<QString>("debugLevel");
+//void TestGAMSObject::getTestData_DebugLevel() {
+//    QTest::addColumn<QString>("debugLevel");
 
-    QTest::newRow("Off") << QString::number(GAMSEnum::DebugLevel::Off);
-    QTest::newRow("KeepFiles") << QString::number(GAMSEnum::DebugLevel::KeepFiles);
-    QTest::newRow("ShowLog") << QString::number(GAMSEnum::DebugLevel::ShowLog);
-    QTest::newRow("Verbose") << QString::number(GAMSEnum::DebugLevel::Verbose);
-}
+//    QTest::newRow("Off") << QString::number(GAMSEnum::DebugLevel::Off);
+//    QTest::newRow("KeepFiles") << QString::number(GAMSEnum::DebugLevel::KeepFiles);
+//    QTest::newRow("ShowLog") << QString::number(GAMSEnum::DebugLevel::ShowLog);
+//    QTest::newRow("Verbose") << QString::number(GAMSEnum::DebugLevel::Verbose);
+//}
 
-void TestGAMSObject::getTestData_ModelLibraries() {
-    QTest::addColumn<int>("index");
-    QTest::addColumn<QString>("library");
-    QTest::addColumn<QString>("modname");
-    QTest::addColumn<QString>("extrafile");
+//void TestGAMSObject::getTestData_ModelLibraries() {
+//    QTest::addColumn<int>("index");
+//    QTest::addColumn<QString>("library");
+//    QTest::addColumn<QString>("modname");
+//    QTest::addColumn<QString>("extrafile");
 
-    QTest::newRow("gamslib_trnsport") << 0 << "gamslib" << "trnsport" << "";
-    QTest::newRow("gamslib_alan")     << 0 << "gamslib" << "alan"  << "";
-    QTest::newRow("testlib_call1")    << 1 << "testlib" << "call1"    << "";
-    QTest::newRow("testlib_onmult1")      << 1 << "testlib" << "onmulti1"     << "";
-    QTest::newRow("datalib_CheckListbox") << 2 << "datalib" << "CheckListbox" << "CheckListbox.gms";
-    QTest::newRow("datalib_Wiring")       << 2 << "datalib" << "Wiring"       << "Sample.mdb"      ;
-    // QTest::newRow("emplib_goempgo")    << 3 << "emplib"  << "goempgo"       << "empmod.inc"      ;
-    QTest::newRow("emplib_hark-monop")    << 3 << "emplib"  << "hark-monop"   << "hark-data.inc"      ;
-    QTest::newRow("emplib_farmnbd")       << 3 << "emplib"  << "farmnbd"      << "" ;
-    QTest::newRow("apilib_JDomainCheck")       << 4 << "apilib"  << "JDomainCheck"     << "" ;
-    QTest::newRow("apilib_JSpecialValues")     << 4 << "apilib"  << "JSpecialValues"   << "" ;
-    QTest::newRow("finlib_DedicationNoBorrow") << 5 << "finlib" << "DedicationNoBorrow"<< "BondData.inc"  ;
-    QTest::newRow("finlib_StructuralModel")    << 5 << "finlib" << "StructuralModel"   << "InputData.gdx" ;
-    QTest::newRow("noalib_reservoir")          << 6 << "noalib" << "reservoir"         << "" ;
-    QTest::newRow("noalib_macro")              << 6 << "noalib" << "macro"             << "" ;
-}
-
-
-void TestGAMSObject::getTestData_InvalidModelLibraries() {
-    QTest::addColumn<int>("index");
-    QTest::addColumn<QString>("library");
-    QTest::addColumn<QString>("modname");
-
-    QTest::newRow("invalid_gamslib") << 0 << "gamslib" << "ThisIsAnUnusualModelName";
-    QTest::newRow("invalid_testlib") << 1 << "testlib" << "ThisIsAnUnusualModelName";
-    QTest::newRow("invalid_datalib") << 2 << "datalib" << "ThisIsAnUnusualModelName";
-    QTest::newRow("invalid_emplib")  << 3 << "emplib"  << "ThisIsAnUnusualModelName";
-    QTest::newRow("invalid_apilib")  << 4 << "apilib"  << "ThisIsAnUnusualModelName";
-    QTest::newRow("invalid_finlib")  << 5 << "finlib"  << "ThisIsAnUnusualModelName";
-    QTest::newRow("invalid_noalib")  << 6 << "noalib"  << "ThisIsAnUnusualModelName";
-}
+//    QTest::newRow("gamslib_trnsport") << 0 << "gamslib" << "trnsport" << "";
+//    QTest::newRow("gamslib_alan")     << 0 << "gamslib" << "alan"  << "";
+//    QTest::newRow("testlib_call1")    << 1 << "testlib" << "call1"    << "";
+//    QTest::newRow("testlib_onmult1")      << 1 << "testlib" << "onmulti1"     << "";
+//    QTest::newRow("datalib_CheckListbox") << 2 << "datalib" << "CheckListbox" << "CheckListbox.gms";
+//    QTest::newRow("datalib_Wiring")       << 2 << "datalib" << "Wiring"       << "Sample.mdb"      ;
+//    // QTest::newRow("emplib_goempgo")    << 3 << "emplib"  << "goempgo"       << "empmod.inc"      ;
+//    QTest::newRow("emplib_hark-monop")    << 3 << "emplib"  << "hark-monop"   << "hark-data.inc"      ;
+//    QTest::newRow("emplib_farmnbd")       << 3 << "emplib"  << "farmnbd"      << "" ;
+//    QTest::newRow("apilib_JDomainCheck")       << 4 << "apilib"  << "JDomainCheck"     << "" ;
+//    QTest::newRow("apilib_JSpecialValues")     << 4 << "apilib"  << "JSpecialValues"   << "" ;
+//    QTest::newRow("finlib_DedicationNoBorrow") << 5 << "finlib" << "DedicationNoBorrow"<< "BondData.inc"  ;
+//    QTest::newRow("finlib_StructuralModel")    << 5 << "finlib" << "StructuralModel"   << "InputData.gdx" ;
+//    QTest::newRow("noalib_reservoir")          << 6 << "noalib" << "reservoir"         << "" ;
+//    QTest::newRow("noalib_macro")              << 6 << "noalib" << "macro"             << "" ;
+//}
 
 
-void TestGAMSObject::getTestData_SpecialValues() {
-    QTest::addColumn<int>("index");
-    QTest::addColumn<double>("value");
+//void TestGAMSObject::getTestData_InvalidModelLibraries() {
+//    QTest::addColumn<int>("index");
+//    QTest::addColumn<QString>("library");
+//    QTest::addColumn<QString>("modname");
 
-    QTest::newRow("UNDF") << 0 << defaultUNDEF;
-    QTest::newRow("NA")   << 1 << defaultNA;
-    QTest::newRow("PINF") << 2 << defaultPINF;
-    QTest::newRow("MINF") << 3 << defaultMINF;
-    QTest::newRow("EPS")  << 4 << defaultEPS;
-}
+//    QTest::newRow("invalid_gamslib") << 0 << "gamslib" << "ThisIsAnUnusualModelName";
+//    QTest::newRow("invalid_testlib") << 1 << "testlib" << "ThisIsAnUnusualModelName";
+//    QTest::newRow("invalid_datalib") << 2 << "datalib" << "ThisIsAnUnusualModelName";
+//    QTest::newRow("invalid_emplib")  << 3 << "emplib"  << "ThisIsAnUnusualModelName";
+//    QTest::newRow("invalid_apilib")  << 4 << "apilib"  << "ThisIsAnUnusualModelName";
+//    QTest::newRow("invalid_finlib")  << 5 << "finlib"  << "ThisIsAnUnusualModelName";
+//    QTest::newRow("invalid_noalib")  << 6 << "noalib"  << "ThisIsAnUnusualModelName";
+//}
+
+
+//void TestGAMSObject::getTestData_SpecialValues() {
+//    QTest::addColumn<int>("index");
+//    QTest::addColumn<double>("value");
+
+//    QTest::newRow("UNDF") << 0 << defaultUNDEF;
+//    QTest::newRow("NA")   << 1 << defaultNA;
+//    QTest::newRow("PINF") << 2 << defaultPINF;
+//    QTest::newRow("MINF") << 3 << defaultMINF;
+//    QTest::newRow("EPS")  << 4 << defaultEPS;
+//}
 
 void TestGAMSObject::getTestData_TransportModel(GAMSDatabase db) {
     getTestData_Set_plants_i(db);
@@ -215,10 +216,10 @@ void TestGAMSObject::getTestData_Database_DomainViolations(GAMSDatabase db) {
     d.addRecord("Seattle", "Alburquerque").setValue( 1.5 );
 }
 
-void TestGAMSObject::testDir(QString dir) {
-    ASSERT_TRUE( ! dir.isNull() );
-    ASSERT_TRUE( ! dir.isEmpty() );
-    ASSERT_TRUE( QDir(dir).exists() );
+void TestGAMSObject::testDir(string dir) {
+    ASSERT_FALSE(dir.empty());
+    // rogo
+//    ASSERT_TRUE( GAMSPath::exists(dir) );
 }
 
 void TestGAMSObject::testJobBeforeRun(GAMSJob job, GAMSWorkspace ws) {
@@ -229,16 +230,16 @@ void TestGAMSObject::testJobBeforeRun(GAMSJob job, GAMSWorkspace ws) {
 
 void TestGAMSObject::testEmptyDatabase(gams::GAMSDatabase db, gams::GAMSWorkspace ws) {
     ASSERT_TRUE( db.isValid() );
-    QCOMPARE( db.getNrSymbols(), 0 );
+    ASSERT_EQ( db.getNrSymbols(), 0 );
     ASSERT_TRUE( db.workspace() == ws );
 
     for (gams::GAMSDatabaseIter it = db.begin(); it != db.end(); ++it)
-        QFAIL("does not expect a symbol in a newly created database.");
+        FAIL() << "does not expect a symbol in a newly created database.";
 
-    QVERIFY_EXCEPTION_THROWN( db.getSet("x"), gams::GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.getParameter("x"), gams::GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.getVariable("x"), gams::GAMSException);
-    QVERIFY_EXCEPTION_THROWN( db.getEquation("x"), gams::GAMSException);
+    EXPECT_THROW( db.getSet("x"), gams::GAMSException);
+    EXPECT_THROW( db.getParameter("x"), gams::GAMSException);
+    EXPECT_THROW( db.getVariable("x"), gams::GAMSException);
+    EXPECT_THROW( db.getEquation("x"), gams::GAMSException);
 }
 
 std::string TestGAMSObject::getShortModelText()

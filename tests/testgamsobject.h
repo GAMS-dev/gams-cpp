@@ -30,6 +30,7 @@
 
 #include <cmath>
 #include <limits>
+#include <unordered_set>
 #include <QObject>
 #include <QDir>
 #include <QTest>
@@ -63,14 +64,14 @@ protected:
     bool equals(double actual, double expect) {
         return std::abs(actual - expect) <= tolerance ;
     }
-    void testDir(QString dir);
+    void testDir(std::string dir);
     void testJobBeforeRun(gams::GAMSJob job, gams::GAMSWorkspace ws);
     void testEmptyDatabase(gams::GAMSDatabase db, gams::GAMSWorkspace ws);
 
-    void getTestData_DebugLevel();
-    void getTestData_ModelLibraries();
-    void getTestData_InvalidModelLibraries();
-    void getTestData_SpecialValues();
+//    void getTestData_DebugLevel();
+//    void getTestData_ModelLibraries();
+//    void getTestData_InvalidModelLibraries();
+//    void getTestData_SpecialValues();
     void getTestData_TransportModel(gams::GAMSDatabase db);
     void getTestData_Set_plants_i(gams::GAMSDatabase db);
     void getTestData_Set_markets_j(gams::GAMSDatabase db);
@@ -80,11 +81,11 @@ protected:
     void getTestData_Parameter_freightcost_f(gams::GAMSDatabase db);
     void getTestData_Database_DomainViolations(gams::GAMSDatabase db);
 
-    QDir testSystemDir;
-    QString testGAMSVersion;
-    QString testAPIVersion;
-    QString testDebugLevel;
-    QSet<QString> testCleanupDirs;
+    std::string testSystemDir;
+    std::string testGAMSVersion;
+    std::string testAPIVersion;
+    std::string testDebugLevel;
+    std::unordered_set<std::string> testCleanupDirs;
 
     int tests_Executed;
     int tests_Failed;

@@ -35,7 +35,10 @@
 #include "gamssymboldomainviolation.h"
 #include "gamsvariable.h"
 #include "testgamsobject.h"
+// rogo
+//#include "gamspath.h"
 
+#include "gamspath.h"
 #include <sstream>
 #include <string>
 
@@ -66,7 +69,7 @@ TEST_F(TestGAMSDatabase, testDefaultConstructor) {
 
 TEST_F(TestGAMSDatabase, testAssignmentOperator) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
 
     GAMSDatabase db1 = ws.addDatabase();
@@ -82,7 +85,7 @@ TEST_F(TestGAMSDatabase, testAssignmentOperator) {
 
 TEST_F(TestGAMSDatabase, testOutOfScopeDatabaseAssignement) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db1;
     // when assignedDatabaseFrom is out of scope
@@ -103,7 +106,7 @@ TEST_F(TestGAMSDatabase, testOutOfScopeDatabaseAssignement) {
 
 TEST_F(TestGAMSDatabase, testIsValid) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when, then
     GAMSDatabase db;
@@ -115,7 +118,7 @@ TEST_F(TestGAMSDatabase, testIsValid) {
 
 TEST_F(TestGAMSDatabase, testBegin) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -127,7 +130,7 @@ TEST_F(TestGAMSDatabase, testBegin) {
 
 TEST_F(TestGAMSDatabase, testEnd) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -143,7 +146,7 @@ TEST_F(TestGAMSDatabase, testEnd) {
 
 TEST_F(TestGAMSDatabase, testLogID) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db1 = ws.addDatabase();
     GAMSDatabase db2 = ws.addDatabase();
@@ -151,7 +154,7 @@ TEST_F(TestGAMSDatabase, testLogID) {
     // when, then
     EXPECT_EQ( db1.logID(), db2.logID() );
 
-    GAMSWorkspaceInfo anotherWsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo anotherWsInfo("", testSystemDir);
     GAMSWorkspace anotherws(anotherWsInfo);
     GAMSDatabase db3 = anotherws.addDatabase();
     ASSERT_TRUE( db3.logID() != db2.logID());
@@ -159,7 +162,7 @@ TEST_F(TestGAMSDatabase, testLogID) {
 
 TEST_F(TestGAMSDatabase, testGetNrSymbols) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when, then
     GAMSDatabase db = ws.addDatabase();
@@ -177,7 +180,7 @@ TEST_F(TestGAMSDatabase, testGetNrSymbols) {
 
 TEST_F(TestGAMSDatabase, testGetSuppressAutoDomainChecking) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when
@@ -193,12 +196,11 @@ TEST_F(TestGAMSDatabase, testGetSuppressAutoDomainChecking) {
 
 TEST_F(TestGAMSDatabase, testGetName) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db1 = ws.addDatabase();
     // when, then
-    ASSERT_TRUE( ! QString::fromStdString(db1.name()).isNull() );
-    ASSERT_TRUE( ! QString::fromStdString(db1.name()).isEmpty() );
+    ASSERT_FALSE( db1.name().empty() );
 
     // when, then
     std::string dbname = "myDatabase";
@@ -208,7 +210,7 @@ TEST_F(TestGAMSDatabase, testGetName) {
 
 TEST_F(TestGAMSDatabase, testGetWorkspace) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
@@ -217,7 +219,7 @@ TEST_F(TestGAMSDatabase, testGetWorkspace) {
 
 TEST_F(TestGAMSDatabase, testDoExport) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when
     GAMSDatabase db = ws.addDatabase();
@@ -232,7 +234,7 @@ TEST_F(TestGAMSDatabase, testDoExport) {
 
 TEST_F(TestGAMSDatabase, testDoExportWithName) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when
     GAMSDatabase db = ws.addDatabase("capacity");
@@ -242,12 +244,12 @@ TEST_F(TestGAMSDatabase, testDoExportWithName) {
     QFileInfo gdxfile(QDir(ws.workingDirectory().c_str()),
                       QString::fromStdString(db.name())+QString::fromStdString(".gdx"));
     ASSERT_TRUE( gdxfile.exists() );
-    // @todo more check on gdxfile
+    // TODO: more check on gdxfile
 }
 
 TEST_F(TestGAMSDatabase, testDoExportWithDomainViolation) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase("domain");
     GAMSSet i = db.addSet("i", "");
@@ -263,7 +265,7 @@ TEST_F(TestGAMSDatabase, testDoExportWithDomainViolation) {
 
 TEST_F(TestGAMSDatabase, testCheckDomains) {
     // when
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
 
@@ -284,7 +286,7 @@ TEST_F(TestGAMSDatabase, testCheckDomains) {
 
 TEST_F(TestGAMSDatabase, testAddSet) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when
@@ -298,7 +300,7 @@ TEST_F(TestGAMSDatabase, testAddSet) {
 
 TEST_F(TestGAMSDatabase, testAddSet_NonPositiveDimension) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
@@ -308,7 +310,7 @@ TEST_F(TestGAMSDatabase, testAddSet_NonPositiveDimension) {
 
 TEST_F(TestGAMSDatabase, testAddSet_ExceedingMaxDimension) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
@@ -322,7 +324,7 @@ TEST_F(TestGAMSDatabase, testAddSet_ExceedingMaxDimension) {
 }
 
 TEST_F(TestGAMSDatabase, testAddSet_DuplicateIdentifier) {
-     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+     GAMSWorkspaceInfo wsInfo("", testSystemDir);
      GAMSWorkspace ws(wsInfo);
 
      GAMSDatabase db = ws.addDatabase();
@@ -335,7 +337,7 @@ TEST_F(TestGAMSDatabase, testAddSet_DuplicateIdentifier) {
 
 TEST_F(TestGAMSDatabase, testAddSet_InvalidStringIdentifier) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
@@ -349,7 +351,7 @@ TEST_F(TestGAMSDatabase, testAddSet_InvalidStringIdentifier) {
 
 TEST_F(TestGAMSDatabase, testAddParameter) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when
@@ -362,7 +364,7 @@ TEST_F(TestGAMSDatabase, testAddParameter) {
 
 TEST_F(TestGAMSDatabase, testAddParameter_NegativeDimension) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
@@ -376,7 +378,7 @@ TEST_F(TestGAMSDatabase, testAddParameter_NegativeDimension) {
 
 TEST_F(TestGAMSDatabase, testAddParameter_ExceedingMaxDimension) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
@@ -390,7 +392,7 @@ TEST_F(TestGAMSDatabase, testAddParameter_ExceedingMaxDimension) {
 
 TEST_F(TestGAMSDatabase, testAddParameter_DuplicateIdentifier) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     db.addParameter("p", 1, "parameter p");
@@ -400,7 +402,7 @@ TEST_F(TestGAMSDatabase, testAddParameter_DuplicateIdentifier) {
 
 TEST_F(TestGAMSDatabase, testAddParameter_InvalidStringIdentifier) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
 
@@ -414,7 +416,7 @@ TEST_F(TestGAMSDatabase, testAddParameter_InvalidStringIdentifier) {
 
 TEST_F(TestGAMSDatabase, testAddVariable) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when
@@ -433,7 +435,7 @@ TEST_F(TestGAMSDatabase, testAddVariable) {
 
 TEST_F(TestGAMSDatabase, testAddVariable_NegativeDimension) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
@@ -447,7 +449,7 @@ TEST_F(TestGAMSDatabase, testAddVariable_NegativeDimension) {
 
 TEST_F(TestGAMSDatabase, testAddVariable_ExceedingMaxDimension) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
@@ -462,7 +464,7 @@ TEST_F(TestGAMSDatabase, testAddVariable_ExceedingMaxDimension) {
 
 TEST_F(TestGAMSDatabase, testAddVariable_DuplicateIdentifier) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     db.addVariable("x", 1,  GAMSEnum::VarType::Positive, "variable x");
@@ -472,7 +474,7 @@ TEST_F(TestGAMSDatabase, testAddVariable_DuplicateIdentifier) {
 
 TEST_F(TestGAMSDatabase, testAddVariable_InvalidStringIdentifier) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
@@ -485,7 +487,7 @@ TEST_F(TestGAMSDatabase, testAddVariable_InvalidStringIdentifier) {
 
 TEST_F(TestGAMSDatabase, testAddEquation) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when
@@ -498,13 +500,13 @@ TEST_F(TestGAMSDatabase, testAddEquation) {
         EXPECT_EQ(equation.equType(), GAMSEnum::EquType::L);
         EXPECT_STREQ(equation.text().c_str(), "observe supply limit at plant i");
     } catch(GAMSException& e) {
-        QFAIL(qPrintable( "Unexpected GAMSException raised by: "+ QString::fromStdString(e.what()) ));
+        FAIL() << "Unexpected GAMSException raised by: " << e.what();
     }
 }
 
 TEST_F(TestGAMSDatabase, testGetEquation) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when
@@ -515,13 +517,13 @@ TEST_F(TestGAMSDatabase, testGetEquation) {
         auto getEquation = db.getEquation("s");
         EXPECT_EQ(initEquation, getEquation);
     } catch(GAMSException& e) {
-        QFAIL(qPrintable( "Unexpected GAMSException raised by: "+ QString::fromStdString(e.what()) ));
+        FAIL() << "Unexpected GAMSException raised by: " << e.what();
     }
 }
 
 TEST_F(TestGAMSDatabase, testAddEquation_NegativeDimension) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
@@ -536,7 +538,7 @@ TEST_F(TestGAMSDatabase, testAddEquation_NegativeDimension) {
 
 TEST_F(TestGAMSDatabase, testAddEquation_ExceedingMaxDimension) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
@@ -550,7 +552,7 @@ TEST_F(TestGAMSDatabase, testAddEquation_ExceedingMaxDimension) {
 
 TEST_F(TestGAMSDatabase, testAddEquation_DuplicateIdentifier) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     db.addEquation("s", 1, GAMSEnum::EquType::L, "observe supply limit at plant i");
@@ -560,7 +562,7 @@ TEST_F(TestGAMSDatabase, testAddEquation_DuplicateIdentifier) {
 
 TEST_F(TestGAMSDatabase, testAddEquation_InvalidStringIdentifier) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
@@ -573,12 +575,12 @@ TEST_F(TestGAMSDatabase, testAddEquation_InvalidStringIdentifier) {
 
 TEST_F(TestGAMSDatabase, testIterator) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     // when, then
     for (GAMSSymbol symbol : db) {
-        QFAIL("unexpected symbol from empty database");
+        FAIL() << "unexpected symbol from empty database";
         symbol.name();
     }
 
@@ -595,7 +597,7 @@ TEST_F(TestGAMSDatabase, testIterator) {
                symbolCounter["GAMSParameter"]++;
                break;
            default:
-               QFAIL("unexpected symbol type of a symbol from transport database");
+               FAIL() << "unexpected symbol type of a symbol from transport database";
                break;
        }
     }
@@ -606,13 +608,13 @@ TEST_F(TestGAMSDatabase, testIterator) {
     try {
         db.clear();
     } catch(GAMSException&) {
-        QFAIL("Do not expect exception when clearing database");
+        FAIL() << "Do not expect exception when clearing database";
     }
 }
 
 TEST_F(TestGAMSDatabase, testGetDatabaseDVs) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -641,7 +643,7 @@ TEST_F(TestGAMSDatabase, testGetDatabaseDVs) {
 
 TEST_F(TestGAMSDatabase, testGetDatabaseDVs_MaxViolation) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -698,7 +700,7 @@ TEST_F(TestGAMSDatabase, testGetDatabaseDVs_MaxViolation) {
 
 TEST_F(TestGAMSDatabase, testEqualToOperator) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db1 = ws.addDatabase();
     TestGAMSObject::getTestData_TransportModel(db1);
@@ -719,7 +721,7 @@ TEST_F(TestGAMSDatabase, testEqualToOperator) {
 
 TEST_F(TestGAMSDatabase, testNotEqualToOperator) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db1 = ws.addDatabase();
     getTestData_TransportModel(db1);
@@ -739,7 +741,7 @@ TEST_F(TestGAMSDatabase, testNotEqualToOperator) {
 
 TEST_F(TestGAMSDatabase, testClear) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_TransportModel(db);
@@ -758,8 +760,9 @@ TEST_F(TestGAMSDatabase, testClear) {
 
 TEST_F(TestGAMSDatabase, testClearOutOfScopedDatabase) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
+    ASSERT_TRUE(GAMSPath::exists(ws.systemDirectory()));
     GAMSDatabase db1 = ws.addDatabase();
     TestGAMSObject::getTestData_TransportModel( db1 );
     int numberOfSymbols = db1.getNrSymbols();
@@ -778,50 +781,56 @@ TEST_F(TestGAMSDatabase, testClearOutOfScopedDatabase) {
     EXPECT_EQ( db1.getParameter("f").numberRecords(), 0 );
 }
 
-// data driven tests: TODO(RG):
-//TEST_F(TestGAMSDatabase, testSetSuppressAutoDomainChecking_data) {
-//    QTest::addColumn<bool>("suppressed");
-//    QTest::addColumn<QString>("gdxfilename");
+// data driven tests:
+class ParameterizedTestGAMSDatabaseAutoDomain
+        : public ::testing::WithParamInterface<std::tuple<const std::string, const bool, const std::string>>,
+          public TestGAMSObject {
+};
 
-//    QTest::newRow("SuppressedAutoDomainChecking")   << true  << "suppressed.gdx";
-//    QTest::newRow("UnsuppressedAutoDomainChecking") << false << "unsuppressed.gdx" ;
-//}
+INSTANTIATE_TEST_SUITE_P(testSetSuppressAutoDomainChecking,
+                        ParameterizedTestGAMSDatabaseAutoDomain,
+                        ::testing::Values (
+                             // description, suppressed, gdxfilename
+                            std::make_tuple("SuppressedAutoDomainChecking", true, "suppressed.gdx"),
+                            std::make_tuple("UnsuppressedAutoDomainChecking", false, "unsuppressed.gdx")
+                        ));
 
-//TEST_F(TestGAMSDatabase, testSetSuppressAutoDomainChecking) {
-//    QFETCH(bool, suppressed);
-//    QFETCH(QString, gdxfilename);
+TEST_P(ParameterizedTestGAMSDatabaseAutoDomain, testSetSuppressAutoDomainChecking) {
+    std::string description = std::get<0>(GetParam());
+    bool suppressed         = std::get<1>(GetParam());
+    std::string gdxfilename = std::get<2>(GetParam());
 
-//    // given
-//    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
-//    GAMSWorkspace ws(wsInfo);
+    // given
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
+    GAMSWorkspace ws(wsInfo);
 
-//    GAMSDatabase db = ws.addDatabase();
-//    GAMSSet i = db.addSet("i", "");
-//    i.addRecord("i1");
-//    GAMSParameter a = db.addParameter("x", "", i);
-//    a.addRecord("i1").setValue( 0.5 );
-//    a.addRecord("i2").setValue( 1.2 );
-//    // when
-//    db.setSuppressAutoDomainChecking(suppressed);
-//    // then
-//    if (suppressed) {
-//        db.doExport();
-//        QFileInfo gdxfile(QDir(ws.workingDirectory().c_str()),
-//                          QString::fromStdString(db.name())+QString::fromStdString(".gdx"));
-//        ASSERT_TRUE( gdxfile.exists() );
-//    }  else {
-//        EXPECT_THROW( db.doExport( gdxfilename.toStdString() ), GAMSException );
-//    }
-//}
+    GAMSDatabase db = ws.addDatabase();
+    GAMSSet i = db.addSet("i", "");
+    i.addRecord("i1");
+    GAMSParameter a = db.addParameter("x", "", i);
+    a.addRecord("i1").setValue( 0.5 );
+    a.addRecord("i2").setValue( 1.2 );
+    // when
+    db.setSuppressAutoDomainChecking(suppressed);
+    // then
+    if (suppressed) {
+        db.doExport();
+//        GAMSPath gdxfile(ws.workingDirectory()); //, db.name() + ".gdx");
+//        ASSERT_TRUE(GAMSPath::exists(ws.workingDirectory()));
+    }  else {
+        EXPECT_THROW( db.doExport(gdxfilename), GAMSException);
+    }
+}
 
 class ParameterizedTestGAMSDatabaseSymbol
-        : public ::testing::WithParamInterface<std::tuple<const char*, int, const char*, int, const char*, int>>,
-          public TestGAMSDatabase {
+        : public ::testing::WithParamInterface<std::tuple<const std::string, const int, const std::string, const int, const std::string, int>>,
+          public TestGAMSObject {
 };
 
 INSTANTIATE_TEST_SUITE_P(testGetSymbol,
                         ParameterizedTestGAMSDatabaseSymbol,
                         ::testing::Values (
+                             // description, symbolType, symbolID, dimension, text, numberOfRecords
                             std::make_tuple("markets_i",     0, "i",      1, "canning plants", 2),
                             std::make_tuple("plants_j",      0, "j",      1, "markets", 3),
                             std::make_tuple("capacity_a",    1, "a",      1, "capacity of plant i in cases", 2),
@@ -843,8 +852,10 @@ TEST_P(ParameterizedTestGAMSDatabaseSymbol, testGetSymbol) {
     std::string text        = std::get<4>(GetParam());
     int numberOfRecords     = std::get<5>(GetParam());
 
+    std::cout << description << std::endl;
+
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
