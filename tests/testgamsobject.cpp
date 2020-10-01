@@ -45,25 +45,27 @@ using namespace gams;
 using namespace std;
 
 void TestGAMSObject::SetUp() {
-//    testSystemDir = GAMSPath(getenv("GTESTDIR"));
-//    if (testSystemDir.path() == "")
-//        testSystemDir = GAMSPath(GAMSPlatform::findGams(0));
-//    ASSERT_FALSE(testSystemDir.path().empty());
-//    testDebugLevel = GAMSPath(getenv("GAMSOOAPIDEBUG"));
-//    testGAMSVersion = GAMSOptions::gamsVersion();
-//    testAPIVersion = GAMSVersion::api();
+    testSystemDir = GAMSPath(getenv("GTESTDIR"));
+    if (testSystemDir.empty())
+        testSystemDir = GAMSPath(GAMSPlatform::findGams(0));
 
-//    tests_Executed = 0;
-//    tests_Failed = 0;
+    ASSERT_FALSE(testSystemDir.empty());
+
+    testDebugLevel = GAMSPath(getenv("GAMSOOAPIDEBUG"));
+    testGAMSVersion = GAMSOptions::gamsVersion();
+    testAPIVersion = GAMSVersion::api();
+
+    tests_Executed = 0;
+    tests_Failed = 0;
 }
 
 void TestGAMSObject::TearDown() {
-//    for (std::string dir: testCleanupDirs) {
-//        GAMSPath path(dir);
-//        if (path.exists() && path.string().find("gams-cpp") != std::string::npos) {
-//            path.remove();
-//        }
-//    }
+    for (std::string dir: testCleanupDirs) {
+        GAMSPath path(dir);
+        if (path.exists() && path.string().find("gams-cpp") != std::string::npos) {
+            path.remove();
+        }
+    }
 }
 
 void TestGAMSObject::init() {
@@ -216,8 +218,7 @@ void TestGAMSObject::getTestData_Database_DomainViolations(GAMSDatabase db) {
 
 void TestGAMSObject::testDir(string dir) {
     ASSERT_FALSE(dir.empty());
-    // rogo
-//    ASSERT_TRUE( GAMSPath::exists(dir) );
+    ASSERT_TRUE( GAMSPath::exists(dir) );
 }
 
 void TestGAMSObject::testJobBeforeRun(GAMSJob job, GAMSWorkspace ws) {

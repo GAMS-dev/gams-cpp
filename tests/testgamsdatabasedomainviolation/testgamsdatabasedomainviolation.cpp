@@ -23,60 +23,58 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-#include "testgamsdatabasedomainviolation.h"
-
 #include <sstream>
-#include <QtTest>
+#include "testgamsobject.h"
 
 using namespace gams;
 
-QString TestGAMSDatabaseDomainViolation::classname()  { return "TestGAMSDatabaseDomainViolation"; }
+class TestGAMSDatabaseDomainViolation: public TestGAMSObject
+{
+};
 
-void TestGAMSDatabaseDomainViolation::testDefaultConstructor() {
+TEST_F(TestGAMSDatabaseDomainViolation, testDefaultConstructor) {
     // when,
     GAMSDatabaseDomainViolation domViolation;
     // then
     ASSERT_TRUE( ! domViolation.isValid() );
-    QVERIFY_EXCEPTION_THROWN( domViolation.violSym(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( domViolation.violRecs(), GAMSException );
+    EXPECT_THROW( domViolation.violSym(), GAMSException );
+    EXPECT_THROW( domViolation.violRecs(), GAMSException );
 }
 
-void TestGAMSDatabaseDomainViolation::testCopyConstructor() {
+TEST_F(TestGAMSDatabaseDomainViolation, testCopyConstructor) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
 
     // when, then
-    QCOMPARE( db.getDatabaseDVs(0, 5).size(), size_t(2) );
+    EXPECT_EQ( db.getDatabaseDVs(0, 5).size(), size_t(2) );
     for(GAMSDatabaseDomainViolation domViol : db.getDatabaseDVs(0, 5)){
         GAMSDatabaseDomainViolation dv( domViol );
-        QCOMPARE( dv.violSym(), domViol.violSym() );
-        QCOMPARE( dv.violRecs().size(), domViol.violRecs().size() );
+        EXPECT_EQ( dv.violSym(), domViol.violSym() );
+        EXPECT_EQ( dv.violRecs().size(), domViol.violRecs().size() );
         ASSERT_TRUE( dv == domViol );
-
     }
 }
 
-void TestGAMSDatabaseDomainViolation::testIsValid() {
+TEST_F(TestGAMSDatabaseDomainViolation, testIsValid) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
 
     // when, then
-    QCOMPARE( db.getDatabaseDVs(0, 5).size(), size_t(2) );
+    EXPECT_EQ( db.getDatabaseDVs(0, 5).size(), size_t(2) );
     for(GAMSDatabaseDomainViolation domViol : db.getDatabaseDVs(0, 5)){
         ASSERT_TRUE( domViol.isValid() );
     }
 }
 
-void TestGAMSDatabaseDomainViolation::testAssignmentOperator() {
+TEST_F(TestGAMSDatabaseDomainViolation, testAssignmentOperator) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -85,17 +83,17 @@ void TestGAMSDatabaseDomainViolation::testAssignmentOperator() {
         // when
         GAMSDatabaseDomainViolation domViol2 = domViol1;
         // then
-        QCOMPARE( domViol2.violSym(), domViol1.violSym() );
-        QCOMPARE( domViol2.violRecs().size(), domViol2.violRecs().size() );
+        EXPECT_EQ( domViol2.violSym(), domViol1.violSym() );
+        EXPECT_EQ( domViol2.violRecs().size(), domViol2.violRecs().size() );
         for(size_t i=size_t(0); i< domViol2.violRecs().size(); i++) {
-            QCOMPARE( domViol2.violRecs()[i], domViol1.violRecs()[i] );
+            EXPECT_EQ( domViol2.violRecs()[i], domViol1.violRecs()[i] );
         }
     }
 }
 
-void TestGAMSDatabaseDomainViolation::testEqualToOperator() {
+TEST_F(TestGAMSDatabaseDomainViolation, testEqualToOperator) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -111,14 +109,14 @@ void TestGAMSDatabaseDomainViolation::testEqualToOperator() {
         } else if (i==size_t(1)) {
             ASSERT_TRUE( db.getDatabaseDVs(0, 2)[i] != domViol1 );
         } else {
-            QFAIL("do not expect more than 2 database domain violation");
+            FAIL() << "do not expect more than 2 database domain violation";
         }
     }
 }
 
-void TestGAMSDatabaseDomainViolation::testNotEqualToOperator() {
+TEST_F(TestGAMSDatabaseDomainViolation, testNotEqualToOperator) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -133,14 +131,14 @@ void TestGAMSDatabaseDomainViolation::testNotEqualToOperator() {
         } else if (i==size_t(1)) {
             ASSERT_TRUE( db.getDatabaseDVs(0, 2)[i] != domViol0 );
         } else {
-            QFAIL("do not expect more than 2 database domain violation");
+            FAIL() << "do not expect more than 2 database domain violation";
         }
     }
 }
 
-void TestGAMSDatabaseDomainViolation::testViolSym() {
+TEST_F(TestGAMSDatabaseDomainViolation, testViolSym) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -150,15 +148,15 @@ void TestGAMSDatabaseDomainViolation::testViolSym() {
     for(GAMSDatabaseDomainViolation domViol : db.getDatabaseDVs(0, 5)){
         symbolCounter[domViol.violSym().name()]++;
     }
-    QCOMPARE( symbolCounter.size(), size_t(2) );
-    QCOMPARE( symbolCounter["a"], size_t(1) );
-    QCOMPARE( symbolCounter["b"], size_t(1) );
-    QCOMPARE( symbolCounter["d"], size_t(0) );
+    EXPECT_EQ( symbolCounter.size(), size_t(2) );
+    EXPECT_EQ( symbolCounter["a"], size_t(1) );
+    EXPECT_EQ( symbolCounter["b"], size_t(1) );
+    EXPECT_EQ( symbolCounter["d"], size_t(0) );
 }
 
-void TestGAMSDatabaseDomainViolation::testViolRecs() {
+TEST_F(TestGAMSDatabaseDomainViolation, testViolRecs) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -174,14 +172,12 @@ void TestGAMSDatabaseDomainViolation::testViolRecs() {
             recordCounter[ss.str()]++;
         }
     }
-    QCOMPARE( symbolCounter.size(), size_t(2) );
-    QCOMPARE( symbolCounter["a"], size_t(2) );
-    QCOMPARE( symbolCounter["b"], size_t(1) );
-    QCOMPARE( symbolCounter["d"], size_t(0) );
-    QCOMPARE( recordCounter.size(), size_t(3) );
-    QCOMPARE( recordCounter["a_Alburquerque"], size_t(1) );
-    QCOMPARE( recordCounter["a_Sanfrancisco"], size_t(1) );
-    QCOMPARE( recordCounter["b_Braunschweig"], size_t(1) );
+    EXPECT_EQ( symbolCounter.size(), size_t(2) );
+    EXPECT_EQ( symbolCounter["a"], size_t(2) );
+    EXPECT_EQ( symbolCounter["b"], size_t(1) );
+    EXPECT_EQ( symbolCounter["d"], size_t(0) );
+    EXPECT_EQ( recordCounter.size(), size_t(3) );
+    EXPECT_EQ( recordCounter["a_Alburquerque"], size_t(1) );
+    EXPECT_EQ( recordCounter["a_Sanfrancisco"], size_t(1) );
+    EXPECT_EQ( recordCounter["b_Braunschweig"], size_t(1) );
 }
-
-QTEST_MAIN(TestGAMSDatabaseDomainViolation)
