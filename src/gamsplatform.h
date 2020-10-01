@@ -86,6 +86,9 @@ struct LIBSPEC GAMSPlatform
 private:
     GAMSPlatform() {}
 
+    static std::string findGamsOnApple(LogId logId);
+    static void ensureEnvPathSetOnApple(const char *dirName);
+
     static std::string findGamsOnUnix(LogId logId);
     static void ensureEnvPathSetOnUnix(const char *dirName);
     static bool interruptOnNonWindows(long pid);
