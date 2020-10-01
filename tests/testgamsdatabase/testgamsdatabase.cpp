@@ -35,9 +35,6 @@
 #include "gamssymboldomainviolation.h"
 #include "gamsvariable.h"
 #include "testgamsobject.h"
-// rogo
-//#include "gamspath.h"
-
 #include "gamspath.h"
 #include <sstream>
 #include <string>
@@ -226,8 +223,7 @@ TEST_F(TestGAMSDatabase, testDoExport) {
     TestGAMSObject::getTestData_Set_plants_i( db );
     db.doExport();
     // then
-    QFileInfo gdxfile(QDir(ws.workingDirectory().c_str()),
-                      QString::fromStdString(db.name())+QString::fromStdString(".gdx"));
+    GAMSPath gdxfile(ws.workingDirectory(), db.name() + ".gdx");
     ASSERT_TRUE( gdxfile.exists() );
     // TODO: more check on gdxfile
 }
@@ -241,8 +237,7 @@ TEST_F(TestGAMSDatabase, testDoExportWithName) {
     TestGAMSObject::getTestData_Parameter_capacity_a( db );
     db.doExport("capacity");
     // then
-    QFileInfo gdxfile(QDir(ws.workingDirectory().c_str()),
-                      QString::fromStdString(db.name())+QString::fromStdString(".gdx"));
+    GAMSPath gdxfile(ws.workingDirectory(), db.name() + ".gdx");
     ASSERT_TRUE( gdxfile.exists() );
     // TODO: more check on gdxfile
 }
@@ -815,8 +810,8 @@ TEST_P(ParameterizedTestGAMSDatabaseAutoDomain, testSetSuppressAutoDomainCheckin
     // then
     if (suppressed) {
         db.doExport();
-//        GAMSPath gdxfile(ws.workingDirectory()); //, db.name() + ".gdx");
-//        ASSERT_TRUE(GAMSPath::exists(ws.workingDirectory()));
+        GAMSPath gdxfile(ws.workingDirectory(), db.name() + ".gdx");
+        ASSERT_TRUE(gdxfile.exists());
     }  else {
         EXPECT_THROW( db.doExport(gdxfilename), GAMSException);
     }

@@ -103,8 +103,7 @@ TEST_F(TestGAMSCheckpoint, testGetName) {
     GAMSCheckpoint cp = ws.addCheckpoint();
     // when, then
     ASSERT_FALSE( cp.name().empty() );
-    // rogo
-    // ASSERT_TRUE( cp.name().rfind(defaultScratchFilePrefix.c_str(), 0) );
+    ASSERT_EQ(cp.name().find(defaultScratchFilePrefix), 0);
 }
 
 TEST_F(TestGAMSCheckpoint, testGetLogID) {

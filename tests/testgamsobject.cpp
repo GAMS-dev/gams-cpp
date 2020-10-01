@@ -40,8 +40,6 @@
 
 #include <vector>
 #include <map>
-#include <QtTest>
-#include <QDir>
 
 using namespace gams;
 using namespace std;
