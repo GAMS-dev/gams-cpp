@@ -45,27 +45,31 @@ using namespace gams;
 using namespace std;
 
 void TestGAMSObject::SetUp() {
-//    testSystemDir = GAMSPath(getenv("GTESTDIR"));
-//    if (testSystemDir.empty())
-//        testSystemDir = GAMSPath(GAMSPlatform::findGams(0));
+    char* testDir = getenv("GTESTDIR");
+    if (testDir) testSystemDir = testDir;
 
-//    ASSERT_FALSE(testSystemDir.empty());
+    if (testSystemDir.empty())
+        testSystemDir = GAMSPlatform::findGams(0);
 
-//    testDebugLevel = GAMSPath(getenv("GAMSOOAPIDEBUG"));
-//    testGAMSVersion = GAMSOptions::gamsVersion();
-//    testAPIVersion = GAMSVersion::api();
+    ASSERT_FALSE(testSystemDir.empty());
 
-//    tests_Executed = 0;
-//    tests_Failed = 0;
+    char* debugLevel = getenv("GAMSOOAPIDEBUG");
+    if (debugLevel) testDebugLevel = debugLevel;
+
+    testGAMSVersion = GAMSOptions::gamsVersion();
+    testAPIVersion = GAMSVersion::api();
+
+    tests_Executed = 0;
+    tests_Failed = 0;
 }
 
 void TestGAMSObject::TearDown() {
-//    for (std::string dir: testCleanupDirs) {
-//        GAMSPath path(dir);
-//        if (path.exists() && path.string().find("gams-cpp") != std::string::npos) {
-//            path.remove();
-//        }
-//    }
+    for (std::string dir: testCleanupDirs) {
+        GAMSPath path(dir);
+        if (path.exists() && path.string().find("gams-cpp") != std::string::npos) {
+            path.remove();
+        }
+    }
 }
 
 void TestGAMSObject::init() {
