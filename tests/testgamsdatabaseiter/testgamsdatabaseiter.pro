@@ -30,8 +30,9 @@ include(../tests.pri)
 
 HEADERS += \
     ../testgamsobject.h \
-    testgamsdatabaseiter.h
+    ../../src/gamspath.h
 
 SOURCES += \
     ../testgamsobject.cpp \
-    testgamsdatabaseiter.cpp
+    testgamsdatabaseiter.cpp \
+    ../../src/gamspath.cpp
