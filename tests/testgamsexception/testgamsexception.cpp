@@ -52,5 +52,3 @@ TEST_F(TestGAMSException, testConstructor_charptr) {
     }
 
 }
-
-

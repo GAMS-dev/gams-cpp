@@ -24,13 +24,13 @@
  * SOFTWARE.
  */
 
+#include "testgamsobject.h"
 #include "gamsworkspace.h"
 #include "gamsexceptionexecution.h"
 #include "gamsset.h"
 #include "gamsparameter.h"
 #include "gamsvariable.h"
 #include "gamsworkspaceinfo.h"
-#include "testgamsjob.h"
 
 using namespace gams;
 
@@ -66,7 +66,7 @@ TEST_F(TestGAMSJob, testEqualToOperator) {
     GAMSJob job2 = ws.addJobFromGamsLib("trnsport");
     GAMSJob job3 = job1;
     // when, then
-    ASSERT_TRUE( !( job1 == job2) );
+    ASSERT_FALSE( job1 == job2 );
     ASSERT_TRUE( job3 == job1 );
     // when
     job1.run();
@@ -149,12 +149,10 @@ TEST_F(TestGAMSJob, testGetName) {
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromString(TestGAMSObject::getDataText());
-    // when
-    QString name = QString::fromStdString(job.name());
+
     // then
-    ASSERT_TRUE( ! name.isNull() );
-    ASSERT_TRUE( ! name.isEmpty() );
-    ASSERT_TRUE( name.startsWith(defaultScratchFilePrefix.c_str()) );
+    ASSERT_TRUE( ! job.name().empty() );
+    ASSERT_TRUE( job.name().find(defaultScratchFilePrefix) == 0 );
 }
 
 TEST_F(TestGAMSJob, testGetWorkspace) {
@@ -179,5 +177,3 @@ TEST_F(TestGAMSJob, testGetLogID) {
     ASSERT_TRUE( job1.logID() == job2.logID() );
     ASSERT_TRUE( job2.logID() == job3.logID() );
 }
-
-

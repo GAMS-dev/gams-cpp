@@ -89,5 +89,3 @@ TEST_F(TestGAMSExceptionExecution, testGetRc) {
         EXPECT_EQ( e.rc(), -1 );
     }
 }
-
-
