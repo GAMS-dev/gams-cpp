@@ -160,7 +160,7 @@ TEST_F(TestGAMSEquation, testGetFirstRecord) {
     }
     // when, then
     { GAMSEquationRecord rec = db.getEquation("demand").firstRecord();
-      EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "new-york", Qt::CaseSensitive ), 0 );
+      EXPECT_STREQ( rec.key(0).c_str(), "new-york" );
       ASSERT_TRUE( equals(rec.level(), 325.0) );
     }
 }
@@ -175,12 +175,12 @@ TEST_F(TestGAMSEquation, testGetFirstRecordSlice) {
 
     // when, then
     { GAMSEquationRecord rec = db.getEquation("supply").firstRecord("san-diego");
-      EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "san-diego", Qt::CaseSensitive ), 0 );
+      EXPECT_STREQ( rec.key(0).c_str(), "san-diego" );
       ASSERT_TRUE( equals(rec.level(), 550.0) );
     }
     // when, then
     { GAMSEquationRecord rec = db.getEquation("demand").firstRecord("topeka");
-      EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseSensitive ), 0 );
+      EXPECT_STREQ( rec.key(0).c_str(), "topeka" );
       ASSERT_TRUE( equals(rec.level(), 275.0) );
     }
 }
@@ -217,7 +217,7 @@ TEST_F(TestGAMSEquation, testGetLastRecord) {
     }
     // when, then
     { GAMSEquationRecord rec = db.getEquation("demand").lastRecord();
-      EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseSensitive ), 0 );
+      EXPECT_STREQ( rec.key(0).c_str(), "topeka" );
       ASSERT_TRUE( equals(rec.level(), 275.0) );
     }
 }
@@ -232,12 +232,12 @@ TEST_F(TestGAMSEquation, testGetLastRecordSlice) {
 
     // when, then
     { GAMSEquationRecord rec = db.getEquation("supply").lastRecord("seattle");
-      EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "seattle", Qt::CaseSensitive ), 0 );
+      EXPECT_STREQ( rec.key(0).c_str(), "seattle" );
       ASSERT_TRUE( equals(rec.level(), 350.0) );
     }
     // when, then
     { GAMSEquationRecord rec = db.getEquation("demand").lastRecord("chicago");
-      EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "chicago", Qt::CaseSensitive ), 0 );
+      EXPECT_STREQ( rec.key(0).c_str(), "chicago" );
       ASSERT_TRUE( equals(rec.level(), 300.0) );
     }
 }
@@ -271,7 +271,7 @@ TEST_F(TestGAMSEquation, testFindRecord) {
     // when, then
     GAMSEquationRecord rec = db.getEquation("supply").findRecord("san-diego");
     ASSERT_TRUE( rec.isValid() );
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "san-diego", Qt::CaseSensitive ), 0 );
+    EXPECT_STREQ( rec.key(0).c_str(), "san-diego" );
     ASSERT_TRUE( equals(rec.level(), 550.0) );
 }
 
@@ -286,7 +286,7 @@ TEST_F(TestGAMSEquation, testFindRecord_InsensitiveCaseKeys) {
     // when
     GAMSEquationRecord rec = db.getEquation("demand").findRecord("TOPEKA");
     // then
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseInsensitive ), 0 );
+    EXPECT_STREQ( rec.key(0).c_str(), "topeka" );
     ASSERT_TRUE( equals(rec.level(), 275.0) );
 }
 
@@ -373,4 +373,3 @@ TEST_F(TestGAMSEquation, testGetEquType) {
     EXPECT_EQ( db.getEquation("supply").equType(), GAMSEnum::EquType::L );
     EXPECT_EQ( db.getEquation("demand").equType(), GAMSEnum::EquType::G );
 }
-

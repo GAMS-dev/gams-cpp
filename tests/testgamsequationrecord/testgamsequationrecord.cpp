@@ -24,12 +24,14 @@
  * SOFTWARE.
  */
 
+#include <tuple>
+
 #include "gamsequation.h"
 #include "gamsparameter.h"
 #include "gamsset.h"
 #include "gamsvariable.h"
 #include "gamsequationrecord.h"
-#include "testgamsequationrecord.h"
+#include "testgamsobject.h"
 
 using namespace gams;
 
@@ -95,57 +97,6 @@ TEST_F(TestGAMSEquationRecord, testAssignmentOperator) {
     GAMSEquationRecord newRecord = rec;
     EXPECT_EQ( newRecord, rec );
     ASSERT_TRUE( newRecord == rec );
-}
-
-TEST_F(TestGAMSEquationRecord, testIncorrectType_data) {
-    QTest::addColumn<int>("symbolType");
-    QTest::addColumn<QString>("symbolID");
-
-    QTest::newRow("plants_i")      << 0 << "i"       ;
-    QTest::newRow("distance_d")    << 1 << "d"       ;
-    QTest::newRow("freightcost_f") << 1 << "f"       ;
-    QTest::newRow("shipment_x")    << 2 << "x"       ;
-}
-
-TEST_F(TestGAMSEquationRecord, testIncorrectType) {
-    QFETCH(int, symbolType);
-    QFETCH(QString, symbolID);
-
-    // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir);
-    GAMSWorkspace ws(wsInfo);
-    GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
-    job.run();
-    GAMSDatabase db = job.outDB();
-
-    // when, then
-    switch(symbolType) {
-      case GAMSEnum::SymbolType::SymTypeSet :
-        {
-          GAMSSet symbol = db.getSet( symbolID.toStdString() );
-          GAMSSymbolRecord rec1 = symbol.firstRecord();
-          EXPECT_THROW( GAMSSymbolRecord rec2 = GAMSParameterRecord( symbol.firstRecord()), GAMSException );
-          EXPECT_THROW( GAMSParameterRecord r = rec1, GAMSException );
-          break;
-        }
-      case GAMSEnum::SymbolType::SymTypeVar :
-        {
-          GAMSVariable symbol = db.getVariable( symbolID.toStdString() );
-          GAMSSymbolRecord rec1 = symbol.firstRecord();
-          EXPECT_THROW( GAMSSymbolRecord rec2 = GAMSParameterRecord( symbol.firstRecord() ), GAMSException );
-          EXPECT_THROW( GAMSParameterRecord r = rec1, GAMSException );
-          break;
-        }
-      case GAMSEnum::SymbolType::SymTypePar :
-      {
-        GAMSParameter symbol = db.getParameter( symbolID.toStdString() );
-        GAMSSymbolRecord rec1 = symbol.firstRecord();
-        EXPECT_THROW( GAMSSymbolRecord rec2 = GAMSSetRecord( symbol.firstRecord() ), GAMSException );
-        EXPECT_THROW( GAMSSetRecord r = rec1, GAMSException );
-        break;
-      }
-      default: break;
-    }
 }
 
 TEST_F(TestGAMSEquationRecord, testGetSetLevel) {
@@ -292,4 +243,57 @@ TEST_F(TestGAMSEquationRecord, testGetSetScale) {
     ASSERT_TRUE( equals(cost.firstRecord().scale(), 1.2345) );
 }
 
+class ParameterizedTestGAMSEquationRecord
+        : public ::testing::WithParamInterface<std::tuple<std::string, int, std::string>>,
+          public TestGAMSEquationRecord {
+};
 
+INSTANTIATE_TEST_SUITE_P(testIncorrectType,
+                        ParameterizedTestGAMSEquationRecord,
+                        ::testing::Values (
+                            std::make_tuple("plants_i",      0, "i"),
+                            std::make_tuple("distance_d",    1, "d"),
+                            std::make_tuple("freightcost_f", 1, "f"),
+                            std::make_tuple("shipment_x",    2, "x")
+                        ));
+
+TEST_P(ParameterizedTestGAMSEquationRecord, testIncorrectType) {
+    int symbolType = std::get<1>(GetParam());
+    std::string symbolID = std::get<2>(GetParam());
+
+    // given
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
+    GAMSWorkspace ws(wsInfo);
+    GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
+    job.run();
+    GAMSDatabase db = job.outDB();
+
+    // when, then
+    switch(symbolType) {
+      case GAMSEnum::SymbolType::SymTypeSet :
+        {
+          GAMSSet symbol = db.getSet( symbolID );
+          GAMSSymbolRecord rec1 = symbol.firstRecord();
+          EXPECT_THROW( GAMSSymbolRecord rec2 = GAMSParameterRecord( symbol.firstRecord()), GAMSException );
+          EXPECT_THROW( GAMSParameterRecord r = rec1, GAMSException );
+          break;
+        }
+      case GAMSEnum::SymbolType::SymTypeVar :
+        {
+          GAMSVariable symbol = db.getVariable( symbolID );
+          GAMSSymbolRecord rec1 = symbol.firstRecord();
+          EXPECT_THROW( GAMSSymbolRecord rec2 = GAMSParameterRecord( symbol.firstRecord() ), GAMSException );
+          EXPECT_THROW( GAMSParameterRecord r = rec1, GAMSException );
+          break;
+        }
+      case GAMSEnum::SymbolType::SymTypePar :
+      {
+        GAMSParameter symbol = db.getParameter( symbolID );
+        GAMSSymbolRecord rec1 = symbol.firstRecord();
+        EXPECT_THROW( GAMSSymbolRecord rec2 = GAMSSetRecord( symbol.firstRecord() ), GAMSException );
+        EXPECT_THROW( GAMSSetRecord r = rec1, GAMSException );
+        break;
+      }
+      default: break;
+    }
+}

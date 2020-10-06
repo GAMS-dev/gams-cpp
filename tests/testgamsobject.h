@@ -31,10 +31,6 @@
 #include <cmath>
 #include <limits>
 #include <unordered_set>
-#include <QObject>
-#include <QDir>
-#include <QTest>
-#include <QSet>
 
 #include "gamsdatabase.h"
 #include "gamsjob.h"
