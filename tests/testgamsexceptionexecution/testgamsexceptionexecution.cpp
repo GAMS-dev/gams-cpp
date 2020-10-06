@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-#include "testgamsexceptionexecution.h"
+#include "testgamsobject.h"
 #include "gamsexceptionexecution.h"
 
 using namespace gams;
@@ -39,17 +39,17 @@ TEST_F(TestGAMSExceptionExecution, testConstructor_string) {
         throw GAMSExceptionExecution(what, 13);
     } catch(GAMSExceptionExecution & e) {
         EXPECT_EQ( e.rc(), 13 );
-        EXPECT_EQ( e.what(), what.c_str());
+        EXPECT_STREQ( e.what(), what.c_str());
     }
 
     try{
        try {
             throw GAMSException(what);
        } catch(GAMSExceptionExecution & ) {
-           QFAIL("do not expect GAMSExceptionExecution to be thrown");
+           FAIL() << "do not expect GAMSExceptionExecution to be thrown";
        }
     } catch(GAMSException & e) {
-        EXPECT_EQ( e.what(), what.c_str());
+        EXPECT_STREQ( e.what(), what.c_str());
     }
 }
 
@@ -58,17 +58,17 @@ TEST_F(TestGAMSExceptionExecution, testConstructor_charptr) {
         throw GAMSExceptionExecution("testConstructor_charptr()", 17);
     } catch(GAMSExceptionExecution & e) {
         EXPECT_EQ( e.rc(), 17 );
-        EXPECT_EQ( e.what(), "testConstructor_charptr()");
+        EXPECT_STREQ( e.what(), "testConstructor_charptr()");
     }
 
     try{
        try {
             throw GAMSException("testConstructor_charptr()");
        } catch(GAMSExceptionExecution & ) {
-           QFAIL("do not expect GAMSExceptionExecution to be thrown");
+           FAIL() << "do not expect GAMSExceptionExecution to be thrown";
        }
     } catch(GAMSException & e) {
-        EXPECT_EQ( e.what(), "testConstructor_charptr()");
+        EXPECT_STREQ( e.what(), "testConstructor_charptr()");
     }
 }
 

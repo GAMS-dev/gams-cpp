@@ -100,7 +100,7 @@ TEST_F(TestGAMSSymbolDomainViolation, testEqualToOperator) {
          } else if (i==size_t(1)) {
                     ASSERT_TRUE(a.getSymbolDVs(2)[i] != dv1 );
          } else {
-             QFAIL("do not expect more than 2 database domain violation");
+             FAIL() << "do not expect more than 2 database domain violation";
          }
     }
 }
@@ -125,7 +125,7 @@ TEST_F(TestGAMSSymbolDomainViolation, testNotEqualToOperator) {
          } else if (i==size_t(1)) {
                     ASSERT_TRUE(a.getSymbolDVs(2)[i] != dv0 );
          } else {
-             QFAIL("do not expect more than 2 database domain violation");
+             FAIL() << "do not expect more than 2 database domain violation";
          }
     }
 }

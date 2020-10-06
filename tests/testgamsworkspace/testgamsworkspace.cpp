@@ -201,7 +201,7 @@ TEST_F(TestGAMSWorkspace, testGetVersion) {
     EXPECT_EQ(testGAMSVersion, QString::fromStdString(ws.version()));
     QStringList testGAMSVersionList = testGAMSVersion.split( "." );
     if (testGAMSVersionList.size() != 3)
-        QFAIL("The GAMSVersion shall consist of three numbers (MAJOR.MINOR.PATCH)");
+        FAIL() << "The GAMSVersion shall consist of three numbers (MAJOR.MINOR.PATCH)";
     EXPECT_EQ(ws.majorRelNumber(), testGAMSVersionList[0].toInt());
     EXPECT_EQ(ws.minorRelNumber(), testGAMSVersionList[1].toInt());
     EXPECT_EQ(ws.goldRelNumber(), testGAMSVersionList[2].toInt());
@@ -305,7 +305,7 @@ TEST_F(TestGAMSWorkspace, testAddDatabaseFromGDX1) {
             EXPECT_EQ( db.getSet("markets").numberRecords(), 3);
         } catch(GAMSException& e) {
             qDebug() << QString::fromStdString( ws.workingDirectory() );
-            QFAIL(qPrintable( "Unexpected GAMSException raised by: "+ QString::fromStdString(e.what()) ));
+            FAIL() << qPrintable( "Unexpected GAMSException raised by: "+ QString::fromStdString(e.what()) );
         }
     } else {
         // when, then
@@ -338,7 +338,7 @@ TEST_F(TestGAMSWorkspace, testAddDatabaseFromGDX2) {
        EXPECT_EQ( db.getNrSymbols(), numberOfSymbols );
     } catch(GAMSException& e) {
        qDebug() << qPrintable("error adding db from ["+ gdxfilename + "] at ["+  QString::fromStdString( ws.workingDirectory() )+"].");
-       QFAIL(qPrintable( "Unexpected GAMSException thrown: "+ QString::fromStdString(e.what()) ));
+       FAIL() << qPrintable( "Unexpected GAMSException thrown: "+ QString::fromStdString(e.what()) );
     }
 }
 
@@ -369,7 +369,7 @@ TEST_F(TestGAMSWorkspace, testAddDatabaseFromGDX3) {
        EXPECT_EQ( db.getNrSymbols(), numberOfSymbols );
     } catch(GAMSException& e) {
        qDebug() << qPrintable("error adding db from ["+ gdxfilename + "] at ["+  QString::fromStdString( ws.workingDirectory() )+"].");
-       QFAIL(qPrintable( "Unexpected GAMSException thrown: "+ QString::fromStdString(e.what()) ));
+       FAIL() << qPrintable( "Unexpected GAMSException thrown: "+ QString::fromStdString(e.what()) );
     }
 }
 
@@ -947,7 +947,7 @@ TEST_F(TestGAMSWorkspace, testAddOptions) {
         // when
        GAMSOptions opt = ws.addOptions();
     } catch(GAMSException& )  {
-       QFAIL("Do not expect a GAMSException to be thrown");
+       FAIL() << "Do not expect a GAMSException to be thrown";
     }
 }
 
@@ -961,7 +961,7 @@ TEST_F(TestGAMSWorkspace, testAddOptions_OptFrom) {
        opt1.setDefine("useBig", "1");
        GAMSOptions opt2 = ws.addOptions(opt1);
     } catch(GAMSException&)  {
-       QFAIL("Do not expect a GAMSException to be thrown");
+       FAIL() << "Do not expect a GAMSException to be thrown";
     }
 }
 
@@ -1014,7 +1014,7 @@ TEST_F(TestGAMSWorkspace, testAddOptions_OptFile) {
            EXPECT_EQ( opt.limCol(), 4 );
            EXPECT_EQ( opt.limRow(), 5 );
         } catch(GAMSException& e) {
-            QFAIL( qPrintable("AddOptions from existing optfile should not fail: "+QString::fromStdString(e.what())) );
+            FAIL() <<  qPrintable("AddOptions from existing optfile should not fail: "+QString::fromStdString(e.what())) ;
         }
     } else {
        EXPECT_THROW( ws.addOptions(optfilename.toStdString()), GAMSException);
@@ -1110,7 +1110,7 @@ TEST_F(TestGAMSWorkspace, testRetrievingInvalidModelFromLibrary) {
              break;
           default:  break;
        }
-       QFAIL(qPrintable("Expect GAMSException due to invalid model name ["+modname+"] on calling ["+library+"]"));
+       FAIL() << qPrintable("Expect GAMSException due to invalid model name ["+modname+"] on calling ["+library+"]");
     } catch(GAMSException &) {
         // then
         QString filename = modname+".gms";

@@ -25,7 +25,7 @@
  */
 
 #include "gamsexception.h"
-#include "testgamsexception.h"
+#include "testgamsobject.h"
 
 #include <QtTest>
 
@@ -40,7 +40,7 @@ TEST_F(TestGAMSException, testConstructor_string) {
     try {
         throw GAMSException(what);
     } catch(GAMSException & e) {
-        EXPECT_EQ( e.what(), what.c_str());
+        EXPECT_STREQ( e.what(), what.c_str());
     }
 }
 
@@ -48,7 +48,7 @@ TEST_F(TestGAMSException, testConstructor_charptr) {
     try {
        throw GAMSException("testConstructor_charptr()");
     } catch(GAMSException & e) {
-        EXPECT_EQ( e.what(), "testConstructor_charptr()");
+        EXPECT_STREQ( e.what(), "testConstructor_charptr()");
     }
 
 }

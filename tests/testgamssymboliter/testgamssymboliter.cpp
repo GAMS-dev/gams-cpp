@@ -126,7 +126,7 @@ TEST_F(TestGAMSSymbolIter, testConstructor_InvalidSymbol) {
     EXPECT_THROW( GAMSSymbolIter<GAMSSet> it(set, -1), GAMSException);
     EXPECT_THROW( GAMSSymbolIter<GAMSSet> it(set, 100), GAMSException);
     try {
-        for(GAMSSetRecord rec : set) { QFAIL("Invalid GAMSSet contains no record!");  }
+        for(GAMSSetRecord rec : set) { FAIL() << "Invalid GAMSSet contains no record!";  }
     } catch(GAMSException&) { ASSERT_TRUE(true); }
 
     GAMSParameter par;
@@ -134,7 +134,7 @@ TEST_F(TestGAMSSymbolIter, testConstructor_InvalidSymbol) {
     EXPECT_THROW( GAMSSymbolIter<GAMSParameter> it(par, -1), GAMSException);
     EXPECT_THROW( GAMSSymbolIter<GAMSParameter> it(par, 100), GAMSException);
     try {
-        for(GAMSParameterRecord rec : par) { QFAIL("Invalid GAMSParameter contains no record!");  }
+        for(GAMSParameterRecord rec : par) { FAIL() << "Invalid GAMSParameter contains no record!";  }
     } catch(GAMSException&) { ASSERT_TRUE(true); }
 
     GAMSEquation eq;
@@ -142,7 +142,7 @@ TEST_F(TestGAMSSymbolIter, testConstructor_InvalidSymbol) {
     EXPECT_THROW( GAMSSymbolIter<GAMSEquation> it(eq, -1), GAMSException);
     EXPECT_THROW( GAMSSymbolIter<GAMSEquation> it(eq, 100), GAMSException);
     try {
-        for(GAMSEquationRecord rec : eq) { QFAIL("Invalid GAMSEquation contains no record!");  }
+        for(GAMSEquationRecord rec : eq) { FAIL() << "Invalid GAMSEquation contains no record!";  }
     } catch(GAMSException&) { ASSERT_TRUE(true); }
 
     GAMSVariable var;
@@ -150,7 +150,7 @@ TEST_F(TestGAMSSymbolIter, testConstructor_InvalidSymbol) {
     EXPECT_THROW( GAMSSymbolIter<GAMSVariable> it(var, -1), GAMSException);
     EXPECT_THROW( GAMSSymbolIter<GAMSVariable> it(var, 100), GAMSException);
     try {
-        for(GAMSVariableRecord rec : var) { QFAIL("Invalid GAMSVariable contains no record!");  }
+        for(GAMSVariableRecord rec : var) { FAIL() << "Invalid GAMSVariable contains no record!";  }
     } catch(GAMSException&) { ASSERT_TRUE(true); }
 
 }
