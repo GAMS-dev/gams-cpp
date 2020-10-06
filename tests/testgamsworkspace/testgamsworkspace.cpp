@@ -41,7 +41,7 @@ class TestGAMSWorkspace: public TestGAMSObject
 {
 };
 
-void TestGAMSWorkspace::testDefaultConstructor() {
+TEST_F(TestGAMSWorkspace, testDefaultConstructor) {
     try {
         GAMSWorkspace ws;
 
@@ -61,7 +61,7 @@ void TestGAMSWorkspace::testDefaultConstructor() {
 }
 
 
-void TestGAMSWorkspace::testCopyConstructor() {
+TEST_F(TestGAMSWorkspace, testCopyConstructor) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws1(wsInfo);
@@ -74,7 +74,7 @@ void TestGAMSWorkspace::testCopyConstructor() {
     EXPECT_EQ(ws1, ws2);
 }
 
-void TestGAMSWorkspace::testConstructor_EmptyWorkspaceInfo() {
+TEST_F(TestGAMSWorkspace, testConstructor_EmptyWorkspaceInfo) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     // when
@@ -87,7 +87,7 @@ void TestGAMSWorkspace::testConstructor_EmptyWorkspaceInfo() {
     QDir(QString::fromStdString(ws.workingDirectory())).removeRecursively();
 }
 
-void TestGAMSWorkspace::testConstructor_WorkspaceInfo() {
+TEST_F(TestGAMSWorkspace, testConstructor_WorkspaceInfo) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     // when
@@ -100,7 +100,7 @@ void TestGAMSWorkspace::testConstructor_WorkspaceInfo() {
     EXPECT_EQ( ws.debug(), GAMSEnum::DebugLevel::Off );
 }
 
-void TestGAMSWorkspace::testConstructor_WorkingDirSystemDirAndDebug() {
+TEST_F(TestGAMSWorkspace, testConstructor_WorkingDirSystemDirAndDebug) {
     // given
     std::string wdir = QDir::currentPath().toStdString();
     std::string sdir = testSystemDir.absolutePath().toStdString();
@@ -116,7 +116,7 @@ void TestGAMSWorkspace::testConstructor_WorkingDirSystemDirAndDebug() {
     EXPECT_EQ(ws.debug(), GAMSEnum::DebugLevel::KeepFiles);
 }
 
-void TestGAMSWorkspace::testConstructor_WorkingDir() {
+TEST_F(TestGAMSWorkspace, testConstructor_WorkingDir) {
     // given
     std::string wdir = "";
     // when
@@ -126,7 +126,7 @@ void TestGAMSWorkspace::testConstructor_WorkingDir() {
     EXPECT_EQ(ws.debug(), GAMSEnum::DebugLevel::Off);
 }
 
-void TestGAMSWorkspace::testConstructor_WorkingDirSystemDir() {
+TEST_F(TestGAMSWorkspace, testConstructor_WorkingDirSystemDir) {
     // given
     std::string wdir = QDir::currentPath().toStdString();
     std::string sdir = testSystemDir.absolutePath().toStdString();
@@ -142,11 +142,11 @@ void TestGAMSWorkspace::testConstructor_WorkingDirSystemDir() {
     EXPECT_EQ(ws.debug(), GAMSEnum::DebugLevel::Off);
 }
 
-void TestGAMSWorkspace::testConstructor_DebugLevel_data() {
+TEST_F(TestGAMSWorkspace, testConstructor_DebugLevel_data) {
     TestGAMSObject::getTestData_DebugLevel();
 }
 
-void TestGAMSWorkspace::testConstructor_DebugLevel() {
+TEST_F(TestGAMSWorkspace, testConstructor_DebugLevel) {
     // TODO add case when "GAMSOOAPIDEBUG" has been set
     // given
     QFETCH(QString, debugLevel);
@@ -184,7 +184,7 @@ void TestGAMSWorkspace::testConstructor_DebugLevel() {
     }
 }
 
-void TestGAMSWorkspace::testConstructorFromOccupiedWorkingDirectory() {
+TEST_F(TestGAMSWorkspace, testConstructorFromOccupiedWorkingDirectory) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     wsInfo.setWorkingDirectory(QDir::currentPath().toStdString());
@@ -193,7 +193,7 @@ void TestGAMSWorkspace::testConstructorFromOccupiedWorkingDirectory() {
     EXPECT_THROW( GAMSWorkspace ws2(wsInfo), GAMSException);
 }
 
-void TestGAMSWorkspace::testGetVersion() {
+TEST_F(TestGAMSWorkspace, testGetVersion) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -207,7 +207,7 @@ void TestGAMSWorkspace::testGetVersion() {
     EXPECT_EQ(ws.goldRelNumber(), testGAMSVersionList[2].toInt());
 }
 
-void TestGAMSWorkspace::testGetAPIVersion() {
+TEST_F(TestGAMSWorkspace, testGetAPIVersion) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -219,7 +219,7 @@ void TestGAMSWorkspace::testGetAPIVersion() {
     EXPECT_EQ(ws.apiGoldRelNumber(), testAPIVersionList[2].toInt());
 }
 
-void TestGAMSWorkspace::testGetScratchFilePrefix() {
+TEST_F(TestGAMSWorkspace, testGetScratchFilePrefix) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -228,7 +228,7 @@ void TestGAMSWorkspace::testGetScratchFilePrefix() {
     EXPECT_EQ( ws.scratchFilePrefix(), defaultScratchFilePrefix );
 }
 
-void TestGAMSWorkspace::testSetScratchFilePrefix_data() {
+TEST_F(TestGAMSWorkspace, testSetScratchFilePrefix_data) {
     QTest::addColumn<QString>("prefixname");
     QTest::addColumn<bool>("valid");
 
@@ -238,7 +238,7 @@ void TestGAMSWorkspace::testSetScratchFilePrefix_data() {
     QTest::newRow("EmptyStringPrefix")    << ""          << true ;
 }
 
-void TestGAMSWorkspace::testSetScratchFilePrefix() {
+TEST_F(TestGAMSWorkspace, testSetScratchFilePrefix) {
     // given
     QFETCH(QString, prefixname);
     QFETCH(bool, valid);
@@ -256,7 +256,7 @@ void TestGAMSWorkspace::testSetScratchFilePrefix() {
     }
 }
 
-void TestGAMSWorkspace::testGetMyEPS() {
+TEST_F(TestGAMSWorkspace, testGetMyEPS) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -264,7 +264,7 @@ void TestGAMSWorkspace::testGetMyEPS() {
     EXPECT_EQ( ws.myEPS(),  defaultEPS );
 }
 
-void TestGAMSWorkspace::testSetMyEPS()  {
+TEST_F(TestGAMSWorkspace, testSetMyEPS) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -275,7 +275,7 @@ void TestGAMSWorkspace::testSetMyEPS()  {
     EXPECT_EQ(  ws.myEPS(), myEPS );
 }
 
-void TestGAMSWorkspace::testAddDatabaseFromGDX1_data() {
+TEST_F(TestGAMSWorkspace, testAddDatabaseFromGDX1_data) {
     QTest::addColumn<QString>("gdxfilename");
     QTest::addColumn<QString>("fromDataLib");
     QTest::addColumn<bool>("valid");
@@ -285,7 +285,7 @@ void TestGAMSWorkspace::testAddDatabaseFromGDX1_data() {
     QTest::newRow("EmptyStringFileName")     << ""                             << ""  << false  ;
 }
 
-void TestGAMSWorkspace::testAddDatabaseFromGDX1() {
+TEST_F(TestGAMSWorkspace, testAddDatabaseFromGDX1) {
     // given
     QFETCH(QString, gdxfilename);
     QFETCH(QString, fromDataLib);
@@ -313,7 +313,7 @@ void TestGAMSWorkspace::testAddDatabaseFromGDX1() {
     }
 }
 
-void TestGAMSWorkspace::testAddDatabaseFromGDX2_data() {
+TEST_F(TestGAMSWorkspace, testAddDatabaseFromGDX2_data) {
     QTest::addColumn<QString>("gdxfilename");
     QTest::addColumn<QString>("fromDataLib");
     QTest::addColumn<int>("numberOfSymbols");
@@ -322,7 +322,7 @@ void TestGAMSWorkspace::testAddDatabaseFromGDX2_data() {
     QTest::newRow("db_DemandData")              << "DemandData.gdx" << "GDXINExample2"           << 2 ;
 }
 
-void TestGAMSWorkspace::testAddDatabaseFromGDX2() {
+TEST_F(TestGAMSWorkspace, testAddDatabaseFromGDX2) {
     // given
     QFETCH(QString, gdxfilename);
     QFETCH(QString, fromDataLib);
@@ -342,7 +342,7 @@ void TestGAMSWorkspace::testAddDatabaseFromGDX2() {
     }
 }
 
-void TestGAMSWorkspace::testAddDatabaseFromGDX3_data() {
+TEST_F(TestGAMSWorkspace, testAddDatabaseFromGDX3_data) {
     QTest::addColumn<QString>("gdxfilename");
     QTest::addColumn<QString>("fromDataLib");
     QTest::addColumn<int>("numberOfSymbols");
@@ -351,7 +351,7 @@ void TestGAMSWorkspace::testAddDatabaseFromGDX3_data() {
     QTest::newRow("db_Trnsport")         << "Trnsport.gdx"     << "GDXINExample3"     << 12 ;
 }
 
-void TestGAMSWorkspace::testAddDatabaseFromGDX3() {
+TEST_F(TestGAMSWorkspace, testAddDatabaseFromGDX3) {
     // given
     QFETCH(QString, gdxfilename);
     QFETCH(QString, fromDataLib);
@@ -373,7 +373,7 @@ void TestGAMSWorkspace::testAddDatabaseFromGDX3() {
     }
 }
 
-void TestGAMSWorkspace::testAddDatabase() {
+TEST_F(TestGAMSWorkspace, testAddDatabase) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -383,7 +383,7 @@ void TestGAMSWorkspace::testAddDatabase() {
     TestGAMSObject::testEmptyDatabase(db, ws);
 }
 
-void TestGAMSWorkspace::testAddDatabase_Name() {
+TEST_F(TestGAMSWorkspace, testAddDatabase_Name) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -395,7 +395,7 @@ void TestGAMSWorkspace::testAddDatabase_Name() {
     TestGAMSObject::testEmptyDatabase(db, ws);
 }
 
-void TestGAMSWorkspace::testAddDatabase_NameAndModelName() {
+TEST_F(TestGAMSWorkspace, testAddDatabase_NameAndModelName) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -409,7 +409,7 @@ void TestGAMSWorkspace::testAddDatabase_NameAndModelName() {
     // @todo EXPECT_EQ( db.inModelName(), modname );
 }
 
-void TestGAMSWorkspace::testAddDatabase_Source() {
+TEST_F(TestGAMSWorkspace, testAddDatabase_Source) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -423,7 +423,7 @@ void TestGAMSWorkspace::testAddDatabase_Source() {
     EXPECT_EQ( db2.getNrSymbols(), 2 );
 }
 
-void TestGAMSWorkspace::testAddDatabase_SourceAndName() {
+TEST_F(TestGAMSWorkspace, testAddDatabase_SourceAndName) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -442,7 +442,7 @@ void TestGAMSWorkspace::testAddDatabase_SourceAndName() {
     EXPECT_EQ( db3.name(), dbname );
 }
 
-void TestGAMSWorkspace::testAddDatabase_SourceNameAndModelName() {
+TEST_F(TestGAMSWorkspace, testAddDatabase_SourceNameAndModelName) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -460,7 +460,7 @@ void TestGAMSWorkspace::testAddDatabase_SourceNameAndModelName() {
     EXPECT_EQ( db2.name(), dbname );
 }
 
-void TestGAMSWorkspace::testAddCheckpoint() {
+TEST_F(TestGAMSWorkspace, testAddCheckpoint) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -471,7 +471,7 @@ void TestGAMSWorkspace::testAddCheckpoint() {
     ASSERT_TRUE( QString::fromStdString(cp.name()).startsWith(defaultScratchFilePrefix.c_str()) );
 }
 
-void TestGAMSWorkspace::testAddCheckpoint_Name_data() {
+TEST_F(TestGAMSWorkspace, testAddCheckpoint_Name_data) {
     QTest::addColumn<QString>("cpname");
     QTest::addColumn<bool>("name_assigned");
 
@@ -481,7 +481,7 @@ void TestGAMSWorkspace::testAddCheckpoint_Name_data() {
     QTest::newRow("EmptyStringName")    << ""              << false ;
 }
 
-void TestGAMSWorkspace::testAddCheckpoint_Name() {
+TEST_F(TestGAMSWorkspace, testAddCheckpoint_Name) {
     // given
     QFETCH(QString, cpname);
     QFETCH(bool, name_assigned);
@@ -498,7 +498,7 @@ void TestGAMSWorkspace::testAddCheckpoint_Name() {
        ASSERT_TRUE( QString::fromStdString(cp.name()).startsWith(defaultScratchFilePrefix.c_str()) );
 }
 
-void TestGAMSWorkspace::testAddJobFromFile() {
+TEST_F(TestGAMSWorkspace, testAddJobFromFile) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -509,7 +509,7 @@ void TestGAMSWorkspace::testAddJobFromFile() {
     TestGAMSObject::testJobBeforeRun(job, ws);
 }
 
-void TestGAMSWorkspace::testAddJobFromFile_JobName() {
+TEST_F(TestGAMSWorkspace, testAddJobFromFile_JobName) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -522,7 +522,7 @@ void TestGAMSWorkspace::testAddJobFromFile_JobName() {
     TestGAMSObject::testJobBeforeRun(job, ws);
 }
 
-void TestGAMSWorkspace::testAddJobFromFile_SameJobName() {
+TEST_F(TestGAMSWorkspace, testAddJobFromFile_SameJobName) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -537,7 +537,7 @@ void TestGAMSWorkspace::testAddJobFromFile_SameJobName() {
     EXPECT_THROW( ws.addJobFromFile("chenery.gms", jobname), GAMSException);
 }
 
-void TestGAMSWorkspace::testAddJobFromFile_Checkpoint() {
+TEST_F(TestGAMSWorkspace, testAddJobFromFile_Checkpoint) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -555,7 +555,7 @@ void TestGAMSWorkspace::testAddJobFromFile_Checkpoint() {
     TestGAMSObject::testJobBeforeRun(job, ws);
 }
 
-void TestGAMSWorkspace::testAddJobFromFile_CheckpointAndJobName() {
+TEST_F(TestGAMSWorkspace, testAddJobFromFile_CheckpointAndJobName) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -570,7 +570,7 @@ void TestGAMSWorkspace::testAddJobFromFile_CheckpointAndJobName() {
     TestGAMSObject::testJobBeforeRun(job, ws);
 }
 
-void TestGAMSWorkspace::testAddJobFromEmptyString() {
+TEST_F(TestGAMSWorkspace, testAddJobFromEmptyString) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -581,7 +581,7 @@ void TestGAMSWorkspace::testAddJobFromEmptyString() {
     EXPECT_THROW( job.run(), GAMSException );
 }
 
-void TestGAMSWorkspace::testAddJobFromString() {
+TEST_F(TestGAMSWorkspace, testAddJobFromString) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -591,7 +591,7 @@ void TestGAMSWorkspace::testAddJobFromString() {
     TestGAMSObject::testJobBeforeRun(job, ws);
 }
 
-void TestGAMSWorkspace::testAddJobFromString_Checkpoint() {
+TEST_F(TestGAMSWorkspace, testAddJobFromString_Checkpoint) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -608,7 +608,7 @@ void TestGAMSWorkspace::testAddJobFromString_Checkpoint() {
     TestGAMSObject::testJobBeforeRun(job, ws);
 }
 
-void TestGAMSWorkspace::testAddJobFromString_JobName() {
+TEST_F(TestGAMSWorkspace, testAddJobFromString_JobName) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -618,7 +618,7 @@ void TestGAMSWorkspace::testAddJobFromString_JobName() {
     TestGAMSObject::testJobBeforeRun(job, ws);
 }
 
-void TestGAMSWorkspace::testAddJobFromString_SameJobName() {
+TEST_F(TestGAMSWorkspace, testAddJobFromString_SameJobName) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -629,7 +629,7 @@ void TestGAMSWorkspace::testAddJobFromString_SameJobName() {
     EXPECT_THROW( ws.addJobFromString(getShortModelText(), jobname), GAMSException);
 }
 
-void TestGAMSWorkspace::testAddValidJobFromString_CheckpointAndJobName() {
+TEST_F(TestGAMSWorkspace, testAddValidJobFromString_CheckpointAndJobName) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -645,7 +645,7 @@ void TestGAMSWorkspace::testAddValidJobFromString_CheckpointAndJobName() {
     TestGAMSObject::testJobBeforeRun(job, ws);
 }
 
-void TestGAMSWorkspace::testAddInvalidJobFromString_CheckpointAndJobName() {
+TEST_F(TestGAMSWorkspace, testAddInvalidJobFromString_CheckpointAndJobName) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -654,7 +654,7 @@ void TestGAMSWorkspace::testAddInvalidJobFromString_CheckpointAndJobName() {
     EXPECT_THROW( ws.addJobFromString( getLongModelText(), cp, "myJobName" ), GAMSException );
 }
 
-void TestGAMSWorkspace::testAddJobFromApiLibrary_data() {
+TEST_F(TestGAMSWorkspace, testAddJobFromApiLibrary_data) {
     QTest::addColumn<QString>("modname");
     QTest::addColumn<bool>("valid");
 
@@ -663,7 +663,7 @@ void TestGAMSWorkspace::testAddJobFromApiLibrary_data() {
     QTest::newRow("Invalid_apilib") << "ThisIsAnUnusualModelName" << false ;
 }
 
-void TestGAMSWorkspace::testAddJobFromApiLibrary() {
+TEST_F(TestGAMSWorkspace, testAddJobFromApiLibrary) {
     // given
     QFETCH(QString, modname);
     QFETCH(bool, valid);
@@ -679,7 +679,7 @@ void TestGAMSWorkspace::testAddJobFromApiLibrary() {
     }
 }
 
-void TestGAMSWorkspace::testAddJobFromGamsLibrary_data() {
+TEST_F(TestGAMSWorkspace, testAddJobFromGamsLibrary_data) {
     QTest::addColumn<QString>("modname");
     QTest::addColumn<bool>("valid");
 
@@ -689,7 +689,7 @@ void TestGAMSWorkspace::testAddJobFromGamsLibrary_data() {
     QTest::newRow("Invalid_gamslib2")   << "ThisIsAnUnusualModelName2" << false ;
 }
 
-void TestGAMSWorkspace::testAddJobFromGamsLibrary() {
+TEST_F(TestGAMSWorkspace, testAddJobFromGamsLibrary) {
     // given
     QFETCH(QString, modname);
     QFETCH(bool, valid);
@@ -705,7 +705,7 @@ void TestGAMSWorkspace::testAddJobFromGamsLibrary() {
     }
 }
 
-void TestGAMSWorkspace::testAddJobFromTestLibrary_data() {
+TEST_F(TestGAMSWorkspace, testAddJobFromTestLibrary_data) {
     QTest::addColumn<QString>("modname");
     QTest::addColumn<bool>("valid");
 
@@ -714,7 +714,7 @@ void TestGAMSWorkspace::testAddJobFromTestLibrary_data() {
     QTest::newRow("Invalid_testlib") << "ThisIsAnUnusualModelName" << false ;
 }
 
-void TestGAMSWorkspace::testAddJobFromTestLibrary() {
+TEST_F(TestGAMSWorkspace, testAddJobFromTestLibrary) {
     // given
     QFETCH(QString, modname);
     QFETCH(bool, valid);
@@ -731,7 +731,7 @@ void TestGAMSWorkspace::testAddJobFromTestLibrary() {
     }
 }
 
-void TestGAMSWorkspace::testAddJobFromDataLibrary_data() {
+TEST_F(TestGAMSWorkspace, testAddJobFromDataLibrary_data) {
     QTest::addColumn<QString>("modname");
     QTest::addColumn<bool>("valid");
 
@@ -740,7 +740,7 @@ void TestGAMSWorkspace::testAddJobFromDataLibrary_data() {
     QTest::newRow("Invalid_datalib") << "ThisIsAnUnusualModelName" << false ;
 }
 
-void TestGAMSWorkspace::testAddJobFromDataLibrary() {
+TEST_F(TestGAMSWorkspace, testAddJobFromDataLibrary) {
     // given
     QFETCH(QString, modname);
     QFETCH(bool, valid);
@@ -756,7 +756,7 @@ void TestGAMSWorkspace::testAddJobFromDataLibrary() {
     }
 }
 
-void TestGAMSWorkspace::testAddJobFromEmpLibrary_data() {
+TEST_F(TestGAMSWorkspace, testAddJobFromEmpLibrary_data) {
     QTest::addColumn<QString>("modname");
     QTest::addColumn<bool>("valid");
 
@@ -765,7 +765,7 @@ void TestGAMSWorkspace::testAddJobFromEmpLibrary_data() {
     QTest::newRow("Invalid_emplib") << "ThisIsAnUnusualModelName" << false;
 }
 
-void TestGAMSWorkspace::testAddJobFromEmpLibrary() {
+TEST_F(TestGAMSWorkspace, testAddJobFromEmpLibrary) {
     // given
     QFETCH(QString, modname);
     QFETCH(bool, valid);
@@ -781,7 +781,7 @@ void TestGAMSWorkspace::testAddJobFromEmpLibrary() {
     }
 }
 
-void TestGAMSWorkspace::testAddJobFromFinLibrary_data() {
+TEST_F(TestGAMSWorkspace, testAddJobFromFinLibrary_data) {
     QTest::addColumn<QString>("modname");
     QTest::addColumn<bool>("valid");
 
@@ -790,7 +790,7 @@ void TestGAMSWorkspace::testAddJobFromFinLibrary_data() {
     QTest::newRow("Invalid_finlib")      << "ThisIsAnUnusualModelName" << false ;
 }
 
-void TestGAMSWorkspace::testAddJobFromFinLibrary() {
+TEST_F(TestGAMSWorkspace, testAddJobFromFinLibrary) {
     // given
     QFETCH(QString, modname);
     QFETCH(bool, valid);
@@ -806,7 +806,7 @@ void TestGAMSWorkspace::testAddJobFromFinLibrary() {
     }
 }
 
-void TestGAMSWorkspace::testAddJobFromNoaLibrary_data() {
+TEST_F(TestGAMSWorkspace, testAddJobFromNoaLibrary_data) {
     QTest::addColumn<QString>("modname");
     QTest::addColumn<bool>("valid");
 
@@ -815,7 +815,7 @@ void TestGAMSWorkspace::testAddJobFromNoaLibrary_data() {
     QTest::newRow("Invalid_noalib") << "ThisIsAnUnusualModelName" << false ;
 }
 
-void TestGAMSWorkspace::testAddJobFromNoaLibrary() {
+TEST_F(TestGAMSWorkspace, testAddJobFromNoaLibrary) {
     // given
     QFETCH(QString, modname);
     QFETCH(bool, valid);
@@ -831,7 +831,7 @@ void TestGAMSWorkspace::testAddJobFromNoaLibrary() {
     }
 }
 
-void TestGAMSWorkspace::testAddJobFromPsoptLibrary_data() {
+TEST_F(TestGAMSWorkspace, testAddJobFromPsoptLibrary_data) {
     QTest::addColumn<QString>("modname");
     QTest::addColumn<bool>("valid");
 
@@ -839,7 +839,7 @@ void TestGAMSWorkspace::testAddJobFromPsoptLibrary_data() {
     QTest::newRow("Invalid_psoptlib") << "ThisIsAnUnusualModelName" << false;
 }
 
-void TestGAMSWorkspace::testAddJobFromPsoptLibrary() {
+TEST_F(TestGAMSWorkspace, testAddJobFromPsoptLibrary) {
     // given
     QFETCH(QString, modname);
     QFETCH(bool, valid);
@@ -855,11 +855,11 @@ void TestGAMSWorkspace::testAddJobFromPsoptLibrary() {
     }
 }
 
-void TestGAMSWorkspace::testAddJobFromLibrary_Checkpoint_data() {
+TEST_F(TestGAMSWorkspace, testAddJobFromLibrary_Checkpoint_data) {
     TestGAMSObject::getTestData_ModelLibraries();
 }
 
-void TestGAMSWorkspace::testAddJobFromLibrary_Checkpoint() {
+TEST_F(TestGAMSWorkspace, testAddJobFromLibrary_Checkpoint) {
     // given
     QFETCH(int, index);
     QFETCH(QString, library);
@@ -897,11 +897,11 @@ void TestGAMSWorkspace::testAddJobFromLibrary_Checkpoint() {
     }
 }
 
-void TestGAMSWorkspace::testAddJobFromLibrary_CheckpointAndJobName_data() {
+TEST_F(TestGAMSWorkspace, testAddJobFromLibrary_CheckpointAndJobName_data) {
     TestGAMSObject::getTestData_ModelLibraries();
 }
 
-void TestGAMSWorkspace::testAddJobFromLibrary_CheckpointAndJobName() {
+TEST_F(TestGAMSWorkspace, testAddJobFromLibrary_CheckpointAndJobName) {
     // given
     QFETCH(int, index);
     QFETCH(QString, library);
@@ -939,7 +939,7 @@ void TestGAMSWorkspace::testAddJobFromLibrary_CheckpointAndJobName() {
     }
 }
 
-void TestGAMSWorkspace::testAddOptions() {
+TEST_F(TestGAMSWorkspace, testAddOptions) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -951,7 +951,7 @@ void TestGAMSWorkspace::testAddOptions() {
     }
 }
 
-void TestGAMSWorkspace::testAddOptions_OptFrom() {
+TEST_F(TestGAMSWorkspace, testAddOptions_OptFrom) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -965,7 +965,7 @@ void TestGAMSWorkspace::testAddOptions_OptFrom() {
     }
 }
 
-void TestGAMSWorkspace::testAddOptions_OptFile_data() {
+TEST_F(TestGAMSWorkspace, testAddOptions_OptFile_data) {
     QString currentWorkingPath = QCoreApplication::applicationDirPath();
     QDir dir(currentWorkingPath);
 
@@ -993,7 +993,7 @@ void TestGAMSWorkspace::testAddOptions_OptFile_data() {
    }
 }
 
-void TestGAMSWorkspace::testAddOptions_OptFile() {
+TEST_F(TestGAMSWorkspace, testAddOptions_OptFile) {
 
     // when
     QFETCH(QString, optfilename);
@@ -1024,11 +1024,11 @@ void TestGAMSWorkspace::testAddOptions_OptFile() {
        dir.removeRecursively();
 }
 
-void TestGAMSWorkspace::testRetrievingModelFromLibrary_data() {
+TEST_F(TestGAMSWorkspace, testRetrievingModelFromLibrary_data) {
     TestGAMSObject::getTestData_ModelLibraries();
 }
 
-void TestGAMSWorkspace::testRetrievingModelFromLibrary() {
+TEST_F(TestGAMSWorkspace, testRetrievingModelFromLibrary) {
     // given
     QFETCH(int, index);
     QFETCH(QString, library);
@@ -1072,11 +1072,11 @@ void TestGAMSWorkspace::testRetrievingModelFromLibrary() {
     }
 }
 
-void TestGAMSWorkspace::testRetrievingInvalidModelFromLibrary_data() {
+TEST_F(TestGAMSWorkspace, testRetrievingInvalidModelFromLibrary_data) {
     TestGAMSObject::getTestData_InvalidModelLibraries();
 }
 
-void TestGAMSWorkspace::testRetrievingInvalidModelFromLibrary() {
+TEST_F(TestGAMSWorkspace, testRetrievingInvalidModelFromLibrary) {
     // given
     QFETCH(int, index);
     QFETCH(QString, library);
@@ -1119,7 +1119,7 @@ void TestGAMSWorkspace::testRetrievingInvalidModelFromLibrary() {
     }
 }
 
-void TestGAMSWorkspace::testGetWorkingDirectory() {
+TEST_F(TestGAMSWorkspace, testGetWorkingDirectory) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1127,7 +1127,7 @@ void TestGAMSWorkspace::testGetWorkingDirectory() {
     TestGAMSObject::testDir( QString::fromStdString(ws.workingDirectory()) );
 }
 
-void TestGAMSWorkspace::testGetSystemDirectory() {
+TEST_F(TestGAMSWorkspace, testGetSystemDirectory) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1135,7 +1135,7 @@ void TestGAMSWorkspace::testGetSystemDirectory() {
     TestGAMSObject::testDir( QString::fromStdString(ws.workingDirectory()) );
 }
 
-void TestGAMSWorkspace::testEqualToOperator() {
+TEST_F(TestGAMSWorkspace, testEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws1(wsInfo);
@@ -1149,7 +1149,7 @@ void TestGAMSWorkspace::testEqualToOperator() {
     ASSERT_TRUE(!(ws3 == ws1) );
 }
 
-void TestGAMSWorkspace::testNotEqualToOperator() {
+TEST_F(TestGAMSWorkspace, testNotEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws1(wsInfo);
@@ -1163,7 +1163,7 @@ void TestGAMSWorkspace::testNotEqualToOperator() {
     ASSERT_TRUE( ws3 != ws1 );
 }
 
-void TestGAMSWorkspace::testGetDebug() {
+TEST_F(TestGAMSWorkspace, testGetDebug) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1172,7 +1172,7 @@ void TestGAMSWorkspace::testGetDebug() {
     ASSERT_TRUE( ws.debug() <= GAMSEnum::DebugLevel::Verbose );
 }
 
-void TestGAMSWorkspace::testGetLogID() {
+TEST_F(TestGAMSWorkspace, testGetLogID) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws1(wsInfo);
@@ -1186,11 +1186,11 @@ void TestGAMSWorkspace::testGetLogID() {
     ASSERT_TRUE( ws1.logID() != ws3.logID());
 }
 
-void TestGAMSWorkspace::testGetSpecValues_data() {
+TEST_F(TestGAMSWorkspace, testGetSpecValues_data) {
     TestGAMSObject::getTestData_SpecialValues();
 }
 
-void TestGAMSWorkspace::testGetSpecValues() {
+TEST_F(TestGAMSWorkspace, testGetSpecValues) {
     QFETCH(int, index);
     QFETCH(double, value);
 

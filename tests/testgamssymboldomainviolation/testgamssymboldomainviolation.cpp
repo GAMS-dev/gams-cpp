@@ -33,7 +33,7 @@ class TestGAMSDatabaseDomainViolation: public TestGAMSObject
 {
 };
 
-void TestGAMSSymbolDomainViolation::testDefaultConstructor() {
+TEST_F(TestGAMSSymbolDomainViolation, testDefaultConstructor) {
     // when,
     GAMSSymbolDomainViolation dv;
     // then
@@ -45,7 +45,7 @@ void TestGAMSSymbolDomainViolation::testDefaultConstructor() {
     ASSERT_TRUE( dv == dv1 );
 }
 
-void TestGAMSSymbolDomainViolation::testCopyConstructor() {
+TEST_F(TestGAMSSymbolDomainViolation, testCopyConstructor) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -64,7 +64,7 @@ void TestGAMSSymbolDomainViolation::testCopyConstructor() {
     }
 }
 
-void TestGAMSSymbolDomainViolation::testIsValid() {
+TEST_F(TestGAMSSymbolDomainViolation, testIsValid) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -79,7 +79,7 @@ void TestGAMSSymbolDomainViolation::testIsValid() {
 
 }
 
-void TestGAMSSymbolDomainViolation::testEqualToOperator() {
+TEST_F(TestGAMSSymbolDomainViolation, testEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -105,7 +105,7 @@ void TestGAMSSymbolDomainViolation::testEqualToOperator() {
     }
 }
 
-void TestGAMSSymbolDomainViolation::testNotEqualToOperator() {
+TEST_F(TestGAMSSymbolDomainViolation, testNotEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -130,7 +130,7 @@ void TestGAMSSymbolDomainViolation::testNotEqualToOperator() {
     }
 }
 
-void TestGAMSSymbolDomainViolation::testViolRecs() {
+TEST_F(TestGAMSSymbolDomainViolation, testViolRecs) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -163,7 +163,7 @@ void TestGAMSSymbolDomainViolation::testViolRecs() {
     }
 }
 
-void TestGAMSSymbolDomainViolation::testViolInd() {
+TEST_F(TestGAMSSymbolDomainViolation, testViolInd) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);

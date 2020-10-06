@@ -37,7 +37,7 @@ class TestGAMSSet: public TestGAMSObject
 {
 };
 
-void TestGAMSSet::testDefaultConstructor() {
+TEST_F(TestGAMSSet, testDefaultConstructor) {
     // when
     GAMSSet s;
 
@@ -52,7 +52,7 @@ void TestGAMSSet::testDefaultConstructor() {
     EXPECT_THROW( s.addRecord("x"), GAMSException );
 }
 
-void TestGAMSSet::testCopyConstructor() {
+TEST_F(TestGAMSSet, testCopyConstructor) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -73,7 +73,7 @@ void TestGAMSSet::testCopyConstructor() {
     EXPECT_EQ( plant.numberRecords(), i.numberRecords() );
 }
 
-void TestGAMSSet::testCopyConstructor_IncorrectType() {
+TEST_F(TestGAMSSet, testCopyConstructor_IncorrectType) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -87,7 +87,7 @@ void TestGAMSSet::testCopyConstructor_IncorrectType() {
     EXPECT_THROW( GAMSSet set_cost( db.getEquation("cost")), GAMSException);
 }
 
-void TestGAMSSet::testIterator() {
+TEST_F(TestGAMSSet, testIterator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -111,7 +111,7 @@ void TestGAMSSet::testIterator() {
     EXPECT_EQ( symbolCounter["Topeka"], 1 );
 }
 
-void TestGAMSSet::testAssignmentOperator() {
+TEST_F(TestGAMSSet, testAssignmentOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -128,7 +128,7 @@ void TestGAMSSet::testAssignmentOperator() {
     EXPECT_EQ( db.getNrSymbols(), numberOfSymbols );
 }
 
-void TestGAMSSet::testAssignmentOperator_IncorrectType() {
+TEST_F(TestGAMSSet, testAssignmentOperator_IncorrectType) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -142,7 +142,7 @@ void TestGAMSSet::testAssignmentOperator_IncorrectType() {
     EXPECT_THROW( GAMSSet supply = db.getEquation("supply"), GAMSException);
 }
 
-void TestGAMSSet::testGetFirstRecord() {
+TEST_F(TestGAMSSet, testGetFirstRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -155,7 +155,7 @@ void TestGAMSSet::testGetFirstRecord() {
     EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "seattle", Qt::CaseInsensitive ), 0 );
 }
 
-void TestGAMSSet::testGetFirstRecordSlice() {
+TEST_F(TestGAMSSet, testGetFirstRecordSlice) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -168,7 +168,7 @@ void TestGAMSSet::testGetFirstRecordSlice() {
     EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseInsensitive ), 0 );
 }
 
-void TestGAMSSet::testGetFirstRecordSlice_InvalidKeys_IncorrectDimension() {
+TEST_F(TestGAMSSet, testGetFirstRecordSlice_InvalidKeys_IncorrectDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -182,7 +182,7 @@ void TestGAMSSet::testGetFirstRecordSlice_InvalidKeys_IncorrectDimension() {
     EXPECT_THROW( j.firstRecord("topeka", "Albuquerque"), GAMSException );
 }
 
-void TestGAMSSet::testGetLastRecord() {
+TEST_F(TestGAMSSet, testGetLastRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -195,7 +195,7 @@ void TestGAMSSet::testGetLastRecord() {
     EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "san-diego", Qt::CaseInsensitive ), 0 );
 }
 
-void TestGAMSSet::testGetLastRecordSlice() {
+TEST_F(TestGAMSSet, testGetLastRecordSlice) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -208,7 +208,7 @@ void TestGAMSSet::testGetLastRecordSlice() {
     EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "chicago", Qt::CaseInsensitive ), 0 );
 }
 
-void TestGAMSSet::testGetLastRecordSlice_InvalidKeys_IncorrectDimension() {
+TEST_F(TestGAMSSet, testGetLastRecordSlice_InvalidKeys_IncorrectDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -222,7 +222,7 @@ void TestGAMSSet::testGetLastRecordSlice_InvalidKeys_IncorrectDimension() {
     EXPECT_THROW( j.lastRecord("topeka", "Albuquerque"), GAMSException );
 }
 
-void TestGAMSSet::testFindRecord() {
+TEST_F(TestGAMSSet, testFindRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -235,7 +235,7 @@ void TestGAMSSet::testFindRecord() {
     EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseInsensitive ), 0 );
 }
 
-void TestGAMSSet::testFindRecord_InsensitiveCaseKeys() {
+TEST_F(TestGAMSSet, testFindRecord_InsensitiveCaseKeys) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -248,7 +248,7 @@ void TestGAMSSet::testFindRecord_InsensitiveCaseKeys() {
     EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseInsensitive ), 0 );
 }
 
-void TestGAMSSet::testAddRecord() {
+TEST_F(TestGAMSSet, testAddRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -277,7 +277,7 @@ void TestGAMSSet::testAddRecord() {
     }
 }
 
-void TestGAMSSet::testAddRecord_DuplicatedKeys_IncorrectDimension() {
+TEST_F(TestGAMSSet, testAddRecord_DuplicatedKeys_IncorrectDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -295,7 +295,7 @@ void TestGAMSSet::testAddRecord_DuplicatedKeys_IncorrectDimension() {
     EXPECT_EQ( j.numberRecords(), numberOfRecords );
 }
 
-void TestGAMSSet::testMergeExistingRecord() {
+TEST_F(TestGAMSSet, testMergeExistingRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -310,7 +310,7 @@ void TestGAMSSet::testMergeExistingRecord() {
     EXPECT_EQ( rec.key(0).c_str(), "Chicago" );
 }
 
-void TestGAMSSet::testMergeNonExistingRecord() {
+TEST_F(TestGAMSSet, testMergeNonExistingRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);

@@ -38,7 +38,7 @@ class TestGAMSModifier: public TestGAMSObject
 {
 };
 
-void TestGAMSModifier::testDefaultConstructor() {
+TEST_F(TestGAMSModifier, testDefaultConstructor) {
      // when
      GAMSModifier mod;
      // then
@@ -52,7 +52,7 @@ void TestGAMSModifier::testDefaultConstructor() {
      EXPECT_THROW( mod.isVariable(), GAMSException );
 }
 
-void TestGAMSModifier::testConstructor_Par() {
+TEST_F(TestGAMSModifier, testConstructor_Par) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -81,7 +81,7 @@ void TestGAMSModifier::testConstructor_Par() {
     }
 }
 
-void TestGAMSModifier::testConstructor_Var() {
+TEST_F(TestGAMSModifier, testConstructor_Var) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -126,7 +126,7 @@ void TestGAMSModifier::testConstructor_Var() {
     }
 }
 
-void TestGAMSModifier::testConstructor_Equ() {
+TEST_F(TestGAMSModifier, testConstructor_Equ) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -178,7 +178,7 @@ void TestGAMSModifier::testConstructor_Equ() {
     }
 }
 
-void TestGAMSModifier::testAssignmentOperator_Par() {
+TEST_F(TestGAMSModifier, testAssignmentOperator_Par) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -215,7 +215,7 @@ void TestGAMSModifier::testAssignmentOperator_Par() {
     }
 }
 
-void TestGAMSModifier::testAssignmentOperator_Var() {
+TEST_F(TestGAMSModifier, testAssignmentOperator_Var) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -252,7 +252,7 @@ void TestGAMSModifier::testAssignmentOperator_Var() {
     }
 }
 
-void TestGAMSModifier::testAssignmentOperator_Equ() {
+TEST_F(TestGAMSModifier, testAssignmentOperator_Equ) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -289,7 +289,7 @@ void TestGAMSModifier::testAssignmentOperator_Equ() {
     }
 }
 
-void TestGAMSModifier::testEqualToOperator() {
+TEST_F(TestGAMSModifier, testEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -319,7 +319,7 @@ void TestGAMSModifier::testEqualToOperator() {
     }
 }
 
-void TestGAMSModifier::testNotEqualToOperator() {
+TEST_F(TestGAMSModifier, testNotEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -355,7 +355,7 @@ void TestGAMSModifier::testNotEqualToOperator() {
     }
 }
 
-void TestGAMSModifier::testIsValid() {
+TEST_F(TestGAMSModifier, testIsValid) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -376,7 +376,7 @@ void TestGAMSModifier::testIsValid() {
     }
 }
 
-void TestGAMSModifier::testGetGamsSymbol() {
+TEST_F(TestGAMSModifier, testGetGamsSymbol) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -392,7 +392,7 @@ void TestGAMSModifier::testGetGamsSymbol() {
     ASSERT_TRUE( eqmod_supply.gamsSymbol() == db.getEquation("supply") );
 }
 
-void TestGAMSModifier::testGetDataSymbol() {
+TEST_F(TestGAMSModifier, testGetDataSymbol) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -408,7 +408,7 @@ void TestGAMSModifier::testGetDataSymbol() {
     ASSERT_TRUE( eqmod_supply.dataSymbol() == db.getParameter("a") );
 }
 
-void TestGAMSModifier::testGetUpdAction() {
+TEST_F(TestGAMSModifier, testGetUpdAction) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -428,7 +428,7 @@ void TestGAMSModifier::testGetUpdAction() {
     EXPECT_EQ( eqmod_supply.updAction(), GAMSEnum::SymbolUpdateAction::Dual );
 }
 
-void TestGAMSModifier::testGetUpdType() {
+TEST_F(TestGAMSModifier, testGetUpdType) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -449,7 +449,7 @@ void TestGAMSModifier::testGetUpdType() {
     EXPECT_EQ( eqmod_supply.updType(), GAMSEnum::SymbolUpdateType::BaseCase );
 }
 
-void TestGAMSModifier::testIsParameter_Variable_Equation() {
+TEST_F(TestGAMSModifier, testIsParameter_Variable_Equation) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);

@@ -29,7 +29,7 @@
 #include "gamsset.h"
 #include "gamsvariable.h"
 #include "gamsequationrecord.h"
-#include "testgamsequation.h"
+#include "testgamsobject.h"
 
 using namespace gams;
 
@@ -37,7 +37,7 @@ class TestGAMSEquation: public TestGAMSObject
 {
 };
 
-void  TestGAMSEquation::testDefaultConstructor() {
+TEST_F(TestGAMSEquation, testDefaultConstructor) {
     // when
     GAMSEquation eq;
     // then
@@ -51,7 +51,7 @@ void  TestGAMSEquation::testDefaultConstructor() {
     EXPECT_THROW( eq.firstRecord(), GAMSException );
 }
 
-void TestGAMSEquation::testCopyConstructor() {
+TEST_F(TestGAMSEquation, testCopyConstructor) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -73,11 +73,11 @@ void TestGAMSEquation::testCopyConstructor() {
     supply.addRecord("Albuquerque");
     // then
     ASSERT_TRUE( equals(eq.findRecord("Albuquerque").level(), 0.0) );
-    EXPECT_EQ( eq.findRecord("Albuquerque").key(0).c_str(), "Albuquerque" );
+    EXPECT_STREQ( eq.findRecord("Albuquerque").key(0).c_str(), "Albuquerque" );
     EXPECT_EQ( eq.numberRecords(), supply.numberRecords() );
 }
 
-void TestGAMSEquation::testCopyConstructor_IncorrectType() {
+TEST_F(TestGAMSEquation, testCopyConstructor_IncorrectType) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -91,7 +91,7 @@ void TestGAMSEquation::testCopyConstructor_IncorrectType() {
     EXPECT_THROW( GAMSEquation eq_x( db.getVariable("x") ), GAMSException);
 }
 
-void TestGAMSEquation::testIterator() {
+TEST_F(TestGAMSEquation, testIterator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -115,7 +115,7 @@ void TestGAMSEquation::testIterator() {
     ASSERT_TRUE( equals(symbolMap["topeka"], 275.0) );
 }
 
-void TestGAMSEquation::testAssignmentOperator() {
+TEST_F(TestGAMSEquation, testAssignmentOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -133,7 +133,7 @@ void TestGAMSEquation::testAssignmentOperator() {
     EXPECT_EQ( db.getNrSymbols(), numberOfSymbols );
 }
 
-void TestGAMSEquation::testAssignmentOperator_IncorrectType() {
+TEST_F(TestGAMSEquation, testAssignmentOperator_IncorrectType) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -146,7 +146,7 @@ void TestGAMSEquation::testAssignmentOperator_IncorrectType() {
     EXPECT_THROW( GAMSEquation v = db.getVariable("x"), GAMSException);
 }
 
-void TestGAMSEquation::testGetFirstRecord() {
+TEST_F(TestGAMSEquation, testGetFirstRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -165,7 +165,7 @@ void TestGAMSEquation::testGetFirstRecord() {
     }
 }
 
-void TestGAMSEquation::testGetFirstRecordSlice() {
+TEST_F(TestGAMSEquation, testGetFirstRecordSlice) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -185,7 +185,7 @@ void TestGAMSEquation::testGetFirstRecordSlice() {
     }
 }
 
-void TestGAMSEquation::testGetFirstRecordSlice_InvalidKeys_IncorrectDimension() {
+TEST_F(TestGAMSEquation, testGetFirstRecordSlice_InvalidKeys_IncorrectDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -203,7 +203,7 @@ void TestGAMSEquation::testGetFirstRecordSlice_InvalidKeys_IncorrectDimension() 
     }
 }
 
-void TestGAMSEquation::testGetLastRecord() {
+TEST_F(TestGAMSEquation, testGetLastRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -222,7 +222,7 @@ void TestGAMSEquation::testGetLastRecord() {
     }
 }
 
-void TestGAMSEquation::testGetLastRecordSlice() {
+TEST_F(TestGAMSEquation, testGetLastRecordSlice) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -242,7 +242,7 @@ void TestGAMSEquation::testGetLastRecordSlice() {
     }
 }
 
-void TestGAMSEquation::testGetLastRecordSlice_InvalidKeys_IncorrectDimension() {
+TEST_F(TestGAMSEquation, testGetLastRecordSlice_InvalidKeys_IncorrectDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -260,7 +260,7 @@ void TestGAMSEquation::testGetLastRecordSlice_InvalidKeys_IncorrectDimension() {
     }
 }
 
-void TestGAMSEquation::testFindRecord() {
+TEST_F(TestGAMSEquation, testFindRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -275,7 +275,7 @@ void TestGAMSEquation::testFindRecord() {
     ASSERT_TRUE( equals(rec.level(), 550.0) );
 }
 
-void TestGAMSEquation::testFindRecord_InsensitiveCaseKeys() {
+TEST_F(TestGAMSEquation, testFindRecord_InsensitiveCaseKeys) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -290,7 +290,7 @@ void TestGAMSEquation::testFindRecord_InsensitiveCaseKeys() {
     ASSERT_TRUE( equals(rec.level(), 275.0) );
 }
 
-void TestGAMSEquation::testAddRecord() {
+TEST_F(TestGAMSEquation, testAddRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -307,7 +307,7 @@ void TestGAMSEquation::testAddRecord() {
     ASSERT_TRUE( equals(rec.level(), 0.0)  );
 }
 
-void TestGAMSEquation::testAddRecord_DuplicatedKeys_IncorrectDimension() {
+TEST_F(TestGAMSEquation, testAddRecord_DuplicatedKeys_IncorrectDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -326,7 +326,7 @@ void TestGAMSEquation::testAddRecord_DuplicatedKeys_IncorrectDimension() {
     EXPECT_EQ( demand.numberRecords(), numberOfRecords );
 }
 
-void TestGAMSEquation::testMergeExistingRecord() {
+TEST_F(TestGAMSEquation, testMergeExistingRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -343,7 +343,7 @@ void TestGAMSEquation::testMergeExistingRecord() {
     ASSERT_TRUE( equals(rec.level(), chicago_rec.level()) );
 }
 
-void TestGAMSEquation::testMergeNonExistingRecord() {
+TEST_F(TestGAMSEquation, testMergeNonExistingRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -356,11 +356,11 @@ void TestGAMSEquation::testMergeNonExistingRecord() {
     GAMSEquationRecord rec = eq.mergeRecord("Albuquerque");
     // then
     EXPECT_EQ( eq.numberRecords(), numberOfRecords+1 );
-    EXPECT_EQ( rec.key(0).c_str(), "Albuquerque" );
+    EXPECT_STREQ( rec.key(0).c_str(), "Albuquerque" );
     ASSERT_TRUE( equals(rec.level(), 0.0) );
 }
 
-void TestGAMSEquation::testGetEquType() {
+TEST_F(TestGAMSEquation, testGetEquType) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);

@@ -35,7 +35,7 @@ class TestGAMSException: public TestGAMSObject
 {
 };
 
-void TestGAMSException::testConstructor_string() {
+TEST_F(TestGAMSException, testConstructor_string) {
     std::string what = "testConstructor_string()";
     try {
         throw GAMSException(what);
@@ -44,7 +44,7 @@ void TestGAMSException::testConstructor_string() {
     }
 }
 
-void TestGAMSException::testConstructor_charptr() {
+TEST_F(TestGAMSException, testConstructor_charptr) {
     try {
        throw GAMSException("testConstructor_charptr()");
     } catch(GAMSException & e) {

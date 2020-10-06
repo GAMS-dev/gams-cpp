@@ -38,7 +38,7 @@ class TestGAMSJob: public TestGAMSObject
 {
 };
 
-void TestGAMSJob::testDefaultConstructor() {
+TEST_F(TestGAMSJob, testDefaultConstructor) {
     // when
     GAMSJob job;
     // then
@@ -46,7 +46,7 @@ void TestGAMSJob::testDefaultConstructor() {
     EXPECT_THROW( job.run(), GAMSException);
 }
 
-void TestGAMSJob::testNotEqualToOperator() {
+TEST_F(TestGAMSJob, testNotEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -58,7 +58,7 @@ void TestGAMSJob::testNotEqualToOperator() {
     ASSERT_TRUE(job1 != job2);
 }
 
-void TestGAMSJob::testEqualToOperator() {
+TEST_F(TestGAMSJob, testEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -74,7 +74,7 @@ void TestGAMSJob::testEqualToOperator() {
     ASSERT_TRUE( job3 == job1 );
 }
 
-void TestGAMSJob::testIsValid() {
+TEST_F(TestGAMSJob, testIsValid) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -85,7 +85,7 @@ void TestGAMSJob::testIsValid() {
     ASSERT_TRUE( job2.isValid() );
 }
 
-void TestGAMSJob::testRun() {
+TEST_F(TestGAMSJob, testRun) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -99,7 +99,7 @@ void TestGAMSJob::testRun() {
     ASSERT_TRUE( equals(z.firstRecord().level(), 153.675) );
 }
 
-void TestGAMSJob::testRunJobFromEmptyString() {
+TEST_F(TestGAMSJob, testRunJobFromEmptyString) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -109,7 +109,7 @@ void TestGAMSJob::testRunJobFromEmptyString() {
     EXPECT_THROW( job.run(), GAMSExceptionExecution );
 }
 
-void TestGAMSJob::testOutDB() {
+TEST_F(TestGAMSJob, testOutDB) {
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
 
@@ -131,7 +131,7 @@ void TestGAMSJob::testOutDB() {
     EXPECT_EQ( db.getParameter("f").numberRecords(), 1 );
 }
 
-void TestGAMSJob::testOutDB_BeforeRun() {
+TEST_F(TestGAMSJob, testOutDB_BeforeRun) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -144,7 +144,7 @@ void TestGAMSJob::testOutDB_BeforeRun() {
     EXPECT_THROW( db.getNrSymbols(), GAMSException );
 }
 
-void TestGAMSJob::testGetName() {
+TEST_F(TestGAMSJob, testGetName) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -157,7 +157,7 @@ void TestGAMSJob::testGetName() {
     ASSERT_TRUE( name.startsWith(defaultScratchFilePrefix.c_str()) );
 }
 
-void TestGAMSJob::testGetWorkspace() {
+TEST_F(TestGAMSJob, testGetWorkspace) {
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
 
@@ -166,7 +166,7 @@ void TestGAMSJob::testGetWorkspace() {
     EXPECT_EQ( job.workspace().logID(), ws.logID() );
 }
 
-void TestGAMSJob::testGetLogID() {
+TEST_F(TestGAMSJob, testGetLogID) {
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
 

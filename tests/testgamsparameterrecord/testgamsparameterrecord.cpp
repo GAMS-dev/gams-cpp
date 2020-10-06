@@ -40,7 +40,7 @@ class TestGAMSParameterRecord: public TestGAMSObject
 {
 };
 
-void TestGAMSParameterRecord::testDefaultConstructor() {
+TEST_F(TestGAMSParameterRecord, testDefaultConstructor) {
     // when
     GAMSParameterRecord rec;
     // then
@@ -52,7 +52,7 @@ void TestGAMSParameterRecord::testDefaultConstructor() {
     EXPECT_THROW( rec.moveNext(), GAMSException );
 }
 
-void TestGAMSParameterRecord::testCopyConstructor() {
+TEST_F(TestGAMSParameterRecord, testCopyConstructor) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -64,7 +64,7 @@ void TestGAMSParameterRecord::testCopyConstructor() {
     EXPECT_EQ( newRecord, rec );
 }
 
-void TestGAMSParameterRecord::testCopyConstructor_IncorrectType() {
+TEST_F(TestGAMSParameterRecord, testCopyConstructor_IncorrectType) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -77,7 +77,7 @@ void TestGAMSParameterRecord::testCopyConstructor_IncorrectType() {
     EXPECT_THROW( GAMSParameterRecord newRecord( db.getEquation("demand").firstRecord() ), GAMSException );
 }
 
-void TestGAMSParameterRecord::testAssignmentOperator() {
+TEST_F(TestGAMSParameterRecord, testAssignmentOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -90,7 +90,7 @@ void TestGAMSParameterRecord::testAssignmentOperator() {
     ASSERT_TRUE( newRecord == rec );
 }
 
-void TestGAMSParameterRecord::testIncorrectType_data() {
+TEST_F(TestGAMSParameterRecord, testIncorrectType_data) {
     QTest::addColumn<int>("symbolType");
     QTest::addColumn<QString>("symbolID");
 
@@ -100,7 +100,7 @@ void TestGAMSParameterRecord::testIncorrectType_data() {
     QTest::newRow("supply")        << 3 << "supply"  ;
 }
 
-void TestGAMSParameterRecord::testIncorrectType() {
+TEST_F(TestGAMSParameterRecord, testIncorrectType) {
     QFETCH(int, symbolType);
     QFETCH(QString, symbolID);
 
@@ -141,7 +141,7 @@ void TestGAMSParameterRecord::testIncorrectType() {
     }
 }
 
-void TestGAMSParameterRecord::testGetValue() {
+TEST_F(TestGAMSParameterRecord, testGetValue) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -160,7 +160,7 @@ void TestGAMSParameterRecord::testGetValue() {
     ASSERT_TRUE( equals(param.findRecord("alburquerque", "topeka").value(), 0.0) );
 }
 
-void TestGAMSParameterRecord::testSetValue() {
+TEST_F(TestGAMSParameterRecord, testSetValue) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);

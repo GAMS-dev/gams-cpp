@@ -33,7 +33,7 @@ class TestGAMSExceptionExecution: public TestGAMSObject
 {
 };
 
-void TestGAMSExceptionExecution::testConstructor_string() {
+TEST_F(TestGAMSExceptionExecution, testConstructor_string) {
     std::string what = "testConstructor_string()";
     try {
         throw GAMSExceptionExecution(what, 13);
@@ -53,7 +53,7 @@ void TestGAMSExceptionExecution::testConstructor_string() {
     }
 }
 
-void TestGAMSExceptionExecution::testConstructor_charptr() {
+TEST_F(TestGAMSExceptionExecution, testConstructor_charptr) {
     try {
         throw GAMSExceptionExecution("testConstructor_charptr()", 17);
     } catch(GAMSExceptionExecution & e) {
@@ -72,7 +72,7 @@ void TestGAMSExceptionExecution::testConstructor_charptr() {
     }
 }
 
-void TestGAMSExceptionExecution::testGetRc() {
+TEST_F(TestGAMSExceptionExecution, testGetRc) {
     try {
         throw GAMSExceptionExecution("testGetRc()", 13);
     } catch(GAMSExceptionExecution & e) {

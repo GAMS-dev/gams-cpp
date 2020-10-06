@@ -37,7 +37,7 @@ class TestGAMSModelInstance: public TestGAMSObject
 {
 };
 
-void TestGAMSModelInstance::testDefaultConstructor()  {
+TEST_F(TestGAMSModelInstance, testDefaultConstructor) {
      GAMSModelInstance mi;
      ASSERT_TRUE( ! mi.isValid() );
      GAMSModifier mod;
@@ -63,7 +63,7 @@ void TestGAMSModelInstance::testDefaultConstructor()  {
      ASSERT_TRUE( mi == anothermi );
 }
 
-void TestGAMSModelInstance::testAssignmentOperator()  {
+TEST_F(TestGAMSModelInstance, testAssignmentOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -78,7 +78,7 @@ void TestGAMSModelInstance::testAssignmentOperator()  {
     ASSERT_TRUE( mi1 != mi2 );
 }
 
-void TestGAMSModelInstance::testEqualToOperator()  {
+TEST_F(TestGAMSModelInstance, testEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -92,7 +92,7 @@ void TestGAMSModelInstance::testEqualToOperator()  {
     ASSERT_TRUE( mi1 == mi3 );
 }
 
-void TestGAMSModelInstance::testNotEqualToOperator()  {
+TEST_F(TestGAMSModelInstance, testNotEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -107,7 +107,7 @@ void TestGAMSModelInstance::testNotEqualToOperator()  {
 }
 
 
-void TestGAMSModelInstance::testIsValid()  {
+TEST_F(TestGAMSModelInstance, testIsValid) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -116,7 +116,7 @@ void TestGAMSModelInstance::testIsValid()  {
     ASSERT_TRUE( cp.isValid() );
 }
 
-void TestGAMSModelInstance::testGetSyncDb()  {
+TEST_F(TestGAMSModelInstance, testGetSyncDb) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -132,8 +132,8 @@ void TestGAMSModelInstance::testGetSyncDb()  {
     ASSERT_TRUE( mi.syncDb().getParameter("bmult") == bmult );
 }
 
-void TestGAMSModelInstance::testInstantiate_data()  { getTestData(); }
-void TestGAMSModelInstance::testInstantiate()  {
+TEST_F(TestGAMSModelInstance, testInstantiate_data) { getTestData(); }
+TEST_F(TestGAMSModelInstance, testInstantiate) {
         QFETCH(double, modifier);
 
     // given
@@ -154,7 +154,7 @@ void TestGAMSModelInstance::testInstantiate()  {
     } catch(GAMSException&) { ASSERT_TRUE(false); }
 }
 
-void TestGAMSModelInstance::testInstantiateBeforeInitializingCP()  {
+TEST_F(TestGAMSModelInstance, testInstantiateBeforeInitializingCP) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -170,9 +170,9 @@ void TestGAMSModelInstance::testInstantiateBeforeInitializingCP()  {
                               GAMSException );
 }
 
-void TestGAMSModelInstance::testSolve_data() { getTestData(); }
+TEST_F(TestGAMSModelInstance, testSolve_data) { getTestData(); }
 
-void TestGAMSModelInstance::testSolve()  {
+TEST_F(TestGAMSModelInstance, testSolve) {
     QFETCH(double, modifier);
     QFETCH(int, SolveStatus);
     QFETCH(int, ModelStatus);
@@ -201,7 +201,7 @@ void TestGAMSModelInstance::testSolve()  {
     ASSERT_TRUE( equals( mi.syncDb().getVariable("z").findRecord().level(), obj) );
 }
 
-void TestGAMSModelInstance::testSolveBeforeInstantiate()  {
+TEST_F(TestGAMSModelInstance, testSolveBeforeInstantiate) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -216,9 +216,9 @@ void TestGAMSModelInstance::testSolveBeforeInstantiate()  {
     EXPECT_THROW( mi.solve(), GAMSException);
 }
 
-void TestGAMSModelInstance::testGetModelSolveStatus_data() { getTestData(); }
+TEST_F(TestGAMSModelInstance, testGetModelSolveStatus_data) { getTestData(); }
 
-void TestGAMSModelInstance::testGetModelSolveStatus()  {
+TEST_F(TestGAMSModelInstance, testGetModelSolveStatus) {
     QFETCH(double, modifier);
     QFETCH(int, SolveStatus);
     QFETCH(QString, SolveStatusStr);
@@ -248,7 +248,7 @@ void TestGAMSModelInstance::testGetModelSolveStatus()  {
     EXPECT_EQ( QString::fromStdString(mi.modelStatusAsString()).trimmed(), ModelStatusStr );
 }
 
-void TestGAMSModelInstance::testCopyModelInstance() {
+TEST_F(TestGAMSModelInstance, testCopyModelInstance) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -268,7 +268,7 @@ void TestGAMSModelInstance::testCopyModelInstance() {
     EXPECT_EQ( newmi.syncDb().getParameter("bmult").numberRecords(), mi.syncDb().getParameter("bmult").numberRecords() );
 }
 
-void TestGAMSModelInstance::testGetCheckpoint()  {
+TEST_F(TestGAMSModelInstance, testGetCheckpoint) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -278,7 +278,7 @@ void TestGAMSModelInstance::testGetCheckpoint()  {
     EXPECT_EQ( mi.checkpoint(), cp);
 }
 
-void TestGAMSModelInstance::testGetName()  {
+TEST_F(TestGAMSModelInstance, testGetName) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -303,7 +303,7 @@ void TestGAMSModelInstance::testGetName()  {
     ASSERT_TRUE( mi4.name() != mi3.name() );
 }
 
-void TestGAMSModelInstance::testGetLogID()  {
+TEST_F(TestGAMSModelInstance, testGetLogID) {
      // given
      GAMSWorkspaceInfo wsInfo("", testSystemDir);
      GAMSWorkspace ws(wsInfo);
@@ -326,7 +326,7 @@ void TestGAMSModelInstance::testGetLogID()  {
      ASSERT_TRUE(mi4.logID() != mi3.logID());
 }
 
-void TestGAMSModelInstance::getTestData() {
+TEST_F(TestGAMSModelInstance, getTestData) {
     QTest::addColumn<double>("modifier");
     QTest::addColumn<int>("SolveStatus");
     QTest::addColumn<QString>("SolveStatusStr");

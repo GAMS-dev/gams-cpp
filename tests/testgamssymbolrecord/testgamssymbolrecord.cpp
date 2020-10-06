@@ -44,7 +44,7 @@ class TestGAMSSymbolRecord: public TestGAMSObject
 {
 };
 
-void TestGAMSSymbolRecord::testDefaultConstructor() {
+TEST_F(TestGAMSSymbolRecord, testDefaultConstructor) {
     // when
     GAMSSymbolRecord rec;
     // then
@@ -52,7 +52,7 @@ void TestGAMSSymbolRecord::testDefaultConstructor() {
     EXPECT_THROW( rec.moveNext(), GAMSException);
 }
 
-void TestGAMSSymbolRecord::testCopyConstructor() {
+TEST_F(TestGAMSSymbolRecord, testCopyConstructor) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -66,7 +66,7 @@ void TestGAMSSymbolRecord::testCopyConstructor() {
 }
 
 
-void TestGAMSSymbolRecord::testAssignmentOperator_data() {
+TEST_F(TestGAMSSymbolRecord, testAssignmentOperator_data) {
     QTest::addColumn<int>("symbolType");
     QTest::addColumn<QString>("symbolID");
 
@@ -76,7 +76,7 @@ void TestGAMSSymbolRecord::testAssignmentOperator_data() {
     QTest::newRow("supply")     << 3 << "supply"  ;
 }
 
-void TestGAMSSymbolRecord::testAssignmentOperator() {
+TEST_F(TestGAMSSymbolRecord, testAssignmentOperator) {
     QFETCH(int, symbolType);
     QFETCH(QString, symbolID);
 
@@ -136,7 +136,7 @@ void TestGAMSSymbolRecord::testAssignmentOperator() {
     }
 }
 
-void TestGAMSSymbolRecord::testAssignmentOperator_IncorrectType_data() {
+TEST_F(TestGAMSSymbolRecord, testAssignmentOperator_IncorrectType_data) {
     QTest::addColumn<int>("symbolType");
     QTest::addColumn<QString>("symbolID");
 
@@ -146,7 +146,7 @@ void TestGAMSSymbolRecord::testAssignmentOperator_IncorrectType_data() {
     QTest::newRow("supply")     << 3 << "supply"  ;
 }
 
-void TestGAMSSymbolRecord::testAssignmentOperator_IncorrectType() {
+TEST_F(TestGAMSSymbolRecord, testAssignmentOperator_IncorrectType) {
     QFETCH(int, symbolType);
     QFETCH(QString, symbolID);
 
@@ -199,7 +199,7 @@ void TestGAMSSymbolRecord::testAssignmentOperator_IncorrectType() {
     }
 }
 
-void TestGAMSSymbolRecord::testEqualToOperator() {
+TEST_F(TestGAMSSymbolRecord, testEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -224,7 +224,7 @@ void TestGAMSSymbolRecord::testEqualToOperator() {
     }
 }
 
-void TestGAMSSymbolRecord::testNotEqualToOperator() {
+TEST_F(TestGAMSSymbolRecord, testNotEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -243,7 +243,7 @@ void TestGAMSSymbolRecord::testNotEqualToOperator() {
     }
 }
 
-void TestGAMSSymbolRecord::testIsValid() {
+TEST_F(TestGAMSSymbolRecord, testIsValid) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -281,7 +281,7 @@ void TestGAMSSymbolRecord::testIsValid() {
     }
 }
 
-void TestGAMSSymbolRecord::testIterator() {
+TEST_F(TestGAMSSymbolRecord, testIterator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -351,7 +351,7 @@ void TestGAMSSymbolRecord::testIterator() {
     }
 }
 
-void TestGAMSSymbolRecord::testGetKeys() {
+TEST_F(TestGAMSSymbolRecord, testGetKeys) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -379,7 +379,7 @@ void TestGAMSSymbolRecord::testGetKeys() {
     EXPECT_EQ( rec_demand.keys().size(), size_t(1));
 }
 
-void TestGAMSSymbolRecord::testGetKey_index() {
+TEST_F(TestGAMSSymbolRecord, testGetKey_index) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -413,7 +413,7 @@ void TestGAMSSymbolRecord::testGetKey_index() {
     EXPECT_THROW( rec_supply.key(1).c_str(), GAMSException );
 }
 
-void TestGAMSSymbolRecord::testIndexOperator() {
+TEST_F(TestGAMSSymbolRecord, testIndexOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -447,7 +447,7 @@ void TestGAMSSymbolRecord::testIndexOperator() {
     EXPECT_THROW( rec_supply[1], GAMSException );
 }
 
-void TestGAMSSymbolRecord::testGetType() {
+TEST_F(TestGAMSSymbolRecord, testGetType) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);

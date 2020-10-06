@@ -39,7 +39,7 @@ class TestGAMSParameter: public TestGAMSObject
 {
 };
 
-void TestGAMSParameter::testDefaultConstructor() {
+TEST_F(TestGAMSParameter, testDefaultConstructor) {
     // when
     GAMSParameter p;
     // then
@@ -53,7 +53,7 @@ void TestGAMSParameter::testDefaultConstructor() {
     EXPECT_THROW( p.addRecord("x"), GAMSException );
 }
 
-void TestGAMSParameter::testCopyConstructor() {
+TEST_F(TestGAMSParameter, testCopyConstructor) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -74,7 +74,7 @@ void TestGAMSParameter::testCopyConstructor() {
     EXPECT_EQ( capacity.numberRecords(), a.numberRecords() );
 }
 
-void TestGAMSParameter::testCopyConstructor_IncorrectType() {
+TEST_F(TestGAMSParameter, testCopyConstructor_IncorrectType) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -88,7 +88,7 @@ void TestGAMSParameter::testCopyConstructor_IncorrectType() {
     EXPECT_THROW( GAMSParameter param_cost( db.getEquation("cost")), GAMSException);
 }
 
-void TestGAMSParameter::testIterator() {
+TEST_F(TestGAMSParameter, testIterator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -112,7 +112,7 @@ void TestGAMSParameter::testIterator() {
     EXPECT_EQ( symbolMap["Topeka"], 275.0 );
 }
 
-void TestGAMSParameter::testAssignmentOperator() {
+TEST_F(TestGAMSParameter, testAssignmentOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -128,7 +128,7 @@ void TestGAMSParameter::testAssignmentOperator() {
     EXPECT_EQ( db.getNrSymbols(), numberOfSymbols );
 }
 
-void TestGAMSParameter::testAssignmentOperator_IncorrectType() {
+TEST_F(TestGAMSParameter, testAssignmentOperator_IncorrectType) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -141,7 +141,7 @@ void TestGAMSParameter::testAssignmentOperator_IncorrectType() {
     EXPECT_THROW( GAMSParameter supply = db.getEquation("supply"), GAMSException);
 }
 
-void TestGAMSParameter::testGetFirstRecord() {
+TEST_F(TestGAMSParameter, testGetFirstRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -155,7 +155,7 @@ void TestGAMSParameter::testGetFirstRecord() {
     ASSERT_TRUE( equals(rec.value(), 350.0) );
 }
 
-void TestGAMSParameter::testGetFirstRecordSlice() {
+TEST_F(TestGAMSParameter, testGetFirstRecordSlice) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -169,7 +169,7 @@ void TestGAMSParameter::testGetFirstRecordSlice() {
     ASSERT_TRUE( equals(rec.value(), 300.0) );
 }
 
-void TestGAMSParameter::testGetFirstRecordSlice_InvalidKeys_IncorrectDimension() {
+TEST_F(TestGAMSParameter, testGetFirstRecordSlice_InvalidKeys_IncorrectDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -183,7 +183,7 @@ void TestGAMSParameter::testGetFirstRecordSlice_InvalidKeys_IncorrectDimension()
     EXPECT_THROW( a.firstRecord("Seattle", "Albuquerque"), GAMSException);
 }
 
-void TestGAMSParameter::testGetLastRecord() {
+TEST_F(TestGAMSParameter, testGetLastRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -197,7 +197,7 @@ void TestGAMSParameter::testGetLastRecord() {
     EXPECT_EQ( rec.value(), 600.0 );
 }
 
-void TestGAMSParameter::testGetLastRecordSlice() {
+TEST_F(TestGAMSParameter, testGetLastRecordSlice) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -211,7 +211,7 @@ void TestGAMSParameter::testGetLastRecordSlice() {
     EXPECT_EQ( rec.value(), 325.0 );
 }
 
-void TestGAMSParameter::testGetLastRecordSlice_InvalidKeys_IncorrectDimension() {
+TEST_F(TestGAMSParameter, testGetLastRecordSlice_InvalidKeys_IncorrectDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -225,7 +225,7 @@ void TestGAMSParameter::testGetLastRecordSlice_InvalidKeys_IncorrectDimension() 
     EXPECT_THROW( b.lastRecord("seattle", "Albuquerque"), GAMSException);
 }
 
-void TestGAMSParameter::testFindRecord() {
+TEST_F(TestGAMSParameter, testFindRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -240,7 +240,7 @@ void TestGAMSParameter::testFindRecord() {
     ASSERT_TRUE( equals(rec.value(), 275.0) );
 }
 
-void TestGAMSParameter::testFindRecord_InsensitiveCaseKeys() {
+TEST_F(TestGAMSParameter, testFindRecord_InsensitiveCaseKeys) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -254,7 +254,7 @@ void TestGAMSParameter::testFindRecord_InsensitiveCaseKeys() {
     ASSERT_TRUE( equals(rec.value(), 300.0) );
 }
 
-void TestGAMSParameter::testAddRecord() {
+TEST_F(TestGAMSParameter, testAddRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -290,7 +290,7 @@ void TestGAMSParameter::testAddRecord() {
     }
 }
 
-void TestGAMSParameter::testAddRecord_DuplicatedKeys_IncorrectDimension() {
+TEST_F(TestGAMSParameter, testAddRecord_DuplicatedKeys_IncorrectDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -308,7 +308,7 @@ void TestGAMSParameter::testAddRecord_DuplicatedKeys_IncorrectDimension() {
     EXPECT_EQ( b.numberRecords(), numberOfRecords );
 }
 
-void TestGAMSParameter::testMergeExistingRecord() {
+TEST_F(TestGAMSParameter, testMergeExistingRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -323,7 +323,7 @@ void TestGAMSParameter::testMergeExistingRecord() {
     EXPECT_EQ( rec.key(0).c_str(), "Chicago" );
 }
 
-void TestGAMSParameter::testMergeNonExistingRecord() {
+TEST_F(TestGAMSParameter, testMergeNonExistingRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);

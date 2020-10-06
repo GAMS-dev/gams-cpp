@@ -40,7 +40,7 @@ class TestGAMSSymbol: public TestGAMSObject
 {
 };
 
-void TestGAMSSymbol::testDefaultConstructor() {
+TEST_F(TestGAMSSymbol, testDefaultConstructor) {
     // when
     GAMSSymbol symbol;
     // then
@@ -48,7 +48,7 @@ void TestGAMSSymbol::testDefaultConstructor() {
     EXPECT_THROW( symbol.clear(), GAMSException);
 }
 
-void TestGAMSSymbol::testCopyConstructor() {
+TEST_F(TestGAMSSymbol, testCopyConstructor) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     try {
@@ -66,7 +66,7 @@ void TestGAMSSymbol::testCopyConstructor() {
     }
 }
 
-void TestGAMSSymbol::testAssignmentOperator() {
+TEST_F(TestGAMSSymbol, testAssignmentOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -121,7 +121,7 @@ void TestGAMSSymbol::testAssignmentOperator() {
     EXPECT_EQ( db.getNrSymbols(), numberOfSymbols);
 }
 
-void TestGAMSSymbol::testAssignmentOperator_IncorrectSymbolType() {
+TEST_F(TestGAMSSymbol, testAssignmentOperator_IncorrectSymbolType) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -159,7 +159,7 @@ void TestGAMSSymbol::testAssignmentOperator_IncorrectSymbolType() {
     EXPECT_EQ( db.getNrSymbols(), numberOfSymbols);
 }
 
-void TestGAMSSymbol::testNotEqualToOperator() {
+TEST_F(TestGAMSSymbol, testNotEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -213,7 +213,7 @@ void TestGAMSSymbol::testNotEqualToOperator() {
     EXPECT_EQ( db.getNrSymbols(), numberOfSymbols );
 }
 
-void TestGAMSSymbol::testEqualToOperator() {
+TEST_F(TestGAMSSymbol, testEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -271,7 +271,7 @@ void TestGAMSSymbol::testEqualToOperator() {
     EXPECT_EQ( db.getNrSymbols(), numberOfSymbols );
 }
 
-void TestGAMSSymbol::testIsValid() {
+TEST_F(TestGAMSSymbol, testIsValid) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -287,7 +287,7 @@ void TestGAMSSymbol::testIsValid() {
     EXPECT_EQ( db.getNrSymbols(), numberOfSymbols );
 }
 
-void TestGAMSSymbol::testBegin() {
+TEST_F(TestGAMSSymbol, testBegin) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -320,7 +320,7 @@ void TestGAMSSymbol::testBegin() {
     ASSERT_TRUE( (*it_z) == z.firstRecord() );
 }
 
-void TestGAMSSymbol::testEnd() {
+TEST_F(TestGAMSSymbol, testEnd) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -353,7 +353,7 @@ void TestGAMSSymbol::testEnd() {
     ASSERT_TRUE( it_z == z.end() );
 }
 
-void TestGAMSSymbol::testAddRecord() {
+TEST_F(TestGAMSSymbol, testAddRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -402,7 +402,7 @@ void TestGAMSSymbol::testAddRecord() {
     ASSERT_TRUE( x.findRecord("Albuquerque", "Florida").isValid() );
 }
 
-void TestGAMSSymbol::testAddRecord_DuplicatedKeys() {
+TEST_F(TestGAMSSymbol, testAddRecord_DuplicatedKeys) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -436,7 +436,7 @@ void TestGAMSSymbol::testAddRecord_DuplicatedKeys() {
     EXPECT_EQ( x.numberRecords(), numberOfRecords );
 }
 
-void TestGAMSSymbol::testAddRecord_IncorrectDimension() {
+TEST_F(TestGAMSSymbol, testAddRecord_IncorrectDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -471,7 +471,7 @@ void TestGAMSSymbol::testAddRecord_IncorrectDimension() {
     EXPECT_EQ( x.numberRecords(), numberOfRecords );
 }
 
-void TestGAMSSymbol::testDeleteRecord_Set_InvalidKeys() {
+TEST_F(TestGAMSSymbol, testDeleteRecord_Set_InvalidKeys) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -485,7 +485,7 @@ void TestGAMSSymbol::testDeleteRecord_Set_InvalidKeys() {
     EXPECT_EQ( i.numberRecords(), 2 );
 }
 
-void TestGAMSSymbol::testDeleteRecord_Parameter_InvalidKeys() {
+TEST_F(TestGAMSSymbol, testDeleteRecord_Parameter_InvalidKeys) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -507,7 +507,7 @@ void TestGAMSSymbol::testDeleteRecord_Parameter_InvalidKeys() {
 
 }
 
-void TestGAMSSymbol::testDeleteRecord_InvalidKeys() {
+TEST_F(TestGAMSSymbol, testDeleteRecord_InvalidKeys) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -528,7 +528,7 @@ void TestGAMSSymbol::testDeleteRecord_InvalidKeys() {
     EXPECT_EQ( x.numberRecords(), 6 );
 }
 
-void TestGAMSSymbol::testDeleteRecord_IncorrectDimension() {
+TEST_F(TestGAMSSymbol, testDeleteRecord_IncorrectDimension) {
         // given
         GAMSWorkspaceInfo wsInfo("", testSystemDir);
         GAMSWorkspace ws(wsInfo);
@@ -573,7 +573,7 @@ void TestGAMSSymbol::testDeleteRecord_IncorrectDimension() {
         EXPECT_EQ( x.numberRecords(), 6 );
 }
 
-void TestGAMSSymbol::testDeleteRecord() {
+TEST_F(TestGAMSSymbol, testDeleteRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -624,7 +624,7 @@ void TestGAMSSymbol::testDeleteRecord() {
     EXPECT_THROW( x.findRecord( shipment ), GAMSException);
 }
 
-void TestGAMSSymbol::testClear() {
+TEST_F(TestGAMSSymbol, testClear) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -682,7 +682,7 @@ void TestGAMSSymbol::testClear() {
     EXPECT_EQ( z.numberRecords(), 0 );
 }
 
-void TestGAMSSymbol::testGetDomains_set() {
+TEST_F(TestGAMSSymbol, testGetDomains_set) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -709,7 +709,7 @@ void TestGAMSSymbol::testGetDomains_set() {
     domainMap.clear();
 }
 
-void TestGAMSSymbol::testGetDomains() {
+TEST_F(TestGAMSSymbol, testGetDomains) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -774,7 +774,7 @@ void TestGAMSSymbol::testGetDomains() {
     }
 }
 
-void TestGAMSSymbol::testCheckDomains() {
+TEST_F(TestGAMSSymbol, testCheckDomains) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -819,7 +819,7 @@ void TestGAMSSymbol::testCheckDomains() {
 
 
 
-void TestGAMSSymbol::testGetSymbolDVs() {
+TEST_F(TestGAMSSymbol, testGetSymbolDVs) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -914,7 +914,7 @@ void TestGAMSSymbol::testGetSymbolDVs() {
     }
 }
 
-void TestGAMSSymbol::testGetFirstRecord() {
+TEST_F(TestGAMSSymbol, testGetFirstRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -949,7 +949,7 @@ void TestGAMSSymbol::testGetFirstRecord() {
     EXPECT_EQ( x.firstRecord().key(0).c_str(), "seattle" );
 }
 
-void TestGAMSSymbol::testGetFirstRecordSlice() {
+TEST_F(TestGAMSSymbol, testGetFirstRecordSlice) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -980,7 +980,7 @@ void TestGAMSSymbol::testGetFirstRecordSlice() {
     EXPECT_EQ( x.firstRecord("san-diego", "new-york").key(1).c_str(), "new-york");
 }
 
-void TestGAMSSymbol::testGetFirstRecordSlice_InvalidKeys() {
+TEST_F(TestGAMSSymbol, testGetFirstRecordSlice_InvalidKeys) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1009,7 +1009,7 @@ void TestGAMSSymbol::testGetFirstRecordSlice_InvalidKeys() {
     EXPECT_THROW( x.firstRecord("seattle", "Dallas"), GAMSException );
 }
 
-void TestGAMSSymbol::testGetFirstRecordSlice_IncorrectDimension() {
+TEST_F(TestGAMSSymbol, testGetFirstRecordSlice_IncorrectDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1038,7 +1038,7 @@ void TestGAMSSymbol::testGetFirstRecordSlice_IncorrectDimension() {
     EXPECT_THROW( x.firstRecord("seattle"), GAMSException );
 }
 
-void TestGAMSSymbol::testGetLastRecord() {
+TEST_F(TestGAMSSymbol, testGetLastRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1073,7 +1073,7 @@ void TestGAMSSymbol::testGetLastRecord() {
     EXPECT_EQ( x.lastRecord().key(0).c_str(), "san-diego" );
 }
 
-void TestGAMSSymbol::testGetLastRecordSlice() {
+TEST_F(TestGAMSSymbol, testGetLastRecordSlice) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1104,7 +1104,7 @@ void TestGAMSSymbol::testGetLastRecordSlice() {
     EXPECT_EQ( x.lastRecord("seattle", "topeka").key(0).c_str(), "seattle" );
 }
 
-void TestGAMSSymbol::testGetLastRecordSlice_InValidKeys() {
+TEST_F(TestGAMSSymbol, testGetLastRecordSlice_InValidKeys) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1133,7 +1133,7 @@ void TestGAMSSymbol::testGetLastRecordSlice_InValidKeys() {
     EXPECT_THROW( x.lastRecord("seattle", "Dallas"), GAMSException );
 }
 
-void TestGAMSSymbol::testGetLastRecordSlice_IncorrectDimension() {
+TEST_F(TestGAMSSymbol, testGetLastRecordSlice_IncorrectDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1162,7 +1162,7 @@ void TestGAMSSymbol::testGetLastRecordSlice_IncorrectDimension() {
     EXPECT_THROW( x.lastRecord("seattle"), GAMSException );
 }
 
-void TestGAMSSymbol::testFindRecord() {
+TEST_F(TestGAMSSymbol, testFindRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1202,7 +1202,7 @@ void TestGAMSSymbol::testFindRecord() {
     EXPECT_EQ( x.findRecord("seattle", "topeka").key(1).c_str(), "topeka");
 }
 
-void TestGAMSSymbol::testFindNonExistingRecord() {
+TEST_F(TestGAMSSymbol, testFindNonExistingRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1231,7 +1231,7 @@ void TestGAMSSymbol::testFindNonExistingRecord() {
     EXPECT_THROW( x.findRecord("Albuquerque"), GAMSException );
 }
 
-void TestGAMSSymbol::testFindRecord_IncrorectDimension() {
+TEST_F(TestGAMSSymbol, testFindRecord_IncrorectDimension) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1260,7 +1260,7 @@ void TestGAMSSymbol::testFindRecord_IncrorectDimension() {
     EXPECT_THROW( x.findRecord("topeka"), GAMSException );
 }
 
-void TestGAMSSymbol::testMergeExistingRecord() {
+TEST_F(TestGAMSSymbol, testMergeExistingRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1306,7 +1306,7 @@ void TestGAMSSymbol::testMergeExistingRecord() {
     EXPECT_EQ( recx.key(1).c_str(), "topeka" );
 }
 
-void TestGAMSSymbol::testMergeNonExistingRecord() {
+TEST_F(TestGAMSSymbol, testMergeNonExistingRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1352,7 +1352,7 @@ void TestGAMSSymbol::testMergeNonExistingRecord() {
     EXPECT_EQ( recx.key(1).c_str(), "Albuquerque" );
 }
 
-void TestGAMSSymbol::testCopySymbol() {
+TEST_F(TestGAMSSymbol, testCopySymbol) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1367,7 +1367,7 @@ void TestGAMSSymbol::testCopySymbol() {
     EXPECT_EQ( i.numberRecords(), j.numberRecords() );
 }
 
-void TestGAMSSymbol::testGetDatabase() {
+TEST_F(TestGAMSSymbol, testGetDatabase) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1380,7 +1380,7 @@ void TestGAMSSymbol::testGetDatabase() {
     EXPECT_EQ( i.database().getNrSymbols(), db.getNrSymbols());
 }
 
-void TestGAMSSymbol::testGetText() {
+TEST_F(TestGAMSSymbol, testGetText) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1426,7 +1426,7 @@ void TestGAMSSymbol::testGetText() {
     EXPECT_EQ( z.text().c_str(), "total transportation costs in thousands of dollars" );
 }
 
-void TestGAMSSymbol::testGetName() {
+TEST_F(TestGAMSSymbol, testGetName) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1472,7 +1472,7 @@ void TestGAMSSymbol::testGetName() {
     EXPECT_EQ( z.name().c_str(), "z" );
 }
 
-void TestGAMSSymbol::testGetNumberOfRecords() {
+TEST_F(TestGAMSSymbol, testGetNumberOfRecords) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1518,7 +1518,7 @@ void TestGAMSSymbol::testGetNumberOfRecords() {
     EXPECT_EQ( z.numberRecords(), 1 );
 }
 
-void TestGAMSSymbol::testGetDim() {
+TEST_F(TestGAMSSymbol, testGetDim) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1564,7 +1564,7 @@ void TestGAMSSymbol::testGetDim() {
     EXPECT_EQ( z.dim(), 0 );
 }
 
-void TestGAMSSymbol::testGetType() {
+TEST_F(TestGAMSSymbol, testGetType) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);

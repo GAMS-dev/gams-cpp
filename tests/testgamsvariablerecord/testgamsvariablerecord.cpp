@@ -40,7 +40,7 @@ class TestGAMSVariableRecord: public TestGAMSObject
 {
 };
 
-void TestGAMSVariableRecord::testDefaultConstructor() {
+TEST_F(TestGAMSVariableRecord, testDefaultConstructor) {
     // when
     GAMSVariableRecord rec;
     // then
@@ -53,7 +53,7 @@ void TestGAMSVariableRecord::testDefaultConstructor() {
     EXPECT_THROW( rec.moveNext(), GAMSException );
 }
 
-void TestGAMSVariableRecord::testCopyConstructor() {
+TEST_F(TestGAMSVariableRecord, testCopyConstructor) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -72,7 +72,7 @@ void TestGAMSVariableRecord::testCopyConstructor() {
     EXPECT_EQ( x.numberRecords(), numberOfRecords );
 }
 
-void TestGAMSVariableRecord::testCopyConstructor_IncorrectType() {
+TEST_F(TestGAMSVariableRecord, testCopyConstructor_IncorrectType) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -85,7 +85,7 @@ void TestGAMSVariableRecord::testCopyConstructor_IncorrectType() {
     EXPECT_THROW( GAMSVariableRecord newRecord( db.getEquation("demand").firstRecord() ), GAMSException );
 }
 
-void TestGAMSVariableRecord::testAssignmentOperator() {
+TEST_F(TestGAMSVariableRecord, testAssignmentOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -99,7 +99,7 @@ void TestGAMSVariableRecord::testAssignmentOperator() {
     ASSERT_TRUE( newRecord == rec );
 }
 
-void TestGAMSVariableRecord::testIncorrectType_data() {
+TEST_F(TestGAMSVariableRecord, testIncorrectType_data) {
     QTest::addColumn<int>("symbolType");
     QTest::addColumn<QString>("symbolID");
 
@@ -109,7 +109,7 @@ void TestGAMSVariableRecord::testIncorrectType_data() {
     QTest::newRow("supply")        << 3 << "supply"  ;
 }
 
-void TestGAMSVariableRecord::testIncorrectType() {
+TEST_F(TestGAMSVariableRecord, testIncorrectType) {
     QFETCH(int, symbolType);
     QFETCH(QString, symbolID);
 
@@ -147,7 +147,7 @@ void TestGAMSVariableRecord::testIncorrectType() {
     }
 }
 
-void TestGAMSVariableRecord::testGetSetLevel() {
+TEST_F(TestGAMSVariableRecord, testGetSetLevel) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -171,7 +171,7 @@ void TestGAMSVariableRecord::testGetSetLevel() {
     ASSERT_TRUE( equals(varz.firstRecord().level(), 123.45) );
 }
 
-void TestGAMSVariableRecord::testGetSetMarginal() {
+TEST_F(TestGAMSVariableRecord, testGetSetMarginal) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -196,7 +196,7 @@ void TestGAMSVariableRecord::testGetSetMarginal() {
     ASSERT_TRUE( equals(varz.firstRecord().marginal(), 0.036) );
 }
 
-void TestGAMSVariableRecord::testGetSetUpper() {
+TEST_F(TestGAMSVariableRecord, testGetSetUpper) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -225,7 +225,7 @@ void TestGAMSVariableRecord::testGetSetUpper() {
     }
 }
 
-void TestGAMSVariableRecord::testGetSetLower() {
+TEST_F(TestGAMSVariableRecord, testGetSetLower) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -258,7 +258,7 @@ void TestGAMSVariableRecord::testGetSetLower() {
     }
 }
 
-void TestGAMSVariableRecord::testGetSetScale() {
+TEST_F(TestGAMSVariableRecord, testGetSetScale) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);

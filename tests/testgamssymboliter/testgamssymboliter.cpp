@@ -39,7 +39,7 @@ class TestGAMSSymbolIter: public TestGAMSObject
 {
 };
 
-void TestGAMSSymbolIter::testConstructor() {
+TEST_F(TestGAMSSymbolIter, testConstructor) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -87,7 +87,7 @@ void TestGAMSSymbolIter::testConstructor() {
     }
 }
 
-void TestGAMSSymbolIter::testConstructor_InvalidPosition() {
+TEST_F(TestGAMSSymbolIter, testConstructor_InvalidPosition) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -120,7 +120,7 @@ void TestGAMSSymbolIter::testConstructor_InvalidPosition() {
     } catch(GAMSException&) { ASSERT_TRUE(true); }
 }
 
-void TestGAMSSymbolIter::testConstructor_InvalidSymbol() {
+TEST_F(TestGAMSSymbolIter, testConstructor_InvalidSymbol) {
     GAMSSet set;
     EXPECT_THROW( GAMSSymbolIter<GAMSSet> it(set, 0), GAMSException);
     EXPECT_THROW( GAMSSymbolIter<GAMSSet> it(set, -1), GAMSException);
@@ -155,7 +155,7 @@ void TestGAMSSymbolIter::testConstructor_InvalidSymbol() {
 
 }
 
-void TestGAMSSymbolIter::testEqualToOperator() {
+TEST_F(TestGAMSSymbolIter, testEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -253,7 +253,7 @@ void TestGAMSSymbolIter::testEqualToOperator() {
     }
 }
 
-void TestGAMSSymbolIter::testNotEqualToOperator() {
+TEST_F(TestGAMSSymbolIter, testNotEqualToOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -316,7 +316,7 @@ void TestGAMSSymbolIter::testNotEqualToOperator() {
     }
 }
 
-void TestGAMSSymbolIter::testPointerOperator() {
+TEST_F(TestGAMSSymbolIter, testPointerOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -362,7 +362,7 @@ void TestGAMSSymbolIter::testPointerOperator() {
 }
 
 
-void TestGAMSSymbolIter::testPointerOperator_BeyondLastRecord() {
+TEST_F(TestGAMSSymbolIter, testPointerOperator_BeyondLastRecord) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -403,7 +403,7 @@ void TestGAMSSymbolIter::testPointerOperator_BeyondLastRecord() {
     }
 }
 
-void TestGAMSSymbolIter::testIncrementOperator() {
+TEST_F(TestGAMSSymbolIter, testIncrementOperator) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);

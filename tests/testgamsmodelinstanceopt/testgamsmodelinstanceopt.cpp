@@ -33,7 +33,7 @@ class TestGAMSModelInstanceOpt: public TestGAMSObject
 {
 };
 
-void TestGAMSModelInstanceOpt::testDefaultConstructor()  {
+TEST_F(TestGAMSModelInstanceOpt, testDefaultConstructor) {
     GAMSModelInstanceOpt miopt;
     ASSERT_TRUE( miopt.solver().empty() );
     EXPECT_EQ( miopt.optFile(), -1 );
@@ -41,7 +41,7 @@ void TestGAMSModelInstanceOpt::testDefaultConstructor()  {
     ASSERT_TRUE( ! miopt.debug() );
 }
 
-void TestGAMSModelInstanceOpt::testConstructor()  {
+TEST_F(TestGAMSModelInstanceOpt, testConstructor) {
     GAMSModelInstanceOpt miopt("x", 1, 1, true);
     EXPECT_EQ( miopt.solver().c_str(), "x" );
     EXPECT_EQ( miopt.noMatchLimit(), 1 );
@@ -49,7 +49,7 @@ void TestGAMSModelInstanceOpt::testConstructor()  {
     ASSERT_TRUE( miopt.debug() );
 }
 
-void TestGAMSModelInstanceOpt::testAssignmentOperator()  {
+TEST_F(TestGAMSModelInstanceOpt, testAssignmentOperator) {
     GAMSModelInstanceOpt miopt1;
 
     GAMSModelInstanceOpt miopt = miopt1;
@@ -60,7 +60,7 @@ void TestGAMSModelInstanceOpt::testAssignmentOperator()  {
     ASSERT_TRUE( miopt == miopt2 );
 }
 
-void TestGAMSModelInstanceOpt::testEqualToOperator()  {
+TEST_F(TestGAMSModelInstanceOpt, testEqualToOperator) {
     GAMSModelInstanceOpt miopt1;
 
     GAMSModelInstanceOpt miopt = miopt1;
@@ -79,7 +79,7 @@ void TestGAMSModelInstanceOpt::testEqualToOperator()  {
     ASSERT_TRUE( miopt == miopt2 );
 }
 
-void TestGAMSModelInstanceOpt::testGetSetSolver_data()  {
+TEST_F(TestGAMSModelInstanceOpt, testGetSetSolver_data) {
     QTest::addColumn<QString>("solver");
 
     QTest::newRow("empty")        << "";
@@ -87,7 +87,7 @@ void TestGAMSModelInstanceOpt::testGetSetSolver_data()  {
     QTest::newRow("conopt")       << "conopt";
 }
 
-void TestGAMSModelInstanceOpt::testGetSetSolver()  {
+TEST_F(TestGAMSModelInstanceOpt, testGetSetSolver) {
     QFETCH(QString, solver);
 
     GAMSModelInstanceOpt miopt1(solver.toStdString(), -1, 0, false);
@@ -98,7 +98,7 @@ void TestGAMSModelInstanceOpt::testGetSetSolver()  {
     EXPECT_EQ(  miopt2.solver(), solver.toStdString() );
 }
 
-void TestGAMSModelInstanceOpt::testGetSetOptFile_data()  {
+TEST_F(TestGAMSModelInstanceOpt, testGetSetOptFile_data) {
     QTest::addColumn<int>("optfile");
     QTest::newRow("minus")        << -1;
     QTest::newRow("zero")         << 0;
@@ -106,7 +106,7 @@ void TestGAMSModelInstanceOpt::testGetSetOptFile_data()  {
     QTest::newRow("onehundread")  << 100;
 }
 
-void TestGAMSModelInstanceOpt::testGetSetOptFile()  {
+TEST_F(TestGAMSModelInstanceOpt, testGetSetOptFile) {
     QFETCH(int, optfile);
 
     GAMSModelInstanceOpt miopt1("x", optfile, 0, false);
@@ -117,7 +117,7 @@ void TestGAMSModelInstanceOpt::testGetSetOptFile()  {
     EXPECT_EQ(  miopt2.optFile(), optfile );
 }
 
-void TestGAMSModelInstanceOpt::testGetSetNoMatchLimit_data()  {
+TEST_F(TestGAMSModelInstanceOpt, testGetSetNoMatchLimit_data) {
     QTest::addColumn<int>("limit");
     QTest::newRow("minus")        << -1;
     QTest::newRow("zero")         << 0;
@@ -125,7 +125,7 @@ void TestGAMSModelInstanceOpt::testGetSetNoMatchLimit_data()  {
     QTest::newRow("onehundread")  << 100;
 }
 
-void TestGAMSModelInstanceOpt::testGetSetNoMatchLimit()  {
+TEST_F(TestGAMSModelInstanceOpt, testGetSetNoMatchLimit) {
     QFETCH(int, limit);
 
     GAMSModelInstanceOpt miopt1("x", 1, limit, false);
@@ -136,13 +136,13 @@ void TestGAMSModelInstanceOpt::testGetSetNoMatchLimit()  {
     EXPECT_EQ(  miopt2.noMatchLimit(), limit );
 }
 
-void TestGAMSModelInstanceOpt::testGetSetDebug_data()  {
+TEST_F(TestGAMSModelInstanceOpt, testGetSetDebug_data) {
     QTest::addColumn<bool>("debug");
     QTest::newRow("true")   << true;
     QTest::newRow("false")   << true;
 }
 
-void TestGAMSModelInstanceOpt::testGetSetDebug()  {
+TEST_F(TestGAMSModelInstanceOpt, testGetSetDebug) {
     QFETCH(bool, debug);
 
     GAMSModelInstanceOpt miopt1("x", 1, 0, debug);
