@@ -33,7 +33,9 @@
 
 using namespace gams;
 
-QString TestGAMSSet::classname()  { return "TestGAMSSet"; }
+class TestGAMSSet: public TestGAMSObject
+{
+};
 
 void TestGAMSSet::testDefaultConstructor() {
     // when
@@ -41,18 +43,18 @@ void TestGAMSSet::testDefaultConstructor() {
 
     // then
     ASSERT_TRUE( ! s.isValid() );
-    QVERIFY_EXCEPTION_THROWN( s.type(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( s.logID(), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( s.dim(), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( s.checkDomains(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( s.numberRecords(), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( s.firstRecord(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( s.addRecord("x"), GAMSException );
+    EXPECT_THROW( s.type(), GAMSException );
+    EXPECT_THROW( s.logID(), GAMSException);
+    EXPECT_THROW( s.dim(), GAMSException);
+    EXPECT_THROW( s.checkDomains(), GAMSException );
+    EXPECT_THROW( s.numberRecords(), GAMSException);
+    EXPECT_THROW( s.firstRecord(), GAMSException );
+    EXPECT_THROW( s.addRecord("x"), GAMSException );
 }
 
 void TestGAMSSet::testCopyConstructor() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -61,40 +63,40 @@ void TestGAMSSet::testCopyConstructor() {
     // when
     GAMSSet plant( i );
     // then
-    QCOMPARE( plant.name(), i.name() );
-    QCOMPARE( plant.numberRecords(), i.numberRecords() );
-    QCOMPARE( db.getNrSymbols(), numberOfSymbols );
+    EXPECT_EQ( plant.name(), i.name() );
+    EXPECT_EQ( plant.numberRecords(), i.numberRecords() );
+    EXPECT_EQ( db.getNrSymbols(), numberOfSymbols );
     // when
     i.addRecord("Albuquerque");
     // then
-    QCOMPARE( plant.findRecord("Albuquerque").key(0).c_str(), "Albuquerque" );
-    QCOMPARE( plant.numberRecords(), i.numberRecords() );
+    EXPECT_EQ( plant.findRecord("Albuquerque").key(0).c_str(), "Albuquerque" );
+    EXPECT_EQ( plant.numberRecords(), i.numberRecords() );
 }
 
 void TestGAMSSet::testCopyConstructor_IncorrectType() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
     GAMSDatabase db = job.outDB();
 
     // when, then
-    QVERIFY_EXCEPTION_THROWN( GAMSSet set_a( db.getParameter("a") ), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( GAMSSet set_z( db.getVariable("z") ), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( GAMSSet set_cost( db.getEquation("cost")), GAMSException);
+    EXPECT_THROW( GAMSSet set_a( db.getParameter("a") ), GAMSException);
+    EXPECT_THROW( GAMSSet set_z( db.getVariable("z") ), GAMSException);
+    EXPECT_THROW( GAMSSet set_cost( db.getEquation("cost")), GAMSException);
 }
 
 void TestGAMSSet::testIterator() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
 
     // when, then
     GAMSSet j;
-    QVERIFY_EXCEPTION_THROWN( j.begin(), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( j.end(), GAMSException);
+    EXPECT_THROW( j.begin(), GAMSException);
+    EXPECT_THROW( j.end(), GAMSException);
 
     TestGAMSObject::getTestData_Set_markets_j( db );
     j = db.getSet("j");
@@ -103,15 +105,15 @@ void TestGAMSSet::testIterator() {
         symbolCounter[rec.key(0)]++;
     }
     // then
-    QCOMPARE( symbolCounter.size(), size_t(3) );
-    QCOMPARE( symbolCounter["New-York"], 1 );
-    QCOMPARE( symbolCounter["Chicago"], 1 );
-    QCOMPARE( symbolCounter["Topeka"], 1 );
+    EXPECT_EQ( symbolCounter.size(), size_t(3) );
+    EXPECT_EQ( symbolCounter["New-York"], 1 );
+    EXPECT_EQ( symbolCounter["Chicago"], 1 );
+    EXPECT_EQ( symbolCounter["Topeka"], 1 );
 }
 
 void TestGAMSSet::testAssignmentOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -121,28 +123,28 @@ void TestGAMSSet::testAssignmentOperator() {
     GAMSSet market = j;
 
     // when, then
-    QCOMPARE( market, j );
+    EXPECT_EQ( market, j );
     ASSERT_TRUE( market == j );
-    QCOMPARE( db.getNrSymbols(), numberOfSymbols );
+    EXPECT_EQ( db.getNrSymbols(), numberOfSymbols );
 }
 
 void TestGAMSSet::testAssignmentOperator_IncorrectType() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
     GAMSDatabase db = job.outDB();
 
     // when, then
-    QVERIFY_EXCEPTION_THROWN( GAMSSet a = db.getParameter("a"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( GAMSSet x = db.getVariable("x"), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( GAMSSet supply = db.getEquation("supply"), GAMSException);
+    EXPECT_THROW( GAMSSet a = db.getParameter("a"), GAMSException);
+    EXPECT_THROW( GAMSSet x = db.getVariable("x"), GAMSException);
+    EXPECT_THROW( GAMSSet supply = db.getEquation("supply"), GAMSException);
 }
 
 void TestGAMSSet::testGetFirstRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -150,12 +152,12 @@ void TestGAMSSet::testGetFirstRecord() {
 
     // when, then
     GAMSSetRecord rec = i.firstRecord();
-    QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "seattle", Qt::CaseInsensitive ), 0 );
+    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "seattle", Qt::CaseInsensitive ), 0 );
 }
 
 void TestGAMSSet::testGetFirstRecordSlice() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -163,26 +165,26 @@ void TestGAMSSet::testGetFirstRecordSlice() {
 
     // when, then
     GAMSSetRecord rec = j.firstRecord("topeka");
-    QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseInsensitive ), 0 );
+    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseInsensitive ), 0 );
 }
 
 void TestGAMSSet::testGetFirstRecordSlice_InvalidKeys_IncorrectDimension() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
     GAMSSet j = db.getSet("j");
 
     // when InvalidKeys, then
-    QVERIFY_EXCEPTION_THROWN( j.firstRecord("Albuquerque"), GAMSException );
+    EXPECT_THROW( j.firstRecord("Albuquerque"), GAMSException );
     // when IncorrectDimension, then
-    QVERIFY_EXCEPTION_THROWN( j.firstRecord("topeka", "Albuquerque"), GAMSException );
+    EXPECT_THROW( j.firstRecord("topeka", "Albuquerque"), GAMSException );
 }
 
 void TestGAMSSet::testGetLastRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -190,12 +192,12 @@ void TestGAMSSet::testGetLastRecord() {
 
     // when, then
     GAMSSetRecord rec = i.lastRecord();
-    QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "san-diego", Qt::CaseInsensitive ), 0 );
+    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "san-diego", Qt::CaseInsensitive ), 0 );
 }
 
 void TestGAMSSet::testGetLastRecordSlice() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -203,26 +205,26 @@ void TestGAMSSet::testGetLastRecordSlice() {
 
     // when, then
     GAMSSetRecord rec = j.lastRecord("chicago");
-    QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "chicago", Qt::CaseInsensitive ), 0 );
+    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "chicago", Qt::CaseInsensitive ), 0 );
 }
 
 void TestGAMSSet::testGetLastRecordSlice_InvalidKeys_IncorrectDimension() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
     GAMSSet j = db.getSet("j");
 
     // when InvalidKeys, then
-    QVERIFY_EXCEPTION_THROWN( j.lastRecord("Albuquerque"), GAMSException );
+    EXPECT_THROW( j.lastRecord("Albuquerque"), GAMSException );
     // when IncorrectDimension, then
-    QVERIFY_EXCEPTION_THROWN( j.lastRecord("topeka", "Albuquerque"), GAMSException );
+    EXPECT_THROW( j.lastRecord("topeka", "Albuquerque"), GAMSException );
 }
 
 void TestGAMSSet::testFindRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -230,12 +232,12 @@ void TestGAMSSet::testFindRecord() {
     // when, then
     GAMSSetRecord rec = db.getSet("j").findRecord("Topeka");
     ASSERT_TRUE( rec.isValid() );
-    QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseInsensitive ), 0 );
+    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseInsensitive ), 0 );
 }
 
 void TestGAMSSet::testFindRecord_InsensitiveCaseKeys() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -243,12 +245,12 @@ void TestGAMSSet::testFindRecord_InsensitiveCaseKeys() {
     // when
     GAMSSetRecord rec = db.getSet("j").findRecord("topeka");
     // then
-    QCOMPARE( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseInsensitive ), 0 );
+    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseInsensitive ), 0 );
 }
 
 void TestGAMSSet::testAddRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     {
@@ -258,7 +260,7 @@ void TestGAMSSet::testAddRecord() {
       // when
       i.addRecord("Albuquerque");
       // then
-      QCOMPARE( i.numberRecords(), numberOfRecords+1);
+      EXPECT_EQ( i.numberRecords(), numberOfRecords+1);
       ASSERT_TRUE( i.findRecord("Albuquerque").isValid() );
     }
     {
@@ -266,18 +268,18 @@ void TestGAMSSet::testAddRecord() {
       GAMSSet j = db.getSet("j");
       int numberOfRecords = j.numberRecords();
       // when, then
-      QVERIFY_EXCEPTION_THROWN( GAMSParameterRecord rec = j.addRecord("Albuquerque"), GAMSException);
-      QCOMPARE( j.numberRecords(), ++numberOfRecords);
-      QVERIFY_EXCEPTION_THROWN( GAMSVariableRecord rec = j.addRecord("Austin"), GAMSException);
-      QCOMPARE( j.numberRecords(), ++numberOfRecords);
-      QVERIFY_EXCEPTION_THROWN( GAMSEquationRecord rec = j.addRecord("LasVegas"), GAMSException);
-      QCOMPARE( j.numberRecords(), ++numberOfRecords);
+      EXPECT_THROW( GAMSParameterRecord rec = j.addRecord("Albuquerque"), GAMSException);
+      EXPECT_EQ( j.numberRecords(), ++numberOfRecords);
+      EXPECT_THROW( GAMSVariableRecord rec = j.addRecord("Austin"), GAMSException);
+      EXPECT_EQ( j.numberRecords(), ++numberOfRecords);
+      EXPECT_THROW( GAMSEquationRecord rec = j.addRecord("LasVegas"), GAMSException);
+      EXPECT_EQ( j.numberRecords(), ++numberOfRecords);
     }
 }
 
 void TestGAMSSet::testAddRecord_DuplicatedKeys_IncorrectDimension() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -285,17 +287,17 @@ void TestGAMSSet::testAddRecord_DuplicatedKeys_IncorrectDimension() {
     int numberOfRecords = j.numberRecords();
 
     // when DuplicatedKeys, then
-    QVERIFY_EXCEPTION_THROWN( db.getSet("j").addRecord("topeka"), GAMSException);
+    EXPECT_THROW( db.getSet("j").addRecord("topeka"), GAMSException);
 
     // when IncorrectDimension, then
-    QVERIFY_EXCEPTION_THROWN( j.addRecord(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( j.addRecord("i1", "j1"), GAMSException );
-    QCOMPARE( j.numberRecords(), numberOfRecords );
+    EXPECT_THROW( j.addRecord(), GAMSException );
+    EXPECT_THROW( j.addRecord("i1", "j1"), GAMSException );
+    EXPECT_EQ( j.numberRecords(), numberOfRecords );
 }
 
 void TestGAMSSet::testMergeExistingRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -304,13 +306,13 @@ void TestGAMSSet::testMergeExistingRecord() {
 
     // when, then
     GAMSSetRecord rec = j.mergeRecord("Chicago");
-    QCOMPARE( j.numberRecords(), numberOfRecords );
-    QCOMPARE( rec.key(0).c_str(), "Chicago" );
+    EXPECT_EQ( j.numberRecords(), numberOfRecords );
+    EXPECT_EQ( rec.key(0).c_str(), "Chicago" );
 }
 
 void TestGAMSSet::testMergeNonExistingRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -319,8 +321,8 @@ void TestGAMSSet::testMergeNonExistingRecord() {
 
     // when, then
     GAMSSetRecord rec = j.mergeRecord("Albuquerque");
-    QCOMPARE( j.numberRecords(), numberOfRecords+1 );
-    QCOMPARE( rec.key(0).c_str(), "Albuquerque" );
+    EXPECT_EQ( j.numberRecords(), numberOfRecords+1 );
+    EXPECT_EQ( rec.key(0).c_str(), "Albuquerque" );
 }
 
-QTEST_MAIN(TestGAMSSet)
+

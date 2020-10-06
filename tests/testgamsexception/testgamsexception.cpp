@@ -31,14 +31,16 @@
 
 using namespace gams;
 
-QString TestGAMSException::classname()  { return "TestGAMSException"; }
+class TestGAMSException: public TestGAMSObject
+{
+};
 
 void TestGAMSException::testConstructor_string() {
     std::string what = "testConstructor_string()";
     try {
         throw GAMSException(what);
     } catch(GAMSException & e) {
-        QCOMPARE( e.what(), what.c_str());
+        EXPECT_EQ( e.what(), what.c_str());
     }
 }
 
@@ -46,9 +48,9 @@ void TestGAMSException::testConstructor_charptr() {
     try {
        throw GAMSException("testConstructor_charptr()");
     } catch(GAMSException & e) {
-        QCOMPARE( e.what(), "testConstructor_charptr()");
+        EXPECT_EQ( e.what(), "testConstructor_charptr()");
     }
 
 }
 
-QTEST_MAIN(TestGAMSException)
+

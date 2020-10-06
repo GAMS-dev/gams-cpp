@@ -29,21 +29,23 @@
 
 using namespace gams;
 
-QString TestGAMSModelInstanceOpt::classname()  { return "TestGAMSModelInstanceOpt"; }
+class TestGAMSModelInstanceOpt: public TestGAMSObject
+{
+};
 
 void TestGAMSModelInstanceOpt::testDefaultConstructor()  {
     GAMSModelInstanceOpt miopt;
     ASSERT_TRUE( miopt.solver().empty() );
-    QCOMPARE( miopt.optFile(), -1 );
-    QCOMPARE( miopt.noMatchLimit(), 0);
+    EXPECT_EQ( miopt.optFile(), -1 );
+    EXPECT_EQ( miopt.noMatchLimit(), 0);
     ASSERT_TRUE( ! miopt.debug() );
 }
 
 void TestGAMSModelInstanceOpt::testConstructor()  {
     GAMSModelInstanceOpt miopt("x", 1, 1, true);
-    QCOMPARE( miopt.solver().c_str(), "x" );
-    QCOMPARE( miopt.noMatchLimit(), 1 );
-    QCOMPARE( miopt.optFile(), 1 );
+    EXPECT_EQ( miopt.solver().c_str(), "x" );
+    EXPECT_EQ( miopt.noMatchLimit(), 1 );
+    EXPECT_EQ( miopt.optFile(), 1 );
     ASSERT_TRUE( miopt.debug() );
 }
 
@@ -62,18 +64,18 @@ void TestGAMSModelInstanceOpt::testEqualToOperator()  {
     GAMSModelInstanceOpt miopt1;
 
     GAMSModelInstanceOpt miopt = miopt1;
-    QCOMPARE( miopt.solver(), miopt1.solver() );
-    QCOMPARE( miopt.noMatchLimit(), miopt1.noMatchLimit() );
-    QCOMPARE( miopt.optFile(), miopt1.optFile() );
-    QCOMPARE( miopt.debug(), miopt1.debug() );
+    EXPECT_EQ( miopt.solver(), miopt1.solver() );
+    EXPECT_EQ( miopt.noMatchLimit(), miopt1.noMatchLimit() );
+    EXPECT_EQ( miopt.optFile(), miopt1.optFile() );
+    EXPECT_EQ( miopt.debug(), miopt1.debug() );
     ASSERT_TRUE( miopt == miopt1 );
 
     GAMSModelInstanceOpt miopt2("x", 1, 0, true);
     miopt = miopt2;
-    QCOMPARE( miopt.solver(), miopt2.solver() );
-    QCOMPARE( miopt.noMatchLimit(), miopt2.noMatchLimit() );
-    QCOMPARE( miopt.optFile(), miopt2.optFile() );
-    QCOMPARE( miopt.debug(), miopt2.debug() );
+    EXPECT_EQ( miopt.solver(), miopt2.solver() );
+    EXPECT_EQ( miopt.noMatchLimit(), miopt2.noMatchLimit() );
+    EXPECT_EQ( miopt.optFile(), miopt2.optFile() );
+    EXPECT_EQ( miopt.debug(), miopt2.debug() );
     ASSERT_TRUE( miopt == miopt2 );
 }
 
@@ -89,11 +91,11 @@ void TestGAMSModelInstanceOpt::testGetSetSolver()  {
     QFETCH(QString, solver);
 
     GAMSModelInstanceOpt miopt1(solver.toStdString(), -1, 0, false);
-    QCOMPARE(  miopt1.solver(), solver.toStdString() );
+    EXPECT_EQ(  miopt1.solver(), solver.toStdString() );
 
     GAMSModelInstanceOpt miopt2;
     miopt2.setSolver( solver.toStdString() );
-    QCOMPARE(  miopt2.solver(), solver.toStdString() );
+    EXPECT_EQ(  miopt2.solver(), solver.toStdString() );
 }
 
 void TestGAMSModelInstanceOpt::testGetSetOptFile_data()  {
@@ -108,11 +110,11 @@ void TestGAMSModelInstanceOpt::testGetSetOptFile()  {
     QFETCH(int, optfile);
 
     GAMSModelInstanceOpt miopt1("x", optfile, 0, false);
-    QCOMPARE(  miopt1.optFile(), optfile );
+    EXPECT_EQ(  miopt1.optFile(), optfile );
 
     GAMSModelInstanceOpt miopt2;
     miopt2.setOptFile( optfile );
-    QCOMPARE(  miopt2.optFile(), optfile );
+    EXPECT_EQ(  miopt2.optFile(), optfile );
 }
 
 void TestGAMSModelInstanceOpt::testGetSetNoMatchLimit_data()  {
@@ -127,11 +129,11 @@ void TestGAMSModelInstanceOpt::testGetSetNoMatchLimit()  {
     QFETCH(int, limit);
 
     GAMSModelInstanceOpt miopt1("x", 1, limit, false);
-    QCOMPARE(  miopt1.noMatchLimit(), limit );
+    EXPECT_EQ(  miopt1.noMatchLimit(), limit );
 
     GAMSModelInstanceOpt miopt2;
     miopt2.setNoMatchLimit( limit );
-    QCOMPARE(  miopt2.noMatchLimit(), limit );
+    EXPECT_EQ(  miopt2.noMatchLimit(), limit );
 }
 
 void TestGAMSModelInstanceOpt::testGetSetDebug_data()  {
@@ -154,4 +156,4 @@ void TestGAMSModelInstanceOpt::testGetSetDebug()  {
     ASSERT_TRUE( debug ? miopt2.debug() : ! miopt2.debug() );
 }
 
-QTEST_MAIN(TestGAMSModelInstanceOpt)
+

@@ -48,7 +48,7 @@ TEST_F(TestGAMSEnum, testGamsReturnCodeToText) {
         if (std::find(std::begin(valid), std::end(valid), i) != std::end(valid)) {
             ASSERT_TRUE(invalid.compare(code) != 0);
         } else {
-            QCOMPARE(code, invalid);
+            EXPECT_EQ(code, invalid);
         }
     }
 }

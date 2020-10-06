@@ -32,7 +32,9 @@
 
 using namespace gams;
 
-QString TestGAMSWorkspaceInfo::classname() { return "TestGAMSWorkspaceInfo"; }
+class TestGAMSWorkspaceInfo: public TestGAMSObject
+{
+};
 
 void TestGAMSWorkspaceInfo::testConstructorDefaultValue()
 {
@@ -41,7 +43,7 @@ void TestGAMSWorkspaceInfo::testConstructorDefaultValue()
     // then
     ASSERT_TRUE(QString::fromStdString(wsInfo.systemDirectory()).isEmpty());
     ASSERT_TRUE(QString::fromStdString(wsInfo.workingDirectory()).isEmpty());
-    QCOMPARE(wsInfo.debug(), GAMSEnum::DebugLevel::Off);
+    EXPECT_EQ(wsInfo.debug(), GAMSEnum::DebugLevel::Off);
 
 }
 
@@ -53,7 +55,7 @@ void TestGAMSWorkspaceInfo::testSetSystemDirectory()
     // when
     wsInfo.setSystemDirectory( dir.path().toStdString() );
     // then
-    QCOMPARE( QString::fromStdString(wsInfo.systemDirectory()), dir.path() );
+    EXPECT_EQ( QString::fromStdString(wsInfo.systemDirectory()), dir.path() );
 }
 
 void TestGAMSWorkspaceInfo::testSetWorkingDirectory()
@@ -64,7 +66,7 @@ void TestGAMSWorkspaceInfo::testSetWorkingDirectory()
     // when
     wsInfo.setWorkingDirectory( dir.path().toStdString() );
     // then
-    QCOMPARE( QString::fromStdString(wsInfo.workingDirectory()), dir.path() );
+    EXPECT_EQ( QString::fromStdString(wsInfo.workingDirectory()), dir.path() );
 }
 
 void TestGAMSWorkspaceInfo::testSetDebug_data()
@@ -82,7 +84,7 @@ void TestGAMSWorkspaceInfo::testSetDebug()
     // when
     wsInfo.setDebug( debug );
     // then
-    QCOMPARE( wsInfo.debug(), debug ) ;
+    EXPECT_EQ( wsInfo.debug(), debug ) ;
 }
 
-QTEST_MAIN(TestGAMSWorkspaceInfo)
+

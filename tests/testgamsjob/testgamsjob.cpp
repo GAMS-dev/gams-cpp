@@ -34,19 +34,21 @@
 
 using namespace gams;
 
-QString TestGAMSJob::classname()  { return "TestGAMSJob"; }
+class TestGAMSJob: public TestGAMSObject
+{
+};
 
 void TestGAMSJob::testDefaultConstructor() {
     // when
     GAMSJob job;
     // then
     ASSERT_TRUE( ! job.isValid() );
-    QVERIFY_EXCEPTION_THROWN( job.run(), GAMSException);
+    EXPECT_THROW( job.run(), GAMSException);
 }
 
 void TestGAMSJob::testNotEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job;
     GAMSJob job1 = ws.addJobFromGamsLib("trnsport");
@@ -58,7 +60,7 @@ void TestGAMSJob::testNotEqualToOperator() {
 
 void TestGAMSJob::testEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job1 = ws.addJobFromGamsLib("trnsport");
     GAMSJob job2 = ws.addJobFromGamsLib("trnsport");
@@ -74,7 +76,7 @@ void TestGAMSJob::testEqualToOperator() {
 
 void TestGAMSJob::testIsValid() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job1 = ws.addJobFromGamsLib("trnsport");
     ASSERT_TRUE( job1.isValid() );
@@ -85,30 +87,30 @@ void TestGAMSJob::testIsValid() {
 
 void TestGAMSJob::testRun() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib("trnsport");
     // when
     job.run();
     // then
     ASSERT_TRUE( job.outDB().isValid() );
-    QCOMPARE( job.outDB().getNrSymbols(), 12 );
+    EXPECT_EQ( job.outDB().getNrSymbols(), 12 );
     GAMSVariable z = job.outDB().getVariable("z");
     ASSERT_TRUE( equals(z.firstRecord().level(), 153.675) );
 }
 
 void TestGAMSJob::testRunJobFromEmptyString() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when
     GAMSJob job = ws.addJobFromString("");
     // then
-    QVERIFY_EXCEPTION_THROWN( job.run(), GAMSExceptionExecution );
+    EXPECT_THROW( job.run(), GAMSExceptionExecution );
 }
 
 void TestGAMSJob::testOutDB() {
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
 
     GAMSJob job = ws.addJobFromString(TestGAMSObject::getDataText());
@@ -118,20 +120,20 @@ void TestGAMSJob::testOutDB() {
     GAMSDatabase db = job.outDB();
     // then
     ASSERT_TRUE( db.isValid() );
-    QCOMPARE( db.getNrSymbols(), 6);
+    EXPECT_EQ( db.getNrSymbols(), 6);
     ASSERT_TRUE( db.workspace() == ws );
 
-    QCOMPARE( db.getSet("i").numberRecords(), 2 );
-    QCOMPARE( db.getSet("j").numberRecords(), 3 );
-    QCOMPARE( db.getParameter("a").numberRecords(), 2 );
-    QCOMPARE( db.getParameter("b").numberRecords(), 3 );
-    QCOMPARE( db.getParameter("d").numberRecords(), 6 );
-    QCOMPARE( db.getParameter("f").numberRecords(), 1 );
+    EXPECT_EQ( db.getSet("i").numberRecords(), 2 );
+    EXPECT_EQ( db.getSet("j").numberRecords(), 3 );
+    EXPECT_EQ( db.getParameter("a").numberRecords(), 2 );
+    EXPECT_EQ( db.getParameter("b").numberRecords(), 3 );
+    EXPECT_EQ( db.getParameter("d").numberRecords(), 6 );
+    EXPECT_EQ( db.getParameter("f").numberRecords(), 1 );
 }
 
 void TestGAMSJob::testOutDB_BeforeRun() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromString(TestGAMSObject::getDataText());
 
@@ -139,12 +141,12 @@ void TestGAMSJob::testOutDB_BeforeRun() {
     GAMSDatabase db = job.outDB();
     // then
     ASSERT_TRUE( ! db.isValid() );
-    QVERIFY_EXCEPTION_THROWN( db.getNrSymbols(), GAMSException );
+    EXPECT_THROW( db.getNrSymbols(), GAMSException );
 }
 
 void TestGAMSJob::testGetName() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromString(TestGAMSObject::getDataText());
     // when
@@ -156,16 +158,16 @@ void TestGAMSJob::testGetName() {
 }
 
 void TestGAMSJob::testGetWorkspace() {
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
 
     GAMSJob job = ws.addJobFromGamsLib("zloof");
-    QCOMPARE( job.workspace(), ws );
-    QCOMPARE( job.workspace().logID(), ws.logID() );
+    EXPECT_EQ( job.workspace(), ws );
+    EXPECT_EQ( job.workspace().logID(), ws.logID() );
 }
 
 void TestGAMSJob::testGetLogID() {
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
 
     GAMSJob job1 = ws.addJobFromGamsLib("trnsport");
@@ -178,4 +180,4 @@ void TestGAMSJob::testGetLogID() {
     ASSERT_TRUE( job2.logID() == job3.logID() );
 }
 
-QTEST_MAIN(TestGAMSJob)
+

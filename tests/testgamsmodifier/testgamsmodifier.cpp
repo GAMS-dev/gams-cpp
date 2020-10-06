@@ -34,25 +34,27 @@
 
 using namespace gams;
 
-QString TestGAMSModifier::classname()  { return "TestGAMSModifier"; }
+class TestGAMSModifier: public TestGAMSObject
+{
+};
 
 void TestGAMSModifier::testDefaultConstructor() {
      // when
      GAMSModifier mod;
      // then
      ASSERT_TRUE( ! mod.isValid() );
-     QVERIFY_EXCEPTION_THROWN( mod.dataSymbol(), GAMSException );
-     QVERIFY_EXCEPTION_THROWN( mod.gamsSymbol(), GAMSException );
-     QVERIFY_EXCEPTION_THROWN( mod.updAction(), GAMSException );
-     QVERIFY_EXCEPTION_THROWN( mod.updType(), GAMSException );
-     QVERIFY_EXCEPTION_THROWN( mod.isParameter(), GAMSException );
-     QVERIFY_EXCEPTION_THROWN( mod.isEquation(), GAMSException );
-     QVERIFY_EXCEPTION_THROWN( mod.isVariable(), GAMSException );
+     EXPECT_THROW( mod.dataSymbol(), GAMSException );
+     EXPECT_THROW( mod.gamsSymbol(), GAMSException );
+     EXPECT_THROW( mod.updAction(), GAMSException );
+     EXPECT_THROW( mod.updType(), GAMSException );
+     EXPECT_THROW( mod.isParameter(), GAMSException );
+     EXPECT_THROW( mod.isEquation(), GAMSException );
+     EXPECT_THROW( mod.isVariable(), GAMSException );
 }
 
 void TestGAMSModifier::testConstructor_Par() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_capacity_a( db );
@@ -61,9 +63,9 @@ void TestGAMSModifier::testConstructor_Par() {
       GAMSModifier mod( db.getParameter("a") );
       // then
       ASSERT_TRUE( mod.isParameter() );
-      QCOMPARE( mod.updType(), GAMSEnum::SymbolUpdateType::Inherit );
+      EXPECT_EQ( mod.updType(), GAMSEnum::SymbolUpdateType::Inherit );
       ASSERT_TRUE( mod.gamsSymbol() == db.getParameter("a") );
-      QCOMPARE( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
+      EXPECT_EQ( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
                                 QString("Seattle"),
                                 Qt::CaseInsensitive ), 0 );
     }
@@ -71,9 +73,9 @@ void TestGAMSModifier::testConstructor_Par() {
       GAMSModifier mod( db.getParameter("b"), GAMSEnum::SymbolUpdateType::BaseCase );
       // then
       ASSERT_TRUE( mod.isParameter() );
-      QCOMPARE( mod.updType(), GAMSEnum::SymbolUpdateType::BaseCase );
+      EXPECT_EQ( mod.updType(), GAMSEnum::SymbolUpdateType::BaseCase );
       ASSERT_TRUE( mod.gamsSymbol() == db.getParameter("b") );
-      QCOMPARE( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
+      EXPECT_EQ( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
                                 QString("New-York"),
                                 Qt::CaseInsensitive ), 0 );
     }
@@ -81,7 +83,7 @@ void TestGAMSModifier::testConstructor_Par() {
 
 void TestGAMSModifier::testConstructor_Var() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -90,12 +92,12 @@ void TestGAMSModifier::testConstructor_Var() {
       GAMSModifier mod( db.getVariable("x"), GAMSEnum::SymbolUpdateAction::Param,  db.getParameter("d") );
       // then
       ASSERT_TRUE( mod.isVariable() );
-      QCOMPARE( mod.updType(), GAMSEnum::SymbolUpdateType::Inherit );
+      EXPECT_EQ( mod.updType(), GAMSEnum::SymbolUpdateType::Inherit );
       ASSERT_TRUE( mod.gamsSymbol() == db.getVariable("x") );
-      QCOMPARE( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
+      EXPECT_EQ( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
                                 QString("Seattle"),
                                 Qt::CaseInsensitive ), 0 );
-      QCOMPARE( QString::compare( QString(mod.gamsSymbol().firstRecord().key(1).c_str()),
+      EXPECT_EQ( QString::compare( QString(mod.gamsSymbol().firstRecord().key(1).c_str()),
                                 QString("new-york"),
                                 Qt::CaseInsensitive ), 0 );
     }
@@ -104,21 +106,21 @@ void TestGAMSModifier::testConstructor_Var() {
                         GAMSEnum::SymbolUpdateType::BaseCase );
       // then
       ASSERT_TRUE( mod.isVariable() );
-      QCOMPARE( mod.updAction(), GAMSEnum::SymbolUpdateAction::Fixed );
-      QCOMPARE( mod.updType(), GAMSEnum::SymbolUpdateType::BaseCase );
+      EXPECT_EQ( mod.updAction(), GAMSEnum::SymbolUpdateAction::Fixed );
+      EXPECT_EQ( mod.updType(), GAMSEnum::SymbolUpdateType::BaseCase );
       ASSERT_TRUE( mod.gamsSymbol() == db.getVariable("x") );
-      QCOMPARE( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
+      EXPECT_EQ( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
                                 QString("Seattle"),
                                 Qt::CaseInsensitive ), 0 );
-      QCOMPARE( QString::compare( QString(mod.gamsSymbol().firstRecord().key(1).c_str()),
+      EXPECT_EQ( QString::compare( QString(mod.gamsSymbol().firstRecord().key(1).c_str()),
                                 QString("new-york"),
                                 Qt::CaseInsensitive ), 0 );
     }
     { // when data symbol of different dim, then
-      QVERIFY_EXCEPTION_THROWN(
+      EXPECT_THROW(
                   GAMSModifier( db.getVariable("x"), GAMSEnum::SymbolUpdateAction::Param,  db.getParameter("a") ),
                   GAMSException );
-      QVERIFY_EXCEPTION_THROWN(
+      EXPECT_THROW(
                   GAMSModifier( db.getVariable("z"), GAMSEnum::SymbolUpdateAction::Param,  db.getParameter("a") ),
                   GAMSException );
     }
@@ -126,7 +128,7 @@ void TestGAMSModifier::testConstructor_Var() {
 
 void TestGAMSModifier::testConstructor_Equ() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -135,10 +137,10 @@ void TestGAMSModifier::testConstructor_Equ() {
       GAMSModifier mod( db.getEquation("supply"), GAMSEnum::SymbolUpdateAction::Param, db.getParameter("a") );
       // then
       ASSERT_TRUE( mod.isEquation());
-      QCOMPARE( mod.updType(), GAMSEnum::SymbolUpdateType::Inherit );
+      EXPECT_EQ( mod.updType(), GAMSEnum::SymbolUpdateType::Inherit );
       ASSERT_TRUE( mod.dataSymbol() == db.getParameter("a") );
       ASSERT_TRUE( mod.gamsSymbol() == db.getEquation("supply") );
-      QCOMPARE( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
+      EXPECT_EQ( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
                                   QString("Seattle"),
                                   Qt::CaseInsensitive ), 0 );
     }
@@ -147,30 +149,30 @@ void TestGAMSModifier::testConstructor_Equ() {
                         GAMSEnum::SymbolUpdateType::Accumulate );
       // then
       ASSERT_TRUE( mod.isEquation());
-      QCOMPARE( mod.updType(), GAMSEnum::SymbolUpdateType::Accumulate );
-      QCOMPARE( mod.updAction(), GAMSEnum::SymbolUpdateAction::Dual );
+      EXPECT_EQ( mod.updType(), GAMSEnum::SymbolUpdateType::Accumulate );
+      EXPECT_EQ( mod.updAction(), GAMSEnum::SymbolUpdateAction::Dual );
       ASSERT_TRUE( mod.dataSymbol() == db.getParameter("b") );
       ASSERT_TRUE( mod.gamsSymbol() == db.getEquation("demand") );
-      QCOMPARE( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
+      EXPECT_EQ( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
                                   QString("New-York"),
                                   Qt::CaseInsensitive ), 0 );
     }
     { // when symbolUpdateAction is not allowed on Equation, then
-      QVERIFY_EXCEPTION_THROWN(
+      EXPECT_THROW(
                  GAMSModifier( db.getEquation("demand"), GAMSEnum::SymbolUpdateAction::Fixed, db.getParameter("b")),
                  GAMSException );
-      QVERIFY_EXCEPTION_THROWN(
+      EXPECT_THROW(
                  GAMSModifier( db.getEquation("supply"), GAMSEnum::SymbolUpdateAction::Upper, db.getParameter("b")),
                  GAMSException );
-      QVERIFY_EXCEPTION_THROWN(
+      EXPECT_THROW(
                  GAMSModifier( db.getEquation("supply"), GAMSEnum::SymbolUpdateAction::Lower, db.getParameter("b")),
                  GAMSException );
     }
     { // when data symbol of different dim, then
-      QVERIFY_EXCEPTION_THROWN(
+      EXPECT_THROW(
                   GAMSModifier( db.getEquation("demand"), GAMSEnum::SymbolUpdateAction::Fixed, db.getParameter("d")),
                   GAMSException );
-      QVERIFY_EXCEPTION_THROWN(
+      EXPECT_THROW(
                   GAMSModifier( db.getEquation("supply"), GAMSEnum::SymbolUpdateAction::Param,  db.getParameter("f") ),
                   GAMSException );
     }
@@ -178,7 +180,7 @@ void TestGAMSModifier::testConstructor_Equ() {
 
 void TestGAMSModifier::testAssignmentOperator_Par() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -191,7 +193,7 @@ void TestGAMSModifier::testAssignmentOperator_Par() {
     { GAMSModifier mod = parmod_a;
       ASSERT_TRUE( mod.isValid() );
       ASSERT_TRUE( mod.isParameter() );
-      QCOMPARE(mod, parmod_a);
+      EXPECT_EQ(mod, parmod_a);
     }
     // when, then
     { parmod_b = parmod_a;
@@ -215,7 +217,7 @@ void TestGAMSModifier::testAssignmentOperator_Par() {
 
 void TestGAMSModifier::testAssignmentOperator_Var() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -228,7 +230,7 @@ void TestGAMSModifier::testAssignmentOperator_Var() {
     { GAMSModifier mod = varmod_x1;
       ASSERT_TRUE( mod.isValid() );
       ASSERT_TRUE( mod.isVariable() );
-      QCOMPARE(mod, varmod_x1);
+      EXPECT_EQ(mod, varmod_x1);
     }
     // when, then
     { varmod_x1 = varmod_x2;
@@ -252,7 +254,7 @@ void TestGAMSModifier::testAssignmentOperator_Var() {
 
 void TestGAMSModifier::testAssignmentOperator_Equ() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -265,7 +267,7 @@ void TestGAMSModifier::testAssignmentOperator_Equ() {
     { GAMSModifier mod = eqmod_supply;
       ASSERT_TRUE( mod.isValid() );
       ASSERT_TRUE( mod.isEquation() );
-      QCOMPARE(mod, eqmod_supply);
+      EXPECT_EQ(mod, eqmod_supply);
     }
     // when, then
     { eqmod_supply = eqmod_demand;
@@ -289,7 +291,7 @@ void TestGAMSModifier::testAssignmentOperator_Equ() {
 
 void TestGAMSModifier::testEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -319,7 +321,7 @@ void TestGAMSModifier::testEqualToOperator() {
 
 void TestGAMSModifier::testNotEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -355,7 +357,7 @@ void TestGAMSModifier::testNotEqualToOperator() {
 
 void TestGAMSModifier::testIsValid() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -376,7 +378,7 @@ void TestGAMSModifier::testIsValid() {
 
 void TestGAMSModifier::testGetGamsSymbol() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -392,7 +394,7 @@ void TestGAMSModifier::testGetGamsSymbol() {
 
 void TestGAMSModifier::testGetDataSymbol() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -408,7 +410,7 @@ void TestGAMSModifier::testGetDataSymbol() {
 
 void TestGAMSModifier::testGetUpdAction() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -419,16 +421,16 @@ void TestGAMSModifier::testGetUpdAction() {
     GAMSModifier eqmod_demand( db.getEquation("demand"), GAMSEnum::SymbolUpdateAction::Primal, db.getParameter("a") );
     GAMSModifier eqmod_supply( db.getEquation("supply"), GAMSEnum::SymbolUpdateAction::Dual, db.getParameter("a") );
     // when, then
-    QCOMPARE( parmod_a.updAction(), GAMSEnum::SymbolUpdateAction::Param );
-    QCOMPARE( varmod_x1.updAction(), GAMSEnum::SymbolUpdateAction::Fixed );
-    QCOMPARE( varmod_x2.updAction(), GAMSEnum::SymbolUpdateAction::Upper );
-    QCOMPARE( eqmod_demand.updAction(), GAMSEnum::SymbolUpdateAction::Primal );
-    QCOMPARE( eqmod_supply.updAction(), GAMSEnum::SymbolUpdateAction::Dual );
+    EXPECT_EQ( parmod_a.updAction(), GAMSEnum::SymbolUpdateAction::Param );
+    EXPECT_EQ( varmod_x1.updAction(), GAMSEnum::SymbolUpdateAction::Fixed );
+    EXPECT_EQ( varmod_x2.updAction(), GAMSEnum::SymbolUpdateAction::Upper );
+    EXPECT_EQ( eqmod_demand.updAction(), GAMSEnum::SymbolUpdateAction::Primal );
+    EXPECT_EQ( eqmod_supply.updAction(), GAMSEnum::SymbolUpdateAction::Dual );
 }
 
 void TestGAMSModifier::testGetUpdType() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -441,15 +443,15 @@ void TestGAMSModifier::testGetUpdType() {
     GAMSModifier eqmod_supply( db.getEquation("supply"), GAMSEnum::SymbolUpdateAction::Dual, db.getParameter("a"),
                              GAMSEnum::SymbolUpdateType::BaseCase );
     // when, then
-    QCOMPARE( parmod_a.updType(), GAMSEnum::SymbolUpdateType::Default );
-    QCOMPARE( varmod_x.updType(), GAMSEnum::SymbolUpdateType::Inherit );
-    QCOMPARE( eqmod_demand.updType(), GAMSEnum::SymbolUpdateType::Accumulate );
-    QCOMPARE( eqmod_supply.updType(), GAMSEnum::SymbolUpdateType::BaseCase );
+    EXPECT_EQ( parmod_a.updType(), GAMSEnum::SymbolUpdateType::Default );
+    EXPECT_EQ( varmod_x.updType(), GAMSEnum::SymbolUpdateType::Inherit );
+    EXPECT_EQ( eqmod_demand.updType(), GAMSEnum::SymbolUpdateType::Accumulate );
+    EXPECT_EQ( eqmod_supply.updType(), GAMSEnum::SymbolUpdateType::BaseCase );
 }
 
 void TestGAMSModifier::testIsParameter_Variable_Equation() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -474,4 +476,4 @@ void TestGAMSModifier::testIsParameter_Variable_Equation() {
     }
 }
 
-QTEST_MAIN(TestGAMSModifier)
+

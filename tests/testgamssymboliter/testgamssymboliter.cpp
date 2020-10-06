@@ -35,11 +35,13 @@
 
 using namespace gams;
 
-QString TestGAMSSymbolIter::classname()  { return "TestGAMSSymbolIter"; }
+class TestGAMSSymbolIter: public TestGAMSObject
+{
+};
 
 void TestGAMSSymbolIter::testConstructor() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -51,9 +53,9 @@ void TestGAMSSymbolIter::testConstructor() {
             recordCounter[rec.key(0)]++;
         }
         // then
-        QCOMPARE( recordCounter.size(), size_t(2) );
-        QCOMPARE( recordCounter["seattle"], size_t(1) );
-        QCOMPARE( recordCounter["san-diego"], size_t(1) );
+        EXPECT_EQ( recordCounter.size(), size_t(2) );
+        EXPECT_EQ( recordCounter["seattle"], size_t(1) );
+        EXPECT_EQ( recordCounter["san-diego"], size_t(1) );
     }
     { std::map<std::string, double> recordMap;
         // when
@@ -63,7 +65,7 @@ void TestGAMSSymbolIter::testConstructor() {
             recordMap[ss.str()] = rec.value();
         }
         // then
-        QCOMPARE( recordMap.size(), size_t(6) );
+        EXPECT_EQ( recordMap.size(), size_t(6) );
         ASSERT_TRUE( equals( recordMap["seattle_new-york"], 2.5) );
         ASSERT_TRUE( equals( recordMap["seattle_chicago"], 1.7) );
         ASSERT_TRUE( equals( recordMap["seattle_topeka"], 1.8) );
@@ -77,17 +79,17 @@ void TestGAMSSymbolIter::testConstructor() {
             recordCounter[rec.key(0)]++;
         }
         // then
-        QCOMPARE( recordCounter.size(), size_t(3) );
-        QCOMPARE( recordCounter["new-york"], size_t(1) );
-        QCOMPARE( recordCounter["chicago"], size_t(1) );
-        QCOMPARE( recordCounter["topeka"], size_t(1) );
+        EXPECT_EQ( recordCounter.size(), size_t(3) );
+        EXPECT_EQ( recordCounter["new-york"], size_t(1) );
+        EXPECT_EQ( recordCounter["chicago"], size_t(1) );
+        EXPECT_EQ( recordCounter["topeka"], size_t(1) );
         recordCounter.clear();
     }
 }
 
 void TestGAMSSymbolIter::testConstructor_InvalidPosition() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -120,33 +122,33 @@ void TestGAMSSymbolIter::testConstructor_InvalidPosition() {
 
 void TestGAMSSymbolIter::testConstructor_InvalidSymbol() {
     GAMSSet set;
-    QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSSet> it(set, 0), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSSet> it(set, -1), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSSet> it(set, 100), GAMSException);
+    EXPECT_THROW( GAMSSymbolIter<GAMSSet> it(set, 0), GAMSException);
+    EXPECT_THROW( GAMSSymbolIter<GAMSSet> it(set, -1), GAMSException);
+    EXPECT_THROW( GAMSSymbolIter<GAMSSet> it(set, 100), GAMSException);
     try {
         for(GAMSSetRecord rec : set) { QFAIL("Invalid GAMSSet contains no record!");  }
     } catch(GAMSException&) { ASSERT_TRUE(true); }
 
     GAMSParameter par;
-    QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSParameter> it(par, 0), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSParameter> it(par, -1), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSParameter> it(par, 100), GAMSException);
+    EXPECT_THROW( GAMSSymbolIter<GAMSParameter> it(par, 0), GAMSException);
+    EXPECT_THROW( GAMSSymbolIter<GAMSParameter> it(par, -1), GAMSException);
+    EXPECT_THROW( GAMSSymbolIter<GAMSParameter> it(par, 100), GAMSException);
     try {
         for(GAMSParameterRecord rec : par) { QFAIL("Invalid GAMSParameter contains no record!");  }
     } catch(GAMSException&) { ASSERT_TRUE(true); }
 
     GAMSEquation eq;
-    QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSEquation> it(eq, 0), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSEquation> it(eq, -1), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSEquation> it(eq, 100), GAMSException);
+    EXPECT_THROW( GAMSSymbolIter<GAMSEquation> it(eq, 0), GAMSException);
+    EXPECT_THROW( GAMSSymbolIter<GAMSEquation> it(eq, -1), GAMSException);
+    EXPECT_THROW( GAMSSymbolIter<GAMSEquation> it(eq, 100), GAMSException);
     try {
         for(GAMSEquationRecord rec : eq) { QFAIL("Invalid GAMSEquation contains no record!");  }
     } catch(GAMSException&) { ASSERT_TRUE(true); }
 
     GAMSVariable var;
-    QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSVariable> it(var, 0), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSVariable> it(var, -1), GAMSException);
-    QVERIFY_EXCEPTION_THROWN( GAMSSymbolIter<GAMSVariable> it(var, 100), GAMSException);
+    EXPECT_THROW( GAMSSymbolIter<GAMSVariable> it(var, 0), GAMSException);
+    EXPECT_THROW( GAMSSymbolIter<GAMSVariable> it(var, -1), GAMSException);
+    EXPECT_THROW( GAMSSymbolIter<GAMSVariable> it(var, 100), GAMSException);
     try {
         for(GAMSVariableRecord rec : var) { QFAIL("Invalid GAMSVariable contains no record!");  }
     } catch(GAMSException&) { ASSERT_TRUE(true); }
@@ -155,7 +157,7 @@ void TestGAMSSymbolIter::testConstructor_InvalidSymbol() {
 
 void TestGAMSSymbolIter::testEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -253,7 +255,7 @@ void TestGAMSSymbolIter::testEqualToOperator() {
 
 void TestGAMSSymbolIter::testNotEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -316,7 +318,7 @@ void TestGAMSSymbolIter::testNotEqualToOperator() {
 
 void TestGAMSSymbolIter::testPointerOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -326,7 +328,7 @@ void TestGAMSSymbolIter::testPointerOperator() {
         // when
         GAMSSymbolIter<GAMSSet> it_i(set_i, 0);
         // then
-        QCOMPARE( (*it_i).key(0).c_str(), "seattle");
+        EXPECT_EQ( (*it_i).key(0).c_str(), "seattle");
     }
 
     { GAMSParameter par_d = db.getParameter("d");
@@ -334,14 +336,14 @@ void TestGAMSSymbolIter::testPointerOperator() {
         GAMSSymbolIter<GAMSParameter> it_d(par_d, 0);
         ++it_d;
         // then
-        QCOMPARE( (*it_d).key(0).c_str(), "seattle");
-        QCOMPARE( (*it_d).key(1).c_str(), "chicago");
+        EXPECT_EQ( (*it_d).key(0).c_str(), "seattle");
+        EXPECT_EQ( (*it_d).key(1).c_str(), "chicago");
         // when
         ++it_d;
         ++it_d;
         // then
-        QCOMPARE( (*it_d).key(0).c_str(), "san-diego");
-        QCOMPARE( (*it_d).key(1).c_str(), "new-york");
+        EXPECT_EQ( (*it_d).key(0).c_str(), "san-diego");
+        EXPECT_EQ( (*it_d).key(1).c_str(), "new-york");
     }
 
     { GAMSVariable var_z = db.getVariable("z");
@@ -362,7 +364,7 @@ void TestGAMSSymbolIter::testPointerOperator() {
 
 void TestGAMSSymbolIter::testPointerOperator_BeyondLastRecord() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -372,38 +374,38 @@ void TestGAMSSymbolIter::testPointerOperator_BeyondLastRecord() {
         GAMSSet set_i = db.getSet("i");
         GAMSSymbolIter<GAMSSet> it_i(set_i, set_i.numberRecords());
         // when, then
-        QVERIFY_EXCEPTION_THROWN( (*it_i).key(0), GAMSException);
+        EXPECT_THROW( (*it_i).key(0), GAMSException);
     }
 
     {
         GAMSParameter par_f = db.getParameter("f");
         GAMSSymbolIter<GAMSParameter> it_f(par_f, par_f.numberRecords());
         // when, then
-        QVERIFY_EXCEPTION_THROWN( (*it_f).value(), GAMSException);
+        EXPECT_THROW( (*it_f).value(), GAMSException);
         // when
         ++it_f;
         // then
-        QVERIFY_EXCEPTION_THROWN( (*it_f).value(), GAMSException);
+        EXPECT_THROW( (*it_f).value(), GAMSException);
     }
 
     {
         GAMSEquation eq_demand = db.getEquation("demand");
         GAMSSymbolIter<GAMSEquation> it_demand(eq_demand, eq_demand.numberRecords());
         // when, then
-        QVERIFY_EXCEPTION_THROWN( (*it_demand).upper(), GAMSException);
+        EXPECT_THROW( (*it_demand).upper(), GAMSException);
     }
 
     {
         GAMSVariable var_z = db.getVariable("z");
         GAMSSymbolIter<GAMSVariable> it_z(var_z, var_z.numberRecords());
         // when, then
-        QVERIFY_EXCEPTION_THROWN( (*it_z).marginal(), GAMSException);
+        EXPECT_THROW( (*it_z).marginal(), GAMSException);
     }
 }
 
 void TestGAMSSymbolIter::testIncrementOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -414,21 +416,21 @@ void TestGAMSSymbolIter::testIncrementOperator() {
         // when
         ++it_i;
         // then
-        QCOMPARE( (*it_i).key(0).c_str(), "san-diego");
+        EXPECT_EQ( (*it_i).key(0).c_str(), "san-diego");
     }
     { GAMSParameter par_d = db.getParameter("d");
         GAMSSymbolIter<GAMSParameter> it_d(par_d, 0);
         // when
         ++it_d;
         // then
-        QCOMPARE( (*it_d).key(0).c_str(), "seattle");
-        QCOMPARE( (*it_d).key(1).c_str(), "chicago");
+        EXPECT_EQ( (*it_d).key(0).c_str(), "seattle");
+        EXPECT_EQ( (*it_d).key(1).c_str(), "chicago");
         // when
         ++it_d;
         ++it_d;
         // then
-        QCOMPARE( (*it_d).key(0).c_str(), "san-diego");
-        QCOMPARE( (*it_d).key(1).c_str(), "new-york");
+        EXPECT_EQ( (*it_d).key(0).c_str(), "san-diego");
+        EXPECT_EQ( (*it_d).key(1).c_str(), "new-york");
     }
     { GAMSVariable var_x = db.getVariable("x");
         GAMSSymbolIter<GAMSVariable> it_x(var_x, 0);
@@ -438,14 +440,14 @@ void TestGAMSSymbolIter::testIncrementOperator() {
         ++it_x;
         ++it_x;
         // then
-        QCOMPARE( (*it_x).key(0).c_str(), "san-diego");
-        QCOMPARE( (*it_x).key(1).c_str(), "chicago");
+        EXPECT_EQ( (*it_x).key(0).c_str(), "san-diego");
+        EXPECT_EQ( (*it_x).key(1).c_str(), "chicago");
     }
     { GAMSEquation eq_demand = db.getEquation("demand");
         GAMSSymbolIter<GAMSEquation> it_demand(eq_demand, 0);
         ++it_demand;
-        QCOMPARE( (*it_demand).key(0).c_str(), "chicago");
+        EXPECT_EQ( (*it_demand).key(0).c_str(), "chicago");
     }
 }
 
-QTEST_MAIN(TestGAMSSymbolIter)
+

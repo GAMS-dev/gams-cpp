@@ -33,7 +33,9 @@
 
 using namespace gams;
 
-QString TestGAMSPlatform::classname()  { return "TestGAMSPlatform"; }
+class TestGAMSPlatform: public TestGAMSObject
+{
+};
 
 void TestGAMSPlatform::testFindGams()
 {
@@ -59,4 +61,4 @@ void TestGAMSPlatform::testRunProcessParallel()
     t.~thread();
 }
 
-QTEST_MAIN(TestGAMSPlatform)
+

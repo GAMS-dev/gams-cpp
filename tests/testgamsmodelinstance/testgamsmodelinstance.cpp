@@ -33,24 +33,26 @@
 
 using namespace gams;
 
-QString TestGAMSModelInstance::classname()  { return "TestGAMSModelInstance"; }
+class TestGAMSModelInstance: public TestGAMSObject
+{
+};
 
 void TestGAMSModelInstance::testDefaultConstructor()  {
      GAMSModelInstance mi;
      ASSERT_TRUE( ! mi.isValid() );
      GAMSModifier mod;
 
-     QVERIFY_EXCEPTION_THROWN( mi.name(), GAMSException );
-     QVERIFY_EXCEPTION_THROWN( mi.copyModelInstance(), GAMSException );
-     QVERIFY_EXCEPTION_THROWN( mi.instantiate("solve", mod), GAMSException );
-     QVERIFY_EXCEPTION_THROWN( mi.interrupt(), GAMSException );
-     QVERIFY_EXCEPTION_THROWN( mi.syncDb(), GAMSException );
-     QVERIFY_EXCEPTION_THROWN( mi.solve(), GAMSException );
-     QVERIFY_EXCEPTION_THROWN( mi.checkpoint(), GAMSException );
-     QVERIFY_EXCEPTION_THROWN( mi.modelStatus(), GAMSException );
-     QVERIFY_EXCEPTION_THROWN( mi.solveStatus(), GAMSException );
-     QVERIFY_EXCEPTION_THROWN( mi.solveStatusAsString(), GAMSException );
-     QVERIFY_EXCEPTION_THROWN( mi.logID(), GAMSException );
+     EXPECT_THROW( mi.name(), GAMSException );
+     EXPECT_THROW( mi.copyModelInstance(), GAMSException );
+     EXPECT_THROW( mi.instantiate("solve", mod), GAMSException );
+     EXPECT_THROW( mi.interrupt(), GAMSException );
+     EXPECT_THROW( mi.syncDb(), GAMSException );
+     EXPECT_THROW( mi.solve(), GAMSException );
+     EXPECT_THROW( mi.checkpoint(), GAMSException );
+     EXPECT_THROW( mi.modelStatus(), GAMSException );
+     EXPECT_THROW( mi.solveStatus(), GAMSException );
+     EXPECT_THROW( mi.solveStatusAsString(), GAMSException );
+     EXPECT_THROW( mi.logID(), GAMSException );
 
      GAMSModelInstance anothermi;
      ASSERT_TRUE( ! anothermi.isValid() );
@@ -63,7 +65,7 @@ void TestGAMSModelInstance::testDefaultConstructor()  {
 
 void TestGAMSModelInstance::testAssignmentOperator()  {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSModelInstance mi1 = ws.addCheckpoint().addModelInstance();
 
@@ -78,7 +80,7 @@ void TestGAMSModelInstance::testAssignmentOperator()  {
 
 void TestGAMSModelInstance::testEqualToOperator()  {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSModelInstance mi1 = ws.addCheckpoint().addModelInstance();
 
@@ -92,7 +94,7 @@ void TestGAMSModelInstance::testEqualToOperator()  {
 
 void TestGAMSModelInstance::testNotEqualToOperator()  {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint("mycp");
     GAMSModelInstance mi1 = cp.addModelInstance();
@@ -107,7 +109,7 @@ void TestGAMSModelInstance::testNotEqualToOperator()  {
 
 void TestGAMSModelInstance::testIsValid()  {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     // when, then
@@ -116,17 +118,17 @@ void TestGAMSModelInstance::testIsValid()  {
 
 void TestGAMSModelInstance::testGetSyncDb()  {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
 
     GAMSModelInstance mi = cp.addModelInstance();
     // when, then
-    QCOMPARE( mi.syncDb().getNrSymbols(), 0);
+    EXPECT_EQ( mi.syncDb().getNrSymbols(), 0);
 
     GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
     // when, then
-    QCOMPARE( mi.syncDb().getNrSymbols(), 1);
+    EXPECT_EQ( mi.syncDb().getNrSymbols(), 1);
     ASSERT_TRUE( mi.syncDb().getParameter("bmult") == bmult );
 }
 
@@ -135,7 +137,7 @@ void TestGAMSModelInstance::testInstantiate()  {
         QFETCH(double, modifier);
 
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     ws.addJobFromString(getModelText()).run(cp);
@@ -154,7 +156,7 @@ void TestGAMSModelInstance::testInstantiate()  {
 
 void TestGAMSModelInstance::testInstantiateBeforeInitializingCP()  {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     ws.addJobFromString(getModelText());
@@ -164,7 +166,7 @@ void TestGAMSModelInstance::testInstantiateBeforeInitializingCP()  {
     GAMSOptions opt = ws.addOptions();
     opt.setAllModelTypes("cplexd");
     // when, then
-    QVERIFY_EXCEPTION_THROWN( mi.instantiate("transport use lp min z",  opt, GAMSModifier(bmult)) ,
+    EXPECT_THROW( mi.instantiate("transport use lp min z",  opt, GAMSModifier(bmult)) ,
                               GAMSException );
 }
 
@@ -177,7 +179,7 @@ void TestGAMSModelInstance::testSolve()  {
     QFETCH(double, obj);
 
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     ws.addJobFromString(getModelText()).run(cp);
@@ -201,17 +203,17 @@ void TestGAMSModelInstance::testSolve()  {
 
 void TestGAMSModelInstance::testSolveBeforeInstantiate()  {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     GAMSModelInstance mi = cp.addModelInstance();
     // when, then
-    QVERIFY_EXCEPTION_THROWN( mi.solve(), GAMSException);
+    EXPECT_THROW( mi.solve(), GAMSException);
 
     ws.addJobFromString(getModelText()).run(cp);
     mi = cp.addModelInstance();
     // when, then
-    QVERIFY_EXCEPTION_THROWN( mi.solve(), GAMSException);
+    EXPECT_THROW( mi.solve(), GAMSException);
 }
 
 void TestGAMSModelInstance::testGetModelSolveStatus_data() { getTestData(); }
@@ -224,7 +226,7 @@ void TestGAMSModelInstance::testGetModelSolveStatus()  {
     QFETCH(QString, ModelStatusStr);
 
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     ws.addJobFromString(getModelText()).run(cp);
@@ -241,14 +243,14 @@ void TestGAMSModelInstance::testGetModelSolveStatus()  {
     mi.solve();
     // then
     ASSERT_TRUE( mi.solveStatus() == SolveStatus );
-    QCOMPARE( QString::fromStdString(mi.solveStatusAsString()).trimmed(), SolveStatusStr );
+    EXPECT_EQ( QString::fromStdString(mi.solveStatusAsString()).trimmed(), SolveStatusStr );
     ASSERT_TRUE( mi.modelStatus() == ModelStatus );
-    QCOMPARE( QString::fromStdString(mi.modelStatusAsString()).trimmed(), ModelStatusStr );
+    EXPECT_EQ( QString::fromStdString(mi.modelStatusAsString()).trimmed(), ModelStatusStr );
 }
 
 void TestGAMSModelInstance::testCopyModelInstance() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     testCleanupDirs << QString::fromStdString(ws.workingDirectory());
     GAMSCheckpoint cp = ws.addCheckpoint();
@@ -262,30 +264,30 @@ void TestGAMSModelInstance::testCopyModelInstance() {
     GAMSModelInstance newmi = mi.copyModelInstance("new transport mi");
     // then
     ASSERT_TRUE( newmi.isValid() );
-    QCOMPARE( mi.syncDb().getNrSymbols(), newmi.syncDb().getNrSymbols() );
-    QCOMPARE( newmi.syncDb().getParameter("bmult").numberRecords(), mi.syncDb().getParameter("bmult").numberRecords() );
+    EXPECT_EQ( mi.syncDb().getNrSymbols(), newmi.syncDb().getNrSymbols() );
+    EXPECT_EQ( newmi.syncDb().getParameter("bmult").numberRecords(), mi.syncDb().getParameter("bmult").numberRecords() );
 }
 
 void TestGAMSModelInstance::testGetCheckpoint()  {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
     GAMSModelInstance mi = cp.addModelInstance();
     // when, then
-    QCOMPARE( mi.checkpoint(), cp);
+    EXPECT_EQ( mi.checkpoint(), cp);
 }
 
 void TestGAMSModelInstance::testGetName()  {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSCheckpoint cp = ws.addCheckpoint();
 
     // when, then
     std::string cpname = "mycp";
     GAMSModelInstance mi1 = cp.addModelInstance(cpname);
-    QCOMPARE( mi1.name(), cpname );
+    EXPECT_EQ( mi1.name(), cpname );
 
     // when, then
     GAMSModelInstance mi2 = cp.addModelInstance("");
@@ -303,7 +305,7 @@ void TestGAMSModelInstance::testGetName()  {
 
 void TestGAMSModelInstance::testGetLogID()  {
      // given
-     GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+     GAMSWorkspaceInfo wsInfo("", testSystemDir);
      GAMSWorkspace ws(wsInfo);
      GAMSCheckpoint cp = ws.addCheckpoint();
      std::string cpname = "mycp";
@@ -316,7 +318,7 @@ void TestGAMSModelInstance::testGetLogID()  {
      GAMSModelInstance mi3 = cp3.addModelInstance();
      ASSERT_TRUE( mi3.logID() == mi1.logID());
 
-     GAMSWorkspaceInfo anotherWsInfo("", testSystemDir.path().toStdString());
+     GAMSWorkspaceInfo anotherWsInfo("", testSystemDir);
      GAMSWorkspace anotherWs(anotherWsInfo);
      GAMSCheckpoint cp4 = anotherWs.addCheckpoint(cpname);
      GAMSModelInstance mi4 = cp4.addModelInstance();
@@ -389,4 +391,4 @@ std::string TestGAMSModelInstance::getModelText() {
            "Model transport /all/ ;                                             \n";
 }
 
-QTEST_MAIN(TestGAMSModelInstance)
+

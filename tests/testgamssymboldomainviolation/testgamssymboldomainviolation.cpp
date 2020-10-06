@@ -29,15 +29,17 @@
 
 using namespace gams;
 
-QString TestGAMSSymbolDomainViolation::classname()  { return "TestGAMSDatabaseDomainViolation"; }
+class TestGAMSDatabaseDomainViolation: public TestGAMSObject
+{
+};
 
 void TestGAMSSymbolDomainViolation::testDefaultConstructor() {
     // when,
     GAMSSymbolDomainViolation dv;
     // then
     ASSERT_TRUE( ! dv.isValid() );
-    QVERIFY_EXCEPTION_THROWN( dv.violInd(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( dv.violRec(), GAMSException );
+    EXPECT_THROW( dv.violInd(), GAMSException );
+    EXPECT_THROW( dv.violRec(), GAMSException );
 
     GAMSSymbolDomainViolation dv1;
     ASSERT_TRUE( dv == dv1 );
@@ -45,7 +47,7 @@ void TestGAMSSymbolDomainViolation::testDefaultConstructor() {
 
 void TestGAMSSymbolDomainViolation::testCopyConstructor() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -53,18 +55,18 @@ void TestGAMSSymbolDomainViolation::testCopyConstructor() {
     GAMSParameter a = db.getParameter("a");
 
     // when, then
-    QCOMPARE( a.getSymbolDVs(5).size(), size_t(2) );
+    EXPECT_EQ( a.getSymbolDVs(5).size(), size_t(2) );
     for(GAMSSymbolDomainViolation domViol : a.getSymbolDVs( 5)){
         GAMSSymbolDomainViolation dv( domViol );
-        QCOMPARE( dv.violInd().size(), domViol.violInd().size() );
-        QCOMPARE( dv.violRec(), domViol.violRec() );
+        EXPECT_EQ( dv.violInd().size(), domViol.violInd().size() );
+        EXPECT_EQ( dv.violRec(), domViol.violRec() );
         ASSERT_TRUE( dv == domViol );
     }
 }
 
 void TestGAMSSymbolDomainViolation::testIsValid() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
@@ -73,19 +75,19 @@ void TestGAMSSymbolDomainViolation::testIsValid() {
     GAMSParameter f = db.getParameter("f");
 
     // when, then
-    QCOMPARE( f.getSymbolDVs(5).size(), size_t(0) );
+    EXPECT_EQ( f.getSymbolDVs(5).size(), size_t(0) );
 
 }
 
 void TestGAMSSymbolDomainViolation::testEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
 
     GAMSParameter a = db.getParameter("a");
-    QCOMPARE( a.getSymbolDVs(2).size(), size_t(2) );
+    EXPECT_EQ( a.getSymbolDVs(2).size(), size_t(2) );
 
     GAMSSymbolDomainViolation dv0 = a.getSymbolDVs(2)[0];
     GAMSSymbolDomainViolation dv1 = a.getSymbolDVs(2)[1];
@@ -105,13 +107,13 @@ void TestGAMSSymbolDomainViolation::testEqualToOperator() {
 
 void TestGAMSSymbolDomainViolation::testNotEqualToOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
 
     GAMSParameter a = db.getParameter("a");
-    QCOMPARE( a.getSymbolDVs(2).size(), size_t(2) );
+    EXPECT_EQ( a.getSymbolDVs(2).size(), size_t(2) );
 
     GAMSSymbolDomainViolation dv0 = a.getSymbolDVs(2)[0];
     GAMSSymbolDomainViolation dv1 = a.getSymbolDVs(2)[1];
@@ -130,50 +132,50 @@ void TestGAMSSymbolDomainViolation::testNotEqualToOperator() {
 
 void TestGAMSSymbolDomainViolation::testViolRecs() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
 
     // when, then
     { GAMSParameter a = db.getParameter("a");
-      QCOMPARE( a.getSymbolDVs(2).size(), size_t(2) );
+      EXPECT_EQ( a.getSymbolDVs(2).size(), size_t(2) );
 
       std::map<std::string, size_t> recordCounter;
       for (GAMSSymbolDomainViolation dv : a.getSymbolDVs()) {
           recordCounter[dv.violRec().key(0)]++;
       }
-      QCOMPARE( recordCounter.size(), size_t(2) );
-      QCOMPARE( recordCounter["Alburquerque"], size_t(1) );
-      QCOMPARE( recordCounter["Sanfrancisco"], size_t(1) );
+      EXPECT_EQ( recordCounter.size(), size_t(2) );
+      EXPECT_EQ( recordCounter["Alburquerque"], size_t(1) );
+      EXPECT_EQ( recordCounter["Sanfrancisco"], size_t(1) );
     }
 
     // when, then
     { GAMSParameter b = db.getParameter("b");
-      QCOMPARE( b.getSymbolDVs(2).size(), size_t(1) );
+      EXPECT_EQ( b.getSymbolDVs(2).size(), size_t(1) );
 
       std::map<std::string, size_t> recordCounter;
       for (GAMSSymbolDomainViolation dv : b.getSymbolDVs()) {
           recordCounter[dv.violRec().key(0)]++;
       }
-      QCOMPARE( recordCounter.size(), size_t(1) );
-      QCOMPARE( recordCounter["Braunschweig"], size_t(1) );
+      EXPECT_EQ( recordCounter.size(), size_t(1) );
+      EXPECT_EQ( recordCounter["Braunschweig"], size_t(1) );
     }
 }
 
 void TestGAMSSymbolDomainViolation::testViolInd() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Database_DomainViolations( db );
 
     { GAMSParameter a = db.getParameter("a");
-      QCOMPARE( a.getSymbolDVs(2).size(), size_t(2) );
+      EXPECT_EQ( a.getSymbolDVs(2).size(), size_t(2) );
       for (GAMSSymbolDomainViolation dv : a.getSymbolDVs()) {
           // when, then
           std::vector<bool> vi = dv.violInd();
-          QCOMPARE( vi.size(), size_t(1) );
+          EXPECT_EQ( vi.size(), size_t(1) );
           ASSERT_TRUE( vi[0] );
       }
     }
@@ -182,15 +184,15 @@ void TestGAMSSymbolDomainViolation::testViolInd() {
     {  GAMSParameter newd = db.addParameter("newd", "distance in thousands of miles", GAMSDomain(db.getSet("i")), GAMSDomain(db.getSet("j")));
        newd.addRecord("Seattle", "Chicago");
        newd.addRecord("Seattle", "Alburquerque");
-       QCOMPARE( newd.getSymbolDVs(2).size(), size_t(1) );
+       EXPECT_EQ( newd.getSymbolDVs(2).size(), size_t(1) );
        for (GAMSSymbolDomainViolation dv : newd.getSymbolDVs()) {
            // when ,then
            std::vector<bool> vi = dv.violInd();
-           QCOMPARE( vi.size(), size_t(2) );
+           EXPECT_EQ( vi.size(), size_t(2) );
            ASSERT_TRUE( ! vi[0] );
            ASSERT_TRUE( vi[1] );
        }
     }
 }
 
-QTEST_MAIN(TestGAMSSymbolDomainViolation)
+

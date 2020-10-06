@@ -36,48 +36,50 @@
 
 using namespace gams;
 
-QString TestGAMSSetRecord::classname()  { return "TestGAMSSetRecord"; }
+class TestGAMSSetRecord: public TestGAMSObject
+{
+};
 
 void TestGAMSSetRecord::testDefaultConstructor() {
     // when
     GAMSSetRecord rec;
     // then
     ASSERT_TRUE( ! rec.isValid() );
-    QVERIFY_EXCEPTION_THROWN( rec.type(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( rec.logID(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( rec.setText("x"), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( rec.keys(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( rec.moveNext(), GAMSException );
+    EXPECT_THROW( rec.type(), GAMSException );
+    EXPECT_THROW( rec.logID(), GAMSException );
+    EXPECT_THROW( rec.setText("x"), GAMSException );
+    EXPECT_THROW( rec.keys(), GAMSException );
+    EXPECT_THROW( rec.moveNext(), GAMSException );
 }
 
 void TestGAMSSetRecord::testCopyConstructor() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i(db);
     GAMSSetRecord rec = db.getSet("i").firstRecord();
     // when
     GAMSSetRecord newRecord( rec );
-    QCOMPARE( newRecord, rec );
+    EXPECT_EQ( newRecord, rec );
 }
 
 void TestGAMSSetRecord::testCopyConstructor_IncorrectType() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
     GAMSDatabase db = job.outDB();
     // when
-    QVERIFY_EXCEPTION_THROWN( GAMSSetRecord newRecord( db.getParameter("a").firstRecord() ), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( GAMSSetRecord newRecord( db.getVariable("x").firstRecord() ), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( GAMSSetRecord newRecord( db.getEquation("demand").firstRecord() ), GAMSException );
+    EXPECT_THROW( GAMSSetRecord newRecord( db.getParameter("a").firstRecord() ), GAMSException );
+    EXPECT_THROW( GAMSSetRecord newRecord( db.getVariable("x").firstRecord() ), GAMSException );
+    EXPECT_THROW( GAMSSetRecord newRecord( db.getEquation("demand").firstRecord() ), GAMSException );
 }
 
 void TestGAMSSetRecord::testAssignmentOperator() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -86,7 +88,7 @@ void TestGAMSSetRecord::testAssignmentOperator() {
 
     // when, then
     GAMSSetRecord newRecord = rec;
-    QCOMPARE( newRecord, rec );
+    EXPECT_EQ( newRecord, rec );
     ASSERT_TRUE( newRecord == rec );
 }
 
@@ -105,7 +107,7 @@ void TestGAMSSetRecord::testIncorrectType() {
     QFETCH(QString, symbolID);
 
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -117,24 +119,24 @@ void TestGAMSSetRecord::testIncorrectType() {
         {
           GAMSParameter symbol = db.getParameter( symbolID.toStdString() );
           GAMSSymbolRecord rec1 = symbol.firstRecord();
-          QVERIFY_EXCEPTION_THROWN( GAMSSymbolRecord rec2 = GAMSSetRecord( symbol.firstRecord() ), GAMSException );
-          QVERIFY_EXCEPTION_THROWN( GAMSSetRecord r = rec1, GAMSException );
+          EXPECT_THROW( GAMSSymbolRecord rec2 = GAMSSetRecord( symbol.firstRecord() ), GAMSException );
+          EXPECT_THROW( GAMSSetRecord r = rec1, GAMSException );
           break;
         }
       case GAMSEnum::SymbolType::SymTypeVar :
         {
           GAMSVariable symbol = db.getVariable( symbolID.toStdString() );
           GAMSSymbolRecord rec1 = symbol.firstRecord();
-          QVERIFY_EXCEPTION_THROWN( GAMSSymbolRecord rec2 = GAMSSetRecord( symbol.firstRecord() ), GAMSException );
-          QVERIFY_EXCEPTION_THROWN( GAMSSetRecord r = rec1, GAMSException );
+          EXPECT_THROW( GAMSSymbolRecord rec2 = GAMSSetRecord( symbol.firstRecord() ), GAMSException );
+          EXPECT_THROW( GAMSSetRecord r = rec1, GAMSException );
           break;
         }
       case GAMSEnum::SymbolType::SymTypeEqu :
         {
           GAMSEquation symbol = db.getEquation( symbolID.toStdString() );
           GAMSSymbolRecord rec1 = symbol.firstRecord();
-          QVERIFY_EXCEPTION_THROWN( GAMSSymbolRecord rec2 = GAMSSetRecord( symbol.firstRecord() ), GAMSException );
-          QVERIFY_EXCEPTION_THROWN( GAMSSetRecord r = rec1, GAMSException );
+          EXPECT_THROW( GAMSSymbolRecord rec2 = GAMSSetRecord( symbol.firstRecord() ), GAMSException );
+          EXPECT_THROW( GAMSSetRecord r = rec1, GAMSException );
           break;
         }
       default: break;
@@ -143,18 +145,18 @@ void TestGAMSSetRecord::testIncorrectType() {
 
 void TestGAMSSetRecord::testGetSetText() {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i(db);
     GAMSSetRecord rec = db.getSet("i").firstRecord();
     rec.setText("seattle record");
-    QCOMPARE( rec.text().c_str(), "seattle record" );
+    EXPECT_EQ( rec.text().c_str(), "seattle record" );
 
     GAMSSet j = db.addSet("j", "set j");
     j.addRecord("j1").setText("");
     ASSERT_TRUE(j.lastRecord().text().empty());
 }
 
-QTEST_MAIN(TestGAMSSetRecord)
+
 
