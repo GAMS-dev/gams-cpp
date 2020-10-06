@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
         GAMSModelInstance mi = cp.addModelInstance();
         GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
         GAMSOptions opt = ws.addOptions();
-        opt.setAllModelTypes("cplexd");
+        opt.setAllModelTypes("cplex");
 
         // instantiate the GAMSModelInstance and pass a model definition and GAMSModifier to declare bmult mutable
         mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));
