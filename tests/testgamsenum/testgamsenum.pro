@@ -31,8 +31,7 @@ DEP = $$TEST/../dep
 include(../tests.pri)
 
 HEADERS += \
-    ../testgamsobject.h \
-    testgamsenum.h
+    ../testgamsobject.h
 
 SOURCES += \
     ../testgamsobject.cpp \

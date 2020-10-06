@@ -25,15 +25,17 @@
  */
 
 #include "gamsdomain.h"
-#include "testgamsdomain.h"
+#include "testgamsobject.h"
 
 using namespace gams;
 
-QString TestGAMSDomain::classname()  { return "TestGAMSDomain"; }
+class TestGAMSDomain: public TestGAMSObject
+{
+};
 
-void TestGAMSDomain::testConstructor_Set() {
+TEST_F(TestGAMSDomain, testConstructor_Set) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -49,7 +51,7 @@ void TestGAMSDomain::testConstructor_Set() {
     }
 }
 
-void TestGAMSDomain::testConstructor_StringRelaxedName() {
+TEST_F(TestGAMSDomain, testConstructor_StringRelaxedName) {
    // given
    std::string setName = "x";
    // when, then
@@ -59,7 +61,7 @@ void TestGAMSDomain::testConstructor_StringRelaxedName() {
    QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
 }
 
-void TestGAMSDomain::testConstructor_CharPtrRelaxedName() {
+TEST_F(TestGAMSDomain, testConstructor_CharPtrRelaxedName) {
     // given
     GAMSDomain domain( "x" );
     // when, then
@@ -68,9 +70,9 @@ void TestGAMSDomain::testConstructor_CharPtrRelaxedName() {
     QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
 }
 
-void TestGAMSDomain::testCopyConstructor() {
+TEST_F(TestGAMSDomain, testCopyConstructor) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
 
@@ -97,9 +99,9 @@ void TestGAMSDomain::testCopyConstructor() {
     }
 }
 
-void TestGAMSDomain::testAssignmentOperator_Set() {
+TEST_F(TestGAMSDomain, testAssignmentOperator_Set) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -115,7 +117,7 @@ void TestGAMSDomain::testAssignmentOperator_Set() {
     }
 }
 
-void TestGAMSDomain::testAssignmentOperator_StringReleaxedName() {
+TEST_F(TestGAMSDomain, testAssignmentOperator_StringReleaxedName) {
     // given, when, then
     std::string setName = "i";
     GAMSDomain domain = setName;
@@ -124,7 +126,7 @@ void TestGAMSDomain::testAssignmentOperator_StringReleaxedName() {
     QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
 }
 
-void TestGAMSDomain::testAssignmentOperator_CharPtrReleaxedName() {
+TEST_F(TestGAMSDomain, testAssignmentOperator_CharPtrReleaxedName) {
     // given, when, then
     GAMSDomain domain = "i";
     ASSERT_TRUE( domain.isRelaxed() );
@@ -132,9 +134,9 @@ void TestGAMSDomain::testAssignmentOperator_CharPtrReleaxedName() {
     QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
 }
 
-void TestGAMSDomain::testAssignmentOperator_GAMSDomain() {
+TEST_F(TestGAMSDomain, testAssignmentOperator_GAMSDomain) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -161,9 +163,9 @@ void TestGAMSDomain::testAssignmentOperator_GAMSDomain() {
     }
 }
 
-void TestGAMSDomain::testGetName() {
+TEST_F(TestGAMSDomain, testGetName) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
@@ -180,9 +182,9 @@ void TestGAMSDomain::testGetName() {
     }
 }
 
-void TestGAMSDomain::testGetSet() {
+TEST_F(TestGAMSDomain, testGetSet) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -203,9 +205,9 @@ void TestGAMSDomain::testGetSet() {
     }
 }
 
-void TestGAMSDomain::testIsRelaxed() {
+TEST_F(TestGAMSDomain, testIsRelaxed) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -224,4 +226,3 @@ void TestGAMSDomain::testIsRelaxed() {
     }
 }
 
-QTEST_MAIN(TestGAMSDomain)
