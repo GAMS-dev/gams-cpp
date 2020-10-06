@@ -66,7 +66,7 @@ TEST_F(TestGAMSDomain, testConstructor_CharPtrRelaxedName) {
     GAMSDomain domain( "x" );
     // when, then
     ASSERT_TRUE( domain.isRelaxed() );
-    EXPECT_EQ( domain.name().c_str(), "x" );
+    EXPECT_STREQ( domain.name().c_str(), "x" );
     EXPECT_THROW( domain.getSet(), GAMSException );
 }
 
@@ -130,7 +130,7 @@ TEST_F(TestGAMSDomain, testAssignmentOperator_CharPtrReleaxedName) {
     // given, when, then
     GAMSDomain domain = "i";
     ASSERT_TRUE( domain.isRelaxed() );
-    EXPECT_EQ( domain.name().c_str(), "i" );
+    EXPECT_STREQ( domain.name().c_str(), "i" );
     EXPECT_THROW( domain.getSet(), GAMSException );
 }
 
@@ -157,7 +157,7 @@ TEST_F(TestGAMSDomain, testAssignmentOperator_GAMSDomain) {
     }
     { GAMSDomain domain_i( "i" );
       GAMSDomain domain = domain_i;
-      EXPECT_EQ( domain.name().c_str(), "i" );
+      EXPECT_STREQ( domain.name().c_str(), "i" );
       EXPECT_THROW( domain.getSet(), GAMSException );
       ASSERT_TRUE( domain.isRelaxed() );
     }
@@ -171,14 +171,14 @@ TEST_F(TestGAMSDomain, testGetName) {
     TestGAMSObject::getTestData_Set_markets_j( db );
     // when, then
     { GAMSDomain domain( db.getSet("j") );
-      EXPECT_EQ( domain.name().c_str(), "j" );
+      EXPECT_STREQ( domain.name().c_str(), "j" );
     }
     { std::string setName = "SetX";;
       GAMSDomain domain( setName );
       EXPECT_EQ( domain.name(), setName );
     }
     { GAMSDomain domain( "SetX" );
-      EXPECT_EQ( domain.name().c_str(), "SetX" );
+      EXPECT_STREQ( domain.name().c_str(), "SetX" );
     }
 }
 
@@ -225,4 +225,3 @@ TEST_F(TestGAMSDomain, testIsRelaxed) {
       ASSERT_TRUE( domain.isRelaxed() );
     }
 }
-
