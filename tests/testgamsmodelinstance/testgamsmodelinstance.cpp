@@ -24,17 +24,19 @@
  * SOFTWARE.
  */
 
+#include "testgamsobject.h"
 #include "gamscheckpoint.h"
 #include "gamsmodelinstance.h"
 #include "gamsoptions.h"
 #include "gamsparameter.h"
 #include "gamsvariable.h"
-#include "testgamsmodelinstance.h"
 
 using namespace gams;
 
 class TestGAMSModelInstance: public TestGAMSObject
 {
+public:
+    static std::string getModelText();
 };
 
 TEST_F(TestGAMSModelInstance, testDefaultConstructor) {
@@ -132,28 +134,6 @@ TEST_F(TestGAMSModelInstance, testGetSyncDb) {
     ASSERT_TRUE( mi.syncDb().getParameter("bmult") == bmult );
 }
 
-TEST_F(TestGAMSModelInstance, testInstantiate_data) { getTestData(); }
-TEST_F(TestGAMSModelInstance, testInstantiate) {
-        QFETCH(double, modifier);
-
-    // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir);
-    GAMSWorkspace ws(wsInfo);
-    GAMSCheckpoint cp = ws.addCheckpoint();
-    ws.addJobFromString(getModelText()).run(cp);
-
-    GAMSModelInstance mi = cp.addModelInstance();
-    GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
-    GAMSOptions opt = ws.addOptions();
-    opt.setAllModelTypes("cplexd");
-    // when, then
-    try {
-       mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));
-       bmult.addRecord().setValue( modifier );
-       mi.solve();
-    } catch(GAMSException&) { ASSERT_TRUE(false); }
-}
-
 TEST_F(TestGAMSModelInstance, testInstantiateBeforeInitializingCP) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
@@ -168,37 +148,6 @@ TEST_F(TestGAMSModelInstance, testInstantiateBeforeInitializingCP) {
     // when, then
     EXPECT_THROW( mi.instantiate("transport use lp min z",  opt, GAMSModifier(bmult)) ,
                               GAMSException );
-}
-
-TEST_F(TestGAMSModelInstance, testSolve_data) { getTestData(); }
-
-TEST_F(TestGAMSModelInstance, testSolve) {
-    QFETCH(double, modifier);
-    QFETCH(int, SolveStatus);
-    QFETCH(int, ModelStatus);
-    QFETCH(double, obj);
-
-    // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir);
-    GAMSWorkspace ws(wsInfo);
-    GAMSCheckpoint cp = ws.addCheckpoint();
-    ws.addJobFromString(getModelText()).run(cp);
-
-    GAMSModelInstance mi = cp.addModelInstance();
-
-    GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
-    GAMSOptions opt = ws.addOptions();
-    opt.setAllModelTypes("cplexd");
-
-    mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));
-    bmult.addRecord().setValue( modifier );
-
-    // when
-    mi.solve();
-    // then
-    ASSERT_TRUE( mi.solveStatus() == SolveStatus );
-    ASSERT_TRUE( mi.modelStatus() == ModelStatus );
-    ASSERT_TRUE( equals( mi.syncDb().getVariable("z").findRecord().level(), obj) );
 }
 
 TEST_F(TestGAMSModelInstance, testSolveBeforeInstantiate) {
@@ -216,43 +165,11 @@ TEST_F(TestGAMSModelInstance, testSolveBeforeInstantiate) {
     EXPECT_THROW( mi.solve(), GAMSException);
 }
 
-TEST_F(TestGAMSModelInstance, testGetModelSolveStatus_data) { getTestData(); }
-
-TEST_F(TestGAMSModelInstance, testGetModelSolveStatus) {
-    QFETCH(double, modifier);
-    QFETCH(int, SolveStatus);
-    QFETCH(QString, SolveStatusStr);
-    QFETCH(int, ModelStatus);
-    QFETCH(QString, ModelStatusStr);
-
-    // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir);
-    GAMSWorkspace ws(wsInfo);
-    GAMSCheckpoint cp = ws.addCheckpoint();
-    ws.addJobFromString(getModelText()).run(cp);
-
-    GAMSModelInstance mi = cp.addModelInstance();
-    GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
-    GAMSOptions opt = ws.addOptions();
-    opt.setAllModelTypes("cplexd");
-
-    mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));
-    bmult.addRecord().setValue( modifier );
-
-    // when
-    mi.solve();
-    // then
-    ASSERT_TRUE( mi.solveStatus() == SolveStatus );
-    EXPECT_EQ( QString::fromStdString(mi.solveStatusAsString()).trimmed(), SolveStatusStr );
-    ASSERT_TRUE( mi.modelStatus() == ModelStatus );
-    EXPECT_EQ( QString::fromStdString(mi.modelStatusAsString()).trimmed(), ModelStatusStr );
-}
-
 TEST_F(TestGAMSModelInstance, testCopyModelInstance) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
-    testCleanupDirs << QString::fromStdString(ws.workingDirectory());
+    testCleanupDirs.insert(ws.workingDirectory());
     GAMSCheckpoint cp = ws.addCheckpoint();
     ws.addJobFromString(getModelText()).run(cp);
 
@@ -326,22 +243,133 @@ TEST_F(TestGAMSModelInstance, testGetLogID) {
      ASSERT_TRUE(mi4.logID() != mi3.logID());
 }
 
-TEST_F(TestGAMSModelInstance, getTestData) {
-    QTest::addColumn<double>("modifier");
-    QTest::addColumn<int>("SolveStatus");
-    QTest::addColumn<QString>("SolveStatusStr");
-    QTest::addColumn<int>("ModelStatus");
-    QTest::addColumn<QString>("ModelStatusStr");
-    QTest::addColumn<double>("obj");
+class ParameterizedTestGAMSModelInstance
+        : public ::testing::WithParamInterface<std::tuple<std::string, double, int,
+                                                          std::string, int, std::string, double>>,
+          public TestGAMSModelInstance {
+};
 
-    QTest::newRow("bmult=0.6")   << 0.6 <<  1 << "1 Normal Completion" << 1 << "1 Optimal"    << 92.20499999999998;
-    QTest::newRow("bmult=0.7")   << 0.7 <<  1 << "1 Normal Completion" << 1 << "1 Optimal"    << 107.57249999999999;
-    QTest::newRow("bmult=0.8")   << 0.8 <<  1 << "1 Normal Completion" << 1 << "1 Optimal"    << 122.94;
-    QTest::newRow("bmult=0.9")   << 0.9 <<  1 << "1 Normal Completion" << 1 << "1 Optimal"    << 138.3075;
-    QTest::newRow("bmult=1.0")   << 1.0 <<  1 << "1 Normal Completion" << 1 << "1 Optimal"    << 153.675;
-    QTest::newRow("bmult=1.1")   << 1.1 <<  1 << "1 Normal Completion" << 4 << "4 Infeasible" << 169.04250000000002;
-    QTest::newRow("bmult=1.2")   << 1.2 <<  1 << "1 Normal Completion" << 4 << "4 Infeasible" << 184.40999999999997;
-    QTest::newRow("bmult=1.3")   << 1.3 <<  1 << "1 Normal Completion" << 4 << "4 Infeasible" << 199.77750000000003;
+INSTANTIATE_TEST_SUITE_P(testSolve,
+                        ParameterizedTestGAMSModelInstance,
+                        ::testing::Values (
+                             //      description, modifier, SolveStatus, SolveStatusStr, ModelStatus, ModelStatusStr, obj
+                             std::make_tuple("bmult=0.6", 0.6, 1, "1 Normal Completion", 1, "1 Optimal"   , 92.20499999999998),
+                             std::make_tuple("bmult=0.7", 0.7, 1, "1 Normal Completion", 1, "1 Optimal"   , 107.57249999999999),
+                             std::make_tuple("bmult=0.8", 0.8, 1, "1 Normal Completion", 1, "1 Optimal"   , 122.94),
+                             std::make_tuple("bmult=0.9", 0.9, 1, "1 Normal Completion", 1, "1 Optimal"   , 138.3075),
+                             std::make_tuple("bmult=1.0", 1.0, 1, "1 Normal Completion", 1, "1 Optimal"   , 153.675),
+                             std::make_tuple("bmult=1.1", 1.1, 1, "1 Normal Completion", 4, "4 Infeasible", 169.04250000000002),
+                             std::make_tuple("bmult=1.2", 1.2, 1, "1 Normal Completion", 4, "4 Infeasible", 184.40999999999997),
+                             std::make_tuple("bmult=1.3", 1.3, 1, "1 Normal Completion", 4, "4 Infeasible", 199.77750000000003)
+                        ));
+
+TEST_P(ParameterizedTestGAMSModelInstance, testSolve) {
+    double modifier = std::get<1>(GetParam());
+    int SolveStatus = std::get<2>(GetParam());
+    int ModelStatus = std::get<4>(GetParam());
+    double obj      = std::get<6>(GetParam());
+
+    // given
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
+    GAMSWorkspace ws(wsInfo);
+    GAMSCheckpoint cp = ws.addCheckpoint();
+    ws.addJobFromString(getModelText()).run(cp);
+
+    GAMSModelInstance mi = cp.addModelInstance();
+
+    GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
+    GAMSOptions opt = ws.addOptions();
+    opt.setAllModelTypes("cplexd");
+
+    mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));
+    bmult.addRecord().setValue( modifier );
+
+    // when
+    mi.solve();
+    // then
+    ASSERT_TRUE( mi.solveStatus() == SolveStatus );
+    ASSERT_TRUE( mi.modelStatus() == ModelStatus );
+    ASSERT_TRUE( equals( mi.syncDb().getVariable("z").findRecord().level(), obj) );
+}
+
+INSTANTIATE_TEST_SUITE_P(testGetModelSolveStatus,
+                        ParameterizedTestGAMSModelInstance,
+                        ::testing::Values (
+                             //      description, modifier, SolveStatus, SolveStatusStr, ModelStatus, ModelStatusStr, obj
+                             std::make_tuple("bmult=0.6", 0.6, 1, "1 Normal Completion", 1, "1 Optimal"   , 92.20499999999998),
+                             std::make_tuple("bmult=0.7", 0.7, 1, "1 Normal Completion", 1, "1 Optimal"   , 107.57249999999999),
+                             std::make_tuple("bmult=0.8", 0.8, 1, "1 Normal Completion", 1, "1 Optimal"   , 122.94),
+                             std::make_tuple("bmult=0.9", 0.9, 1, "1 Normal Completion", 1, "1 Optimal"   , 138.3075),
+                             std::make_tuple("bmult=1.0", 1.0, 1, "1 Normal Completion", 1, "1 Optimal"   , 153.675),
+                             std::make_tuple("bmult=1.1", 1.1, 1, "1 Normal Completion", 4, "4 Infeasible", 169.04250000000002),
+                             std::make_tuple("bmult=1.2", 1.2, 1, "1 Normal Completion", 4, "4 Infeasible", 184.40999999999997),
+                             std::make_tuple("bmult=1.3", 1.3, 1, "1 Normal Completion", 4, "4 Infeasible", 199.77750000000003)
+                        ));
+
+TEST_P(ParameterizedTestGAMSModelInstance, testGetModelSolveStatus) {
+    double modifier            = std::get<1>(GetParam());
+    int SolveStatus            = std::get<2>(GetParam());
+    std::string SolveStatusStr = std::get<3>(GetParam());
+    int ModelStatus            = std::get<4>(GetParam());
+    std::string ModelStatusStr = std::get<5>(GetParam());
+
+    // given
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
+    GAMSWorkspace ws(wsInfo);
+    GAMSCheckpoint cp = ws.addCheckpoint();
+    ws.addJobFromString(getModelText()).run(cp);
+
+    GAMSModelInstance mi = cp.addModelInstance();
+    GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
+    GAMSOptions opt = ws.addOptions();
+    opt.setAllModelTypes("cplexd");
+
+    mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));
+    bmult.addRecord().setValue( modifier );
+
+    // when
+    mi.solve();
+    // then
+    ASSERT_TRUE( mi.solveStatus() == SolveStatus );
+    // we use find here as we do not care about trailing spaces
+    EXPECT_TRUE( mi.solveStatusAsString().find(SolveStatusStr) == 0 );
+    ASSERT_TRUE( mi.modelStatus() == ModelStatus );
+    EXPECT_TRUE( mi.modelStatusAsString().find(ModelStatusStr) == 0 );
+}
+
+INSTANTIATE_TEST_SUITE_P(testInstantiate,
+                        ParameterizedTestGAMSModelInstance,
+                        ::testing::Values (
+                             //      description, modifier, SolveStatus, SolveStatusStr, ModelStatus, ModelStatusStr, obj
+                             std::make_tuple("bmult=0.6", 0.6, 1, "1 Normal Completion", 1, "1 Optimal"   , 92.20499999999998),
+                             std::make_tuple("bmult=0.7", 0.7, 1, "1 Normal Completion", 1, "1 Optimal"   , 107.57249999999999),
+                             std::make_tuple("bmult=0.8", 0.8, 1, "1 Normal Completion", 1, "1 Optimal"   , 122.94),
+                             std::make_tuple("bmult=0.9", 0.9, 1, "1 Normal Completion", 1, "1 Optimal"   , 138.3075),
+                             std::make_tuple("bmult=1.0", 1.0, 1, "1 Normal Completion", 1, "1 Optimal"   , 153.675),
+                             std::make_tuple("bmult=1.1", 1.1, 1, "1 Normal Completion", 4, "4 Infeasible", 169.04250000000002),
+                             std::make_tuple("bmult=1.2", 1.2, 1, "1 Normal Completion", 4, "4 Infeasible", 184.40999999999997),
+                             std::make_tuple("bmult=1.3", 1.3, 1, "1 Normal Completion", 4, "4 Infeasible", 199.77750000000003)
+                        ));
+
+TEST_P(ParameterizedTestGAMSModelInstance, testInstantiate) {
+    double modifier = std::get<1>(GetParam());
+
+    // given
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
+    GAMSWorkspace ws(wsInfo);
+    GAMSCheckpoint cp = ws.addCheckpoint();
+    ws.addJobFromString(getModelText()).run(cp);
+
+    GAMSModelInstance mi = cp.addModelInstance();
+    GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
+    GAMSOptions opt = ws.addOptions();
+    opt.setAllModelTypes("cplexd");
+    // when, then
+    try {
+       mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));
+       bmult.addRecord().setValue( modifier );
+       mi.solve();
+    } catch(GAMSException&) { ASSERT_TRUE(false); }
 }
 
 std::string TestGAMSModelInstance::getModelText() {

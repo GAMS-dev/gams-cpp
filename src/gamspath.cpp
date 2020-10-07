@@ -156,7 +156,7 @@ void GAMSPath::pack()
 
 bool GAMSPath::remove()
 {
-    return std::filesystem::remove(*this);
+    return std::filesystem::remove_all(*this);
 }
 
 bool GAMSPath::rename(const std::string &newFileName)
