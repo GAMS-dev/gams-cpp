@@ -75,13 +75,12 @@
 /// <p>Acronyms, support for GAMS compilation/execution errors
 /// (GAMSJob.Run just throws an exception), structured access to listing file, and
 /// proper support for solver options.</p>
-/// <p>Currently only CplexD and Gurobi fully utilize the power of solving
+/// <p>Currently only Cplex and Gurobi fully utilize the power of solving
 /// GAMSModelInstances. Some solvers will not even work in a multi-threaded
 /// application using GAMSModelInstances. For some solvers this is unavoidable
 /// because the solver library is not thread safe (e.g. MINOS), other solvers are
-/// in principle thread safe but the GAMS link is not (e.g. Cplex, note there is a
-/// thread safe version of Cplex called CplexD which lack some minor features e.g.
-/// support for BCH framework). Moreover, GAMSModelInstances are not available for quadratic
+/// in principle thread safe but the GAMS link is not (e.g. SNOPT). 
+/// Moreover, GAMSModelInstances are not available for quadratic
 /// model types (QCP, MIQCP, RMIQCP).</p>
 /// <p>There are examples in C++ using this API in [GAMS system]\\apifiles.</p>
 namespace gams {
