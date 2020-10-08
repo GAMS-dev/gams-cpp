@@ -24,6 +24,7 @@
  * SOFTWARE.
  */
 
+#include "testgamsobject.h"
 #include "gamsequation.h"
 #include "gamsparameter.h"
 #include "gamsparameterrecord.h"
@@ -31,7 +32,6 @@
 #include "gamsvariable.h"
 #include "gamsworkspace.h"
 #include "gamsworkspaceinfo.h"
-#include "testgamsparameter.h"
 
 using namespace gams;
 
@@ -70,7 +70,7 @@ TEST_F(TestGAMSParameter, testCopyConstructor) {
     // when
     a.addRecord("Albuquerque");
     // then
-    EXPECT_EQ( capacity.findRecord("Albuquerque").key(0).c_str(), "Albuquerque" );
+    EXPECT_STREQ( capacity.findRecord("Albuquerque").key(0).c_str(), "Albuquerque" );
     EXPECT_EQ( capacity.numberRecords(), a.numberRecords() );
 }
 
@@ -151,7 +151,7 @@ TEST_F(TestGAMSParameter, testGetFirstRecord) {
 
     // when, then
     GAMSParameterRecord rec = a.firstRecord();
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "Seattle", Qt::CaseSensitive ), 0 );
+    EXPECT_STREQ( rec.key(0).c_str(), "Seattle" );
     ASSERT_TRUE( equals(rec.value(), 350.0) );
 }
 
@@ -165,7 +165,7 @@ TEST_F(TestGAMSParameter, testGetFirstRecordSlice) {
 
     // when, then
     GAMSParameterRecord rec = b.firstRecord("Chicago");
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "Chicago", Qt::CaseSensitive ), 0 );
+    EXPECT_STREQ( rec.key(0).c_str(), "Chicago" );
     ASSERT_TRUE( equals(rec.value(), 300.0) );
 }
 
@@ -193,7 +193,7 @@ TEST_F(TestGAMSParameter, testGetLastRecord) {
 
     // when, then
     GAMSParameterRecord rec = a.lastRecord();
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "San-Diego", Qt::CaseSensitive ), 0 );
+    EXPECT_STREQ( rec.key(0).c_str(), "San-Diego" );
     EXPECT_EQ( rec.value(), 600.0 );
 }
 
@@ -207,7 +207,7 @@ TEST_F(TestGAMSParameter, testGetLastRecordSlice) {
 
     // when, then
     GAMSParameterRecord rec = b.lastRecord("New-York");
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "New-York", Qt::CaseSensitive ), 0 );
+    EXPECT_STREQ( rec.key(0).c_str(), "New-York" );
     EXPECT_EQ( rec.value(), 325.0 );
 }
 
@@ -236,7 +236,7 @@ TEST_F(TestGAMSParameter, testFindRecord) {
     // when, then
     GAMSParameterRecord rec = db.getParameter("b").findRecord("Topeka");
     ASSERT_TRUE( rec.isValid() );
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "Topeka", Qt::CaseSensitive ), 0 );
+    EXPECT_STREQ( rec.key(0).c_str(), "Topeka");
     ASSERT_TRUE( equals(rec.value(), 275.0) );
 }
 
@@ -250,7 +250,7 @@ TEST_F(TestGAMSParameter, testFindRecord_InsensitiveCaseKeys) {
     // when
     GAMSParameterRecord rec = db.getParameter("b").findRecord("CHICAGO");
     // then
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "chicago", Qt::CaseInsensitive ), 0 );
+    EXPECT_STRCASEEQ( rec.key(0).c_str(), "chicago" );
     ASSERT_TRUE( equals(rec.value(), 300.0) );
 }
 
@@ -320,7 +320,7 @@ TEST_F(TestGAMSParameter, testMergeExistingRecord) {
     // when, then
     GAMSParameterRecord rec = b.mergeRecord("Chicago");
     EXPECT_EQ( b.numberRecords(), numberOfRecords );
-    EXPECT_EQ( rec.key(0).c_str(), "Chicago" );
+    EXPECT_STREQ( rec.key(0).c_str(), "Chicago" );
 }
 
 TEST_F(TestGAMSParameter, testMergeNonExistingRecord) {
@@ -335,7 +335,7 @@ TEST_F(TestGAMSParameter, testMergeNonExistingRecord) {
     // when, then
     GAMSParameterRecord rec = a.mergeRecord("Albuquerque");
     EXPECT_EQ( a.numberRecords(), numberOfRecords+1 );
-    EXPECT_EQ( rec.key(0).c_str(), "Albuquerque" );
+    EXPECT_STREQ( rec.key(0).c_str(), "Albuquerque" );
 }
 
 
