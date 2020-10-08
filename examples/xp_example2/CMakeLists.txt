@@ -9,6 +9,7 @@ INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../../C/api")
 
 add_executable(${PROJECT_NAME}
     "xp_example2.cpp"
+    "../../C/api/gcmt.c"
     "../../C/api/gdxcc.c"
     "../../C/api/optcc.c"
     "../../C/api/gamsxcc.c")
@@ -16,5 +17,5 @@ add_executable(${PROJECT_NAME}
 IF (WIN32)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} user32)
 ELSEIF(UNIX)
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} dl)
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} dl pthread)
 ENDIF()
