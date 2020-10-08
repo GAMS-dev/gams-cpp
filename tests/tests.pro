@@ -47,6 +47,6 @@ SUBDIRS += testgamssymboldomainviolation
 SUBDIRS += testgamssymboliter
 SUBDIRS += testgamssymbolrecord
 SUBDIRS += testgamsvariable
-#SUBDIRS += testgamsvariablerecord
+SUBDIRS += testgamsvariablerecord
 #SUBDIRS += testgamsworkspace
 #SUBDIRS += testgamsworkspaceinfo
