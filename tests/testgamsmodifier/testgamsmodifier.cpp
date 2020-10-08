@@ -24,13 +24,12 @@
  * SOFTWARE.
  */
 
+#include "testgamsobject.h"
 #include "gamsmodifier.h"
 #include "gamsequation.h"
 #include "gamsparameter.h"
 #include "gamsvariable.h"
-#include "testgamsmodifier.h"
 
-#include <QTest>
 
 using namespace gams;
 
@@ -65,9 +64,7 @@ TEST_F(TestGAMSModifier, testConstructor_Par) {
       ASSERT_TRUE( mod.isParameter() );
       EXPECT_EQ( mod.updType(), GAMSEnum::SymbolUpdateType::Inherit );
       ASSERT_TRUE( mod.gamsSymbol() == db.getParameter("a") );
-      EXPECT_EQ( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
-                                QString("Seattle"),
-                                Qt::CaseInsensitive ), 0 );
+      EXPECT_STRCASEEQ( mod.gamsSymbol().firstRecord().key(0).c_str(), "Seattle");
     }
     { // when
       GAMSModifier mod( db.getParameter("b"), GAMSEnum::SymbolUpdateType::BaseCase );
@@ -75,9 +72,7 @@ TEST_F(TestGAMSModifier, testConstructor_Par) {
       ASSERT_TRUE( mod.isParameter() );
       EXPECT_EQ( mod.updType(), GAMSEnum::SymbolUpdateType::BaseCase );
       ASSERT_TRUE( mod.gamsSymbol() == db.getParameter("b") );
-      EXPECT_EQ( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
-                                QString("New-York"),
-                                Qt::CaseInsensitive ), 0 );
+      EXPECT_STRCASEEQ( mod.gamsSymbol().firstRecord().key(0).c_str(), "New-York" );
     }
 }
 
@@ -94,12 +89,8 @@ TEST_F(TestGAMSModifier, testConstructor_Var) {
       ASSERT_TRUE( mod.isVariable() );
       EXPECT_EQ( mod.updType(), GAMSEnum::SymbolUpdateType::Inherit );
       ASSERT_TRUE( mod.gamsSymbol() == db.getVariable("x") );
-      EXPECT_EQ( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
-                                QString("Seattle"),
-                                Qt::CaseInsensitive ), 0 );
-      EXPECT_EQ( QString::compare( QString(mod.gamsSymbol().firstRecord().key(1).c_str()),
-                                QString("new-york"),
-                                Qt::CaseInsensitive ), 0 );
+      EXPECT_STRCASEEQ( mod.gamsSymbol().firstRecord().key(0).c_str(), "seattle");
+      EXPECT_STRCASEEQ( mod.gamsSymbol().firstRecord().key(1).c_str(), "New-York" );
     }
     { // when
       GAMSModifier mod( db.getVariable("x"), GAMSEnum::SymbolUpdateAction::Fixed,  db.getParameter("d"),
@@ -109,12 +100,8 @@ TEST_F(TestGAMSModifier, testConstructor_Var) {
       EXPECT_EQ( mod.updAction(), GAMSEnum::SymbolUpdateAction::Fixed );
       EXPECT_EQ( mod.updType(), GAMSEnum::SymbolUpdateType::BaseCase );
       ASSERT_TRUE( mod.gamsSymbol() == db.getVariable("x") );
-      EXPECT_EQ( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
-                                QString("Seattle"),
-                                Qt::CaseInsensitive ), 0 );
-      EXPECT_EQ( QString::compare( QString(mod.gamsSymbol().firstRecord().key(1).c_str()),
-                                QString("new-york"),
-                                Qt::CaseInsensitive ), 0 );
+      EXPECT_STRCASEEQ( mod.gamsSymbol().firstRecord().key(0).c_str(), "seattle");
+      EXPECT_STRCASEEQ( mod.gamsSymbol().firstRecord().key(1).c_str(), "New-York" );
     }
     { // when data symbol of different dim, then
       EXPECT_THROW(
@@ -140,9 +127,7 @@ TEST_F(TestGAMSModifier, testConstructor_Equ) {
       EXPECT_EQ( mod.updType(), GAMSEnum::SymbolUpdateType::Inherit );
       ASSERT_TRUE( mod.dataSymbol() == db.getParameter("a") );
       ASSERT_TRUE( mod.gamsSymbol() == db.getEquation("supply") );
-      EXPECT_EQ( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
-                                  QString("Seattle"),
-                                  Qt::CaseInsensitive ), 0 );
+      EXPECT_STRCASEEQ( mod.gamsSymbol().firstRecord().key(0).c_str(), "seattle");
     }
     { // when
       GAMSModifier mod( db.getEquation("demand"), GAMSEnum::SymbolUpdateAction::Dual, db.getParameter("b"),
@@ -153,9 +138,7 @@ TEST_F(TestGAMSModifier, testConstructor_Equ) {
       EXPECT_EQ( mod.updAction(), GAMSEnum::SymbolUpdateAction::Dual );
       ASSERT_TRUE( mod.dataSymbol() == db.getParameter("b") );
       ASSERT_TRUE( mod.gamsSymbol() == db.getEquation("demand") );
-      EXPECT_EQ( QString::compare( QString(mod.gamsSymbol().firstRecord().key(0).c_str()),
-                                  QString("New-York"),
-                                  Qt::CaseInsensitive ), 0 );
+      EXPECT_STRCASEEQ( mod.gamsSymbol().firstRecord().key(0).c_str(), "New-York" );
     }
     { // when symbolUpdateAction is not allowed on Equation, then
       EXPECT_THROW(

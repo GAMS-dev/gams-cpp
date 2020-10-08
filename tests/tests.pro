@@ -37,7 +37,7 @@ SUBDIRS += testgamsexceptionexecution
 SUBDIRS += testgamsjob
 SUBDIRS += testgamsmodelinstance
 SUBDIRS += testgamsmodelinstanceopt
-#SUBDIRS += testgamsmodifier
+SUBDIRS += testgamsmodifier
 #SUBDIRS += testgamsparameter
 #SUBDIRS += testgamsparameterrecord
 
