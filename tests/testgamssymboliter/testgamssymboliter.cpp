@@ -24,12 +24,12 @@
  * SOFTWARE.
  */
 
+#include "testgamsobject.h"
 #include "gamsequation.h"
 #include "gamsset.h"
 #include "gamsparameter.h"
 #include "gamssymboliter.h"
 #include "gamsvariable.h"
-#include "testgamssymboliter.h"
 
 #include <sstream>
 
@@ -328,7 +328,7 @@ TEST_F(TestGAMSSymbolIter, testPointerOperator) {
         // when
         GAMSSymbolIter<GAMSSet> it_i(set_i, 0);
         // then
-        EXPECT_EQ( (*it_i).key(0).c_str(), "seattle");
+        EXPECT_STREQ( (*it_i).key(0).c_str(), "seattle");
     }
 
     { GAMSParameter par_d = db.getParameter("d");
@@ -336,14 +336,14 @@ TEST_F(TestGAMSSymbolIter, testPointerOperator) {
         GAMSSymbolIter<GAMSParameter> it_d(par_d, 0);
         ++it_d;
         // then
-        EXPECT_EQ( (*it_d).key(0).c_str(), "seattle");
-        EXPECT_EQ( (*it_d).key(1).c_str(), "chicago");
+        EXPECT_STREQ( (*it_d).key(0).c_str(), "seattle");
+        EXPECT_STREQ( (*it_d).key(1).c_str(), "chicago");
         // when
         ++it_d;
         ++it_d;
         // then
-        EXPECT_EQ( (*it_d).key(0).c_str(), "san-diego");
-        EXPECT_EQ( (*it_d).key(1).c_str(), "new-york");
+        EXPECT_STREQ( (*it_d).key(0).c_str(), "san-diego");
+        EXPECT_STREQ( (*it_d).key(1).c_str(), "new-york");
     }
 
     { GAMSVariable var_z = db.getVariable("z");
@@ -416,21 +416,21 @@ TEST_F(TestGAMSSymbolIter, testIncrementOperator) {
         // when
         ++it_i;
         // then
-        EXPECT_EQ( (*it_i).key(0).c_str(), "san-diego");
+        EXPECT_STREQ( (*it_i).key(0).c_str(), "san-diego");
     }
     { GAMSParameter par_d = db.getParameter("d");
         GAMSSymbolIter<GAMSParameter> it_d(par_d, 0);
         // when
         ++it_d;
         // then
-        EXPECT_EQ( (*it_d).key(0).c_str(), "seattle");
-        EXPECT_EQ( (*it_d).key(1).c_str(), "chicago");
+        EXPECT_STREQ( (*it_d).key(0).c_str(), "seattle");
+        EXPECT_STREQ( (*it_d).key(1).c_str(), "chicago");
         // when
         ++it_d;
         ++it_d;
         // then
-        EXPECT_EQ( (*it_d).key(0).c_str(), "san-diego");
-        EXPECT_EQ( (*it_d).key(1).c_str(), "new-york");
+        EXPECT_STREQ( (*it_d).key(0).c_str(), "san-diego");
+        EXPECT_STREQ( (*it_d).key(1).c_str(), "new-york");
     }
     { GAMSVariable var_x = db.getVariable("x");
         GAMSSymbolIter<GAMSVariable> it_x(var_x, 0);
@@ -440,13 +440,13 @@ TEST_F(TestGAMSSymbolIter, testIncrementOperator) {
         ++it_x;
         ++it_x;
         // then
-        EXPECT_EQ( (*it_x).key(0).c_str(), "san-diego");
-        EXPECT_EQ( (*it_x).key(1).c_str(), "chicago");
+        EXPECT_STREQ( (*it_x).key(0).c_str(), "san-diego");
+        EXPECT_STREQ( (*it_x).key(1).c_str(), "chicago");
     }
     { GAMSEquation eq_demand = db.getEquation("demand");
         GAMSSymbolIter<GAMSEquation> it_demand(eq_demand, 0);
         ++it_demand;
-        EXPECT_EQ( (*it_demand).key(0).c_str(), "chicago");
+        EXPECT_STREQ( (*it_demand).key(0).c_str(), "chicago");
     }
 }
 
