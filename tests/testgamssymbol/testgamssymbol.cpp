@@ -24,13 +24,13 @@
  * SOFTWARE.
  */
 
+#include "testgamsobject.h"
 #include "gamsequation.h"
 #include "gamsparameter.h"
 #include "gamssymbol.h"
 #include "gamsvariable.h"
 #include "gamsworkspace.h"
 #include "gamsworkspaceinfo.h"
-#include "testgamssymbol.h"
 
 #include <sstream>
 
@@ -924,16 +924,16 @@ TEST_F(TestGAMSSymbol, testGetFirstRecord) {
 
     // when, then
     GAMSSymbol i = db.getSet("i");
-    EXPECT_EQ( i.firstRecord().key(0).c_str(), "seattle" );
+    EXPECT_STREQ( i.firstRecord().key(0).c_str(), "seattle" );
 
     // when, then
     GAMSSymbol b( db.getParameter("b") );
-    EXPECT_EQ( b.firstRecord().key(0).c_str(), "new-york");
+    EXPECT_STREQ( b.firstRecord().key(0).c_str(), "new-york");
 
     // when, then
     GAMSSymbol d( db.getParameter("d") );
-    EXPECT_EQ( d.firstRecord().key(1).c_str(), "new-york");
-    EXPECT_EQ( d.firstRecord().key(0).c_str(), "seattle" );
+    EXPECT_STREQ( d.firstRecord().key(1).c_str(), "new-york");
+    EXPECT_STREQ( d.firstRecord().key(0).c_str(), "seattle" );
 
     // when, then
     GAMSSymbol f( db.getParameter("f") );
@@ -941,12 +941,12 @@ TEST_F(TestGAMSSymbol, testGetFirstRecord) {
 
     // when, then
     GAMSSymbol supply( db.getEquation("supply") );
-    EXPECT_EQ( supply.firstRecord().key(0).c_str(), "seattle" );
+    EXPECT_STREQ( supply.firstRecord().key(0).c_str(), "seattle" );
 
     // when, then
     GAMSSymbol x( db.getVariable("x") );
-    EXPECT_EQ( x.firstRecord().key(1).c_str(), "new-york");
-    EXPECT_EQ( x.firstRecord().key(0).c_str(), "seattle" );
+    EXPECT_STREQ( x.firstRecord().key(1).c_str(), "new-york");
+    EXPECT_STREQ( x.firstRecord().key(0).c_str(), "seattle" );
 }
 
 TEST_F(TestGAMSSymbol, testGetFirstRecordSlice) {
@@ -959,25 +959,25 @@ TEST_F(TestGAMSSymbol, testGetFirstRecordSlice) {
 
     // when, then
     GAMSSymbol j = db.getSet("j");
-    EXPECT_EQ( j.firstRecord("chicago").key(0).c_str(), "chicago" );
+    EXPECT_STREQ( j.firstRecord("chicago").key(0).c_str(), "chicago" );
 
     // when, then
     GAMSSymbol b( db.getParameter("b") );
-    EXPECT_EQ( b.firstRecord("topeka").key(0).c_str(), "topeka");
+    EXPECT_STREQ( b.firstRecord("topeka").key(0).c_str(), "topeka");
 
     // when, then
     GAMSSymbol d( db.getParameter("d") );
-    EXPECT_EQ( d.firstRecord("seattle", "topeka").key(0).c_str(), "seattle" );
-    EXPECT_EQ( d.firstRecord("seattle", "topeka").key(1).c_str(), "topeka");
+    EXPECT_STREQ( d.firstRecord("seattle", "topeka").key(0).c_str(), "seattle" );
+    EXPECT_STREQ( d.firstRecord("seattle", "topeka").key(1).c_str(), "topeka");
 
     // when, then
     GAMSSymbol supply( db.getEquation("supply") );
-    EXPECT_EQ( supply.firstRecord("san-diego").key(0).c_str(), "san-diego" );
+    EXPECT_STREQ( supply.firstRecord("san-diego").key(0).c_str(), "san-diego" );
 
     // when, then
     GAMSSymbol x( db.getVariable("x") );
-    EXPECT_EQ( x.firstRecord("san-diego", "new-york").key(0).c_str(), "san-diego" );
-    EXPECT_EQ( x.firstRecord("san-diego", "new-york").key(1).c_str(), "new-york");
+    EXPECT_STREQ( x.firstRecord("san-diego", "new-york").key(0).c_str(), "san-diego" );
+    EXPECT_STREQ( x.firstRecord("san-diego", "new-york").key(1).c_str(), "new-york");
 }
 
 TEST_F(TestGAMSSymbol, testGetFirstRecordSlice_InvalidKeys) {
@@ -1048,16 +1048,16 @@ TEST_F(TestGAMSSymbol, testGetLastRecord) {
 
     // when, then
     GAMSSymbol i = db.getSet("i");
-    EXPECT_EQ( i.lastRecord().key(0).c_str(), "san-diego" );
+    EXPECT_STREQ( i.lastRecord().key(0).c_str(), "san-diego" );
 
     // when, then
     GAMSSymbol b( db.getParameter("b") );
-    EXPECT_EQ( b.lastRecord().key(0).c_str(), "topeka");
+    EXPECT_STREQ( b.lastRecord().key(0).c_str(), "topeka");
 
     // when, then
     GAMSSymbol d( db.getParameter("d") );
-    EXPECT_EQ( d.lastRecord().key(1).c_str(), "topeka");
-    EXPECT_EQ( d.lastRecord().key(0).c_str(), "san-diego" );
+    EXPECT_STREQ( d.lastRecord().key(1).c_str(), "topeka");
+    EXPECT_STREQ( d.lastRecord().key(0).c_str(), "san-diego" );
 
     // when, then
     GAMSSymbol f( db.getParameter("f") );
@@ -1065,12 +1065,12 @@ TEST_F(TestGAMSSymbol, testGetLastRecord) {
 
     // when, then
     GAMSSymbol supply( db.getEquation("supply") );
-    EXPECT_EQ( supply.lastRecord().key(0).c_str(), "san-diego" );
+    EXPECT_STREQ( supply.lastRecord().key(0).c_str(), "san-diego" );
 
     // when, then
     GAMSSymbol x( db.getVariable("x") );
-    EXPECT_EQ( x.lastRecord().key(1).c_str(), "topeka");
-    EXPECT_EQ( x.lastRecord().key(0).c_str(), "san-diego" );
+    EXPECT_STREQ( x.lastRecord().key(1).c_str(), "topeka");
+    EXPECT_STREQ( x.lastRecord().key(0).c_str(), "san-diego" );
 }
 
 TEST_F(TestGAMSSymbol, testGetLastRecordSlice) {
@@ -1083,25 +1083,25 @@ TEST_F(TestGAMSSymbol, testGetLastRecordSlice) {
 
     // when, then
     GAMSSymbol j = db.getSet("j");
-    EXPECT_EQ( j.lastRecord("chicago").key(0).c_str(), "chicago" );
+    EXPECT_STREQ( j.lastRecord("chicago").key(0).c_str(), "chicago" );
 
     // when, then
     GAMSSymbol a = db.getParameter("b");
-    EXPECT_EQ( a.lastRecord("new-york").key(0).c_str(), "new-york");
+    EXPECT_STREQ( a.lastRecord("new-york").key(0).c_str(), "new-york");
 
     // when, then
     GAMSSymbol d = db.getParameter("d");
-    EXPECT_EQ( d.lastRecord("san-diego", "chicago").key(1).c_str(), "chicago" );
-    EXPECT_EQ( d.lastRecord("san-diego", "chicago").key(0).c_str(), "san-diego" );
+    EXPECT_STREQ( d.lastRecord("san-diego", "chicago").key(1).c_str(), "chicago" );
+    EXPECT_STREQ( d.lastRecord("san-diego", "chicago").key(0).c_str(), "san-diego" );
 
     // when, then
     GAMSSymbol supply = db.getEquation("supply");
-    EXPECT_EQ( supply.lastRecord("seattle").key(0).c_str(), "seattle" );
+    EXPECT_STREQ( supply.lastRecord("seattle").key(0).c_str(), "seattle" );
 
     // when, then
     GAMSSymbol x = db.getVariable("x");
-    EXPECT_EQ( x.lastRecord("seattle", "topeka").key(1).c_str(), "topeka");
-    EXPECT_EQ( x.lastRecord("seattle", "topeka").key(0).c_str(), "seattle" );
+    EXPECT_STREQ( x.lastRecord("seattle", "topeka").key(1).c_str(), "topeka");
+    EXPECT_STREQ( x.lastRecord("seattle", "topeka").key(0).c_str(), "seattle" );
 }
 
 TEST_F(TestGAMSSymbol, testGetLastRecordSlice_InValidKeys) {
@@ -1173,18 +1173,18 @@ TEST_F(TestGAMSSymbol, testFindRecord) {
     // when, then
     GAMSSymbol i = db.getSet("i");
     ASSERT_TRUE( i.findRecord("san-diego").isValid() );
-    EXPECT_EQ( i.findRecord("san-diego").key(0).c_str(), "san-diego");
+    EXPECT_STREQ( i.findRecord("san-diego").key(0).c_str(), "san-diego");
 
     // when, then
     GAMSSymbol b = db.getParameter("b");
     ASSERT_TRUE( b.findRecord("chicago").isValid() );
-    EXPECT_EQ( b.findRecord("chicago").key(0).c_str(), "chicago");
+    EXPECT_STREQ( b.findRecord("chicago").key(0).c_str(), "chicago");
 
     // when, then
     GAMSSymbol d =  db.getParameter("d");
     ASSERT_TRUE( d.findRecord("seattle", "chicago").isValid() );
-    EXPECT_EQ( d.findRecord("seattle", "chicago").key(0).c_str(), "seattle");
-    EXPECT_EQ( d.findRecord("seattle", "chicago").key(1).c_str(), "chicago");
+    EXPECT_STREQ( d.findRecord("seattle", "chicago").key(0).c_str(), "seattle");
+    EXPECT_STREQ( d.findRecord("seattle", "chicago").key(1).c_str(), "chicago");
 
     // when, then
     GAMSSymbol f = db.getParameter("f");
@@ -1193,13 +1193,13 @@ TEST_F(TestGAMSSymbol, testFindRecord) {
     // when, then
     GAMSSymbol supply = db.getEquation("supply");
     ASSERT_TRUE( supply.findRecord("seattle").isValid() );
-    EXPECT_EQ( supply.findRecord("seattle").key(0).c_str(), "seattle");
+    EXPECT_STREQ( supply.findRecord("seattle").key(0).c_str(), "seattle");
 
     // when, then
     GAMSSymbol x  = db.getVariable("x");
     ASSERT_TRUE( x.findRecord("seattle", "topeka").isValid() );
-    EXPECT_EQ( x.findRecord("seattle", "topeka").key(0).c_str(), "seattle");
-    EXPECT_EQ( x.findRecord("seattle", "topeka").key(1).c_str(), "topeka");
+    EXPECT_STREQ( x.findRecord("seattle", "topeka").key(0).c_str(), "seattle");
+    EXPECT_STREQ( x.findRecord("seattle", "topeka").key(1).c_str(), "topeka");
 }
 
 TEST_F(TestGAMSSymbol, testFindNonExistingRecord) {
@@ -1273,37 +1273,37 @@ TEST_F(TestGAMSSymbol, testMergeExistingRecord) {
     int numberOfRecords = j.numberRecords();
     GAMSSetRecord recj = j.mergeRecord("chicago");
     EXPECT_EQ( j.numberRecords(), numberOfRecords );
-    EXPECT_EQ( recj.key(0).c_str(), "chicago" );
+    EXPECT_STREQ( recj.key(0).c_str(), "chicago" );
 
     // when, then
     GAMSParameter b = db.getParameter("b");
     numberOfRecords = b.numberRecords();
     GAMSParameterRecord recb = b.mergeRecord("topeka");
     EXPECT_EQ( b.numberRecords(), numberOfRecords );
-    EXPECT_EQ( recb.key(0).c_str(), "topeka" );
+    EXPECT_STREQ( recb.key(0).c_str(), "topeka" );
 
     // when, then
     GAMSSymbol d =  db.getParameter("d");
     numberOfRecords = d.numberRecords();
     GAMSSymbolRecord recd = d.mergeRecord("seattle", "chicago");
     EXPECT_EQ( d.numberRecords(), numberOfRecords );
-    EXPECT_EQ( recd.key(0).c_str(), "seattle" );
-    EXPECT_EQ( recd.key(1).c_str(), "chicago" );
+    EXPECT_STREQ( recd.key(0).c_str(), "seattle" );
+    EXPECT_STREQ( recd.key(1).c_str(), "chicago" );
 
     // when, then
     GAMSSymbol supply = db.getEquation("supply");
     numberOfRecords = supply.numberRecords();
     GAMSSymbolRecord recs = supply.mergeRecord("seattle");
     EXPECT_EQ( supply.numberRecords(), numberOfRecords );
-    EXPECT_EQ( recs.key(0).c_str(), "seattle" );
+    EXPECT_STREQ( recs.key(0).c_str(), "seattle" );
 
     // when, then
     GAMSSymbol x  = db.getVariable("x");
     numberOfRecords = x.numberRecords();
     GAMSSymbolRecord recx = x.mergeRecord("seattle", "topeka");
     EXPECT_EQ( x.numberRecords(), numberOfRecords );
-    EXPECT_EQ( recx.key(0).c_str(), "seattle" );
-    EXPECT_EQ( recx.key(1).c_str(), "topeka" );
+    EXPECT_STREQ( recx.key(0).c_str(), "seattle" );
+    EXPECT_STREQ( recx.key(1).c_str(), "topeka" );
 }
 
 TEST_F(TestGAMSSymbol, testMergeNonExistingRecord) {
@@ -1319,37 +1319,37 @@ TEST_F(TestGAMSSymbol, testMergeNonExistingRecord) {
     int numberOfRecords = j.numberRecords();
     GAMSSetRecord recj = j.mergeRecord("Albuquerque");
     EXPECT_EQ( j.numberRecords(), numberOfRecords+1 );
-    EXPECT_EQ( recj.key(0).c_str(), "Albuquerque" );
+    EXPECT_STREQ( recj.key(0).c_str(), "Albuquerque" );
 
     // when, then
     GAMSParameter b = db.getParameter("b");
     numberOfRecords = b.numberRecords();
     GAMSParameterRecord recb = b.mergeRecord("Albuquerque");
     EXPECT_EQ( b.numberRecords(), numberOfRecords+1 );
-    EXPECT_EQ( recb.key(0).c_str(), "Albuquerque" );
+    EXPECT_STREQ( recb.key(0).c_str(), "Albuquerque" );
 
     // when, then
     GAMSSymbol d =  db.getParameter("d");
     numberOfRecords = d.numberRecords();
     GAMSSymbolRecord recd = d.mergeRecord("seattle", "Albuquerque");
     EXPECT_EQ( d.numberRecords(), numberOfRecords+1 );
-    EXPECT_EQ( recd.key(0).c_str(), "seattle" );
-    EXPECT_EQ( recd.key(1).c_str(), "Albuquerque" );
+    EXPECT_STREQ( recd.key(0).c_str(), "seattle" );
+    EXPECT_STREQ( recd.key(1).c_str(), "Albuquerque" );
 
     // when, then
     GAMSSymbol supply = db.getEquation("supply");
     numberOfRecords = supply.numberRecords();
     GAMSSymbolRecord recs = supply.mergeRecord("Boston");
     EXPECT_EQ( supply.numberRecords(), numberOfRecords+1 );
-    EXPECT_EQ( recs.key(0).c_str(), "Boston" );
+    EXPECT_STREQ( recs.key(0).c_str(), "Boston" );
 
     // when, then
     GAMSSymbol x  = db.getVariable("x");
     numberOfRecords = x.numberRecords();
     GAMSSymbolRecord recx = x.mergeRecord("san-diego", "Albuquerque");
     EXPECT_EQ( x.numberRecords(), numberOfRecords+1 );
-    EXPECT_EQ( recx.key(0).c_str(), "san-diego" );
-    EXPECT_EQ( recx.key(1).c_str(), "Albuquerque" );
+    EXPECT_STREQ( recx.key(0).c_str(), "san-diego" );
+    EXPECT_STREQ( recx.key(1).c_str(), "Albuquerque" );
 }
 
 TEST_F(TestGAMSSymbol, testCopySymbol) {
@@ -1390,40 +1390,40 @@ TEST_F(TestGAMSSymbol, testGetText) {
 
     // when, then
     GAMSSymbol i( db.getSet("i") );
-    EXPECT_EQ( i.text().c_str(), "canning plants" );
+    EXPECT_STREQ( i.text().c_str(), "canning plants" );
     // when, then
     GAMSSymbol j( db.getSet("j") );
-    EXPECT_EQ( j.text().c_str(), "markets" );
+    EXPECT_STREQ( j.text().c_str(), "markets" );
     // when, then
     GAMSSymbol a( db.getParameter("a") );
-    EXPECT_EQ( a.text().c_str(), "capacity of plant i in cases" );
+    EXPECT_STREQ( a.text().c_str(), "capacity of plant i in cases" );
     // when, then
     GAMSSymbol b( db.getParameter("b") );
-    EXPECT_EQ( b.text().c_str(), "demand at market j in cases" );
+    EXPECT_STREQ( b.text().c_str(), "demand at market j in cases" );
     // when, then
     GAMSSymbol d( db.getParameter("d") );
-    EXPECT_EQ( d.text().c_str(), "distance in thousands of miles" );
+    EXPECT_STREQ( d.text().c_str(), "distance in thousands of miles" );
     // when, then
     GAMSSymbol f( db.getParameter("f") );
-    EXPECT_EQ( f.text().c_str(), "freight in dollars per case per thousand miles" );
+    EXPECT_STREQ( f.text().c_str(), "freight in dollars per case per thousand miles" );
     // when, then
     GAMSSymbol c( db.getParameter("c") );
-    EXPECT_EQ( c.text().c_str(), "transport cost in thousands of dollars per case" );
+    EXPECT_STREQ( c.text().c_str(), "transport cost in thousands of dollars per case" );
     // when, then
     GAMSSymbol cost( db.getEquation("cost") );
-    EXPECT_EQ( cost.text().c_str(), "define objective function" );
+    EXPECT_STREQ( cost.text().c_str(), "define objective function" );
     // when, then
     GAMSSymbol supply( db.getEquation("supply") );
-    EXPECT_EQ( supply.text().c_str(), "observe supply limit at plant i" );
+    EXPECT_STREQ( supply.text().c_str(), "observe supply limit at plant i" );
     // when, then
     GAMSSymbol demand( db.getEquation("demand") );
-    EXPECT_EQ( demand.text().c_str(), "satisfy demand at market j" );
+    EXPECT_STREQ( demand.text().c_str(), "satisfy demand at market j" );
     // when, then
     GAMSSymbol x( db.getVariable("x") );
-    EXPECT_EQ( x.text().c_str(), "shipment quantities in cases" );
+    EXPECT_STREQ( x.text().c_str(), "shipment quantities in cases" );
     // when, then
     GAMSSymbol z( db.getVariable("z") );
-    EXPECT_EQ( z.text().c_str(), "total transportation costs in thousands of dollars" );
+    EXPECT_STREQ( z.text().c_str(), "total transportation costs in thousands of dollars" );
 }
 
 TEST_F(TestGAMSSymbol, testGetName) {
@@ -1436,40 +1436,40 @@ TEST_F(TestGAMSSymbol, testGetName) {
 
     // when, then
     GAMSSymbol i( db.getSet("i") );
-    EXPECT_EQ( i.name().c_str(), "i" );
+    EXPECT_STREQ( i.name().c_str(), "i" );
     // when, then
     GAMSSymbol j( db.getSet("j") );
-    EXPECT_EQ( j.name().c_str(), "j" );
+    EXPECT_STREQ( j.name().c_str(), "j" );
     // when, then
     GAMSSymbol a( db.getParameter("a") );
-    EXPECT_EQ( a.name().c_str(), "a" );
+    EXPECT_STREQ( a.name().c_str(), "a" );
     // when, then
     GAMSSymbol b( db.getParameter("b") );
-    EXPECT_EQ( b.name().c_str(), "b" );
+    EXPECT_STREQ( b.name().c_str(), "b" );
     // when, then
     GAMSSymbol d( db.getParameter("d") );
-    EXPECT_EQ( d.name().c_str(), "d" );
+    EXPECT_STREQ( d.name().c_str(), "d" );
     // when, then
     GAMSSymbol f( db.getParameter("f") );
-    EXPECT_EQ( f.name().c_str(), "f" );
+    EXPECT_STREQ( f.name().c_str(), "f" );
     // when, then
     GAMSSymbol c( db.getParameter("c") );
-    EXPECT_EQ( c.name().c_str(), "c" );
+    EXPECT_STREQ( c.name().c_str(), "c" );
     // when, then
     GAMSSymbol cost( db.getEquation("cost") );
-    EXPECT_EQ( cost.name().c_str(), "cost" );
+    EXPECT_STREQ( cost.name().c_str(), "cost" );
     // when, then
     GAMSSymbol supply( db.getEquation("supply") );
-    EXPECT_EQ( supply.name().c_str(), "supply" );
+    EXPECT_STREQ( supply.name().c_str(), "supply" );
     // when, then
     GAMSSymbol demand( db.getEquation("demand") );
-    EXPECT_EQ( demand.name().c_str(), "demand" );
+    EXPECT_STREQ( demand.name().c_str(), "demand" );
     // when, then
     GAMSSymbol x( db.getVariable("x") );
-    EXPECT_EQ( x.name().c_str(), "x" );
+    EXPECT_STREQ( x.name().c_str(), "x" );
     // when, then
     GAMSSymbol z( db.getVariable("z") );
-    EXPECT_EQ( z.name().c_str(), "z" );
+    EXPECT_STREQ( z.name().c_str(), "z" );
 }
 
 TEST_F(TestGAMSSymbol, testGetNumberOfRecords) {
