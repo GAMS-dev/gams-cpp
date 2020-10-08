@@ -24,12 +24,12 @@
  * SOFTWARE.
  */
 
+#include "testgamsobject.h"
 #include "gamsparameter.h"
-#include "testgamssymboldomainviolation.h"
 
 using namespace gams;
 
-class TestGAMSDatabaseDomainViolation: public TestGAMSObject
+class TestGAMSSymbolDomainViolation: public TestGAMSObject
 {
 };
 
