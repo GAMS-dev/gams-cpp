@@ -24,12 +24,12 @@
  * SOFTWARE.
  */
 
+#include "testgamsobject.h"
 #include "gamsequation.h"
 #include "gamsparameter.h"
 #include "gamsset.h"
 #include "gamsvariable.h"
 #include "gamssetrecord.h"
-#include "testgamsset.h"
 
 using namespace gams;
 
@@ -69,7 +69,7 @@ TEST_F(TestGAMSSet, testCopyConstructor) {
     // when
     i.addRecord("Albuquerque");
     // then
-    EXPECT_EQ( plant.findRecord("Albuquerque").key(0).c_str(), "Albuquerque" );
+    EXPECT_STREQ( plant.findRecord("Albuquerque").key(0).c_str(), "Albuquerque" );
     EXPECT_EQ( plant.numberRecords(), i.numberRecords() );
 }
 
@@ -152,7 +152,7 @@ TEST_F(TestGAMSSet, testGetFirstRecord) {
 
     // when, then
     GAMSSetRecord rec = i.firstRecord();
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "seattle", Qt::CaseInsensitive ), 0 );
+    EXPECT_STRCASEEQ( rec.key(0).c_str(), "seattle" );
 }
 
 TEST_F(TestGAMSSet, testGetFirstRecordSlice) {
@@ -165,7 +165,7 @@ TEST_F(TestGAMSSet, testGetFirstRecordSlice) {
 
     // when, then
     GAMSSetRecord rec = j.firstRecord("topeka");
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseInsensitive ), 0 );
+    EXPECT_STRCASEEQ( rec.key(0).c_str(), "topeka" );
 }
 
 TEST_F(TestGAMSSet, testGetFirstRecordSlice_InvalidKeys_IncorrectDimension) {
@@ -192,7 +192,7 @@ TEST_F(TestGAMSSet, testGetLastRecord) {
 
     // when, then
     GAMSSetRecord rec = i.lastRecord();
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "san-diego", Qt::CaseInsensitive ), 0 );
+    EXPECT_STRCASEEQ( rec.key(0).c_str(), "san-diego" );
 }
 
 TEST_F(TestGAMSSet, testGetLastRecordSlice) {
@@ -205,7 +205,7 @@ TEST_F(TestGAMSSet, testGetLastRecordSlice) {
 
     // when, then
     GAMSSetRecord rec = j.lastRecord("chicago");
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "chicago", Qt::CaseInsensitive ), 0 );
+    EXPECT_STRCASEEQ( rec.key(0).c_str(), "chicago" );
 }
 
 TEST_F(TestGAMSSet, testGetLastRecordSlice_InvalidKeys_IncorrectDimension) {
@@ -232,7 +232,7 @@ TEST_F(TestGAMSSet, testFindRecord) {
     // when, then
     GAMSSetRecord rec = db.getSet("j").findRecord("Topeka");
     ASSERT_TRUE( rec.isValid() );
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseInsensitive ), 0 );
+    EXPECT_STRCASEEQ( rec.key(0).c_str(), "topeka" );
 }
 
 TEST_F(TestGAMSSet, testFindRecord_InsensitiveCaseKeys) {
@@ -245,7 +245,7 @@ TEST_F(TestGAMSSet, testFindRecord_InsensitiveCaseKeys) {
     // when
     GAMSSetRecord rec = db.getSet("j").findRecord("topeka");
     // then
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "topeka", Qt::CaseInsensitive ), 0 );
+    EXPECT_STRCASEEQ( rec.key(0).c_str(), "topeka" );
 }
 
 TEST_F(TestGAMSSet, testAddRecord) {
@@ -307,7 +307,7 @@ TEST_F(TestGAMSSet, testMergeExistingRecord) {
     // when, then
     GAMSSetRecord rec = j.mergeRecord("Chicago");
     EXPECT_EQ( j.numberRecords(), numberOfRecords );
-    EXPECT_EQ( rec.key(0).c_str(), "Chicago" );
+    EXPECT_STREQ( rec.key(0).c_str(), "Chicago" );
 }
 
 TEST_F(TestGAMSSet, testMergeNonExistingRecord) {
@@ -322,7 +322,7 @@ TEST_F(TestGAMSSet, testMergeNonExistingRecord) {
     // when, then
     GAMSSetRecord rec = j.mergeRecord("Albuquerque");
     EXPECT_EQ( j.numberRecords(), numberOfRecords+1 );
-    EXPECT_EQ( rec.key(0).c_str(), "Albuquerque" );
+    EXPECT_STREQ( rec.key(0).c_str(), "Albuquerque" );
 }
 
 

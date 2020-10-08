@@ -40,8 +40,7 @@ SUBDIRS += testgamsmodelinstanceopt
 SUBDIRS += testgamsmodifier
 SUBDIRS += testgamsparameter
 SUBDIRS += testgamsparameterrecord
-
-#SUBDIRS += testgamsset
+SUBDIRS += testgamsset
 #SUBDIRS += testgamssetrecord
 #SUBDIRS += testgamssymbol
 #SUBDIRS += testgamssymboldomainviolation
