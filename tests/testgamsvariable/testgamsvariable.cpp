@@ -24,13 +24,13 @@
  * SOFTWARE.
  */
 
+#include "testgamsobject.h"
 #include "gamsequation.h"
 #include "gamsexception.h"
 #include "gamsparameter.h"
 #include "gamsset.h"
 #include "gamsvariable.h"
 #include "gamsvariablerecord.h"
-#include "testgamsvariable.h"
 
 #include <sstream>
 #include <string>
@@ -163,8 +163,8 @@ TEST_F(TestGAMSVariable, testGetFirstRecord) {
     // when, then
     { GAMSVariableRecord rec = db.getVariable("x").firstRecord();
       EXPECT_EQ( rec.keys().size(), size_t(2) );
-      EXPECT_EQ( rec.key(0).c_str(), "seattle" );
-      EXPECT_EQ( rec.key(1).c_str(), "new-york" );
+      EXPECT_STREQ( rec.key(0).c_str(), "seattle" );
+      EXPECT_STREQ( rec.key(1).c_str(), "new-york" );
       ASSERT_TRUE( equals(rec.level(), 50.0) );
     }
     // when, then
@@ -185,15 +185,15 @@ TEST_F(TestGAMSVariable, testGetFirstRecordSlice) {
     // when, then
     { GAMSVariableRecord rec = db.getVariable("x").firstRecord("seattle", "chicago");
       EXPECT_EQ( rec.keys().size(), size_t(2) );
-      EXPECT_EQ( rec.key(0).c_str(), "seattle" );
-      EXPECT_EQ( rec.key(1).c_str(), "chicago" );
+      EXPECT_STREQ( rec.key(0).c_str(), "seattle" );
+      EXPECT_STREQ( rec.key(1).c_str(), "chicago" );
       ASSERT_TRUE( equals(rec.level(), 300.0) );
     }
     // when, then
     { GAMSVariableRecord rec = db.getVariable("x").firstRecord("san-diego", "topeka");
       EXPECT_EQ( rec.keys().size(), size_t(2) );
-      EXPECT_EQ( rec.key(0).c_str(), "san-diego" );
-      EXPECT_EQ( rec.key(1).c_str(), "topeka" );
+      EXPECT_STREQ( rec.key(0).c_str(), "san-diego" );
+      EXPECT_STREQ( rec.key(1).c_str(), "topeka" );
       ASSERT_TRUE( equals(rec.level(), 275.0) );
     }
 }
@@ -229,8 +229,8 @@ TEST_F(TestGAMSVariable, testGetLastRecord) {
     // when, then
     { GAMSVariableRecord rec = db.getVariable("x").lastRecord();
       EXPECT_EQ( rec.keys().size(), size_t(2) );
-      EXPECT_EQ( rec.key(0).c_str(), "san-diego" );
-      EXPECT_EQ( rec.key(1).c_str(), "topeka" );
+      EXPECT_STREQ( rec.key(0).c_str(), "san-diego" );
+      EXPECT_STREQ( rec.key(1).c_str(), "topeka" );
       ASSERT_TRUE( equals(rec.level(), 275.0) );
     }
     // when, then
@@ -252,15 +252,15 @@ TEST_F(TestGAMSVariable, testGetLastRecordSlice) {
     // when, then
     { GAMSVariableRecord rec = db.getVariable("x").lastRecord("san-diego", "new-york");
       EXPECT_EQ( rec.keys().size(), size_t(2) );
-      EXPECT_EQ( rec.key(0).c_str(), "san-diego" );
-      EXPECT_EQ( rec.key(1).c_str(), "new-york" );
+      EXPECT_STREQ( rec.key(0).c_str(), "san-diego" );
+      EXPECT_STREQ( rec.key(1).c_str(), "new-york" );
       ASSERT_TRUE( equals(rec.level(), 275.0) );
     }
     // when, then
     { GAMSVariableRecord rec = db.getVariable("x").lastRecord("seattle", "chicago");
       EXPECT_EQ( rec.keys().size(), size_t(2) );
-      EXPECT_EQ( rec.key(0).c_str(), "seattle" );
-      EXPECT_EQ( rec.key(1).c_str(), "chicago" );
+      EXPECT_STREQ( rec.key(0).c_str(), "seattle" );
+      EXPECT_STREQ( rec.key(1).c_str(), "chicago" );
       ASSERT_TRUE( equals(rec.level(), 300.0) );
     }
 }
@@ -292,8 +292,8 @@ TEST_F(TestGAMSVariable, testFindRecord) {
     // when, then
     GAMSVariableRecord rec = db.getVariable("x").findRecord("seattle", "chicago");
     ASSERT_TRUE( rec.isValid() );
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "seattle", Qt::CaseSensitive ), 0 );
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(1)), "chicago", Qt::CaseSensitive ), 0 );
+    EXPECT_STREQ( rec.key(0).c_str(), "seattle" );
+    EXPECT_STREQ( rec.key(1).c_str(), "chicago" );
     ASSERT_TRUE( equals(rec.level(), 300.0) );
 }
 
@@ -308,8 +308,8 @@ TEST_F(TestGAMSVariable, testFindRecord_InsensitiveCaseKeys) {
     // when, then
     GAMSVariableRecord rec = db.getVariable("x").findRecord("SAN-DIEGO", "TOPEKA");
     ASSERT_TRUE( rec.isValid() );
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(0)), "san-diego", Qt::CaseInsensitive ), 0 );
-    EXPECT_EQ( QString::compare( QString::fromStdString(rec.key(1)), "topeka", Qt::CaseInsensitive ), 0 );
+    EXPECT_STREQ( rec.key(0).c_str(), "san-diego" );
+    EXPECT_STREQ( rec.key(1).c_str(), "topeka" );
     ASSERT_TRUE( equals(rec.level(), 275.0) );
 
 }
@@ -380,8 +380,8 @@ TEST_F(TestGAMSVariable, testMergeExistingRecord) {
       EXPECT_EQ( x.numberRecords(), numberOfRecords );
       EXPECT_EQ( rec, x_rec );
       EXPECT_EQ( rec.keys().size(), size_t(2) );
-      EXPECT_EQ( rec.key(0).c_str(), "seattle" );
-      EXPECT_EQ( rec.key(1).c_str(), "topeka" );
+      EXPECT_STREQ( rec.key(0).c_str(), "seattle" );
+      EXPECT_STREQ( rec.key(1).c_str(), "topeka" );
       ASSERT_TRUE( equals(rec.level(), x_rec.level()) );
     }
 }
@@ -402,8 +402,8 @@ TEST_F(TestGAMSVariable, testMergeNonExistingRecord) {
     // then
     EXPECT_EQ( x.numberRecords(), numberOfRecords+1 );
     EXPECT_EQ( rec.keys().size(), size_t(2) );
-    EXPECT_EQ( rec.key(0).c_str(), "seattle" );
-    EXPECT_EQ( rec.key(1).c_str(), "alburquerque" );
+    EXPECT_STREQ( rec.key(0).c_str(), "seattle" );
+    EXPECT_STREQ( rec.key(1).c_str(), "alburquerque" );
     ASSERT_TRUE( equals(rec.level(), 0.0) );
 }
 

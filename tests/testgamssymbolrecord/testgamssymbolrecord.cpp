@@ -24,6 +24,7 @@
  * SOFTWARE.
  */
 
+#include "testgamsobject.h"
 #include "gamssymbolrecord.h"
 #include "gamsequation.h"
 #include "gamsequationrecord.h"
@@ -33,7 +34,6 @@
 #include "gamsparameterrecord.h"
 #include "gamsvariable.h"
 #include "gamsvariablerecord.h"
-#include "testgamssymbolrecord.h"
 
 #include <sstream>
 #include <string>
@@ -65,20 +65,23 @@ TEST_F(TestGAMSSymbolRecord, testCopyConstructor) {
     EXPECT_EQ( newRecord, rec );
 }
 
+class ParameterizedTestAssignmentOperator
+        : public ::testing::WithParamInterface<std::tuple<std::string, int, std::string>>,
+          public TestGAMSSymbolRecord {
+};
 
-TEST_F(TestGAMSSymbolRecord, testAssignmentOperator_data) {
-    QTest::addColumn<int>("symbolType");
-    QTest::addColumn<QString>("symbolID");
+INSTANTIATE_TEST_SUITE_P(testAssignmentOperator,
+                        ParameterizedTestAssignmentOperator,
+                        ::testing::Values (
+                            std::make_tuple("plants_j",      0, "j"),
+                            std::make_tuple("distance_a",    1, "a"),
+                            std::make_tuple("obj_x",         2, "x"),
+                            std::make_tuple("supply",        3, "supply")
+                        ));
 
-    QTest::newRow("plants_j")   << 0 << "j"       ;
-    QTest::newRow("distance_a") << 1 << "a"       ;
-    QTest::newRow("obj_x")      << 2 << "x"       ;
-    QTest::newRow("supply")     << 3 << "supply"  ;
-}
-
-TEST_F(TestGAMSSymbolRecord, testAssignmentOperator) {
-    QFETCH(int, symbolType);
-    QFETCH(QString, symbolID);
+TEST_P(ParameterizedTestAssignmentOperator, testAssignmentOperator) {
+    int symbolType = std::get<1>(GetParam());
+    std::string symbolID = std::get<2>(GetParam());
 
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
@@ -91,7 +94,7 @@ TEST_F(TestGAMSSymbolRecord, testAssignmentOperator) {
     switch(symbolType) {
       case GAMSEnum::SymbolType::SymTypeSet :
         {
-          GAMSSetRecord rec = db.getSet(symbolID.toStdString()).firstRecord();
+          GAMSSetRecord rec = db.getSet(symbolID).firstRecord();
           GAMSSetRecord newRecord = rec;
           EXPECT_EQ( newRecord.keys().size(), rec.keys().size() );
           for(auto i=0UL; i<newRecord.keys().size(); ++i)
@@ -101,7 +104,7 @@ TEST_F(TestGAMSSymbolRecord, testAssignmentOperator) {
         break;
       case GAMSEnum::SymbolType::SymTypePar :
         {
-          GAMSParameterRecord rec = db.getParameter(symbolID.toStdString()).firstRecord();
+          GAMSParameterRecord rec = db.getParameter(symbolID).firstRecord();
           GAMSParameterRecord newRecord = rec;
           EXPECT_EQ( newRecord.keys().size(), rec.keys().size() );
           for(auto i=0UL; i<newRecord.keys().size(); ++i) {
@@ -112,7 +115,7 @@ TEST_F(TestGAMSSymbolRecord, testAssignmentOperator) {
         }
       case GAMSEnum::SymbolType::SymTypeVar :
         {
-          GAMSVariableRecord rec = db.getVariable(symbolID.toStdString()).firstRecord();
+          GAMSVariableRecord rec = db.getVariable(symbolID).firstRecord();
           GAMSVariableRecord newRecord = rec;
           EXPECT_EQ( newRecord.keys().size(), rec.keys().size() );
           for(auto i=0UL; i<newRecord.keys().size(); ++i) {
@@ -123,7 +126,7 @@ TEST_F(TestGAMSSymbolRecord, testAssignmentOperator) {
         }
       case GAMSEnum::SymbolType::SymTypeEqu :
         {
-          GAMSEquationRecord rec = db.getEquation( symbolID.toStdString() ).firstRecord();;
+          GAMSEquationRecord rec = db.getEquation( symbolID ).firstRecord();;
           GAMSEquationRecord newRecord = rec;
           EXPECT_EQ( newRecord.keys().size(), rec.keys().size() );
           for(auto i=0UL; i<newRecord.keys().size(); ++i) {
@@ -136,19 +139,23 @@ TEST_F(TestGAMSSymbolRecord, testAssignmentOperator) {
     }
 }
 
-TEST_F(TestGAMSSymbolRecord, testAssignmentOperator_IncorrectType_data) {
-    QTest::addColumn<int>("symbolType");
-    QTest::addColumn<QString>("symbolID");
+class ParameterizedTestAssignmentOperator_IncorrectType
+        : public ::testing::WithParamInterface<std::tuple<std::string, int, std::string>>,
+          public TestGAMSSymbolRecord {
+};
 
-    QTest::newRow("markets_i")  << 0 << "i"       ;
-    QTest::newRow("distance_d") << 1 << "d"       ;
-    QTest::newRow("obj_z")      << 2 << "z"       ;
-    QTest::newRow("supply")     << 3 << "supply"  ;
-}
+INSTANTIATE_TEST_SUITE_P(testAssignmentOperator,
+                        ParameterizedTestAssignmentOperator_IncorrectType,
+                        ::testing::Values (
+                            std::make_tuple("markets_i",     0, "i"),
+                            std::make_tuple("distance_d",    1, "d"),
+                            std::make_tuple("obj_z",         2, "z"),
+                            std::make_tuple("supply",        3, "supply")
+                        ));
 
-TEST_F(TestGAMSSymbolRecord, testAssignmentOperator_IncorrectType) {
-    QFETCH(int, symbolType);
-    QFETCH(QString, symbolID);
+TEST_P(ParameterizedTestAssignmentOperator_IncorrectType, testAssignmentOperator) {
+    int symbolType = std::get<1>(GetParam());
+    std::string symbolID = std::get<2>(GetParam());
 
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
@@ -161,7 +168,7 @@ TEST_F(TestGAMSSymbolRecord, testAssignmentOperator_IncorrectType) {
     switch(symbolType) {
       case GAMSEnum::SymbolType::SymTypeSet :
         {
-          GAMSSet symbol = db.getSet( symbolID.toStdString() );
+          GAMSSet symbol = db.getSet( symbolID );
           GAMSSymbolRecord rec = symbol.firstRecord();
           EXPECT_THROW( GAMSParameterRecord r = rec, GAMSException );
           EXPECT_THROW( GAMSEquationRecord r = rec, GAMSException );
@@ -170,7 +177,7 @@ TEST_F(TestGAMSSymbolRecord, testAssignmentOperator_IncorrectType) {
         break;
       case GAMSEnum::SymbolType::SymTypePar :
         {
-          GAMSParameter symbol = db.getParameter( symbolID.toStdString() );
+          GAMSParameter symbol = db.getParameter( symbolID );
           GAMSSymbolRecord rec = symbol.firstRecord();
           EXPECT_THROW( GAMSSetRecord r = rec, GAMSException );
           EXPECT_THROW( GAMSEquationRecord r = rec, GAMSException );
@@ -179,7 +186,7 @@ TEST_F(TestGAMSSymbolRecord, testAssignmentOperator_IncorrectType) {
         }
       case GAMSEnum::SymbolType::SymTypeVar :
         {
-          GAMSVariable symbol = db.getVariable( symbolID.toStdString() );
+          GAMSVariable symbol = db.getVariable( symbolID );
           GAMSSymbolRecord rec = symbol.firstRecord();
           EXPECT_THROW( GAMSSetRecord r = rec, GAMSException );
           EXPECT_THROW( GAMSEquationRecord r = rec, GAMSException );
@@ -188,7 +195,7 @@ TEST_F(TestGAMSSymbolRecord, testAssignmentOperator_IncorrectType) {
         }
       case GAMSEnum::SymbolType::SymTypeEqu :
         {
-          GAMSEquation symbol = db.getEquation( symbolID.toStdString() );
+          GAMSEquation symbol = db.getEquation( symbolID );
           GAMSSymbolRecord rec = symbol.firstRecord();
           EXPECT_THROW( GAMSSetRecord r = rec, GAMSException );
           EXPECT_THROW( GAMSVariableRecord r = rec, GAMSException );
@@ -389,27 +396,27 @@ TEST_F(TestGAMSSymbolRecord, testGetKey_index) {
 
     // when, then
     GAMSSymbolRecord rec_i = db.getSet("i").lastRecord();
-    EXPECT_EQ( rec_i.key(0).c_str(), "san-diego");
+    EXPECT_STREQ( rec_i.key(0).c_str(), "san-diego");
     EXPECT_THROW( rec_i.key(1).c_str(), GAMSException );
 
     GAMSSymbolRecord rec_d = db.getParameter("d").lastRecord();
-    EXPECT_EQ( rec_d.key(0).c_str(), "san-diego");
-    EXPECT_EQ( rec_d.key(1).c_str(), "topeka");
+    EXPECT_STREQ( rec_d.key(0).c_str(), "san-diego");
+    EXPECT_STREQ( rec_d.key(1).c_str(), "topeka");
     EXPECT_THROW( rec_d.key(2), GAMSException );
 
     GAMSSymbolRecord rec_f = db.getParameter("f").lastRecord();
     EXPECT_THROW( rec_f.key(0), GAMSException );
 
     GAMSSymbolRecord rec_x = db.getVariable("x").lastRecord();
-    EXPECT_EQ( rec_x.key(0).c_str(), "san-diego");
-    EXPECT_EQ( rec_x.key(1).c_str(), "topeka");
+    EXPECT_STREQ( rec_x.key(0).c_str(), "san-diego");
+    EXPECT_STREQ( rec_x.key(1).c_str(), "topeka");
     EXPECT_THROW( rec_x.key(2).c_str(), GAMSException );
 
     GAMSSymbolRecord rec_cost = db.getEquation("cost").lastRecord();
     EXPECT_THROW( rec_cost.key(0), GAMSException );
 
     GAMSSymbolRecord rec_supply = db.getEquation("supply").lastRecord();
-    EXPECT_EQ( rec_supply.key(0).c_str(), "san-diego");
+    EXPECT_STREQ( rec_supply.key(0).c_str(), "san-diego");
     EXPECT_THROW( rec_supply.key(1).c_str(), GAMSException );
 }
 
@@ -423,27 +430,27 @@ TEST_F(TestGAMSSymbolRecord, testIndexOperator) {
 
     // when, then
     GAMSSymbolRecord rec_i = db.getSet("i").lastRecord();
-    EXPECT_EQ( rec_i[0].c_str(), "san-diego");
+    EXPECT_STREQ( rec_i[0].c_str(), "san-diego");
     EXPECT_THROW( rec_i[1], GAMSException );
 
     GAMSSymbolRecord rec_d = db.getParameter("d").lastRecord();
-    EXPECT_EQ( rec_d[0].c_str(), "san-diego");
-    EXPECT_EQ( rec_d[1].c_str(), "topeka");
+    EXPECT_STREQ( rec_d[0].c_str(), "san-diego");
+    EXPECT_STREQ( rec_d[1].c_str(), "topeka");
     EXPECT_THROW( rec_d[2], GAMSException );
 
     GAMSSymbolRecord rec_f = db.getParameter("f").lastRecord();
     EXPECT_THROW( rec_f[0], GAMSException );
 
     GAMSSymbolRecord rec_x = db.getVariable("x").lastRecord();
-    EXPECT_EQ( rec_x[0].c_str(), "san-diego");
-    EXPECT_EQ( rec_x[1].c_str(), "topeka");
+    EXPECT_STREQ( rec_x[0].c_str(), "san-diego");
+    EXPECT_STREQ( rec_x[1].c_str(), "topeka");
     EXPECT_THROW( rec_x[2].c_str(), GAMSException );
 
     GAMSSymbolRecord rec_cost = db.getEquation("cost").lastRecord();
     EXPECT_THROW( rec_cost[0], GAMSException );
 
     GAMSSymbolRecord rec_supply = db.getEquation("supply").lastRecord();
-    EXPECT_EQ( rec_supply[0].c_str(), "san-diego");
+    EXPECT_STREQ( rec_supply[0].c_str(), "san-diego");
     EXPECT_THROW( rec_supply[1], GAMSException );
 }
 
