@@ -39,7 +39,7 @@ SUBDIRS += testgamsmodelinstance
 SUBDIRS += testgamsmodelinstanceopt
 SUBDIRS += testgamsmodifier
 SUBDIRS += testgamsparameter
-#SUBDIRS += testgamsparameterrecord
+SUBDIRS += testgamsparameterrecord
 
 #SUBDIRS += testgamsset
 #SUBDIRS += testgamssetrecord
