@@ -2,7 +2,7 @@ Version 0.11.0
 ========================
 
 - Adjusted compilation of examples to new handling of critical sections in GAMS expert level APIs
-- Adjusted some examples since GAMS/Cplex and GAMS/CplexD were merged
+- Adjusted some examples since GAMS/CplexD is now a synonym for GAMS/Cplex
 
 Version 0.10.1
 ========================
