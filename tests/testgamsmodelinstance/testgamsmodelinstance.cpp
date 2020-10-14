@@ -143,7 +143,7 @@ void TestGAMSModelInstance::testInstantiate()  {
     GAMSModelInstance mi = cp.addModelInstance();
     GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
     GAMSOptions opt = ws.addOptions();
-    opt.setAllModelTypes("cplexd");
+    opt.setAllModelTypes("cplex");
     // when, then
     try {
        mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));
@@ -162,7 +162,7 @@ void TestGAMSModelInstance::testInstantiateBeforeInitializingCP()  {
     GAMSModelInstance mi = cp.addModelInstance();
     GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
     GAMSOptions opt = ws.addOptions();
-    opt.setAllModelTypes("cplexd");
+    opt.setAllModelTypes("cplex");
     // when, then
     QVERIFY_EXCEPTION_THROWN( mi.instantiate("transport use lp min z",  opt, GAMSModifier(bmult)) ,
                               GAMSException );
@@ -186,7 +186,7 @@ void TestGAMSModelInstance::testSolve()  {
 
     GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
     GAMSOptions opt = ws.addOptions();
-    opt.setAllModelTypes("cplexd");
+    opt.setAllModelTypes("cplex");
 
     mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));
     bmult.addRecord().setValue( modifier );
@@ -232,7 +232,7 @@ void TestGAMSModelInstance::testGetModelSolveStatus()  {
     GAMSModelInstance mi = cp.addModelInstance();
     GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
     GAMSOptions opt = ws.addOptions();
-    opt.setAllModelTypes("cplexd");
+    opt.setAllModelTypes("cplex");
 
     mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));
     bmult.addRecord().setValue( modifier );
