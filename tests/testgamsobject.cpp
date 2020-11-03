@@ -39,6 +39,7 @@
 #include "gamspath.h"
 
 #include <vector>
+#include <tuple>
 #include <map>
 
 using namespace gams;
@@ -82,14 +83,16 @@ void TestGAMSObject::cleanup() {
         tests_Failed++;
 }
 
-//void TestGAMSObject::getTestData_DebugLevel() {
-//    QTest::addColumn<QString>("debugLevel");
+std::vector<std::tuple<std::string, int>> TestGAMSObject::getTestData_DebugLevel() {
+    std::vector<std::tuple<std::string, int>> retvec;
 
-//    QTest::newRow("Off") << QString::number(GAMSEnum::DebugLevel::Off);
-//    QTest::newRow("KeepFiles") << QString::number(GAMSEnum::DebugLevel::KeepFiles);
-//    QTest::newRow("ShowLog") << QString::number(GAMSEnum::DebugLevel::ShowLog);
-//    QTest::newRow("Verbose") << QString::number(GAMSEnum::DebugLevel::Verbose);
-//}
+    retvec.push_back(std::make_tuple("Off", GAMSEnum::DebugLevel::Off));
+    retvec.push_back(std::make_tuple("KeepFiles", GAMSEnum::DebugLevel::KeepFiles));
+    retvec.push_back(std::make_tuple("ShowLog", GAMSEnum::DebugLevel::ShowLog));
+    retvec.push_back(std::make_tuple("Verbose", GAMSEnum::DebugLevel::Verbose));
+
+    return retvec;
+}
 
 //void TestGAMSObject::getTestData_ModelLibraries() {
 //    QTest::addColumn<int>("index");
@@ -121,7 +124,7 @@ void TestGAMSObject::cleanup() {
 //    QTest::addColumn<QString>("modname");
 
 //    QTest::newRow("invalid_gamslib") << 0 << "gamslib" << "ThisIsAnUnusualModelName";
-//    QTest::newRow("invalid_testlib") << 1 << "testlib" << "ThisIsAnUnusualModelName";
+//    QTest::_newRow("invalid_testlib") << 1 << "testlib" << "ThisIsAnUnusualModelName";
 //    QTest::newRow("invalid_datalib") << 2 << "datalib" << "ThisIsAnUnusualModelName";
 //    QTest::newRow("invalid_emplib")  << 3 << "emplib"  << "ThisIsAnUnusualModelName";
 //    QTest::newRow("invalid_apilib")  << 4 << "apilib"  << "ThisIsAnUnusualModelName";
@@ -129,17 +132,6 @@ void TestGAMSObject::cleanup() {
 //    QTest::newRow("invalid_noalib")  << 6 << "noalib"  << "ThisIsAnUnusualModelName";
 //}
 
-
-//void TestGAMSObject::getTestData_SpecialValues() {
-//    QTest::addColumn<int>("index");
-//    QTest::addColumn<double>("value");
-
-//    QTest::newRow("UNDF") << 0 << defaultUNDEF;
-//    QTest::newRow("NA")   << 1 << defaultNA;
-//    QTest::newRow("PINF") << 2 << defaultPINF;
-//    QTest::newRow("MINF") << 3 << defaultMINF;
-//    QTest::newRow("EPS")  << 4 << defaultEPS;
-//}
 
 void TestGAMSObject::getTestData_TransportModel(GAMSDatabase db) {
     getTestData_Set_plants_i(db);

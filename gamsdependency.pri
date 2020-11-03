@@ -71,6 +71,7 @@ equals(GAMS_BUILD_ENV, "") {
     SOURCES +=                                      \
         $$GAMS_DISTRIB_C_API/gclgms.c               \
         $$GAMS_DISTRIB_C_API/gmdcc.c                \
+        $$GAMS_DISTRIB_C_API/gcmt.c                 \
         $$GAMS_DISTRIB_C_API/cfgmcc.c               \
         $$GAMS_DISTRIB_C_API/gevmcc.c               \
         $$GAMS_DISTRIB_C_API/gmomcc.c               \

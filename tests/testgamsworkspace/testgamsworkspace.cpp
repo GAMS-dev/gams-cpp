@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 
+#include "testgamsobject.h"
 #include "gamscheckpoint.h"
 #include "gamsexception.h"
 #include "gamsset.h"
@@ -30,10 +31,17 @@
 #include "gamsoptions.h"
 #include "gamsworkspaceinfo.h"
 #include "gamsexception.h"
-#include "testgamsworkspace.h"
 #include "gamspath.h"
 
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <limits.h>
+
+#ifdef _WIN32
+#include windows.h
+#endif
 
 using namespace gams;
 
@@ -41,22 +49,23 @@ class TestGAMSWorkspace: public TestGAMSObject
 {
 };
 
+// TODO(RG): is this test expected to fail?!
 TEST_F(TestGAMSWorkspace, testDefaultConstructor) {
     try {
         GAMSWorkspace ws;
 
         // then
-        TestGAMSObject::testDir( QString::fromStdString(ws.systemDirectory()) );
-        QString sdir = QString::fromStdString(ws.systemDirectory());
-        EXPECT_EQ( testSystemDir, QDir(sdir) );
+        TestGAMSObject::testDir( ws.systemDirectory() );
+        std::string sdir = ws.systemDirectory();
+        EXPECT_EQ( testSystemDir, sdir );
         TestGAMSObject::testDir( sdir );
 
-        TestGAMSObject::testDir( QString::fromStdString(ws.workingDirectory()) );
+        // TODO(RG): what is supposed to have happened here in between? someone should take a look at this
+        TestGAMSObject::testDir( ws.workingDirectory() );
         EXPECT_EQ(ws.debug(), GAMSEnum::DebugLevel::Off);
 
     } catch (GAMSException &e) {
-        QEXPECT_FAIL("", e.what(), Abort);
-        ASSERT_TRUE(false);
+        FAIL() << e.what();
     }
 }
 
@@ -80,11 +89,11 @@ TEST_F(TestGAMSWorkspace, testConstructor_EmptyWorkspaceInfo) {
     // when
     GAMSWorkspace ws(wsInfo);
     // then
-    TestGAMSObject::testDir( QString::fromStdString(ws.systemDirectory()) );
-    TestGAMSObject::testDir( QString::fromStdString(ws.workingDirectory()) );
+    TestGAMSObject::testDir( ws.systemDirectory() );
+    TestGAMSObject::testDir( ws.workingDirectory() );
     EXPECT_EQ( ws.debug(), GAMSEnum::DebugLevel::Off );
 
-    QDir(QString::fromStdString(ws.workingDirectory())).removeRecursively();
+    GAMSPath(ws.workingDirectory()).remove();
 }
 
 TEST_F(TestGAMSWorkspace, testConstructor_WorkspaceInfo) {
@@ -93,8 +102,8 @@ TEST_F(TestGAMSWorkspace, testConstructor_WorkspaceInfo) {
     // when
     GAMSWorkspace ws(wsInfo);
     // then
-    TestGAMSObject::testDir( QString::fromStdString(ws.systemDirectory()) );
-    TestGAMSObject::testDir( QString::fromStdString(ws.workingDirectory()) );
+    TestGAMSObject::testDir( ws.systemDirectory() );
+    TestGAMSObject::testDir( ws.workingDirectory() );
 
     EXPECT_EQ( GAMSPath(ws.workingDirectory()), GAMSPath(ws.workingDirectory()) );
     EXPECT_EQ( ws.debug(), GAMSEnum::DebugLevel::Off );
@@ -102,15 +111,15 @@ TEST_F(TestGAMSWorkspace, testConstructor_WorkspaceInfo) {
 
 TEST_F(TestGAMSWorkspace, testConstructor_WorkingDirSystemDirAndDebug) {
     // given
-    std::string wdir = QDir::currentPath().toStdString();
-    std::string sdir = testSystemDir.absolutePath().toStdString();
+    std::string wdir = std::filesystem::current_path();
+    std::string sdir = testSystemDir;
     // when
     GAMSWorkspace ws( wdir, sdir, GAMSEnum::DebugLevel::KeepFiles );
     // then
-    TestGAMSObject::testDir( QString::fromStdString(ws.workingDirectory()) );
+    TestGAMSObject::testDir( ws.workingDirectory() );
     EXPECT_EQ(GAMSPath(ws.workingDirectory()), GAMSPath(wdir));
 
-    TestGAMSObject::testDir( QString::fromStdString(ws.systemDirectory()) );
+    TestGAMSObject::testDir( ws.systemDirectory() );
     EXPECT_EQ(GAMSPath(ws.systemDirectory()), GAMSPath(sdir));
 
     EXPECT_EQ(ws.debug(), GAMSEnum::DebugLevel::KeepFiles);
@@ -122,72 +131,79 @@ TEST_F(TestGAMSWorkspace, testConstructor_WorkingDir) {
     // when
     GAMSWorkspace ws(wdir, testSystemDir);
     // then
-    TestGAMSObject::testDir( QString::fromStdString(ws.workingDirectory()) );
+    TestGAMSObject::testDir( ws.workingDirectory() );
     EXPECT_EQ(ws.debug(), GAMSEnum::DebugLevel::Off);
 }
 
 TEST_F(TestGAMSWorkspace, testConstructor_WorkingDirSystemDir) {
     // given
-    std::string wdir = QDir::currentPath().toStdString();
-    std::string sdir = testSystemDir.absolutePath().toStdString();
+    std::string wdir = std::filesystem::current_path();
+    std::string sdir = testSystemDir;
     // when
     GAMSWorkspace ws(wdir, sdir);
     // then
-    TestGAMSObject::testDir(QDir(QString::fromStdString(ws.workingDirectory())).absolutePath());
-    EXPECT_EQ(GAMSPath(ws.workingDirectory()), GAMSPath(wdir));
+    TestGAMSObject::testDir(ws.workingDirectory());
+    EXPECT_EQ(ws.workingDirectory(), wdir);
 
-    TestGAMSObject::testDir(QDir(QString::fromStdString(ws.systemDirectory())).absolutePath());
-    EXPECT_EQ(GAMSPath(ws.systemDirectory()), GAMSPath(sdir));
+    TestGAMSObject::testDir(ws.systemDirectory());
+    EXPECT_EQ(ws.systemDirectory(), sdir);
 
     EXPECT_EQ(ws.debug(), GAMSEnum::DebugLevel::Off);
 }
 
-TEST_F(TestGAMSWorkspace, testConstructor_DebugLevel_data) {
-    TestGAMSObject::getTestData_DebugLevel();
-}
+class ParameterizedTestConstructor_DebugLevel
+        : public ::testing::WithParamInterface<std::tuple<const char*, GAMSEnum::DebugLevel>>,
+          public TestGAMSWorkspace {
+};
 
-TEST_F(TestGAMSWorkspace, testConstructor_DebugLevel) {
+INSTANTIATE_TEST_SUITE_P(testConstructor_DebugLevel,
+                        ParameterizedTestConstructor_DebugLevel,
+                        ::testing::Values (
+                            std::make_tuple("Off",       GAMSEnum::DebugLevel::Off),
+                            std::make_tuple("KeepFiles", GAMSEnum::DebugLevel::KeepFiles),
+                            std::make_tuple("ShowLog",   GAMSEnum::DebugLevel::ShowLog),
+                            std::make_tuple("Verbose",   GAMSEnum::DebugLevel::Verbose)
+                        ));
+
+
+TEST_P(ParameterizedTestConstructor_DebugLevel, testConstructor_DebugLevel) {
     // TODO add case when "GAMSOOAPIDEBUG" has been set
     // given
-    QFETCH(QString, debugLevel);
-    GAMSEnum::DebugLevel debugLevelEnum = static_cast<GAMSEnum::DebugLevel>(debugLevel.toInt());
+    std::string debugLevel = std::get<0>(GetParam());
+    GAMSEnum::DebugLevel debugLevelEnum = std::get<1>(GetParam());
 
-    QString dir;
-    // when
-    {
-        GAMSWorkspace ws("", testSystemDir, debugLevelEnum);
-        dir = QString::fromStdString(ws.workingDirectory());
-    }
+    GAMSWorkspace ws("", testSystemDir, debugLevelEnum);
+    std::string dir = ws.workingDirectory();
+
     // then
-    switch(debugLevel.toInt()) {
-       case 0: // Off
-           ASSERT_TRUE( ! QDir(dir).exists() );
+    switch(debugLevelEnum) {
+       case GAMSEnum::DebugLevel::Off:
+           ASSERT_TRUE( ! GAMSPath(dir).exists() );
            break;
-       case 1: // KeepFiles
-           ASSERT_TRUE( QDir(dir).exists() );
+       case GAMSEnum::DebugLevel::KeepFiles:
+           ASSERT_TRUE( GAMSPath(dir).exists() );
            /* TODO QEXPECT_FAIL("", "More tests to be implemented ", Abort); ASSERT_TRUE(false); */
            break;
-      case 2: // ShowLog
-           ASSERT_TRUE( ! QDir(dir).exists() );
+      case GAMSEnum::DebugLevel::ShowLog:
+           ASSERT_TRUE( ! GAMSPath(dir).exists() );
            /* TODO QEXPECT_FAIL("", "More tests to be implemented ", Abort); ASSERT_TRUE(false); */
            break;
-      case 3: // Verbose
-           ASSERT_TRUE( ! QDir(dir).exists() );
+      case GAMSEnum::DebugLevel::Verbose:
+           ASSERT_TRUE( ! GAMSPath(dir).exists() );
            /* TODO QEXPECT_FAIL("", "More tests to be implemented ", Abort); ASSERT_TRUE(false); */
            break;
       default:
            break;
     }
-    QDir qdir(dir);
-    if (qdir.exists()) {
-        qdir.removeRecursively();
-    }
+    GAMSPath qdir(dir);
+    if (qdir.exists())
+        qdir.remove();
 }
 
 TEST_F(TestGAMSWorkspace, testConstructorFromOccupiedWorkingDirectory) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
-    wsInfo.setWorkingDirectory(QDir::currentPath().toStdString());
+    wsInfo.setWorkingDirectory(std::filesystem::current_path());
     GAMSWorkspace ws1(wsInfo);
     // when creating workspace from working directory that is already in use, then
     EXPECT_THROW( GAMSWorkspace ws2(wsInfo), GAMSException);
@@ -198,13 +214,20 @@ TEST_F(TestGAMSWorkspace, testGetVersion) {
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when, then
-    EXPECT_EQ(testGAMSVersion, QString::fromStdString(ws.version()));
-    QStringList testGAMSVersionList = testGAMSVersion.split( "." );
+    EXPECT_EQ(testGAMSVersion, ws.version());
+
+    std::vector<std::string> testGAMSVersionList;
+    std::stringstream sstream(testGAMSVersion);
+    std::string item;
+    while (std::getline(sstream, item, '.'))
+        testGAMSVersionList.push_back(item);
+
     if (testGAMSVersionList.size() != 3)
         FAIL() << "The GAMSVersion shall consist of three numbers (MAJOR.MINOR.PATCH)";
-    EXPECT_EQ(ws.majorRelNumber(), testGAMSVersionList[0].toInt());
-    EXPECT_EQ(ws.minorRelNumber(), testGAMSVersionList[1].toInt());
-    EXPECT_EQ(ws.goldRelNumber(), testGAMSVersionList[2].toInt());
+
+    EXPECT_EQ(ws.majorRelNumber(), std::stoi(testGAMSVersionList[0]));
+    EXPECT_EQ(ws.minorRelNumber(), std::stoi(testGAMSVersionList[1]));
+    EXPECT_EQ(ws.goldRelNumber(),  std::stoi(testGAMSVersionList[2]));
 }
 
 TEST_F(TestGAMSWorkspace, testGetAPIVersion) {
@@ -212,11 +235,16 @@ TEST_F(TestGAMSWorkspace, testGetAPIVersion) {
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when, then
-    EXPECT_EQ(testAPIVersion, QString::fromStdString(ws.apiVersion()));
-    QStringList testAPIVersionList = testAPIVersion.split( "." );
-    EXPECT_EQ(ws.apiMajorRelNumber(), testAPIVersionList[0].toInt());
-    EXPECT_EQ(ws.apiMinorRelNumber(), testAPIVersionList[1].toInt());
-    EXPECT_EQ(ws.apiGoldRelNumber(), testAPIVersionList[2].toInt());
+    EXPECT_EQ(testAPIVersion, ws.apiVersion());
+    std::vector<std::string> testAPIVersionList;
+    std::stringstream sstream(testAPIVersion);
+    std::string item;
+    while (std::getline(sstream, item, '.'))
+        testAPIVersionList.push_back(item);
+
+    EXPECT_EQ(ws.apiMajorRelNumber(), std::stoi(testAPIVersionList[0]));
+    EXPECT_EQ(ws.apiMinorRelNumber(), std::stoi(testAPIVersionList[1]));
+    EXPECT_EQ(ws.apiGoldRelNumber(),  std::stoi(testAPIVersionList[2]));
 }
 
 TEST_F(TestGAMSWorkspace, testGetScratchFilePrefix) {
@@ -228,31 +256,37 @@ TEST_F(TestGAMSWorkspace, testGetScratchFilePrefix) {
     EXPECT_EQ( ws.scratchFilePrefix(), defaultScratchFilePrefix );
 }
 
-TEST_F(TestGAMSWorkspace, testSetScratchFilePrefix_data) {
-    QTest::addColumn<QString>("prefixname");
-    QTest::addColumn<bool>("valid");
+class ParameterizedTestSetScratchFilePrefix
+        : public ::testing::WithParamInterface<std::tuple<std::string, std::string, bool>>,
+          public TestGAMSWorkspace {
+};
 
-    QTest::newRow("NormalPrefix")          << "myPrefix" << true ;
-    QTest::newRow("PrefixWithUnderScore") << "_myPrefix" << true ;
-    QTest::newRow("PrefixWithWhiteSpace") << "my Prefix" << false;
-    QTest::newRow("EmptyStringPrefix")    << ""          << true ;
-}
+INSTANTIATE_TEST_SUITE_P(testSetScratchFilePrefix,
+                        ParameterizedTestSetScratchFilePrefix,
+                        ::testing::Values (
+                             //              description,           prefix name, valid
+                            std::make_tuple("NormalPrefix"        , "myPrefix" , true ),
+                            std::make_tuple("PrefixWithUnderScore", "_myPrefix", true ),
+                            std::make_tuple("PrefixWithWhiteSpace", "my Prefix", false),
+                            std::make_tuple("EmptyStringPrefix"   , ""         , true )
+                        ));
 
-TEST_F(TestGAMSWorkspace, testSetScratchFilePrefix) {
+TEST_P(ParameterizedTestSetScratchFilePrefix, testSetScratchFilePrefix) {
     // given
-    QFETCH(QString, prefixname);
-    QFETCH(bool, valid);
+    std::string prefixname = std::get<1>(GetParam());
+    bool valid = std::get<2>(GetParam());
+
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     if (valid) {
        // when
-       ws.setScratchFilePrefix(prefixname.toStdString());
+       ws.setScratchFilePrefix(prefixname);
        // then
-       EXPECT_EQ( ws.scratchFilePrefix(), prefixname.toStdString());
+       EXPECT_EQ( ws.scratchFilePrefix(), prefixname);
     } else {
         // then
-       EXPECT_THROW( ws.setScratchFilePrefix(prefixname.toStdString()), GAMSException );
+       EXPECT_THROW( ws.setScratchFilePrefix(prefixname), GAMSException );
     }
 }
 
@@ -275,101 +309,115 @@ TEST_F(TestGAMSWorkspace, testSetMyEPS) {
     EXPECT_EQ(  ws.myEPS(), myEPS );
 }
 
-TEST_F(TestGAMSWorkspace, testAddDatabaseFromGDX1_data) {
-    QTest::addColumn<QString>("gdxfilename");
-    QTest::addColumn<QString>("fromDataLib");
-    QTest::addColumn<bool>("valid");
+class ParameterizedTestAddDatabaseFromGDX1
+        : public ::testing::WithParamInterface<std::tuple<std::string, std::string, std::string, bool>>,
+          public TestGAMSWorkspace {
+};
 
-    QTest::newRow("DemandData.gdx")          << "DemandData.gdx"               << "GDXINExample1"  << true ;
-    QTest::newRow("NonExistingFileName.gdx") << "ThisGDXFileDoesNotExist.gdx"  << ""  << false  ;
-    QTest::newRow("EmptyStringFileName")     << ""                             << ""  << false  ;
-}
+INSTANTIATE_TEST_SUITE_P(testAddDatabaseFromGDX1,
+                        ParameterizedTestAddDatabaseFromGDX1,
+                        ::testing::Values (
+                             //              description,           gdxfilename,                      fromDataLib,   valid
+                            std::make_tuple("DemandData.gdx"         , "DemandData.gdx"             , "GDXINExample1", true),
+                            std::make_tuple("NonExistingFileName.gdx", "ThisGDXFileDoesNotExist.gdx", "", false),
+                            std::make_tuple("EmptyStringFileName"    , ""                           , "", false)
+                        ));
 
-TEST_F(TestGAMSWorkspace, testAddDatabaseFromGDX1) {
+TEST_P(ParameterizedTestAddDatabaseFromGDX1, testAddDatabaseFromGDX1) {
     // given
-    QFETCH(QString, gdxfilename);
-    QFETCH(QString, fromDataLib);
-    QFETCH(bool, valid);
+    std::string gdxfilename = std::get<1>(GetParam());
+    std::string fromDataLib = std::get<2>(GetParam());
+    bool valid = std::get<3>(GetParam());
+
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     if (valid) {
-        std::string s = fromDataLib.toStdString();
+        std::string s = fromDataLib;
         ws.dataLib(s);
         // when
         try {
-            GAMSDatabase db = ws.addDatabaseFromGDX(gdxfilename.toStdString() );
+            GAMSDatabase db = ws.addDatabaseFromGDX(gdxfilename );
 
             EXPECT_EQ( db.getNrSymbols(), 2 );
             EXPECT_EQ( db.getParameter("demand").numberRecords(), 3);
             EXPECT_EQ( db.getSet("markets").numberRecords(), 3);
         } catch(GAMSException& e) {
-            qDebug() << QString::fromStdString( ws.workingDirectory() );
-            FAIL() << qPrintable( "Unexpected GAMSException raised by: "+ QString::fromStdString(e.what()) );
+            FAIL() << "Unexpected GAMSException raised by: " << e.what();
         }
     } else {
         // when, then
-        EXPECT_THROW(ws.addDatabaseFromGDX(gdxfilename.toStdString()) , GAMSException);
+        EXPECT_THROW(ws.addDatabaseFromGDX(gdxfilename) , GAMSException);
     }
 }
 
-TEST_F(TestGAMSWorkspace, testAddDatabaseFromGDX2_data) {
-    QTest::addColumn<QString>("gdxfilename");
-    QTest::addColumn<QString>("fromDataLib");
-    QTest::addColumn<int>("numberOfSymbols");
+class ParameterizedTestAddDatabaseFromGDX2
+        : public ::testing::WithParamInterface<std::tuple<std::string, std::string, std::string, int>>,
+          public TestGAMSWorkspace {
+};
 
-    QTest::newRow("db_ExecTimeReadTrnsportGDX") << "Trnsport.gdx"   << "ExecTimeReadTrnsportGDX" << 12 ;
-    QTest::newRow("db_DemandData")              << "DemandData.gdx" << "GDXINExample2"           << 2 ;
-}
+INSTANTIATE_TEST_SUITE_P(testAddDatabaseFromGDX2,
+                        ParameterizedTestAddDatabaseFromGDX2,
+                        ::testing::Values (
+                             //              description,           gdxfilename,                      fromDataLib,   numberOfSymbols
+                            std::make_tuple("db_ExecTimeReadTrnsportGDX", "Trnsport.gdx"  , "ExecTimeReadTrnsportGDX", 12),
+                            std::make_tuple("db_DemandData"             , "DemandData.gdx", "GDXINExample2"          ,  2)
+                        ));
 
-TEST_F(TestGAMSWorkspace, testAddDatabaseFromGDX2) {
+TEST_P(ParameterizedTestAddDatabaseFromGDX2, testAddDatabaseFromGDX2) {
     // given
-    QFETCH(QString, gdxfilename);
-    QFETCH(QString, fromDataLib);
-    QFETCH(int, numberOfSymbols);
+    std::string description = std::get<0>(GetParam());
+    std::string gdxfilename = std::get<1>(GetParam());
+    std::string fromDataLib = std::get<2>(GetParam());
+    int numberOfSymbols     = std::get<3>(GetParam());
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
-    ws.dataLib( fromDataLib.toStdString() );
+    ws.dataLib( fromDataLib );
     try {
        // when
-       GAMSDatabase db = ws.addDatabaseFromGDX(gdxfilename.toStdString(), QTest::currentDataTag() );
-       EXPECT_EQ( db.name().c_str(),  QTest::currentDataTag() );
-       EXPECT_EQ( db.getNrSymbols(), numberOfSymbols );
+       GAMSDatabase db = ws.addDatabaseFromGDX(gdxfilename, description);
+       EXPECT_EQ(db.name().c_str(), description);
+       EXPECT_EQ(db.getNrSymbols(), numberOfSymbols);
     } catch(GAMSException& e) {
-       qDebug() << qPrintable("error adding db from ["+ gdxfilename + "] at ["+  QString::fromStdString( ws.workingDirectory() )+"].");
-       FAIL() << qPrintable( "Unexpected GAMSException thrown: "+ QString::fromStdString(e.what()) );
+       std::cerr << "error adding db from "+ gdxfilename + " at "+ ws.workingDirectory()+"." << std::endl;
+       FAIL() << "Unexpected GAMSException thrown: " << e.what();
     }
 }
 
-TEST_F(TestGAMSWorkspace, testAddDatabaseFromGDX3_data) {
-    QTest::addColumn<QString>("gdxfilename");
-    QTest::addColumn<QString>("fromDataLib");
-    QTest::addColumn<int>("numberOfSymbols");
+class ParameterizedTestAddDatabaseFromGDX3
+        : public ::testing::WithParamInterface<std::tuple<std::string, std::string, std::string, int>>,
+          public TestGAMSWorkspace {
+};
 
-    QTest::newRow("db_GDXCOPYExample19") << "UNStatistics.gdx" << "GDXCOPYExample19"  << 8 ;
-    QTest::newRow("db_Trnsport")         << "Trnsport.gdx"     << "GDXINExample3"     << 12 ;
-}
+INSTANTIATE_TEST_SUITE_P(testAddDatabaseFromGDX3,
+                        ParameterizedTestAddDatabaseFromGDX3,
+                        ::testing::Values (
+                             //              description,           gdxfilename,       fromDataLib,       numberOfSymbols
+                            std::make_tuple("db_GDXCOPYExample19", "UNStatistics.gdx", "GDXCOPYExample19", 8),
+                            std::make_tuple("db_Trnsport"        , "Trnsport.gdx"    , "GDXINExample3"   ,12)
+                        ));
 
-TEST_F(TestGAMSWorkspace, testAddDatabaseFromGDX3) {
+TEST_P(ParameterizedTestAddDatabaseFromGDX3, testAddDatabaseFromGDX3) {
     // given
-    QFETCH(QString, gdxfilename);
-    QFETCH(QString, fromDataLib);
-    QFETCH(int, numberOfSymbols);
+    std::string description = std::get<0>(GetParam());
+    std::string gdxfilename = std::get<1>(GetParam());
+    std::string fromDataLib = std::get<2>(GetParam());
+    int numberOfSymbols     = std::get<3>(GetParam());
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
-    ws.dataLib( fromDataLib.toStdString() );
+    ws.dataLib( fromDataLib );
     try {
        // when
        std::string inModelName = "myModel";
-       GAMSDatabase db = ws.addDatabaseFromGDX(gdxfilename.toStdString(), QTest::currentDataTag(), inModelName);
-       EXPECT_EQ( db.name().c_str(),  QTest::currentDataTag() );
+       GAMSDatabase db = ws.addDatabaseFromGDX(gdxfilename, description, inModelName);
+       EXPECT_EQ( db.name().c_str(),  description);
        // @todo EXPECT_EQ( db.inModelName(), inModelName );
        EXPECT_EQ( db.getNrSymbols(), numberOfSymbols );
     } catch(GAMSException& e) {
-       qDebug() << qPrintable("error adding db from ["+ gdxfilename + "] at ["+  QString::fromStdString( ws.workingDirectory() )+"].");
-       FAIL() << qPrintable( "Unexpected GAMSException thrown: "+ QString::fromStdString(e.what()) );
+        std::cerr << "error adding db from "+ gdxfilename + " at "+ ws.workingDirectory()+"." << std::endl;
+       FAIL() << "Unexpected GAMSException thrown: " << e.what();
     }
 }
 
@@ -468,34 +516,37 @@ TEST_F(TestGAMSWorkspace, testAddCheckpoint) {
     GAMSCheckpoint cp = ws.addCheckpoint();
     // then
     ASSERT_TRUE( ! cp.name().empty() );
-    ASSERT_TRUE( QString::fromStdString(cp.name()).startsWith(defaultScratchFilePrefix.c_str()) );
+    ASSERT_TRUE( cp.name().find(defaultScratchFilePrefix) == 0 );
 }
+class ParameterizedTestAddCheckpoint_Name
+        : public ::testing::WithParamInterface<std::tuple<std::string, std::string, bool>>,
+          public TestGAMSWorkspace {
+};
 
-TEST_F(TestGAMSWorkspace, testAddCheckpoint_Name_data) {
-    QTest::addColumn<QString>("cpname");
-    QTest::addColumn<bool>("name_assigned");
+INSTANTIATE_TEST_SUITE_P( testAddCheckpoint_Name,
+                        ParameterizedTestAddCheckpoint_Name,
+                        ::testing::Values (
+                            std::make_tuple("validname"         , "myCheckpoint" , true ),
+                            std::make_tuple("nameWithUnderScore", "my_checkpoint", true ),
+                            std::make_tuple("nameWithWhiteSpace", "my Checkpoint", true ),
+                            std::make_tuple("EmptyStringName"   , ""             , false)
+                        ));
 
-    QTest::newRow("validname")          << "myCheckpoint"  << true ;
-    QTest::newRow("nameWithUnderScore") << "my_checkpoint" << true ;
-    QTest::newRow("nameWithWhiteSpace") << "my Checkpoint" << true ;
-    QTest::newRow("EmptyStringName")    << ""              << false ;
-}
-
-TEST_F(TestGAMSWorkspace, testAddCheckpoint_Name) {
-    // given
-    QFETCH(QString, cpname);
-    QFETCH(bool, name_assigned);
+TEST_P(ParameterizedTestAddCheckpoint_Name,  testAddCheckpoint_Name) {
+    std::string description = std::get<0>(GetParam());
+    std::string cpname = std::get<1>(GetParam());
+    bool name_assigned = std::get<2>(GetParam());
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when
-    GAMSCheckpoint cp = ws.addCheckpoint(cpname.toStdString());
+    GAMSCheckpoint cp = ws.addCheckpoint(cpname);
     // then
     ASSERT_TRUE( ! cp.name().empty() );
     if (name_assigned)
-       EXPECT_EQ( cp.name(), cpname.toStdString() );
+       EXPECT_EQ( cp.name(), cpname );
     else
-       ASSERT_TRUE( QString::fromStdString(cp.name()).startsWith(defaultScratchFilePrefix.c_str()) );
+       ASSERT_TRUE( cp.name().find(defaultScratchFilePrefix) == 0 );
 }
 
 TEST_F(TestGAMSWorkspace, testAddJobFromFile) {
@@ -654,216 +705,269 @@ TEST_F(TestGAMSWorkspace, testAddInvalidJobFromString_CheckpointAndJobName) {
     EXPECT_THROW( ws.addJobFromString( getLongModelText(), cp, "myJobName" ), GAMSException );
 }
 
-TEST_F(TestGAMSWorkspace, testAddJobFromApiLibrary_data) {
-    QTest::addColumn<QString>("modname");
-    QTest::addColumn<bool>("valid");
+class ParameterizedTestAddJobFromApiLibrary
+        : public ::testing::WithParamInterface<std::tuple<std::string, std::string, bool>>,
+          public TestGAMSWorkspace {
+};
 
-    QTest::newRow("apiutil")        << "apiutil"    << true ;
-    QTest::newRow("PInterrupt")     << "PInterrupt" << true ;
-    QTest::newRow("Invalid_apilib") << "ThisIsAnUnusualModelName" << false ;
-}
+INSTANTIATE_TEST_SUITE_P(testAddJobFromApiLibrary,
+                        ParameterizedTestAddJobFromApiLibrary,
+                        ::testing::Values (
+                            std::make_tuple("apiutil"       , "apiutil"   , true ),
+                            std::make_tuple("PInterrupt"    , "PInterrupt", true ),
+                            std::make_tuple("Invalid_apilib", "ThisIsAnUnusualModelName", false)
+                        ));
 
-TEST_F(TestGAMSWorkspace, testAddJobFromApiLibrary) {
-    // given
-    QFETCH(QString, modname);
-    QFETCH(bool, valid);
+TEST_P(ParameterizedTestAddJobFromApiLibrary, testAddJobFromApiLibrary) {
+    std::string modname = std::get<1>(GetParam());
+    bool valid = std::get<2>(GetParam());
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when, then
     if (valid) {
-        GAMSJob job = ws.addJobFromApiLib(modname.toStdString());
+        GAMSJob job = ws.addJobFromApiLib(modname);
         TestGAMSObject::testJobBeforeRun(job, ws);
     } else {
-        EXPECT_THROW(ws.addJobFromApiLib(modname.toStdString()), GAMSException);
+        EXPECT_THROW(ws.addJobFromApiLib(modname), GAMSException);
     }
 }
 
-TEST_F(TestGAMSWorkspace, testAddJobFromGamsLibrary_data) {
-    QTest::addColumn<QString>("modname");
-    QTest::addColumn<bool>("valid");
+class ParameterizedTestAddJobFromGamsLibrary
+        : public ::testing::WithParamInterface<std::tuple<std::string, std::string, bool>>,
+          public TestGAMSWorkspace {
+};
 
-    QTest::newRow("whouse")   << "whouse"  << true ;
-    QTest::newRow("chenery")  << "chenery" << true ;
-    QTest::newRow("Invalid_gamslib1")   << "ThisIsAnUnusualModelName" << false ;
-    QTest::newRow("Invalid_gamslib2")   << "ThisIsAnUnusualModelName2" << false ;
-}
+INSTANTIATE_TEST_SUITE_P(testAddJobFromGamsLibrary,
+                        ParameterizedTestAddJobFromGamsLibrary,
+                        ::testing::Values (
+                            std::make_tuple("whouse" , "whouse" , true),
+                            std::make_tuple("chenery", "chenery", true),
+                            std::make_tuple("Invalid_gamslib1", "ThisIsAnUnusualModelName" , false),
+                            std::make_tuple("Invalid_gamslib2", "ThisIsAnUnusualModelName2", false)
+                        ));
 
-TEST_F(TestGAMSWorkspace, testAddJobFromGamsLibrary) {
+TEST_P(ParameterizedTestAddJobFromGamsLibrary, testAddJobFromGamsLibrary) {
     // given
-    QFETCH(QString, modname);
-    QFETCH(bool, valid);
+    std::string modname = std::get<1>(GetParam());
+    bool valid = std::get<2>(GetParam());
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when, then
     if (valid) {
-        GAMSJob job = ws.addJobFromGamsLib(modname.toStdString());
+        GAMSJob job = ws.addJobFromGamsLib(modname);
         TestGAMSObject::testJobBeforeRun(job, ws);
     } else {
-        EXPECT_THROW(ws.addJobFromGamsLib(modname.toStdString()), GAMSException);
+        EXPECT_THROW(ws.addJobFromGamsLib(modname), GAMSException);
     }
 }
 
-TEST_F(TestGAMSWorkspace, testAddJobFromTestLibrary_data) {
-    QTest::addColumn<QString>("modname");
-    QTest::addColumn<bool>("valid");
+class ParameterizedTestAddJobFromTestLibrary
+        : public ::testing::WithParamInterface<std::tuple<std::string, std::string, bool>>,
+          public TestGAMSWorkspace {
+};
 
-    QTest::newRow("testutil")        << "testutil"     << true ;
-    QTest::newRow("fnsqr")           << "fnsqr"        << true ;
-    QTest::newRow("Invalid_testlib") << "ThisIsAnUnusualModelName" << false ;
-}
+INSTANTIATE_TEST_SUITE_P(testAddJobFromTestLibrary,
+                        ParameterizedTestAddJobFromTestLibrary,
+                        ::testing::Values (
+                            std::make_tuple("testutil"       , "testutil"                , true),
+                            std::make_tuple("fnsqr"          , "fnsqr"                   , true),
+                            std::make_tuple("Invalid_testlib", "ThisIsAnUnusualModelName", false)
+                        ));
 
-TEST_F(TestGAMSWorkspace, testAddJobFromTestLibrary) {
+TEST_P(ParameterizedTestAddJobFromTestLibrary, testAddJobFromTestLibrary) {
     // given
-    QFETCH(QString, modname);
-    QFETCH(bool, valid);
+    std::string modname = std::get<1>(GetParam());
+    bool valid = std::get<2>(GetParam());
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when, then
     if (valid) {
-        GAMSJob job = ws.addJobFromTestLib(modname.toStdString());
+        GAMSJob job = ws.addJobFromTestLib(modname);
         ASSERT_TRUE( ! job.name().empty() );
         ASSERT_TRUE( ! job.outDB().isValid() );
     } else {
-        EXPECT_THROW(ws.addJobFromTestLib(modname.toStdString()), GAMSException);
+        EXPECT_THROW(ws.addJobFromTestLib(modname), GAMSException);
     }
 }
 
-TEST_F(TestGAMSWorkspace, testAddJobFromDataLibrary_data) {
-    QTest::addColumn<QString>("modname");
-    QTest::addColumn<bool>("valid");
+class ParameterizedTestAddJobFromDataLibrary
+        : public ::testing::WithParamInterface<std::tuple<std::string, std::string, bool>>,
+          public TestGAMSWorkspace {
+};
 
-    QTest::newRow("Excel")           << "Excel"     << true ;
-    QTest::newRow("Portfolio")       << "Portfolio" << true ;
-    QTest::newRow("Invalid_datalib") << "ThisIsAnUnusualModelName" << false ;
-}
+INSTANTIATE_TEST_SUITE_P(testAddJobFromDataLibrary,
+                        ParameterizedTestAddJobFromDataLibrary,
+                        ::testing::Values (
+                            std::make_tuple("Excel"          , "Excel"                   , true),
+                            std::make_tuple("Portfolio"      , "Portfolio"               , true),
+                            std::make_tuple("Invalid_datalib", "ThisIsAnUnusualModelName", false)
+                        ));
 
-TEST_F(TestGAMSWorkspace, testAddJobFromDataLibrary) {
+TEST_P(ParameterizedTestAddJobFromDataLibrary, testAddJobFromDataLibrary) {
     // given
-    QFETCH(QString, modname);
-    QFETCH(bool, valid);
+    std::string modname = std::get<1>(GetParam());
+    bool valid = std::get<2>(GetParam());
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when, then
     if (valid) {
-        GAMSJob job = ws.addJobFromDataLib(modname.toStdString());
+        GAMSJob job = ws.addJobFromDataLib(modname);
         ASSERT_TRUE( ! job.name().empty() );
     } else {
-        EXPECT_THROW(ws.addJobFromDataLib(modname.toStdString()), GAMSException);
+        EXPECT_THROW(ws.addJobFromDataLib(modname), GAMSException);
     }
 }
 
-TEST_F(TestGAMSWorkspace, testAddJobFromEmpLibrary_data) {
-    QTest::addColumn<QString>("modname");
-    QTest::addColumn<bool>("valid");
+class ParameterizedTestAddJobFromEmpLibrary
+        : public ::testing::WithParamInterface<std::tuple<std::string, std::string, bool>>,
+          public TestGAMSWorkspace {
+};
 
-    QTest::newRow("emputil")        << "emputil"     << true ;
-    QTest::newRow("traffic")        << "traffic"     << true ;
-    QTest::newRow("Invalid_emplib") << "ThisIsAnUnusualModelName" << false;
-}
+INSTANTIATE_TEST_SUITE_P(testAddJobFromEmpLibrary,
+                        ParameterizedTestAddJobFromEmpLibrary,
+                        ::testing::Values (
+                            std::make_tuple("emputil"       , "emputil"                   , true),
+                            std::make_tuple("traffic"       , "traffic"               , true),
+                            std::make_tuple("Invalid_emplib", "ThisIsAnUnusualModelName", false)
+                        ));
 
-TEST_F(TestGAMSWorkspace, testAddJobFromEmpLibrary) {
+TEST_P(ParameterizedTestAddJobFromEmpLibrary, testAddJobFromEmpLibrary) {
     // given
-    QFETCH(QString, modname);
-    QFETCH(bool, valid);
+    std::string modname = std::get<1>(GetParam());
+    bool valid = std::get<2>(GetParam());
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when, then
     if (valid) {
-        GAMSJob job = ws.addJobFromEmpLib(modname.toStdString());
+        GAMSJob job = ws.addJobFromEmpLib(modname);
         ASSERT_TRUE( ! job.name().empty() );
     } else {
-        EXPECT_THROW(ws.addJobFromEmpLib(modname.toStdString()), GAMSException);
+        EXPECT_THROW(ws.addJobFromEmpLib(modname), GAMSException);
     }
 }
 
-TEST_F(TestGAMSWorkspace, testAddJobFromFinLibrary_data) {
-    QTest::addColumn<QString>("modname");
-    QTest::addColumn<bool>("valid");
+class ParameterizedTestAddJobFromFinLibrary
+        : public ::testing::WithParamInterface<std::tuple<std::string, std::string, bool>>,
+          public TestGAMSWorkspace {
+};
 
-    QTest::newRow("DedicationNoBorrow")  << "DedicationNoBorrow"  << true ;
-    QTest::newRow("Horizon")             << "Horizon"             << true ;
-    QTest::newRow("Invalid_finlib")      << "ThisIsAnUnusualModelName" << false ;
-}
+INSTANTIATE_TEST_SUITE_P(testAddJobFromFinLibrary,
+                        ParameterizedTestAddJobFromFinLibrary,
+                        ::testing::Values (
+                            std::make_tuple("DedicationNoBorrow", "DedicationNoBorrow"      , true),
+                            std::make_tuple("Horizon"           , "Horizon"                 , true),
+                            std::make_tuple("Invalid_finlib"    , "ThisIsAnUnusualModelName", false)
+                        ));
 
-TEST_F(TestGAMSWorkspace, testAddJobFromFinLibrary) {
+TEST_P(ParameterizedTestAddJobFromFinLibrary, testAddJobFromFinLibrary) {
     // given
-    QFETCH(QString, modname);
-    QFETCH(bool, valid);
+    std::string modname = std::get<1>(GetParam());
+    bool valid = std::get<2>(GetParam());
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when, then
     if (valid) {
-        GAMSJob job = ws.addJobFromFinLib(modname.toStdString());
+        GAMSJob job = ws.addJobFromFinLib(modname);
         ASSERT_TRUE( ! job.name().empty() );
     } else {
-        EXPECT_THROW(ws.addJobFromFinLib(modname.toStdString()), GAMSException);
+        EXPECT_THROW(ws.addJobFromFinLib(modname), GAMSException);
     }
 }
 
-TEST_F(TestGAMSWorkspace, testAddJobFromNoaLibrary_data) {
-    QTest::addColumn<QString>("modname");
-    QTest::addColumn<bool>("valid");
+class ParameterizedTestAddJobFromNoaLibrary
+        : public ::testing::WithParamInterface<std::tuple<std::string, std::string, bool>>,
+          public TestGAMSWorkspace {
+};
 
-    QTest::newRow("reservoir")      << "reservoir" << true ;
-    QTest::newRow("ethanol")        << "ethanol"   << true ;
-    QTest::newRow("Invalid_noalib") << "ThisIsAnUnusualModelName" << false ;
-}
+INSTANTIATE_TEST_SUITE_P(testAddJobFromNoaLibrary,
+                        ParameterizedTestAddJobFromNoaLibrary,
+                        ::testing::Values (
+                            std::make_tuple("reservoir"     , "reservoir"               , true),
+                            std::make_tuple("ethanol"       , "ethanol"                 , true),
+                            std::make_tuple("Invalid_noalib", "ThisIsAnUnusualModelName", false)
+                        ));
 
-TEST_F(TestGAMSWorkspace, testAddJobFromNoaLibrary) {
+TEST_P(ParameterizedTestAddJobFromNoaLibrary, testAddJobFromNoaLibrary) {
     // given
-    QFETCH(QString, modname);
-    QFETCH(bool, valid);
+    std::string modname = std::get<1>(GetParam());
+    bool valid = std::get<2>(GetParam());
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when, then
     if (valid) {
-        GAMSJob job = ws.addJobFromNoaLib(modname.toStdString());
+        GAMSJob job = ws.addJobFromNoaLib(modname);
         TestGAMSObject::testJobBeforeRun(job, ws);
     } else {
-        EXPECT_THROW(ws.addJobFromNoaLib(modname.toStdString()), GAMSException);
+        EXPECT_THROW(ws.addJobFromNoaLib(modname), GAMSException);
     }
 }
 
-TEST_F(TestGAMSWorkspace, testAddJobFromPsoptLibrary_data) {
-    QTest::addColumn<QString>("modname");
-    QTest::addColumn<bool>("valid");
+class ParameterizedTestAddJobFromPsoptLibrary
+        : public ::testing::WithParamInterface<std::tuple<std::string, std::string, bool>>,
+          public TestGAMSWorkspace {
+};
 
-    QTest::newRow("SimpleLP")        << "SimpleLP"   << true;
-    QTest::newRow("Invalid_psoptlib") << "ThisIsAnUnusualModelName" << false;
-}
+INSTANTIATE_TEST_SUITE_P(testAddJobFromPsoptLibrary,
+                        ParameterizedTestAddJobFromPsoptLibrary,
+                        ::testing::Values (
+                            std::make_tuple("SimpleLP"        , "SimpleLP"                , true),
+                            std::make_tuple("Invalid_psoptlib", "ThisIsAnUnusualModelName", false)
+                        ));
 
-TEST_F(TestGAMSWorkspace, testAddJobFromPsoptLibrary) {
+TEST_P(ParameterizedTestAddJobFromPsoptLibrary, testAddJobFromPsoptLibrary) {
     // given
-    QFETCH(QString, modname);
-    QFETCH(bool, valid);
+    std::string modname = std::get<1>(GetParam());
+    bool valid = std::get<2>(GetParam());
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when, then
     if (valid) {
-        GAMSJob job = ws.addJobFromPsoptLib(modname.toStdString());
+        GAMSJob job = ws.addJobFromPsoptLib(modname);
         TestGAMSObject::testJobBeforeRun(job, ws);
     } else {
-        EXPECT_THROW(ws.addJobFromPsoptLib(modname.toStdString()), GAMSException);
+        EXPECT_THROW(ws.addJobFromPsoptLib(modname), GAMSException);
     }
 }
 
-TEST_F(TestGAMSWorkspace, testAddJobFromLibrary_Checkpoint_data) {
-    TestGAMSObject::getTestData_ModelLibraries();
-}
+class ParameterizedTestAddJobFromLibrary_Checkpoint
+        : public ::testing::WithParamInterface<std::tuple<std::string, int, std::string, std::string, std::string>>,
+          public TestGAMSWorkspace {
+};
 
-TEST_F(TestGAMSWorkspace, testAddJobFromLibrary_Checkpoint) {
+INSTANTIATE_TEST_SUITE_P(testAddJobFromLibrary_Checkpoint,
+                        ParameterizedTestAddJobFromLibrary_Checkpoint,
+                        ::testing::Values (
+                             //             description,        index, library,      modname, extrafile
+                             std::make_tuple("gamslib_trnsport", 0, "gamslib", "trnsport", ""),
+                             std::make_tuple("gamslib_alan", 0, "gamslib", "alan", ""),
+                             std::make_tuple("testlib_call1", 1, "testlib", "call1", ""),
+                             std::make_tuple("testlib_onmult1", 1, "testlib", "onmulti1", ""),
+                             std::make_tuple("datalib_CheckListbox", 2, "datalib", "CheckListbox", "CheckListbox.gms"),
+                             std::make_tuple("datalib_Wiring", 2, "datalib", "Wiring", "Sample.mdb"),
+                             // std::make_tuple("emplib_goempgo", 3, "emplib", "goempgo", "empmod.inc"),
+                             std::make_tuple("emplib_hark-monop", 3, "emplib", "hark-monop", "hark-data.inc"),
+                             std::make_tuple("emplib_farmnbd", 3, "emplib", "farmnbd", ""),
+                             std::make_tuple("apilib_JDomainCheck", 4, "apilib", "JDomainCheck", ""),
+                             std::make_tuple("apilib_JSpecialValues", 4, "apilib", "JSpecialValues", ""),
+                             std::make_tuple("finlib_DedicationNoBorrow", 5, "finlib", "DedicationNoBorrow", "BondData.inc"),
+                             std::make_tuple("finlib_StructuralModel", 5, "finlib", "StructuralModel", "InputData.gdx"),
+                             std::make_tuple("noalib_reservoir", 6, "noalib", "reservoir", ""),
+                             std::make_tuple("noalib_macro", 6, "noalib", "macro", "")
+                        ));
+
+TEST_P(ParameterizedTestAddJobFromLibrary_Checkpoint, testAddJobFromLibrary_Checkpoint) {
     // given
-    QFETCH(int, index);
-    QFETCH(QString, library);
-    QFETCH(QString, modname);
+    int index = std::get<1>(GetParam());
+    std::string library = std::get<2>(GetParam());
+    std::string modname = std::get<3>(GetParam());
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -873,39 +977,61 @@ TEST_F(TestGAMSWorkspace, testAddJobFromLibrary_Checkpoint) {
     // when
     switch(index) {
        case 0: // gamslib
-          TestGAMSObject::testJobBeforeRun(ws.addJobFromGamsLib( modname.toStdString(), cp), ws);
+          TestGAMSObject::testJobBeforeRun(ws.addJobFromGamsLib( modname, cp), ws);
           break;
        case 1: // testlib
-          TestGAMSObject::testJobBeforeRun(ws.addJobFromTestLib( modname.toStdString(), cp), ws);
+          TestGAMSObject::testJobBeforeRun(ws.addJobFromTestLib( modname, cp), ws);
           break;
        case 2: // datalib
-          TestGAMSObject::testJobBeforeRun(ws.addJobFromDataLib( modname.toStdString(), cp), ws);
+          TestGAMSObject::testJobBeforeRun(ws.addJobFromDataLib( modname, cp), ws);
           break;
        case 3: // emplib
-          TestGAMSObject::testJobBeforeRun(ws.addJobFromEmpLib( modname.toStdString(), cp), ws);
+          TestGAMSObject::testJobBeforeRun(ws.addJobFromEmpLib( modname, cp), ws);
           break;
        case 4: // apilib
-           TestGAMSObject::testJobBeforeRun(ws.addJobFromApiLib( modname.toStdString(), cp), ws);
+           TestGAMSObject::testJobBeforeRun(ws.addJobFromApiLib( modname, cp), ws);
           break;
        case 5: // finlib
-          TestGAMSObject::testJobBeforeRun(ws.addJobFromFinLib( modname.toStdString(), cp), ws);
+          TestGAMSObject::testJobBeforeRun(ws.addJobFromFinLib( modname, cp), ws);
           break;
        case 6: // noalib
-          TestGAMSObject::testJobBeforeRun(ws.addJobFromNoaLib( modname.toStdString(), cp), ws);
+          TestGAMSObject::testJobBeforeRun(ws.addJobFromNoaLib( modname, cp), ws);
           break;
        default:  break;
     }
 }
 
-TEST_F(TestGAMSWorkspace, testAddJobFromLibrary_CheckpointAndJobName_data) {
-    TestGAMSObject::getTestData_ModelLibraries();
-}
+class ParameterizedTestAddJobFromLibrary_CheckpointAndJobName
+        : public ::testing::WithParamInterface<std::tuple<std::string, int, std::string, std::string, std::string>>,
+          public TestGAMSWorkspace {
+};
 
-TEST_F(TestGAMSWorkspace, testAddJobFromLibrary_CheckpointAndJobName) {
+INSTANTIATE_TEST_SUITE_P(testAddJobFromLibrary_CheckpointAndJobName,
+                        ParameterizedTestAddJobFromLibrary_CheckpointAndJobName,
+                        ::testing::Values (
+                             //             description,        index, library,      modname, extrafile
+                             std::make_tuple("gamslib_trnsport", 0, "gamslib", "trnsport", ""),
+                             std::make_tuple("gamslib_alan", 0, "gamslib", "alan", ""),
+                             std::make_tuple("testlib_call1", 1, "testlib", "call1", ""),
+                             std::make_tuple("testlib_onmult1", 1, "testlib", "onmulti1", ""),
+                             std::make_tuple("datalib_CheckListbox", 2, "datalib", "CheckListbox", "CheckListbox.gms"),
+                             std::make_tuple("datalib_Wiring", 2, "datalib", "Wiring", "Sample.mdb"),
+                             // std::make_tuple("emplib_goempgo", 3, "emplib", "goempgo", "empmod.inc"),
+                             std::make_tuple("emplib_hark-monop", 3, "emplib", "hark-monop", "hark-data.inc"),
+                             std::make_tuple("emplib_farmnbd", 3, "emplib", "farmnbd", ""),
+                             std::make_tuple("apilib_JDomainCheck", 4, "apilib", "JDomainCheck", ""),
+                             std::make_tuple("apilib_JSpecialValues", 4, "apilib", "JSpecialValues", ""),
+                             std::make_tuple("finlib_DedicationNoBorrow", 5, "finlib", "DedicationNoBorrow", "BondData.inc"),
+                             std::make_tuple("finlib_StructuralModel", 5, "finlib", "StructuralModel", "InputData.gdx"),
+                             std::make_tuple("noalib_reservoir", 6, "noalib", "reservoir", ""),
+                             std::make_tuple("noalib_macro", 6, "noalib", "macro", "")
+                        ));
+
+TEST_P(ParameterizedTestAddJobFromLibrary_CheckpointAndJobName, testAddJobFromLibrary_CheckpointAndJobName) {
     // given
-    QFETCH(int, index);
-    QFETCH(QString, library);
-    QFETCH(QString, modname);
+    int index = std::get<1>(GetParam());
+    std::string library = std::get<2>(GetParam());
+    std::string modname = std::get<3>(GetParam());
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -915,25 +1041,25 @@ TEST_F(TestGAMSWorkspace, testAddJobFromLibrary_CheckpointAndJobName) {
     // when
     switch(index) {
        case 0: // gamslib
-          TestGAMSObject::testJobBeforeRun(ws.addJobFromGamsLib( modname.toStdString(), cp, "myJobName"), ws);
+          TestGAMSObject::testJobBeforeRun(ws.addJobFromGamsLib( modname, cp, "myJobName"), ws);
           break;
        case 1: // testlib
-          TestGAMSObject::testJobBeforeRun(ws.addJobFromTestLib( modname.toStdString(), cp, "myJobName"), ws);
+          TestGAMSObject::testJobBeforeRun(ws.addJobFromTestLib( modname, cp, "myJobName"), ws);
           break;
        case 2: // datalib
-          TestGAMSObject::testJobBeforeRun(ws.addJobFromDataLib( modname.toStdString(), cp, "myJobName"), ws);
+          TestGAMSObject::testJobBeforeRun(ws.addJobFromDataLib( modname, cp, "myJobName"), ws);
           break;
        case 3: // emplib
-          TestGAMSObject::testJobBeforeRun(ws.addJobFromEmpLib( modname.toStdString(), cp, "myJobName"), ws);
+          TestGAMSObject::testJobBeforeRun(ws.addJobFromEmpLib( modname, cp, "myJobName"), ws);
           break;
        case 4: // apilib
-           TestGAMSObject::testJobBeforeRun(ws.addJobFromApiLib( modname.toStdString(), cp, "myJobName"), ws);
+           TestGAMSObject::testJobBeforeRun(ws.addJobFromApiLib( modname, cp, "myJobName"), ws);
           break;
        case 5: // finlib
-          TestGAMSObject::testJobBeforeRun(ws.addJobFromFinLib( modname.toStdString(), cp, "myJobName"), ws);
+          TestGAMSObject::testJobBeforeRun(ws.addJobFromFinLib( modname, cp, "myJobName"), ws);
           break;
        case 6: // noalib
-          TestGAMSObject::testJobBeforeRun(ws.addJobFromNoaLib( modname.toStdString(), cp, "myJobName"), ws);
+          TestGAMSObject::testJobBeforeRun(ws.addJobFromNoaLib( modname, cp, "myJobName"), ws);
           break;
        default:  break;
     }
@@ -965,122 +1091,171 @@ TEST_F(TestGAMSWorkspace, testAddOptions_OptFrom) {
     }
 }
 
-TEST_F(TestGAMSWorkspace, testAddOptions_OptFile_data) {
-    QString currentWorkingPath = QCoreApplication::applicationDirPath();
-    QDir dir(currentWorkingPath);
+class ParameterizedTestAddOptions_OptFile
+        : public ::testing::WithParamInterface<std::tuple<std::string, std::string, bool>>,
+          public TestGAMSWorkspace {
+};
 
-    QString workdir = dir.absolutePath();
+INSTANTIATE_TEST_SUITE_P(testAddOptions_OptFile,
+                        ParameterizedTestAddOptions_OptFile,
+                        ::testing::Values (
+                            std::make_tuple("valid_optfile"        , "test.pf"            , true),
+                            std::make_tuple("invalid_optfile", "ThereWillExistThisFile.pf", false)
+                        ));
 
-    QString finalPath = dir.filePath(TestGAMSWorkspace::classname());
-    if (dir.mkpath(finalPath)) {
+TEST_P(ParameterizedTestAddOptions_OptFile, testAddOptions_OptFile) {
+    // setup
+
+    std::string workdir = std::filesystem::current_path();
+
+    GAMSPath finalPath = GAMSPath(workdir, "TestGAMSWorkspace");
+    if (finalPath.mkDir())
         workdir = finalPath;
-    }
-    QTest::addColumn<QString>("optfilename");
-    QTest::addColumn<bool>("exist");
-    QTest::addColumn<QString>("workdir");
 
-    QTest::newRow("valid_optfile")     << "test.pf"                   << true  << workdir ;
-    QTest::newRow("invalid_optfile")   << "ThereWillExistThisFile.pf" << false << workdir ;
+    std::string filename="test.pf";
+    std::ofstream file;
+    file.open(GAMSPath(workdir, filename), std::ios::out);
 
-    QString filename="test.pf";
-    QFile file( QDir(workdir).filePath( filename ) );
-    if ( file.open(QIODevice::WriteOnly) )  {
-      QTextStream stream( &file );
-      stream << "IterLim=1" << endl;
-      stream << "LimCol=4" << endl;
-      stream << "LimRow=5" << endl;
+    if ( file.is_open() )  {
+      file << "IterLim=1" << std::endl;
+      file << "LimCol=4" << std::endl;
+      file << "LimRow=5" << std::endl;
       file.close();
    }
-}
-
-TEST_F(TestGAMSWorkspace, testAddOptions_OptFile) {
 
     // when
-    QFETCH(QString, optfilename);
-    QFETCH(bool, exist);
-    QFETCH(QString, workdir);
+    std::string optfilename = std::get<1>(GetParam());
+    bool exists             = std::get<2>(GetParam());
 
-    QDir dir(workdir);
+    GAMSPath dir(std::filesystem::current_path());
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
-    wsInfo.setWorkingDirectory( dir.absolutePath().toStdString() );
+    wsInfo.setWorkingDirectory( dir );
     wsInfo.setDebug(GAMSEnum::DebugLevel::KeepFiles);
     GAMSWorkspace ws(wsInfo);
     GAMSOptions o = ws.addOptions();
-    if (exist) {
+    if (exists) {
         try {
-           QString filename = dir.absoluteFilePath(optfilename);
-           GAMSOptions opt = ws.addOptions(filename.toStdString());
+           std::string filename = GAMSPath(dir, optfilename);
+           GAMSOptions opt = ws.addOptions(filename);
            EXPECT_EQ( opt.iterLim(), 1 );
            EXPECT_EQ( opt.limCol(), 4 );
            EXPECT_EQ( opt.limRow(), 5 );
         } catch(GAMSException& e) {
-            FAIL() <<  qPrintable("AddOptions from existing optfile should not fail: "+QString::fromStdString(e.what())) ;
+            FAIL() <<  "AddOptions from existing optfile should not fail: " << e.what();
         }
     } else {
-       EXPECT_THROW( ws.addOptions(optfilename.toStdString()), GAMSException);
+       EXPECT_THROW( ws.addOptions(optfilename), GAMSException);
     }
     // clean up only when working dir is not application dir
-    if (QFileInfo(QCoreApplication::applicationDirPath()) != QFileInfo(dir.canonicalPath()))
-       dir.removeRecursively();
+
+    std::string appDir;
+#ifdef _WIN32
+    char result[ MAX_PATH ];
+    return std::string( result, GetModuleFileName( NULL, result, MAX_PATH ) );
+#else
+    char result[ PATH_MAX ];
+    ssize_t count = readlink( "/proc/self/exe", result, PATH_MAX );
+    appDir = std::string (result, (count > 0) ? count : 0 );
+#endif
+    if (appDir != dir.string()) // TODO(RG): test this on all platforms
+       dir.remove();
 }
 
-TEST_F(TestGAMSWorkspace, testRetrievingModelFromLibrary_data) {
-    TestGAMSObject::getTestData_ModelLibraries();
-}
+class ParameterizedTestRetrievingModelFromLibrary
+        : public ::testing::WithParamInterface<std::tuple<std::string, int, std::string, std::string, std::string>>,
+          public TestGAMSWorkspace {
+};
 
-TEST_F(TestGAMSWorkspace, testRetrievingModelFromLibrary) {
+INSTANTIATE_TEST_SUITE_P(testRetrievingModelFromLibrary,
+                        ParameterizedTestRetrievingModelFromLibrary,
+                        ::testing::Values (
+                             //             description,        index, library,      modname, extrafile
+                             std::make_tuple("gamslib_trnsport", 0, "gamslib", "trnsport", ""),
+                             std::make_tuple("gamslib_alan", 0, "gamslib", "alan", ""),
+                             std::make_tuple("testlib_call1", 1, "testlib", "call1", ""),
+                             std::make_tuple("testlib_onmult1", 1, "testlib", "onmulti1", ""),
+                             std::make_tuple("datalib_CheckListbox", 2, "datalib", "CheckListbox", "CheckListbox.gms"),
+                             std::make_tuple("datalib_Wiring", 2, "datalib", "Wiring", "Sample.mdb"),
+                             // std::make_tuple("emplib_goempgo", 3, "emplib", "goempgo", "empmod.inc"),
+                             std::make_tuple("emplib_hark-monop", 3, "emplib", "hark-monop", "hark-data.inc"),
+                             std::make_tuple("emplib_farmnbd", 3, "emplib", "farmnbd", ""),
+                             std::make_tuple("apilib_JDomainCheck", 4, "apilib", "JDomainCheck", ""),
+                             std::make_tuple("apilib_JSpecialValues", 4, "apilib", "JSpecialValues", ""),
+                             std::make_tuple("finlib_DedicationNoBorrow", 5, "finlib", "DedicationNoBorrow", "BondData.inc"),
+                             std::make_tuple("finlib_StructuralModel", 5, "finlib", "StructuralModel", "InputData.gdx"),
+                             std::make_tuple("noalib_reservoir", 6, "noalib", "reservoir", ""),
+                             std::make_tuple("noalib_macro", 6, "noalib", "macro", "")
+                        ));
+
+TEST_P(ParameterizedTestRetrievingModelFromLibrary, testRetrievingModelFromLibrary) {
     // given
-    QFETCH(int, index);
-    QFETCH(QString, library);
-    QFETCH(QString, modname);
-    QFETCH(QString, extrafile);
+    int index = std::get<1>(GetParam());
+    std::string library = std::get<2>(GetParam());
+    std::string modname = std::get<3>(GetParam());
+    std::string extrafile = std::get<4>(GetParam());
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when
     switch(index) {
        case 0: // gamslib
-          ws.gamsLib(modname.toStdString());
+          ws.gamsLib(modname);
           break;
        case 1: // testlib
-          ws.testLib(modname.toStdString());
+          ws.testLib(modname);
           break;
        case 2: // datalib
-          ws.dataLib(modname.toStdString());
+          ws.dataLib(modname);
           break;
        case 3: // emplib
-          ws.empLib(modname.toStdString());
+          ws.empLib(modname);
           break;
        case 4: // apilib
-          ws.apiLib(modname.toStdString());
+          ws.apiLib(modname);
           break;
        case 5: // finlib
-          ws.finLib(modname.toStdString());
+          ws.finLib(modname);
           break;
        case 6: // noalib
-          ws.noaLib(modname.toStdString());
+          ws.noaLib(modname);
           break;
        default:  break;
     }
     // then
-    QString filename = modname+".gms";
-    QFileInfo modfile( QString(ws.workingDirectory().c_str()), filename);
-    QVERIFY2(modfile.exists(), qPrintable("Expect ["+filename+"] file from ["+library+"]"));
-    if (!extrafile.isEmpty()) {
-        QFileInfo morefile(QString(ws.workingDirectory().c_str()), extrafile);
-        QVERIFY2(morefile.exists(), qPrintable("Expect ["+extrafile+"] file with ["+modname+"] from ["+library+"]"));
+    std::string filename = modname+".gms";
+    GAMSPath modfile( ws.workingDirectory(), filename);
+
+    ASSERT_TRUE(modfile.exists()) << "Expect ["+filename+"] file from ["+library+"]";
+
+    if (!extrafile.empty()) {
+        GAMSPath morefile(ws.workingDirectory(), extrafile);
+        ASSERT_TRUE(morefile.exists()) << "Expect ["+extrafile+"] file with ["+modname+"] from ["+library+"]";
     }
 }
 
-TEST_F(TestGAMSWorkspace, testRetrievingInvalidModelFromLibrary_data) {
-    TestGAMSObject::getTestData_InvalidModelLibraries();
-}
+class ParameterizedTestRetrievingInvalidModelFromLibrary
+        : public ::testing::WithParamInterface<std::tuple<std::string, int, std::string, std::string, std::string>>,
+          public TestGAMSWorkspace {
+};
 
-TEST_F(TestGAMSWorkspace, testRetrievingInvalidModelFromLibrary) {
+INSTANTIATE_TEST_SUITE_P(testRetrievingInvalidModelFromLibrary,
+                        ParameterizedTestRetrievingInvalidModelFromLibrary,
+                        ::testing::Values (
+                             //             description,        index, library,      modname
+                                 std::make_tuple("invalid_gamslib", 0, "gamslib", "ThisIsAnUnusualModelName"),
+                                 std::make_tuple("invalid_testlib", 1, "testlib", "ThisIsAnUnusualModelName"),
+                                 std::make_tuple("invalid_datalib", 2, "datalib", "ThisIsAnUnusualModelName"),
+                                 std::make_tuple("invalid_emplib",  3, "emplib",  "ThisIsAnUnusualModelName"),
+                                 std::make_tuple("invalid_apilib",  4, "apilib",  "ThisIsAnUnusualModelName"),
+                                 std::make_tuple("invalid_finlib",  5, "finlib",  "ThisIsAnUnusualModelName"),
+                                 std::make_tuple("invalid_noalib",  6, "noalib",  "ThisIsAnUnusualModelName")
+                        ));
+
+TEST_P(ParameterizedTestRetrievingInvalidModelFromLibrary, testRetrievingInvalidModelFromLibrary) {
     // given
-    QFETCH(int, index);
-    QFETCH(QString, library);
-    QFETCH(QString, modname);
+    int index = std::get<1>(GetParam());
+    std::string library = std::get<2>(GetParam());
+    std::string modname = std::get<3>(GetParam());
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1088,34 +1263,34 @@ TEST_F(TestGAMSWorkspace, testRetrievingInvalidModelFromLibrary) {
     try {
         switch(index) {
           case 0: // gamslib
-             ws.gamsLib(modname.toStdString());
+             ws.gamsLib(modname);
              break;
           case 1: // testlib
-             ws.testLib(modname.toStdString());
+             ws.testLib(modname);
              break;
           case 2: // datalib
-             ws.dataLib(modname.toStdString());
+             ws.dataLib(modname);
              break;
           case 3: // emplib
-             ws.empLib(modname.toStdString());
+             ws.empLib(modname);
              break;
           case 4: // apilib
-             ws.apiLib(modname.toStdString());
+             ws.apiLib(modname);
              break;
           case 5: // finlib
-             ws.finLib(modname.toStdString());
+             ws.finLib(modname);
              break;
           case 6: // noalib
-             ws.noaLib(modname.toStdString());
+             ws.noaLib(modname);
              break;
           default:  break;
        }
-       FAIL() << qPrintable("Expect GAMSException due to invalid model name ["+modname+"] on calling ["+library+"]");
+       FAIL() << "Expect GAMSException due to invalid model name ["+modname+"] on calling ["+library+"]";
     } catch(GAMSException &) {
         // then
-        QString filename = modname+".gms";
-        QFileInfo modfile(QDir(ws.workingDirectory().c_str()), filename);
-        QVERIFY2(!modfile.exists(), qPrintable("Do not expect a file named ["+filename+"]  from ["+library+"]"));
+        std::string filename = modname+".gms";
+        GAMSPath modfile(ws.workingDirectory(), filename);
+        ASSERT_TRUE(!modfile.exists()) << "Do not expect a file named ["+filename+"]  from ["+library+"]";
     }
 }
 
@@ -1124,7 +1299,7 @@ TEST_F(TestGAMSWorkspace, testGetWorkingDirectory) {
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when, then
-    TestGAMSObject::testDir( QString::fromStdString(ws.workingDirectory()) );
+    TestGAMSObject::testDir( ws.workingDirectory() );
 }
 
 TEST_F(TestGAMSWorkspace, testGetSystemDirectory) {
@@ -1132,7 +1307,7 @@ TEST_F(TestGAMSWorkspace, testGetSystemDirectory) {
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     // when, then
-    TestGAMSObject::testDir( QString::fromStdString(ws.workingDirectory()) );
+    TestGAMSObject::testDir( ws.workingDirectory() );
 }
 
 TEST_F(TestGAMSWorkspace, testEqualToOperator) {
@@ -1186,13 +1361,27 @@ TEST_F(TestGAMSWorkspace, testGetLogID) {
     ASSERT_TRUE( ws1.logID() != ws3.logID());
 }
 
-TEST_F(TestGAMSWorkspace, testGetSpecValues_data) {
-    TestGAMSObject::getTestData_SpecialValues();
-}
+class ParameterizedTestGetSpecValues
+        : public ::testing::WithParamInterface<std::tuple<std::string, int, double>>,
+          public TestGAMSWorkspace {
+};
 
-TEST_F(TestGAMSWorkspace, testGetSpecValues) {
-    QFETCH(int, index);
-    QFETCH(double, value);
+INSTANTIATE_TEST_SUITE_P(testGetSpecValues,
+                        ParameterizedTestGetSpecValues,
+                        ::testing::Values (
+                             // TODO(RG): these values need either be made static or we need some other way of accessing them here
+                             //         description, int,  double
+                             std::make_tuple("UNDF", 0, 1.0E300),
+                             std::make_tuple("NA",   1, std::numeric_limits<double>::quiet_NaN()),
+                             std::make_tuple("PINF", 2, std::numeric_limits<double>::infinity()),
+                             std::make_tuple("MINF", 3, - std::numeric_limits<double>::infinity()),
+                             std::make_tuple("EPS",  4, std::numeric_limits<double>::min())
+                        ));
+
+TEST_P(ParameterizedTestGetSpecValues, testGetSpecValues) {
+    // given
+    int index    = std::get<1>(GetParam());
+    double value = std::get<2>(GetParam());
 
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);

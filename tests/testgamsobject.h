@@ -38,7 +38,7 @@
 
 class TestGAMSObject : public ::testing::Test
 {
-protected:
+public:
     void SetUp() override;
     void TearDown() override;
     void init();
@@ -64,10 +64,10 @@ protected:
     void testJobBeforeRun(gams::GAMSJob job, gams::GAMSWorkspace ws);
     void testEmptyDatabase(gams::GAMSDatabase db, gams::GAMSWorkspace ws);
 
-//    void getTestData_DebugLevel();
 //    void getTestData_ModelLibraries();
 //    void getTestData_InvalidModelLibraries();
 //    void getTestData_SpecialValues();
+    std::vector<std::tuple<std::string, int>> getTestData_DebugLevel();
     void getTestData_TransportModel(gams::GAMSDatabase db);
     void getTestData_Set_plants_i(gams::GAMSDatabase db);
     void getTestData_Set_markets_j(gams::GAMSDatabase db);

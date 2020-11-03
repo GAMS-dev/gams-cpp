@@ -49,14 +49,10 @@ void TestGAMSPlatform::testRunProcessParallel()
     std::string gams = GAMSPlatform::findGams(0);
     GAMSPath g = GAMSPlatform::findGams(0) + "/gams.exe";
 
-//    qDebug() << "g2" << g2.string().c_str(); // rogo: delete
     std::thread t = GAMSPlatform::runProcessParallel(g.string(), "clad.exe");
-    qDebug() << t.native_handle(); // rogo: delete
 //    t.detach();
 
-    qDebug() << "joinable" << t.joinable(); // rogo: delete
     QTest::qWait(1000);
-    qDebug() << "joinabl2" << t.joinable(); // rogo: delete
 
     t.~thread();
 }
