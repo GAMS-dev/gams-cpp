@@ -173,10 +173,8 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
         implFile.rename(checkpoint->fileName());
         delete tmpCP; tmpCP=nullptr;
     }
-    if (mWs.debug() < GAMSEnum::DebugLevel::KeepFiles)
-    {
-        try { GAMSPath(pfFileName).remove(); }
-        catch(...) { }
+    if (mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) {
+        GAMSPath(pfFileName).remove();
     }
 }
 

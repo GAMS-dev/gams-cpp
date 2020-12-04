@@ -181,18 +181,18 @@ TEST_P(ParameterizedTestConstructor_DebugLevel, testConstructor_DebugLevel) {
     // then
     switch(debugLevelEnum) {
        case GAMSEnum::DebugLevel::Off:
-           ASSERT_TRUE( ! GAMSPath(dir).exists() );
+           ASSERT_FALSE( GAMSPath(dir).exists() );
            break;
        case GAMSEnum::DebugLevel::KeepFiles:
            ASSERT_TRUE( GAMSPath(dir).exists() );
            /* TODO QEXPECT_FAIL("", "More tests to be implemented ", Abort); ASSERT_TRUE(false); */
            break;
       case GAMSEnum::DebugLevel::ShowLog:
-           ASSERT_TRUE( ! GAMSPath(dir).exists() );
+           ASSERT_TRUE( GAMSPath(dir).exists() );
            /* TODO QEXPECT_FAIL("", "More tests to be implemented ", Abort); ASSERT_TRUE(false); */
            break;
       case GAMSEnum::DebugLevel::Verbose:
-           ASSERT_TRUE( ! GAMSPath(dir).exists() );
+           ASSERT_TRUE( GAMSPath(dir).exists() );
            /* TODO QEXPECT_FAIL("", "More tests to be implemented ", Abort); ASSERT_TRUE(false); */
            break;
       default:
