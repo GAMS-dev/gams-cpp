@@ -175,8 +175,11 @@ TEST_P(ParameterizedTestConstructor_DebugLevel, testConstructor_DebugLevel) {
     std::string debugLevel = std::get<0>(GetParam());
     GAMSEnum::DebugLevel debugLevelEnum = std::get<1>(GetParam());
 
-    GAMSWorkspace ws("", testSystemDir, debugLevelEnum);
-    std::string dir = ws.workingDirectory();
+    std::string dir;
+    {
+        GAMSWorkspace ws("", testSystemDir, debugLevelEnum);
+        dir = ws.workingDirectory();
+    }
 
     // then
     switch(debugLevelEnum) {

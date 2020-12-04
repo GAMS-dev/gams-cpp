@@ -34,6 +34,7 @@ include(../gamsdependency.pri)
 win32:{
     LIBS += -luser32
     LIBS += -L../../bin/ -lgamscpp
+    SOURCES += $$PWD/../src/gamspath.cpp # TODO(RG): this needs better handling
 }
 
 unix:{
@@ -53,7 +54,6 @@ macx:QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
 TESTROOT = $$_PRO_FILE_PWD_/..
 
 INCLUDEPATH += $$TESTROOT $$TESTROOT/../src/
-SOURCES += $$PWD/../src/gamspath.cpp
 
 # GoogleTest:
 GOOGLETEST_DIR = $$_PRO_FILE_PWD_/../../googletest
