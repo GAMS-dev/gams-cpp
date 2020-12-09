@@ -174,7 +174,8 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
         delete tmpCP; tmpCP=nullptr;
     }
     if (mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) {
-        GAMSPath(pfFileName).remove();
+        // TODO(RG): this is not good style, but apparently needed
+        try { GAMSPath(pfFileName).remove(); } catch (...) { }
     }
 }
 

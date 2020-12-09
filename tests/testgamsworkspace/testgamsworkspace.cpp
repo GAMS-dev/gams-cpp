@@ -1240,66 +1240,66 @@ TEST_P(ParameterizedTestRetrievingModelFromLibrary, testRetrievingModelFromLibra
     }
 }
 
-//class ParameterizedTestRetrievingInvalidModelFromLibrary
-//        : public ::testing::WithParamInterface<std::tuple<std::string, int, std::string, std::string, std::string>>,
-//          public TestGAMSWorkspace {
-//};
+class ParameterizedTestRetrievingInvalidModelFromLibrary
+        : public ::testing::WithParamInterface<std::tuple<std::string, int, std::string, std::string>>,
+          public TestGAMSWorkspace {
+};
 
-//INSTANTIATE_TEST_SUITE_P(testRetrievingInvalidModelFromLibrary,
-//                        ParameterizedTestRetrievingInvalidModelFromLibrary,
-//                        ::testing::Values (
-//                             //             description,        index, library,      modname
-//                                 std::make_tuple("invalid_gamslib", 0, "gamslib", "ThisIsAnUnusualModelName"),
-//                                 std::make_tuple("invalid_testlib", 1, "testlib", "ThisIsAnUnusualModelName"),
-//                                 std::make_tuple("invalid_datalib", 2, "datalib", "ThisIsAnUnusualModelName"),
-//                                 std::make_tuple("invalid_emplib",  3, "emplib",  "ThisIsAnUnusualModelName"),
-//                                 std::make_tuple("invalid_apilib",  4, "apilib",  "ThisIsAnUnusualModelName"),
-//                                 std::make_tuple("invalid_finlib",  5, "finlib",  "ThisIsAnUnusualModelName"),
-//                                 std::make_tuple("invalid_noalib",  6, "noalib",  "ThisIsAnUnusualModelName")
-//                        ));
+INSTANTIATE_TEST_SUITE_P(testRetrievingInvalidModelFromLibrary,
+                        ParameterizedTestRetrievingInvalidModelFromLibrary,
+                        ::testing::Values (
+                             //             description,        index, library,      modname
+                                 std::make_tuple("invalid_gamslib", 0, "gamslib", "ThisIsAnUnusualModelName"),
+                                 std::make_tuple("invalid_testlib", 1, "testlib", "ThisIsAnUnusualModelName"),
+                                 std::make_tuple("invalid_datalib", 2, "datalib", "ThisIsAnUnusualModelName"),
+                                 std::make_tuple("invalid_emplib",  3, "emplib",  "ThisIsAnUnusualModelName"),
+                                 std::make_tuple("invalid_apilib",  4, "apilib",  "ThisIsAnUnusualModelName"),
+                                 std::make_tuple("invalid_finlib",  5, "finlib",  "ThisIsAnUnusualModelName"),
+                                 std::make_tuple("invalid_noalib",  6, "noalib",  "ThisIsAnUnusualModelName")
+                        ));
 
-//TEST_P(ParameterizedTestRetrievingInvalidModelFromLibrary, testRetrievingInvalidModelFromLibrary) {
-//    // given
-//    int index = std::get<1>(GetParam());
-//    std::string library = std::get<2>(GetParam());
-//    std::string modname = std::get<3>(GetParam());
+TEST_P(ParameterizedTestRetrievingInvalidModelFromLibrary, testRetrievingInvalidModelFromLibrary) {
+    // given
+    int index = std::get<1>(GetParam());
+    std::string library = std::get<2>(GetParam());
+    std::string modname = std::get<3>(GetParam());
 
-//    GAMSWorkspaceInfo wsInfo("", testSystemDir);
-//    GAMSWorkspace ws(wsInfo);
-//    // when
-//    try {
-//        switch(index) {
-//          case 0: // gamslib
-//             ws.gamsLib(modname);
-//             break;
-//          case 1: // testlib
-//             ws.testLib(modname);
-//             break;
-//          case 2: // datalib
-//             ws.dataLib(modname);
-//             break;
-//          case 3: // emplib
-//             ws.empLib(modname);
-//             break;
-//          case 4: // apilib
-//             ws.apiLib(modname);
-//             break;
-//          case 5: // finlib
-//             ws.finLib(modname);
-//             break;
-//          case 6: // noalib
-//             ws.noaLib(modname);
-//             break;
-//          default:  break;
-//       }
-//       FAIL() << "Expect GAMSException due to invalid model name ["+modname+"] on calling ["+library+"]";
-//    } catch(GAMSException &) {
-//        // then
-//        std::string filename = modname+".gms";
-//        GAMSPath modfile(ws.workingDirectory(), filename);
-//        ASSERT_TRUE(!modfile.exists()) << "Do not expect a file named ["+filename+"]  from ["+library+"]";
-//    }
-//}
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
+    GAMSWorkspace ws(wsInfo);
+    // when
+    try {
+        switch(index) {
+          case 0: // gamslib
+             ws.gamsLib(modname);
+             break;
+          case 1: // testlib
+             ws.testLib(modname);
+             break;
+          case 2: // datalib
+             ws.dataLib(modname);
+             break;
+          case 3: // emplib
+             ws.empLib(modname);
+             break;
+          case 4: // apilib
+             ws.apiLib(modname);
+             break;
+          case 5: // finlib
+             ws.finLib(modname);
+             break;
+          case 6: // noalib
+             ws.noaLib(modname);
+             break;
+          default:  break;
+       }
+       FAIL() << "Expect GAMSException due to invalid model name ["+modname+"] on calling ["+library+"]";
+    } catch(GAMSException &) {
+        // then
+        std::string filename = modname+".gms";
+        GAMSPath modfile(ws.workingDirectory(), filename);
+        ASSERT_TRUE(!modfile.exists()) << "Do not expect a file named ["+filename+"]  from ["+library+"]";
+    }
+}
 
 TEST_F(TestGAMSWorkspace, testGetWorkingDirectory) {
     // given
