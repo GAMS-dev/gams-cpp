@@ -49,4 +49,4 @@ SUBDIRS += testgamssymbolrecord
 SUBDIRS += testgamsvariable
 SUBDIRS += testgamsvariablerecord
 SUBDIRS += testgamsworkspace
-#SUBDIRS += testgamsworkspaceinfo
+SUBDIRS += testgamsworkspaceinfo

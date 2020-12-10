@@ -1105,7 +1105,7 @@ class ParameterizedTestAddOptions_OptFile
 INSTANTIATE_TEST_SUITE_P(testAddOptions_OptFile,
                         ParameterizedTestAddOptions_OptFile,
                         ::testing::Values (
-                            std::make_tuple("valid_optfile"        , "test.pf"            , true),
+                            std::make_tuple("valid_optfile"  , "test.pf", true),
                             std::make_tuple("invalid_optfile", "ThereWillExistThisFile.pf", false)
                         ));
 
@@ -1146,7 +1146,7 @@ TEST_P(ParameterizedTestAddOptions_OptFile, testAddOptions_OptFile) {
            EXPECT_EQ( opt.iterLim(), 1 );
            EXPECT_EQ( opt.limCol(), 4 );
            EXPECT_EQ( opt.limRow(), 5 );
-        } catch(GAMSException& e) {
+        } catch (GAMSException& e) {
             FAIL() <<  "AddOptions from existing optfile should not fail: " << e.what();
         }
     } else {

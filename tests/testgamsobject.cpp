@@ -83,56 +83,6 @@ void TestGAMSObject::cleanup() {
         tests_Failed++;
 }
 
-std::vector<std::tuple<std::string, int>> TestGAMSObject::getTestData_DebugLevel() {
-    std::vector<std::tuple<std::string, int>> retvec;
-
-    retvec.push_back(std::make_tuple("Off", GAMSEnum::DebugLevel::Off));
-    retvec.push_back(std::make_tuple("KeepFiles", GAMSEnum::DebugLevel::KeepFiles));
-    retvec.push_back(std::make_tuple("ShowLog", GAMSEnum::DebugLevel::ShowLog));
-    retvec.push_back(std::make_tuple("Verbose", GAMSEnum::DebugLevel::Verbose));
-
-    return retvec;
-}
-
-//void TestGAMSObject::getTestData_ModelLibraries() {
-//    QTest::addColumn<int>("index");
-//    QTest::addColumn<QString>("library");
-//    QTest::addColumn<QString>("modname");
-//    QTest::addColumn<QString>("extrafile");
-
-//    QTest::newRow("gamslib_trnsport") << 0 << "gamslib" << "trnsport" << "";
-//    QTest::newRow("gamslib_alan")     << 0 << "gamslib" << "alan"  << "";
-//    QTest::newRow("testlib_call1")    << 1 << "testlib" << "call1"    << "";
-//    QTest::newRow("testlib_onmult1")      << 1 << "testlib" << "onmulti1"     << "";
-//    QTest::newRow("datalib_CheckListbox") << 2 << "datalib" << "CheckListbox" << "CheckListbox.gms";
-//    QTest::newRow("datalib_Wiring")       << 2 << "datalib" << "Wiring"       << "Sample.mdb"      ;
-//    // QTest::newRow("emplib_goempgo")    << 3 << "emplib"  << "goempgo"       << "empmod.inc"      ;
-//    QTest::newRow("emplib_hark-monop")    << 3 << "emplib"  << "hark-monop"   << "hark-data.inc"      ;
-//    QTest::newRow("emplib_farmnbd")       << 3 << "emplib"  << "farmnbd"      << "" ;
-//    QTest::newRow("apilib_JDomainCheck")       << 4 << "apilib"  << "JDomainCheck"     << "" ;
-//    QTest::newRow("apilib_JSpecialValues")     << 4 << "apilib"  << "JSpecialValues"   << "" ;
-//    QTest::newRow("finlib_DedicationNoBorrow") << 5 << "finlib" << "DedicationNoBorrow"<< "BondData.inc"  ;
-//    QTest::newRow("finlib_StructuralModel")    << 5 << "finlib" << "StructuralModel"   << "InputData.gdx" ;
-//    QTest::newRow("noalib_reservoir")          << 6 << "noalib" << "reservoir"         << "" ;
-//    QTest::newRow("noalib_macro")              << 6 << "noalib" << "macro"             << "" ;
-//}
-
-
-//void TestGAMSObject::getTestData_InvalidModelLibraries() {
-//    QTest::addColumn<int>("index");
-//    QTest::addColumn<QString>("library");
-//    QTest::addColumn<QString>("modname");
-
-//    QTest::newRow("invalid_gamslib") << 0 << "gamslib" << "ThisIsAnUnusualModelName";
-//    QTest::_newRow("invalid_testlib") << 1 << "testlib" << "ThisIsAnUnusualModelName";
-//    QTest::newRow("invalid_datalib") << 2 << "datalib" << "ThisIsAnUnusualModelName";
-//    QTest::newRow("invalid_emplib")  << 3 << "emplib"  << "ThisIsAnUnusualModelName";
-//    QTest::newRow("invalid_apilib")  << 4 << "apilib"  << "ThisIsAnUnusualModelName";
-//    QTest::newRow("invalid_finlib")  << 5 << "finlib"  << "ThisIsAnUnusualModelName";
-//    QTest::newRow("invalid_noalib")  << 6 << "noalib"  << "ThisIsAnUnusualModelName";
-//}
-
-
 void TestGAMSObject::getTestData_TransportModel(GAMSDatabase db) {
     getTestData_Set_plants_i(db);
     getTestData_Set_markets_j(db);
