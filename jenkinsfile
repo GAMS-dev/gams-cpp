@@ -2,6 +2,10 @@ def QT_FOR_LINUX = "/opt/Qt/5.12.9/bin"
 def QT_FOR_MACOS = "/Users/distrib/Qt/5.12.9/clang_64/bin"
 def QT_FOR_WINDOWS = "C:\\Qt\\5.12.9\\msvc2017_64\\bin"
 
+def GAMS_FOR_LINUX = "/opt/gams/gams34.0_linux_x64_64_sfx"
+def GAMS_FOR_MACOS = "/Library/Frameworks/GAMS.framework/Versions/34/Resources"
+def GAMS_FOR_WINDOWS = "C:\\GAMS\\34"
+
 pipeline {
     agent none
 
@@ -16,7 +20,8 @@ pipeline {
                 stage ('linux') {
                     agent { label 'master' }
                     environment {
-                        PATH="${QT_FOR_LINUX}:${PATH}"
+                        GAMS_CORE_PATH="${GAMS_FOR_LINUX}"
+                        PATH="${QT_FOR_LINUX}:${GAMS_FOR_LINUX}:${PATH}"
                     }
                     steps {
                         step([$class: 'WsCleanup'])
@@ -35,7 +40,8 @@ pipeline {
                 stage ('windowsX64') {
                     agent { label 'windowsX64' }
                     environment {
-                        PATH="${QT_FOR_WINDOWS};${PATH}"
+                        GAMS_CORE_PATH="${GAMS_FOR_WINDOWS}"
+                        PATH="${QT_FOR_WINDOWS};${GAMS_FOR_WINDOWS};${PATH}"
                         NO_WINDOWS_REGISTRY=1
                     }
                     steps {
@@ -61,7 +67,8 @@ pipeline {
                 stage ('macos') {
                     agent { label 'macos' }
                     environment {
-                        PATH="${QT_FOR_MACOS}:${PATH}"
+                        GAMS_CORE_PATH="${GAMS_FOR_MACOS}"
+                        PATH="${QT_FOR_MACOS}:${GAMS_FOR_MACOS}:${PATH}"
                     }
                     steps {
                         step([$class: 'WsCleanup'])
@@ -81,7 +88,7 @@ pipeline {
                 stage ('linux') {
                     agent { label 'master' }
                     environment {
-                        PATH="${QT_FOR_LINUX}:${PATH}"
+                        PATH="${QT_FOR_LINUX}:${GAMS_FOR_LINUX}:${PATH}"
                     }
                     steps {
                         sh '''
@@ -102,7 +109,7 @@ pipeline {
                 stage ('windowsX64') {
                     agent { label 'windowsX64' }
                     environment {
-                        PATH="${QT_FOR_WINDOWS};${PATH}"
+                        PATH="${QT_FOR_WINDOWS};${GAMS_FOR_WINDOWS};${PATH}"
                     }
                     steps {
                         bat '''
@@ -121,7 +128,7 @@ pipeline {
                 stage ('macos') {
                     agent { label 'macos' }
                     environment {
-                        PATH="${QT_FOR_MACOS}:${PATH}"
+                        PATH="${QT_FOR_MACOS}:${GAMS_FOR_MACOS}:${PATH}"
                     }
                     steps {
                         sh '''
