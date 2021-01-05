@@ -26,6 +26,6 @@ TEMPLATE = app
 
 include(../examples.pri)
 
-QT += sql
+win32:QT += sql
 
 SOURCES += transport9.cpp
