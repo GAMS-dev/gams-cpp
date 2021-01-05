@@ -144,7 +144,7 @@ TEST_F(TestGAMSModelInstance, testInstantiateBeforeInitializingCP) {
     GAMSModelInstance mi = cp.addModelInstance();
     GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
     GAMSOptions opt = ws.addOptions();
-    opt.setAllModelTypes("cplexd");
+    opt.setAllModelTypes("cplex");
     // when, then
     EXPECT_THROW( mi.instantiate("transport use lp min z",  opt, GAMSModifier(bmult)) ,
                               GAMSException );

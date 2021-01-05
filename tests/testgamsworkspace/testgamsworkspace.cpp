@@ -33,6 +33,7 @@
 #include "gamsworkspaceinfo.h"
 #include "gamsexception.h"
 #include "gamspath.h"
+#include "gamsversion.h"
 
 #include <iostream>
 #include <fstream>
@@ -215,7 +216,7 @@ TEST_F(TestGAMSWorkspace, testConstructorFromOccupiedWorkingDirectory) {
     EXPECT_THROW( GAMSWorkspace ws2(wsInfo), GAMSException);
 }
 
-TEST_F(TestGAMSWorkspace, testGetVersion) {
+TEST_F(TestGAMSWorkspace, testGetGAMSVersion) {
     // given
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
@@ -1111,7 +1112,6 @@ INSTANTIATE_TEST_SUITE_P(testAddOptions_OptFile,
 
 TEST_P(ParameterizedTestAddOptions_OptFile, testAddOptions_OptFile) {
     // setup
-
     std::string workdir = std::filesystem::current_path().string();
 
     GAMSPath finalPath = GAMSPath(workdir, "TestGAMSWorkspace");
