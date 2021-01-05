@@ -65,7 +65,7 @@ void TestGAMSObject::SetUp() {
 }
 
 void TestGAMSObject::TearDown() {
-    for (std::string dir: testCleanupDirs) {
+    for (const std::string &dir: testCleanupDirs) {
         GAMSPath path(dir);
         if (path.exists() && path.string().find("gams-cpp") != std::string::npos) {
             path.remove();

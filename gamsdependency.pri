@@ -69,7 +69,6 @@ equals(GAMS_BUILD_ENV, "") {
     INCLUDEPATH += $$GAMS_DISTRIB_C_API
 
     SOURCES +=                                      \
-        $$GAMS_DISTRIB_C_API/gcmt.c                 \
         $$GAMS_DISTRIB_C_API/gclgms.c               \
         $$GAMS_DISTRIB_C_API/gmdcc.c                \
         $$GAMS_DISTRIB_C_API/gcmt.c                 \
