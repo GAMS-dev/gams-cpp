@@ -35,6 +35,8 @@
 #include "gmdcc.h"
 #include "gevmcc.h"
 #include "gmomcc.h"
+#include "gamsversion.h"
+
 #include <cassert>
 #include <iostream>
 #include <memory>
@@ -207,7 +209,10 @@ void GAMSModelInstanceImpl::instantiate(const std::string& modelDefinition, cons
     }
     // TODO make sure that GAMSParameters in syncDB are modifiers
 
-    std::string model = "option limrow = 0, limcol = 0, solver = convertd; \n";
+    std::string model = "option limrow = 0, limcol = 0; \n";
+    if (GAMSVersion::gamsMajor() < 34)
+        model += "option solver = convertd; \n";
+
     if (havePar) {
         model += "Set s__(*) /'s0'/;\n";
         for (GAMSModifier mod: modifiers) {
@@ -234,7 +239,11 @@ void GAMSModelInstanceImpl::instantiate(const std::string& modelDefinition, cons
     }
     std::size_t pos = modelDefinition.find(" ");
     std::string modelName = modelDefinition.substr(0, pos);
-    model += modelName + ".solvelink=2; " + modelName + ".integer1=234; \n";
+    if (GAMSVersion::gamsMajor() < 34)
+        model += modelName + ".solvelink=2; " + modelName + ".integer1=234; \n";
+    else
+        model += modelName + ".justScrDir=1; \n";
+
     model += "solve " + modelDefinition;
     if (havePar) {
         model += " scenario dict;";
@@ -258,7 +267,9 @@ void GAMSModelInstanceImpl::instantiate(const std::string& modelDefinition, cons
 
     if (gevInitEnvironmentLegacy(mGEV, (mScrDir / tmpOpt.solverCntr()).c_str()) != 0)
         throw GAMSException("Could not initialize model instance");
-    gevSetIntOpt(mGEV, "Integer1", tmpOpt.integer1());
+
+    if (GAMSVersion::gamsMajor() < 34)
+        gevSetIntOpt(mGEV, "Integer1", tmpOpt.integer1());
 
     char buf[GMS_SSSIZE];
     gmoRegisterEnvironment(mGMO, mGEV, buf);
