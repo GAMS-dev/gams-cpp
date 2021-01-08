@@ -25,6 +25,8 @@
 CONFIG += console c++11
 CONFIG -= app_bundle
 
+!win32:QT -= gui
+
 exists($$PWD/../gams-cpp.pro) {
     DESTDIR = ../../bin
     unix : LIBS += -ldl -L../../bin -lgamscpp

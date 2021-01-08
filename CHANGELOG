@@ -1,3 +1,10 @@
+Version 0.12.0
+========================
+
+- replaced internal use of convertd by convert, since convertd was merged into convert
+- removed Qt gui and sql for non-windows platforms
+- removed unrelated gmd performance test project
+
 Version 0.11.0
 ========================
 
@@ -16,25 +23,3 @@ Version 0.10.0
   `HKEY_CURRENT_USER\gams.location` and `HKEY_LOCAL_MACHINE\Software\Classes\gams.location` to
   `[HKEY_CURRENT_USER|HKEY_LOCAL_MACHINE]\Software\Classes\gams.location`
 - use the new GAMS.framework structure on macOS
-
-Version 0.9.9
-========================
-
-# General
-- The GAMS command line parameter 'pySetup' has been deprecated and was removed from the OO API. Using GAMS Embedded Code with an external Python installation is controlled using the environment variable GMSPYTHONLIB
-- Removed GAMS return code 116 ("Could not find GMSPython") from enum GAMSExitCode
-
-Version 0.9.8
-========================
-
-# General
-- Microsoft Windows 32-bit dropped
-- Example solution for VS2013 dropped
-- Example solutions for VS2015 and VS2017 64-bit updated
-
-Version 0.9.7
-========================
-
-# General
-- macOS Catalina update
-

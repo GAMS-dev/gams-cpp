@@ -30,6 +30,7 @@
 #include <vector>
 #include <memory>
 #include <map>
+#include <stdexcept>
 
 namespace gams {
 
