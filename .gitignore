@@ -1,4 +1,5 @@
 *.pro.user
+*.txt.user
 build*
 *.o
 **/.qmake.stash
