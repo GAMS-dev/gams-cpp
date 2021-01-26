@@ -22,20 +22,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-project( GAMS-cpp )
 
-cmake_minimum_required( VERSION 3.1 )
+if(WIN32)
+    # Switch off warings caused by GAMS headers
+    add_definition( _CRT_SECURE_NO_WARNINGS )
+endif()
 
-set( CMAKE_CXX_STANDARD 17 )
-set( CMAKE_INCLUDE_CURRENT_DIR ON )
-set( CMAKE_AUTOMOC ON )
-set( CMAKE_BUILD_TYPE Release )
-
-add_definitions ( -Wall )
-find_package ( Qt5Widgets REQUIRED )
-find_package ( Qt5Core REQUIRED )
-find_package ( Qt5Gui REQUIRED )
-
-add_subdirectory( src )
-#add_subdirectory( examples )
-#add_subdirectory( tests )
+include(version)

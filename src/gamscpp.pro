@@ -52,7 +52,7 @@ win32:{
 unix:{
     LIBS += -ldl
 
-    !macx{
+    !macx:{
         LIBS += -lstdc++fs
         QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\',-rpath,\'\$$ORIGIN/../../..\'"
         linux-g++ {
@@ -68,8 +68,9 @@ unix:{
 }
 macx:QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
 
-# TODO(RG): we need to find a solution for how to handle generated files... #HEADERS += generated/gamsoptions.h      \
-#           generated/gamsoptionsimpl.h
+# TODO(RG): we need to find a solution for how to handle generated files...
+# HEADERS += generated/gamsoptions.h      \
+#            generated/gamsoptionsimpl.h
 # we dont need headers included, if they are located in one of the includepath folders
 
 SOURCES += generated/gamsoptions.cpp      \

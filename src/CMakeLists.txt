@@ -22,13 +22,41 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
+set (GITCHECKOUT true) # TODO(RG): use this?
+set (NO_WINDOWS_REGISTRY ${NO_WINDOWS_REGISTRY})
+# include gamsdependency.pri # TODO(RG): add this
 
-# Generated from gamscpp.pro.
+# TODO(RG): read this https://www.cs.swarthmore.edu/~adanner/tips/cmake.php
 
+if (WIN32)
+    message(${ORIGIN})
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        add_definitions(-EHsc -GR -c -nologo -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS)
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "G++") # TODO(RG): find out how to check for G++: win32-g++
+        add_definitions(-DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS)
+    endif()
+    add_library(user32)
+
+elseif (UNIX) # Apple or Linux
+    add_library(dl)
+    if (APPLE)
+        set(MACOSX_DEPLOYMENT_TARGET 10.15)
+    else() # UNIX
+        add_definitions(-Wl,-rpath,\'\$$ORIGIN\',-rpath,\'\$$ORIGIN/../../..\') # TODO(RG): check this
+        link_libraries(stdc++fs)
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "G++")
+            execute_process(COMMAND "gcc -dumpversion" OUTPUT_VARIABLE GCCMAJORVERSION)
+            if ($GCCMAJORVERSION LESS 9)
+                set(CC "gcc-9")
+                set(CXX "g++-9")
+            endif()
+        endif()
+    endif()
+endif()
+
+INCLUDE_DIRECTORIES (../src/generated PUBLIC_LIBRARIES)
+#    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin" # TODO(RG): do we need this?
 add_library(gamscpp
-    MODULE
-    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin"
-    SOURCES
         gams.h
         gamscheckpoint.cpp gamscheckpoint.h
         gamscheckpointimpl.cpp gamscheckpointimpl.h
@@ -78,78 +106,17 @@ add_library(gamscpp
         generated/gamsoptions.cpp
         generated/gamsoptionsimpl.cpp
         solveroptions.cpp solveroptions.h
-    DEFINES
-        -UNICODE
-        API_VERSION=\\\"'0'.'11'.'0'\\\"
-        GAMS_CPP_LIB
-        MAKELIB
-    INCLUDE_DIRECTORIES
-        ../src/generated
-    PUBLIC_LIBRARIES
-        Qt::Core
+        ../CHANGELOG ../version
 )
+include(../CMakeInclude.txt)
 
 #### Keys ignored in scope 1:.:.:gamscpp.pro:<TRUE>:
-# NO_WINDOWS_REGISTRY = "$$(NO_WINDOWS_REGISTRY)"
 # OTHER_FILES = "gamscpp.qmodel" "coreclasses.qmodel" "../CHANGELOG" "../jenkinsfile" "../version"
 # TEMPLATE = "lib"
 # USE_GAMS_DISTRIB_CPP_API_SRC = "false"
 
 ## Scopes:
 #####################################################################
-
-extend_target(gamscpp CONDITION NO_WINDOWS_REGISTRY___equals___1
-    DEFINES
-        NO_WINDOWS_REGISTRY
-)
-
-qt_extend_target(gamscpp CONDITION WIN32
-    DEFINES
-        _CRT_SECURE_NO_WARNINGS
-    PUBLIC_LIBRARIES
-        user32
-)
-
-qt_extend_target(gamscpp CONDITION (WIN32) AND (win32-g++)
-    DEFINES
-        FNAME_UCASE_NODECOR
-        F_CALLCONV=__cdecl
-        _CRT_DISABLE_PERFCRIT_LOCKS
-)
-
-qt_extend_target(gamscpp CONDITION WIN32 AND win32-msvc_x_
-    DEFINES
-        FNAME_UCASE_NODECOR
-        F_CALLCONV=__cdecl
-        _CRT_DISABLE_PERFCRIT_LOCKS
-    COMPILE_OPTIONS
-        -EHsc
-        -GR
-        -c
-        -nologo
-)
-
-qt_extend_target(gamscpp CONDITION UNIX
-    PUBLIC_LIBRARIES
-        dl
-)
-
-qt_extend_target(gamscpp CONDITION UNIX AND NOT MACOS
-    PUBLIC_LIBRARIES
-        stdc++fs
-    LINK_OPTIONS
-        "-Wl,-rpath,'$$ORIGIN',-rpath,'$$ORIGIN/../../..'"
-)
-
-#### Keys ignored in scope 8:.:.:gamscpp.pro:linux-g++:
-# GCCMAJORVERSION = "$$system("gcc -dumpversion")"
-
-#### Keys ignored in scope 9:.:.:gamscpp.pro:(GCCMAJORVERSION LESS 9):
-# QMAKE_CC = "gcc-9"
-# QMAKE_CXX = "g++-9"
-
-#### Keys ignored in scope 10:.:.:gamscpp.pro:MACOS:
-# QMAKE_MACOSX_DEPLOYMENT_TARGET = "10.15"
 
 #### Keys ignored in scope 15:.:..:../gamsdependency.pri:MACOS:
 # GAMSINC = "GAMS_DISTRIB=/Library/Frameworks/GAMS.framework/Versions/'$$GAMS_DISTRIB_MAJOR'/Resources" "GAMS_DISTRIB_C_API=\$$GAMS_DISTRIB/apifiles/C/api" "GAMS_DISTRIB_CPP_API=\$$GAMS_DISTRIB/apifiles/C++/api"
@@ -163,76 +130,76 @@ qt_extend_target(gamscpp CONDITION UNIX AND NOT MACOS
 #### Keys ignored in scope 18:.:..:../gamsdependency.pri:else:
 # GAMSINC = "GAMS_DISTRIB=$$(GAMS_CORE_PATH)" "GAMS_DISTRIB_C_API=\$$GAMS_DISTRIB/apifiles/C/api" "GAMS_DISTRIB_CPP_API=\$$GAMS_DISTRIB/apifiles/C++/api"
 
-qt_extend_target(gamscpp CONDITION GAMS_BUILD_ENV___equals___
-    SOURCES
-        /cfgmcc.c
-        /gclgms.c
-        /gcmt.c
-        /gevmcc.c
-        /gmdcc.c
-        /gmomcc.c
-        /optcc.c
-)
+#qt_extend_target(gamscpp CONDITION GAMS_BUILD_ENV___equals___
+#    SOURCES
+#        /cfgmcc.c
+#        /gclgms.c
+#        /gcmt.c
+#        /gevmcc.c
+#        /gmdcc.c
+#        /gmomcc.c
+#        /optcc.c
+#)
 
-qt_extend_target(gamscpp CONDITION NOT GAMS_BUILD_ENV___equals___
-    SOURCES
-        $ENV{GPRODUCTS}/apiwrap/gmdobj/gmdcc.c
-        $ENV{GPRODUCTS}/apiwrap/joat/cfgmcc.c
-        $ENV{GPRODUCTS}/apiwrap/joat/gevmcc.c
-        $ENV{GPRODUCTS}/apiwrap/joat/gmomcc.c
-        $ENV{GPRODUCTS}/apiwrap/optobj/optcc.c
-        $ENV{GPRODUCTS}/gclib/gclgms.c
-        $ENV{GPRODUCTS}/gclib/gcmt.c
-    DEFINES
-        HAVE_MUTEX
-    INCLUDE_DIRECTORIES
-        $ENV{GPRODUCTS}/apiwrap/gmdobj
-        $ENV{GPRODUCTS}/apiwrap/joat
-        $ENV{GPRODUCTS}/apiwrap/optobj
-        $ENV{GPRODUCTS}/gclib
-)
+#qt_extend_target(gamscpp CONDITION NOT GAMS_BUILD_ENV___equals___
+#    SOURCES
+#        $ENV{GPRODUCTS}/apiwrap/gmdobj/gmdcc.c
+#        $ENV{GPRODUCTS}/apiwrap/joat/cfgmcc.c
+#        $ENV{GPRODUCTS}/apiwrap/joat/gevmcc.c
+#        $ENV{GPRODUCTS}/apiwrap/joat/gmomcc.c
+#        $ENV{GPRODUCTS}/apiwrap/optobj/optcc.c
+#        $ENV{GPRODUCTS}/gclib/gclgms.c
+#        $ENV{GPRODUCTS}/gclib/gcmt.c
+#    DEFINES
+#        HAVE_MUTEX
+#    INCLUDE_DIRECTORIES
+#        $ENV{GPRODUCTS}/apiwrap/gmdobj
+#        $ENV{GPRODUCTS}/apiwrap/joat
+#        $ENV{GPRODUCTS}/apiwrap/optobj
+#        $ENV{GPRODUCTS}/gclib
+#)
 
-#### Keys ignored in scope 22:.:..:../gamsdependency.pri:else:
-# GSYS_ENV = "$$(GSYS)"
+##### Keys ignored in scope 22:.:..:../gamsdependency.pri:else:
+## GSYS_ENV = "$$(GSYS)"
 
-qt_extend_target(gamscpp CONDITION GSYS_ENV___equals___wei AND NOT GAMS_BUILD_ENV___equals___
-    DEFINES
-        CIA_WEX
-        WEI
-)
+#qt_extend_target(gamscpp CONDITION GSYS_ENV___equals___wei AND NOT GAMS_BUILD_ENV___equals___
+#    DEFINES
+#        CIA_WEX
+#        WEI
+#)
 
-qt_extend_target(gamscpp CONDITION GSYS_ENV___equals___vs8 AND NOT GAMS_BUILD_ENV___equals___
-    DEFINES
-        CIA_WIN
-        VS8
-)
+#qt_extend_target(gamscpp CONDITION GSYS_ENV___equals___vs8 AND NOT GAMS_BUILD_ENV___equals___
+#    DEFINES
+#        CIA_WIN
+#        VS8
+#)
 
-qt_extend_target(gamscpp CONDITION GSYS_ENV___equals___leg AND NOT GAMS_BUILD_ENV___equals___
-    DEFINES
-        CIA_LEX
-        LEG
-    COMPILE_OPTIONS
-        -Werror-implicit-function-declaration
-        -Wmissing-declarations
-        -Wreturn-type
-        -m64
-)
+#qt_extend_target(gamscpp CONDITION GSYS_ENV___equals___leg AND NOT GAMS_BUILD_ENV___equals___
+#    DEFINES
+#        CIA_LEX
+#        LEG
+#    COMPILE_OPTIONS
+#        -Werror-implicit-function-declaration
+#        -Wmissing-declarations
+#        -Wreturn-type
+#        -m64
+#)
 
-#### Keys ignored in scope 25:.:..:../gamsdependency.pri:GSYS_ENV___equals___leg:
-# QMAKE_CFLAGS = "-Werror-implicit-function-declaration" "-Wreturn-type" "-Wmissing-prototypes" "-Wmissing-declarations" "-m64"
+##### Keys ignored in scope 25:.:..:../gamsdependency.pri:GSYS_ENV___equals___leg:
+## QMAKE_CFLAGS = "-Werror-implicit-function-declaration" "-Wreturn-type" "-Wmissing-prototypes" "-Wmissing-declarations" "-m64"
 
-qt_extend_target(gamscpp CONDITION GSYS_ENV___equals___deg AND NOT GAMS_BUILD_ENV___equals___
-    DEFINES
-        CIA_DEX
-        DEG
-    COMPILE_OPTIONS
-        -Werror-implicit-function-declaration
-        -Wmissing-declarations
-        -Wreturn-type
-        -m64
-)
+#qt_extend_target(gamscpp CONDITION GSYS_ENV___equals___deg AND NOT GAMS_BUILD_ENV___equals___
+#    DEFINES
+#        CIA_DEX
+#        DEG
+#    COMPILE_OPTIONS
+#        -Werror-implicit-function-declaration
+#        -Wmissing-declarations
+#        -Wreturn-type
+#        -m64
+#)
 
-#### Keys ignored in scope 26:.:..:../gamsdependency.pri:GSYS_ENV___equals___deg:
-# QMAKE_CFLAGS = "-Werror-implicit-function-declaration" "-Wreturn-type" "-Wmissing-prototypes" "-Wmissing-declarations" "-m64"
+##### Keys ignored in scope 26:.:..:../gamsdependency.pri:GSYS_ENV___equals___deg:
+## QMAKE_CFLAGS = "-Werror-implicit-function-declaration" "-Wreturn-type" "-Wmissing-prototypes" "-Wmissing-declarations" "-m64"
 
-qt_autogen_tools_initial_setup(gamscpp)
+#qt_autogen_tools_initial_setup(gamscpp)
