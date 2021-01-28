@@ -26,25 +26,25 @@ set (GITCHECKOUT true) # TODO(RG): use this?
 set (NO_WINDOWS_REGISTRY ${NO_WINDOWS_REGISTRY})
 # include gamsdependency.pri # TODO(RG): add this
 
+# Coding Style: https://community.kde.org/Policies/CMake_Coding_Style
 # TODO(RG): read this https://www.cs.swarthmore.edu/~adanner/tips/cmake.php
 
-if (WIN32)
-    message(${ORIGIN})
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+if(WIN32)
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         add_definitions(-EHsc -GR -c -nologo -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS)
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "G++") # TODO(RG): find out how to check for G++: win32-g++
         add_definitions(-DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS)
     endif()
     add_library(user32)
 
-elseif (UNIX) # Apple or Linux
+elseif(UNIX) # Apple or Linux
     add_library(dl)
     if (APPLE)
         set(MACOSX_DEPLOYMENT_TARGET 10.15)
     else() # UNIX
         add_definitions(-Wl,-rpath,\'\$$ORIGIN\',-rpath,\'\$$ORIGIN/../../..\') # TODO(RG): check this
         link_libraries(stdc++fs)
-        if(CMAKE_CXX_COMPILER_ID STREQUAL "G++")
+        if (CMAKE_CXX_COMPILER_ID STREQUAL "G++")
             execute_process(COMMAND "gcc -dumpversion" OUTPUT_VARIABLE GCCMAJORVERSION)
             if ($GCCMAJORVERSION LESS 9)
                 set(CC "gcc-9")
@@ -54,7 +54,8 @@ elseif (UNIX) # Apple or Linux
     endif()
 endif()
 
-INCLUDE_DIRECTORIES (../src/generated PUBLIC_LIBRARIES)
+# TODO(RG):  we need to find a solution for how to handle generated files...
+include_directories(../src/generated PUBLIC_LIBRARIES)
 #    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin" # TODO(RG): do we need this?
 add_library(gamscpp
         gams.h
