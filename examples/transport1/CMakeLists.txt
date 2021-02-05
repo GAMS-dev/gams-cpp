@@ -5,18 +5,15 @@ project(transport1 C CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
-# TODO(RG): experimental changes, revert at some point!
-file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../../gamsinclude.pri" GAMSINCLUDE LIMIT_COUNT 1)
-message(${GAMSINCLUDE})
-
-string(REGEX MATCH "[^=]+$" GAMSPATH ${GAMSINCLUDE})
-message(GAMSPATH: ${VALUE})
-
-INCLUDE_DIRECTORIES("${GAMSPATH}/apifiles/C/api"
-    "${GAMSPATH}/apifiles/C++/api")
-
-message(${GAMSPATH})
+# TODO(RG): improve this!
+if (IS_IN_GAMS_DIR)
+    INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../../C/api"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/../api")
+    set(PATH ${CMAKE_CURRENT_SOURCE_DIR})
+else()
+    INCLUDE_DIRECTORIES("${GAMSPATH}/apifiles/C/api"
+                        "${GAMSPATH}/apifiles/C++/api")
+endif()
 
 IF (WIN32)
   SET(VSVERSION "vs2017" CACHE STRING "Visual Studio version") # TODO(RG): change to 2019?

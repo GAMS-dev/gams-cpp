@@ -28,7 +28,7 @@ win32 {
     DEFINES += _CRT_SECURE_NO_WARNINGS
 }
 
-include (version)
+include(version)
 # GAMS_CORE_PATH is Jenkins build switch
 GAMS_CORE_TMP = $$(GAMS_CORE_PATH)
 !exists($$PWD/gamsinclude.pri) {

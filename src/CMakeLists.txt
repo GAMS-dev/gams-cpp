@@ -22,9 +22,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-set (GITCHECKOUT true) # TODO(RG): use this?
+set (IS_IN_GAMS_DIR false) # TODO(RG): make dynamic
 set (NO_WINDOWS_REGISTRY ${NO_WINDOWS_REGISTRY})
-# include gamsdependency.pri # TODO(RG): add this
+include(../CMakeInclude.txt)
+
+set(GAMSPATH ${GAMSPATH} PARENT_SCOPE) # this is needed to make this var available to siblings
 
 # Coding Style: https://community.kde.org/Policies/CMake_Coding_Style
 # TODO(RG): read this https://www.cs.swarthmore.edu/~adanner/tips/cmake.php
@@ -56,8 +58,15 @@ endif()
 
 # TODO(RG):  we need to find a solution for how to handle generated files...
 include_directories(../src/generated PUBLIC_LIBRARIES)
-#    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin" # TODO(RG): do we need this?
-add_library(gamscpp
+
+message("Output Folder: ${CMAKE_BINARY_DIR}")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+# original:
+# OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin"
+
+add_library(gamscpp STATIC
         gams.h
         gamscheckpoint.cpp gamscheckpoint.h
         gamscheckpointimpl.cpp gamscheckpointimpl.h
@@ -109,98 +118,3 @@ add_library(gamscpp
         solveroptions.cpp solveroptions.h
         ../CHANGELOG ../version
 )
-include(../CMakeInclude.txt)
-
-#### Keys ignored in scope 1:.:.:gamscpp.pro:<TRUE>:
-# OTHER_FILES = "gamscpp.qmodel" "coreclasses.qmodel" "../CHANGELOG" "../jenkinsfile" "../version"
-# TEMPLATE = "lib"
-# USE_GAMS_DISTRIB_CPP_API_SRC = "false"
-
-## Scopes:
-#####################################################################
-
-#### Keys ignored in scope 15:.:..:../gamsdependency.pri:MACOS:
-# GAMSINC = "GAMS_DISTRIB=/Library/Frameworks/GAMS.framework/Versions/'$$GAMS_DISTRIB_MAJOR'/Resources" "GAMS_DISTRIB_C_API=\$$GAMS_DISTRIB/apifiles/C/api" "GAMS_DISTRIB_CPP_API=\$$GAMS_DISTRIB/apifiles/C++/api"
-
-#### Keys ignored in scope 16:.:..:../gamsdependency.pri:UNIX AND NOT MACOS:
-# GAMSINC = "GAMS_DISTRIB=$$(HOME)/gams/gams'$$GAMS_DISTRIB_MAJOR'.'$$GAMS_DISTRIB_MINOR'_linux_x64_64_sfx" "GAMS_DISTRIB_C_API=\$$GAMS_DISTRIB/apifiles/C/api" "GAMS_DISTRIB_CPP_API=\$$GAMS_DISTRIB/apifiles/C++/api"
-
-#### Keys ignored in scope 17:.:..:../gamsdependency.pri:WIN32:
-# GAMSINC = "GAMS_DISTRIB=C:/GAMS/win64/'$$GAMS_DISTRIB_MAJOR'.'$$GAMS_DISTRIB_MINOR'" "GAMS_DISTRIB_C_API=\$$GAMS_DISTRIB/apifiles/C/api" "GAMS_DISTRIB_CPP_API=\$$GAMS_DISTRIB/apifiles/C++/api"
-
-#### Keys ignored in scope 18:.:..:../gamsdependency.pri:else:
-# GAMSINC = "GAMS_DISTRIB=$$(GAMS_CORE_PATH)" "GAMS_DISTRIB_C_API=\$$GAMS_DISTRIB/apifiles/C/api" "GAMS_DISTRIB_CPP_API=\$$GAMS_DISTRIB/apifiles/C++/api"
-
-#qt_extend_target(gamscpp CONDITION GAMS_BUILD_ENV___equals___
-#    SOURCES
-#        /cfgmcc.c
-#        /gclgms.c
-#        /gcmt.c
-#        /gevmcc.c
-#        /gmdcc.c
-#        /gmomcc.c
-#        /optcc.c
-#)
-
-#qt_extend_target(gamscpp CONDITION NOT GAMS_BUILD_ENV___equals___
-#    SOURCES
-#        $ENV{GPRODUCTS}/apiwrap/gmdobj/gmdcc.c
-#        $ENV{GPRODUCTS}/apiwrap/joat/cfgmcc.c
-#        $ENV{GPRODUCTS}/apiwrap/joat/gevmcc.c
-#        $ENV{GPRODUCTS}/apiwrap/joat/gmomcc.c
-#        $ENV{GPRODUCTS}/apiwrap/optobj/optcc.c
-#        $ENV{GPRODUCTS}/gclib/gclgms.c
-#        $ENV{GPRODUCTS}/gclib/gcmt.c
-#    DEFINES
-#        HAVE_MUTEX
-#    INCLUDE_DIRECTORIES
-#        $ENV{GPRODUCTS}/apiwrap/gmdobj
-#        $ENV{GPRODUCTS}/apiwrap/joat
-#        $ENV{GPRODUCTS}/apiwrap/optobj
-#        $ENV{GPRODUCTS}/gclib
-#)
-
-##### Keys ignored in scope 22:.:..:../gamsdependency.pri:else:
-## GSYS_ENV = "$$(GSYS)"
-
-#qt_extend_target(gamscpp CONDITION GSYS_ENV___equals___wei AND NOT GAMS_BUILD_ENV___equals___
-#    DEFINES
-#        CIA_WEX
-#        WEI
-#)
-
-#qt_extend_target(gamscpp CONDITION GSYS_ENV___equals___vs8 AND NOT GAMS_BUILD_ENV___equals___
-#    DEFINES
-#        CIA_WIN
-#        VS8
-#)
-
-#qt_extend_target(gamscpp CONDITION GSYS_ENV___equals___leg AND NOT GAMS_BUILD_ENV___equals___
-#    DEFINES
-#        CIA_LEX
-#        LEG
-#    COMPILE_OPTIONS
-#        -Werror-implicit-function-declaration
-#        -Wmissing-declarations
-#        -Wreturn-type
-#        -m64
-#)
-
-##### Keys ignored in scope 25:.:..:../gamsdependency.pri:GSYS_ENV___equals___leg:
-## QMAKE_CFLAGS = "-Werror-implicit-function-declaration" "-Wreturn-type" "-Wmissing-prototypes" "-Wmissing-declarations" "-m64"
-
-#qt_extend_target(gamscpp CONDITION GSYS_ENV___equals___deg AND NOT GAMS_BUILD_ENV___equals___
-#    DEFINES
-#        CIA_DEX
-#        DEG
-#    COMPILE_OPTIONS
-#        -Werror-implicit-function-declaration
-#        -Wmissing-declarations
-#        -Wreturn-type
-#        -m64
-#)
-
-##### Keys ignored in scope 26:.:..:../gamsdependency.pri:GSYS_ENV___equals___deg:
-## QMAKE_CFLAGS = "-Werror-implicit-function-declaration" "-Wreturn-type" "-Wmissing-prototypes" "-Wmissing-declarations" "-m64"
-
-#qt_autogen_tools_initial_setup(gamscpp)

@@ -25,11 +25,36 @@
 message("-- START OF CMakeInclude.txt --")
 if(WIN32)
     # Switch off warnings caused by GAMS headers
-    add_definitions( _CRT_SECURE_NO_WARNINGS )
+    # add_definitions( _CRT_SECURE_NO_WARNINGS )
 endif()
 set(PWD ${CMAKE_CURRENT_SOURCE_DIR}/..)
-message(${PWD})
-# include(version) # TODO(RG): read version file
+message(PWD: ${PWD})
+
+message(STATUS "Reading version file")
+file(STRINGS ${PWD}/version ConfigContents)
+foreach(NameAndValue ${ConfigContents})
+
+    # Strip leading spaces
+    string(REGEX REPLACE "^[ ]+" "" NameAndValue ${NameAndValue})
+    
+    # ignore comments
+    if(${NameAndValue} MATCHES "^#")
+        continue()
+    endif()
+
+    # Find variable name
+    string(REGEX MATCH "^[^=]+" Name ${NameAndValue})
+    # Find the value
+    string(REPLACE "${Name}=" "" Value ${NameAndValue})
+    # Set the variable
+    set(${Name} "${Value}")
+endforeach()
+set(VERSION "${GAMSCPP_MAJOR_VERSION}.${GAMSCPP_MINOR_VERSION}.${GAMSCPP_PATCH_LEVEL}")
+set(GAMS_DISTRIB_VERSION ${GAMS_DISTRIB_MAJOR}${GAMS_DISTRIB_MINOR}${GAMS_DISTRIB_GOLD}) # TODO(RG): is this ever used?
+message("  Version: ${VERSION}")
+
+# Project file version defines
+add_definitions(API_VERSION="${VERSION}") #TODO(RG): not sure if this is right
 
 # GAMS_CORE_PATH is Jenkins build switch
 set(GAMS_CORE_TMP ${GAMS_CORE_PATH})
@@ -128,7 +153,13 @@ set(GSYS_ENV ${GSYS})
 #         ${GPRODUCTS}/apiwrap/optobj/optcc.c
 
     if (${USE_GAMS_DISTRIB_CPP_API_SRC})
+        include_directories(${GPRODUCTS}/apiexamples/C++/api)
 #    ${GPRODUCTS}/apiexamples/C++/api/gamsoptions.cpp       \
 #    ${GPRODUCTS}/apiexamples/C++/api/gamsoptionsimpl.cpp
     endif()
 endif()
+
+# create variable GAMSPATH from gamsinclude.pri
+file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../gamsinclude.pri" GAMSINCLUDE LIMIT_COUNT 1)
+string(REGEX MATCH "[^=]+$" GAMSPATH ${GAMSINCLUDE})
+message("cmakelistsincludefile: ${GAMSPATH}")
