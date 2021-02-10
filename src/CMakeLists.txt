@@ -44,7 +44,7 @@ elseif(UNIX) # Apple or Linux
     if (APPLE)
         set(MACOSX_DEPLOYMENT_TARGET 10.15)
     else() # UNIX
-        add_definitions(-Wl,-rpath,\'\$$ORIGIN\',-rpath,\'\$$ORIGIN/../../..\') # TODO(RG): check this
+        add_definitions(-Wl,-rpath,${ORIGIN},-rpath,${ORIGIN}/../../..\') # TODO(RG): check this
         link_libraries(stdc++fs)
         if (CMAKE_CXX_COMPILER_ID STREQUAL "G++")
             execute_process(COMMAND "gcc -dumpversion" OUTPUT_VARIABLE GCCMAJORVERSION)
@@ -66,7 +66,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # original:
 # OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin"
 
-add_library(gamscpp STATIC
+add_library(gamscpp
         gams.h
         gamscheckpoint.cpp gamscheckpoint.h
         gamscheckpointimpl.cpp gamscheckpointimpl.h

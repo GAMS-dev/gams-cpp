@@ -22,60 +22,69 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
+set(PWD ${CMAKE_CURRENT_SOURCE_DIR}/..)
+message(PWD: ${PWD})
+
+function(ReadFromFileAndSet FILEPATH)
+    message(STATUS "Reading file: ${FILEPATH}")
+    file(STRINGS ${FILEPATH} FileContents)
+    foreach(NameAndValue ${FileContents})
+
+        # Strip leading spaces
+        string(REGEX REPLACE "^[ ]+" "" NameAndValue ${NameAndValue})
+        
+        # ignore comments
+        if(${NameAndValue} MATCHES "^#")
+            continue()
+        endif()
+
+        # Find variable name
+        string(REGEX MATCH "^[^=]+" Name ${NameAndValue})
+        # Find the value
+        string(REPLACE "${Name}=" "" Value ${NameAndValue})
+        # Set the variable
+        message("read and set: ${Name} = ${Value}")
+        set(${Name} "${Value}" PARENT_SCOPE)
+    endforeach()
+endfunction()
+
 message("-- START OF CMakeInclude.txt --")
 if(WIN32)
     # Switch off warnings caused by GAMS headers
     # add_definitions( _CRT_SECURE_NO_WARNINGS )
 endif()
-set(PWD ${CMAKE_CURRENT_SOURCE_DIR}/..)
-message(PWD: ${PWD})
 
-message(STATUS "Reading version file")
-file(STRINGS ${PWD}/version ConfigContents)
-foreach(NameAndValue ${ConfigContents})
-
-    # Strip leading spaces
-    string(REGEX REPLACE "^[ ]+" "" NameAndValue ${NameAndValue})
-    
-    # ignore comments
-    if(${NameAndValue} MATCHES "^#")
-        continue()
-    endif()
-
-    # Find variable name
-    string(REGEX MATCH "^[^=]+" Name ${NameAndValue})
-    # Find the value
-    string(REPLACE "${Name}=" "" Value ${NameAndValue})
-    # Set the variable
-    set(${Name} "${Value}")
-endforeach()
+ReadFromFileAndSet(${PWD}/version)
 set(VERSION "${GAMSCPP_MAJOR_VERSION}.${GAMSCPP_MINOR_VERSION}.${GAMSCPP_PATCH_LEVEL}")
-set(GAMS_DISTRIB_VERSION ${GAMS_DISTRIB_MAJOR}${GAMS_DISTRIB_MINOR}${GAMS_DISTRIB_GOLD}) # TODO(RG): is this ever used?
+#set(GAMS_DISTRIB_VERSION ${GAMS_DISTRIB_MAJOR}${GAMS_DISTRIB_MINOR}${GAMS_DISTRIB_GOLD}) # TODO(RG): is this ever used?
 message("  Version: ${VERSION}")
 
 # Project file version defines
-add_definitions(API_VERSION="${VERSION}") #TODO(RG): not sure if this is right
+set(API_VERSION ${VERSION})
 
 # GAMS_CORE_PATH is Jenkins build switch
 set(GAMS_CORE_TMP ${GAMS_CORE_PATH})
-if(NOT EXISTS ${PWD}/gamsinclude.pri)
+if(true) # (NOT EXISTS ${PWD}/gamsinclude.pri) TODO(RG): see todo below
     message(STATUS "gamsinclude.pri not existing.")
     if(NOT DEFINED ${GAMS_CORE_TMP})
         if(APPLE)
+            set(GAMS_DISTRIB /Library/Frameworks/GAMS.framework/Versions/${GAMS_DISTRIB_MAJOR}/Resources)       
             set(GAMSINC
-"GAMS_DISTRIB=/Library/Frameworks/GAMS.framework/Versions/${GAMS_DISTRIB_MAJOR}/Resources \
+"GAMS_DISTRIB=${GAMS_DISTRIB}\n\
 GAMS_DISTRIB_C_API=${GAMS_DISTRIB}/apifiles/C/api\
 GAMS_DISTRIB_CPP_API=${GAMS_DISTRIB}/apifiles/C++/api")
 
         elseif(UNIX AND NOT APPLE)
+            set(GAMS_DISTRIB GAMS_DISTRIB=$ENV{HOME}/gams/gams${GAMS_DISTRIB_MAJOR}_linux_x64_64_sfx)
             set(GAMSINC
-"GAMS_DISTRIB=$ENV{HOME}/gams/gams${GAMS_DISTRIB_MAJOR}.${GAMS_DISTRIB_MINOR}_linux_x64_64_sfx\n\
+"GAMS_DISTRIB=${GAMS_DISTRIB}\n\
 GAMS_DISTRIB_C_API=${GAMS_DISTRIB}/apifiles/C/api\n\
 GAMS_DISTRIB_CPP_API=${GAMS_DISTRIB}/apifiles/C++/api")
 
         elseif(WIN32)
+            set(GAMS_DISTRIB C:/GAMS/${GAMS_DISTRIB_MAJOR})
             set(GAMSINC
-"GAMS_DISTRIB=C:/GAMS/win64/${GAMS_DISTRIB_MAJOR}.${GAMS_DISTRIB_MINOR}\n\
+"GAMS_DISTRIB=${GAMS_DISTRIB}\n\
 GAMS_DISTRIB_C_API=${GAMS_DISTRIB}/apifiles/C/api\n\
 GAMS_DISTRIB_CPP_API=${GAMS_DISTRIB}/apifiles/C++/api")
         endif()
@@ -92,8 +101,7 @@ GAMS_DISTRIB_CPP_API=${GAMS_DISTRIB}/apifiles/C++/api")
 endif()
 
 if(EXISTS ${PWD}/gamsinclude.pri)
-    # TODO(RG): read values instead of include
-    # include(${PWD}/gamsinclude.pri)
+    ReadFromFileAndSet(${PWD}/gamsinclude.pri)
 endif()
 
 # GAMS_BUILD is GAMS distrib build switch
@@ -162,4 +170,3 @@ endif()
 # create variable GAMSPATH from gamsinclude.pri
 file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../gamsinclude.pri" GAMSINCLUDE LIMIT_COUNT 1)
 string(REGEX MATCH "[^=]+$" GAMSPATH ${GAMSINCLUDE})
-message("cmakelistsincludefile: ${GAMSPATH}")
