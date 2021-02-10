@@ -31,7 +31,7 @@
 namespace gams {
 
 /// Represents the GAMS version information.
-class LIBSPEC GAMSVersion
+class /*LIBSPEC*/ GAMSVersion // TODO(RG): what about this LIBSPEC?
 {
 public:
     /// Get the full API version information, including major and

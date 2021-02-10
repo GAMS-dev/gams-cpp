@@ -43,7 +43,7 @@ function(ReadFromFileAndSet FILEPATH)
         # Find the value
         string(REPLACE "${Name}=" "" Value ${NameAndValue})
         # Set the variable
-        message("read and set: ${Name} = ${Value}")
+        message("  -- Set: ${Name} = ${Value}")
         set(${Name} "${Value}" PARENT_SCOPE)
     endforeach()
 endfunction()
@@ -51,16 +51,15 @@ endfunction()
 message("-- START OF CMakeInclude.txt --")
 if(WIN32)
     # Switch off warnings caused by GAMS headers
-    # add_definitions( _CRT_SECURE_NO_WARNINGS )
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
 ReadFromFileAndSet(${PWD}/version)
 set(VERSION "${GAMSCPP_MAJOR_VERSION}.${GAMSCPP_MINOR_VERSION}.${GAMSCPP_PATCH_LEVEL}")
-#set(GAMS_DISTRIB_VERSION ${GAMS_DISTRIB_MAJOR}${GAMS_DISTRIB_MINOR}${GAMS_DISTRIB_GOLD}) # TODO(RG): is this ever used?
 message("  Version: ${VERSION}")
 
 # Project file version defines
-set(API_VERSION ${VERSION})
+add_definitions(-DAPI_VERSION="${VERSION}")
 
 # GAMS_CORE_PATH is Jenkins build switch
 set(GAMS_CORE_TMP ${GAMS_CORE_PATH})

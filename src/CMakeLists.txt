@@ -37,7 +37,7 @@ if(WIN32)
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "G++") # TODO(RG): find out how to check for G++: win32-g++
         add_definitions(-DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS)
     endif()
-    add_library(user32)
+#    add_library(user32) #TODO(RG): what is this
 
 elseif(UNIX) # Apple or Linux
     add_library(dl)

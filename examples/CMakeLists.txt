@@ -5,7 +5,7 @@ project(examples)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
 #add_subdirectory(transportGDX)
 add_subdirectory(transport1)
