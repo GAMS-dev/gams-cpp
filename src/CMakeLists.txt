@@ -22,7 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-set (IS_IN_GAMS_DIR false) # TODO(RG): make dynamic
+set (IS_IN_GAMS_DIR false) # \LTODO\(RG): make dynamic
 set (NO_WINDOWS_REGISTRY ${NO_WINDOWS_REGISTRY})
 include(../CMakeInclude.txt)
 
@@ -33,17 +33,17 @@ add_definitions(-DMAKELIB)
 if(WIN32)
     if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         add_definitions(-EHsc -GR -c -nologo -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS)
-    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "G++") # TODO(RG): find out how to check for G++: win32-g++
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "G++") # \LTODO\(RG): find out how to check for G++: win32-g++
         add_definitions(-DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS)
     endif()
-#    find_library(USER32 user32) # TODO(RG): check if this is needed
+#    find_library(USER32 user32) # \LTODO\(RG): check if this is needed
 
 elseif(UNIX) # Apple or Linux
     add_library(dl)
     if (APPLE)
         set(MACOSX_DEPLOYMENT_TARGET 10.15)
     else() # UNIX
-        add_definitions(-Wl,-rpath,${ORIGIN},-rpath,${ORIGIN}/../../..) # TODO(RG): check this
+        add_definitions(-Wl,-rpath,${ORIGIN},-rpath,${ORIGIN}/../../..) # \LTODO\(RG): check this
         link_libraries(stdc++fs)
         if (CMAKE_CXX_COMPILER_ID STREQUAL "G++")
             execute_process(COMMAND "gcc -dumpversion" OUTPUT_VARIABLE GCCMAJORVERSION)
@@ -55,7 +55,7 @@ elseif(UNIX) # Apple or Linux
     endif()
 endif()
 
-# TODO(RG):  we need to find a solution for how to handle generated files...
+# \LTODO\(RG):  we need to find a solution for how to handle generated files...
 include_directories(../src/generated PUBLIC_LIBRARIES)
 
 message("Output Folder: ${CMAKE_BINARY_DIR}")

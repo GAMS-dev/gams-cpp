@@ -5,15 +5,15 @@ project(xp_example1 C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../../C/api")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../C/api")
 
 add_executable(${PROJECT_NAME}
     "xp_example1.cpp"
     "../../C/api/gcmt.c"
     "../../C/api/gdxcc.c")
 
-IF (WIN32)
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} user32)
-ELSEIF(UNIX)
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} dl pthread)
-ENDIF()
+if(WIN32)
+target_link_libraries(${PROJECT_NAME} user32)
+elseif(UNIX)
+target_link_libraries(${PROJECT_NAME} dl pthread)
+endif()

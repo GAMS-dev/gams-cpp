@@ -5,24 +5,24 @@ project(transport9 C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../../C/api"
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../C/api"
     "${CMAKE_CURRENT_SOURCE_DIR}/../api")
 
-IF (WIN32)
-  SET(VSVERSION "vs2017" CACHE STRING "Visual Studio version")
-  LINK_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../lib/${VSVERSION}")
-ELSE()
-  LINK_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../lib")
-ENDIF()
+if(WIN32)
+  set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
+  link_directories("${CMAKE_CURRENT_SOURCE_DIR}/../lib/${VSVERSION}")
+else()
+  link_directories("${CMAKE_CURRENT_SOURCE_DIR}/../lib")
+endif()
 
 add_executable(${PROJECT_NAME}
     "transport9.cpp"
     )
 
-IF (WIN32)
+if(WIN32)
     find_package(Qt5Core)
     qt5_use_modules(${PROJECT_NAME} Core Sql)
-    TARGET_LINK_LIBRARIES(${PROJECT_NAME} gamscpp)
-ELSEIF(UNIX)
-    TARGET_LINK_LIBRARIES(${PROJECT_NAME} gamscpp)
-ENDIF()
+    target_link_libraries(${PROJECT_NAME} gamscpp)
+elseif(UNIX)
+    target_link_libraries(${PROJECT_NAME} gamscpp)
+endif()

@@ -33,9 +33,6 @@ set( CMAKE_AUTOMOC OFF )
 set( CMAKE_BUILD_TYPE Release )
 
 #add_definitions ( -Wall ) # TODO(RG): probably remove this
-#find_package ( Qt5Widgets REQUIRED )
-#find_package ( Qt5Core REQUIRED )
-#find_package ( Qt5Gui REQUIRED )
 
 add_subdirectory( src )
 add_subdirectory( examples )

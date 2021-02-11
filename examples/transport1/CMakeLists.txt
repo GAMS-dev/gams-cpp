@@ -5,25 +5,24 @@ project(transport1 C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# TODO(RG): improve this!
 if (IS_IN_GAMS_DIR)
-    INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../../C/api"
+    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../C/api"
                         "${CMAKE_CURRENT_SOURCE_DIR}/../api")
     set(PATH ${CMAKE_CURRENT_SOURCE_DIR})
 else()
-    INCLUDE_DIRECTORIES("${GAMSPATH}/apifiles/C/api"
+    include_directories("${GAMSPATH}/apifiles/C/api"
                         "${GAMSPATH}/apifiles/C++/api")
 endif()
 
-IF (WIN32)
-  SET(VSVERSION "vs2019" CACHE STRING "Visual Studio version") # TODO(RG): change to 2019?
+if(WIN32)
+  set(VSVERSION "vs2019" CACHE STRING "Visual Studio version") # TODO(RG): change to 2019?
   message("TRANSPORT1 ${GAMSPATH}")
-  LINK_DIRECTORIES("${GAMSPATH}/apifiles/C++/lib/${VSVERSION}")
-ELSE()
-  LINK_DIRECTORIES("${GAMSPATH}/apifiles/C++/lib")
-ENDIF()
+  link_directories("${GAMSPATH}/apifiles/C++/lib/${VSVERSION}")
+else()
+  link_directories("${GAMSPATH}/apifiles/C++/lib")
+endif()
 
 add_executable(${PROJECT_NAME} "transport1.cpp")
 
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} gamscpp)
+target_link_libraries(${PROJECT_NAME} gamscpp)
 
