@@ -38,5 +38,5 @@ set( CMAKE_BUILD_TYPE Release )
 #find_package ( Qt5Gui REQUIRED )
 
 add_subdirectory( src )
-#add_subdirectory( examples )
+add_subdirectory( examples )
 #add_subdirectory( tests )

@@ -106,21 +106,23 @@ endif()
 # GAMS_BUILD is GAMS distrib build switch
 if(NOT DEFINED ${GAMS_BUILD_ENV})
     include_directories(${GAMS_DISTRIB_C_API})
-    #     SOURCES +=                                      \
-    #         $$GAMS_DISTRIB_C_API/gclgms.c               \
-    #         $$GAMS_DISTRIB_C_API/gmdcc.c                \
-    #         $$GAMS_DISTRIB_C_API/gcmt.c                 \
-    #         $$GAMS_DISTRIB_C_API/cfgmcc.c               \
-    #         $$GAMS_DISTRIB_C_API/gevmcc.c               \
-    #         $$GAMS_DISTRIB_C_API/gmomcc.c               \
-    #         $$GAMS_DISTRIB_C_API/optcc.c
+
+    set(SOURCE ${SOURCE} ${GAMS_DISTRIB_C_API}/gclgms.c
+                         ${GAMS_DISTRIB_C_API}/gmdcc.c
+                         ${GAMS_DISTRIB_C_API}/gcmt.c
+                         ${GAMS_DISTRIB_C_API}/cfgmcc.c
+                         ${GAMS_DISTRIB_C_API}/gevmcc.c
+                         ${GAMS_DISTRIB_C_API}/gmomcc.c
+                         ${GAMS_DISTRIB_C_API}/optcc.c)
+
     if(${USE_GAMS_DISTRIB_CPP_API_SRC})
-        include_directories(${GAMS_DISTRIB_CPP_API})
-    #    HEADERS += $$GAMS_DISTRIB_CPP_API/gamsoptions.h      \
-    #               $$GAMS_DISTRIB_CPP_API/gamsoptionsimpl.h
-    #    SOURCES +=                                      \
-    #        $$GAMS_DISTRIB_CPP_API/gamsoptions.cpp      \
-    #        $$GAMS_DISTRIB_CPP_API/gamsoptionsimpl.cpp
+        # include_directories(${GAMS_DISTRIB_CPP_API}) # TODO(RG): remove if not needed
+        set(HEADER ${HEADER} ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.h
+                             ${GAMS_DISTRIB_CPP_API}/gamsoptions.h
+                             PARENT_SCOPE)
+        set(SOURCE ${SOURCE} ${GAMS_DISTRIB_CPP_API}/gamsoptions.cpp
+                             ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.cpp
+                             PARENT_SCOPE)
     endif()
 else()
 add_definitions(HAVE_MUTEX)
@@ -147,22 +149,24 @@ set(GSYS_ENV ${GSYS})
         add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-declarations -m64)
         add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64)
     endif()
-    include_directories(${GPRODUCTS}/gclib ${GPRODUCTS}/apiwrap/gmdobj)
-    include_directories(${GPRODUCTS}/apiwrap/joat ${GPRODUCTS}/apiwrap/optobj)
 
-#     SOURCES +=                                                  \
-#         ${GPRODUCTS}/gclib/gclgms.c                            \
-#         ${GPRODUCTS}/gclib/gcmt.c                              \
-#         ${GPRODUCTS}/apiwrap/gmdobj/gmdcc.c                    \
-#         ${GPRODUCTS}/apiwrap/joat/cfgmcc.c                     \
-#         ${GPRODUCTS}/apiwrap/joat/gevmcc.c                     \
-#         ${GPRODUCTS}/apiwrap/joat/gmomcc.c                     \
-#         ${GPRODUCTS}/apiwrap/optobj/optcc.c
+    include_directories(${GPRODUCTS}/gclib
+                        ${GPRODUCTS}/apiwrap/gmdobj
+                        ${GPRODUCTS}/apiwrap/joat
+                        ${GPRODUCTS}/apiwrap/optobj)
+
+    set(SOURCE ${SOURCE} ${GPRODUCTS}/gclib/gclgms.c
+                         ${GPRODUCTS}/gclib/gcmt.c
+                         ${GPRODUCTS}/apiwrap/gmdobj/gmdcc.c
+                         ${GPRODUCTS}/apiwrap/joat/cfgmcc.c
+                         ${GPRODUCTS}/apiwrap/joat/gevmcc.c
+                         ${GPRODUCTS}/apiwrap/joat/gmomcc.c
+                         ${GPRODUCTS}/apiwrap/optobj/optcc.c)
 
     if (${USE_GAMS_DISTRIB_CPP_API_SRC})
         include_directories(${GPRODUCTS}/apiexamples/C++/api)
-#    ${GPRODUCTS}/apiexamples/C++/api/gamsoptions.cpp       \
-#    ${GPRODUCTS}/apiexamples/C++/api/gamsoptionsimpl.cpp
+        set(SOURCE ${SOURCE} ${GPRODUCTS}/apiexamples/C++/api/gamsoptions.cpp
+                             ${GPRODUCTS}/apiexamples/C++/api/gamsoptionsimpl.cpp)
     endif()
 endif()
 

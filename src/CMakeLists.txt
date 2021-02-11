@@ -26,9 +26,9 @@ set (IS_IN_GAMS_DIR false) # TODO(RG): make dynamic
 set (NO_WINDOWS_REGISTRY ${NO_WINDOWS_REGISTRY})
 include(../CMakeInclude.txt)
 
-set(GAMSPATH ${GAMSPATH} PARENT_SCOPE) # this is needed to make this var available to siblings
-
 # Coding Style: https://community.kde.org/Policies/CMake_Coding_Style
+set(GAMSPATH ${GAMSPATH} PARENT_SCOPE) # this is needed to make this var available to siblings
+add_definitions(-DMAKELIB)
 
 if(WIN32)
     if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
@@ -116,4 +116,5 @@ add_library(gamscpp SHARED
         generated/gamsoptionsimpl.cpp
         solveroptions.cpp solveroptions.h
         ../CHANGELOG ../version
+        ${SOURCE} ${HEADER}
 )
