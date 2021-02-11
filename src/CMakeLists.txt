@@ -29,7 +29,6 @@ include(../CMakeInclude.txt)
 set(GAMSPATH ${GAMSPATH} PARENT_SCOPE) # this is needed to make this var available to siblings
 
 # Coding Style: https://community.kde.org/Policies/CMake_Coding_Style
-# TODO(RG): read this https://www.cs.swarthmore.edu/~adanner/tips/cmake.php
 
 if(WIN32)
     if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
@@ -37,14 +36,14 @@ if(WIN32)
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "G++") # TODO(RG): find out how to check for G++: win32-g++
         add_definitions(-DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS)
     endif()
-#    add_library(user32) #TODO(RG): what is this
+#    find_library(USER32 user32) # TODO(RG): check if this is needed
 
 elseif(UNIX) # Apple or Linux
     add_library(dl)
     if (APPLE)
         set(MACOSX_DEPLOYMENT_TARGET 10.15)
     else() # UNIX
-        add_definitions(-Wl,-rpath,${ORIGIN},-rpath,${ORIGIN}/../../..\') # TODO(RG): check this
+        add_definitions(-Wl,-rpath,${ORIGIN},-rpath,${ORIGIN}/../../..) # TODO(RG): check this
         link_libraries(stdc++fs)
         if (CMAKE_CXX_COMPILER_ID STREQUAL "G++")
             execute_process(COMMAND "gcc -dumpversion" OUTPUT_VARIABLE GCCMAJORVERSION)
@@ -66,7 +65,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # original:
 # OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin"
 
-add_library(gamscpp
+add_library(gamscpp SHARED
         gams.h
         gamscheckpoint.cpp gamscheckpoint.h
         gamscheckpointimpl.cpp gamscheckpointimpl.h

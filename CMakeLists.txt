@@ -29,10 +29,10 @@ cmake_minimum_required( VERSION 3.1 )
 
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
-set( CMAKE_AUTOMOC ON )
+set( CMAKE_AUTOMOC OFF )
 set( CMAKE_BUILD_TYPE Release )
 
-add_definitions ( -Wall )
+#add_definitions ( -Wall ) # TODO(RG): probably remove this
 #find_package ( Qt5Widgets REQUIRED )
 #find_package ( Qt5Core REQUIRED )
 #find_package ( Qt5Gui REQUIRED )

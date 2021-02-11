@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.11)
 
 project(transport1 C CXX)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # TODO(RG): improve this!
@@ -16,7 +16,8 @@ else()
 endif()
 
 IF (WIN32)
-  SET(VSVERSION "vs2017" CACHE STRING "Visual Studio version") # TODO(RG): change to 2019?
+  SET(VSVERSION "vs2019" CACHE STRING "Visual Studio version") # TODO(RG): change to 2019?
+  message("TRANSPORT1 ${GAMSPATH}")
   LINK_DIRECTORIES("${GAMSPATH}/apifiles/C++/lib/${VSVERSION}")
 ELSE()
   LINK_DIRECTORIES("${GAMSPATH}/apifiles/C++/lib")
