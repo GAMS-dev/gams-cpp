@@ -23,7 +23,6 @@
 # SOFTWARE.
 #
 project( GAMS-cpp )
-message(--- START OF GAMS-CPP ---)
 
 cmake_minimum_required( VERSION 3.1 )
 
@@ -31,8 +30,6 @@ set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
 set( CMAKE_AUTOMOC OFF )
 set( CMAKE_BUILD_TYPE Release )
-
-#add_definitions ( -Wall ) # TODO(RG): probably remove this
 
 add_subdirectory( src )
 add_subdirectory( examples )

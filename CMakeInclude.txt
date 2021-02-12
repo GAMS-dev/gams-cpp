@@ -23,10 +23,8 @@
 # SOFTWARE.
 #
 set(PWD ${CMAKE_CURRENT_SOURCE_DIR}/..)
-message(PWD: ${PWD})
 
 function(ReadFromFileAndSet FILEPATH)
-    message(STATUS "Reading file: ${FILEPATH}")
     file(STRINGS ${FILEPATH} FileContents)
     foreach(NameAndValue ${FileContents})
 
@@ -43,12 +41,10 @@ function(ReadFromFileAndSet FILEPATH)
         # Find the value
         string(REPLACE "${Name}=" "" Value ${NameAndValue})
         # Set the variable
-        message("  -- Set: ${Name} = ${Value}")
         set(${Name} "${Value}" PARENT_SCOPE)
     endforeach()
 endfunction()
 
-message("-- START OF CMakeInclude.txt --")
 if(WIN32)
     # Switch off warnings caused by GAMS headers
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
@@ -56,15 +52,13 @@ endif()
 
 ReadFromFileAndSet(${PWD}/version)
 set(VERSION "${GAMSCPP_MAJOR_VERSION}.${GAMSCPP_MINOR_VERSION}.${GAMSCPP_PATCH_LEVEL}")
-message("  Version: ${VERSION}")
 
 # Project file version defines
 add_definitions(-DAPI_VERSION="${VERSION}")
 
 # GAMS_CORE_PATH is Jenkins build switch
 set(GAMS_CORE_TMP ${GAMS_CORE_PATH})
-if(true) # (NOT EXISTS ${PWD}/gamsinclude.pri) TODO(RG): see todo below
-    message(STATUS "gamsinclude.pri not existing.")
+if(NOT EXISTS ${PWD}/gamsinclude.pri)
     if(NOT DEFINED ${GAMS_CORE_TMP})
         if(APPLE)
             set(GAMS_DISTRIB /Library/Frameworks/GAMS.framework/Versions/${GAMS_DISTRIB_MAJOR}/Resources)       
@@ -88,7 +82,6 @@ GAMS_DISTRIB_C_API=${GAMS_DISTRIB}/apifiles/C/api\n\
 GAMS_DISTRIB_CPP_API=${GAMS_DISTRIB}/apifiles/C++/api")
         endif()
 
-        message(STATUS "Writing file: ${PWD}/gamsinclude.pri")
         file(WRITE ${PWD}/gamsinclude.pri ${GAMSINC})
     elseif()
         set(GAMSINC

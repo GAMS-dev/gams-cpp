@@ -5,14 +5,19 @@ project(transport10 C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../C/api"
-    "${CMAKE_CURRENT_SOURCE_DIR}/../api")
+if (IS_IN_GAMS_DIR)
+    set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
+else()
+    set(BASEPATH "${GAMSPATH}/apifiles/")
+endif()
+include_directories("${BASEPATH}/C/api"
+                    "${BASEPATH}/C++/api")
 
 if(WIN32)
   set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
-  link_directories("${CMAKE_CURRENT_SOURCE_DIR}/../lib/${VSVERSION}")
+  link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
 else()
-  link_directories("${CMAKE_CURRENT_SOURCE_DIR}/../lib")
+  link_directories("${BASEPATH}/C++/lib")
 endif()
 
 add_executable(${PROJECT_NAME} "transport10.cpp")
