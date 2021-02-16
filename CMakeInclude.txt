@@ -30,7 +30,7 @@ function(ReadFromFileAndSet FILEPATH)
 
         # Strip leading spaces
         string(REGEX REPLACE "^[ ]+" "" NameAndValue ${NameAndValue})
-        
+
         # ignore comments
         if(${NameAndValue} MATCHES "^#")
             continue()
@@ -61,14 +61,14 @@ set(GAMS_CORE_TMP ${GAMS_CORE_PATH})
 if(NOT EXISTS ${PWD}/gamsinclude.pri)
     if(NOT DEFINED ${GAMS_CORE_TMP})
         if(APPLE)
-            set(GAMS_DISTRIB /Library/Frameworks/GAMS.framework/Versions/${GAMS_DISTRIB_MAJOR}/Resources)       
+            set(GAMS_DISTRIB /Library/Frameworks/GAMS.framework/Versions/${GAMS_DISTRIB_MAJOR}/Resources)
             set(GAMSINC
 "GAMS_DISTRIB=${GAMS_DISTRIB}\n\
 GAMS_DISTRIB_C_API=${GAMS_DISTRIB}/apifiles/C/api\
 GAMS_DISTRIB_CPP_API=${GAMS_DISTRIB}/apifiles/C++/api")
 
         elseif(UNIX AND NOT APPLE)
-            set(GAMS_DISTRIB GAMS_DISTRIB=$ENV{HOME}/gams/gams${GAMS_DISTRIB_MAJOR}_linux_x64_64_sfx)
+            set(GAMS_DISTRIB $ENV{HOME}/gams/gams${GAMS_DISTRIB_MAJOR}.${GAMS_DISTRIB_MINOR}_linux_x64_64_sfx)
             set(GAMSINC
 "GAMS_DISTRIB=${GAMS_DISTRIB}\n\
 GAMS_DISTRIB_C_API=${GAMS_DISTRIB}/apifiles/C/api\n\
@@ -162,7 +162,6 @@ set(GSYS_ENV ${GSYS})
                              ${GPRODUCTS}/apiexamples/C++/api/gamsoptionsimpl.cpp)
     endif()
 endif()
-
 # create variable GAMSPATH from gamsinclude.pri
 file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../gamsinclude.pri" GAMSINCLUDE LIMIT_COUNT 1)
 string(REGEX MATCH "[^=]+$" GAMSPATH ${GAMSINCLUDE})
