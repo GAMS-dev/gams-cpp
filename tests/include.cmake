@@ -22,22 +22,33 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-include(../include.cmake)
-include_directories(. .. ../../src)
+link_libraries(../../bin/gamscpp)
 
-set(HEADER ${HEADER} ../testgamsobject.h
-                     ../../src/gamspath.h)
+if(UNIX) # Apple or Linux
+    link_libraries(dl)
+    if (APPLE)
+        set(MACOSX_DEPLOYMENT_TARGET 10.15)
+    else() # UNIX
+        set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath,${ORIGIN},-rpath,${ORIGIN}/../../..")
+        link_libraries(stdc++fs pthread)
+        if (CMAKE_CXX_COMPILER_ID STREQUAL "G++")
+            execute_process(COMMAND "gcc -dumpversion" OUTPUT_VARIABLE GCCMAJORVERSION)
+            if (${GCCMAJORVERSION} LESS 9)
+                set(CC "gcc-9")
+                set(CXX "g++-9")
+            endif()
+        endif()
+    endif()
+endif()
 
-set(SOURCE ${SOURCE} ../testgamsobject.cpp
-                     testgamscheckpoint.cpp
-                     ../../src/gamspath.cpp)
+# GoogleTest
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../src)
+if(NOT DEFINED ${GOOGLETEST_DIR})
+    set(GOOGLETEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../googletest")
+endif()
 
-get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-foreach(dir ${dirs})
-    message(STATUS "dir='${dir}'")
-endforeach()
+set(GTEST_SRCDIR ${GOOGLETEST_DIR}/googletest)
+include_directories(${GTEST_SRCDIR} ${GTEST_SRCDIR}/include)
+enable_testing()
 
-add_executable(testgamscheckpoint ${SOURCE})
-target_link_libraries(testgamscheckpoint gtest gtest_main)
-add_test(testgamscheckpoint testgamscheckpoint)
 

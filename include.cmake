@@ -109,7 +109,6 @@ if(NOT DEFINED ${GAMS_BUILD_ENV})
                          ${GAMS_DISTRIB_C_API}/optcc.c)
 
     if(${USE_GAMS_DISTRIB_CPP_API_SRC})
-        # include_directories(${GAMS_DISTRIB_CPP_API}) # TODO(RG): remove if not needed
         set(HEADER ${HEADER} ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.h
                              ${GAMS_DISTRIB_CPP_API}/gamsoptions.h
                              PARENT_SCOPE)

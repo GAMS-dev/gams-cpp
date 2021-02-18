@@ -24,7 +24,7 @@
 #
 set (IS_IN_GAMS_DIR false) # TODO(RG): make dynamic
 set (NO_WINDOWS_REGISTRY ${NO_WINDOWS_REGISTRY})
-include(../CMakeInclude.txt)
+include(../include.cmake)
 
 set(GAMSPATH ${GAMSPATH} PARENT_SCOPE) # this is needed to make this var available to siblings
 add_definitions(-DMAKELIB)
