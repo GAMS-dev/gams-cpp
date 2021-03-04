@@ -112,7 +112,7 @@ public:
     bool symbolLock();
     bool recordLock();
 
-    GAMSWorkspace mWs;
+    const GAMSWorkspace& mWs;
     std::string mInModelName;
     std::string mDatabaseName;
     bool mSuppressAutoDomainChecking = false;

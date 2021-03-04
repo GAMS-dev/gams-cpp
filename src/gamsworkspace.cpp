@@ -60,7 +60,7 @@ bool GAMSWorkspace::usingTmpWorkingDir() const
     return mImpl->usingTmpWorkingDir();
 }
 
-std::string GAMSWorkspace::registerDatabase(const string databaseName)
+std::string GAMSWorkspace::registerDatabase(const string databaseName) const
 {
     return mImpl->registerDatabase(databaseName);
 }

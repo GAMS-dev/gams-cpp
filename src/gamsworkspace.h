@@ -446,7 +446,7 @@ private:
     /// Add GAMSDatabase with given name to workspace
     /// \param databaseName Database name to add
     /// \returns True if everything worked, else false
-    std::string registerDatabase(const std::string databaseName = "");
+    std::string registerDatabase(const std::string databaseName = "") const;
     std::string nextDatabaseName() const;
 
     /// Registers a ModelInstance to workspace
