@@ -46,7 +46,7 @@ GAMSCheckpoint& GAMSCheckpoint::operator=(const GAMSCheckpoint& other)
     return *this;
 }
 
-GAMSCheckpoint::GAMSCheckpoint(const GAMSWorkspace &ws, const string &checkpointName)
+GAMSCheckpoint::GAMSCheckpoint(const GAMSWorkspace& ws, const string &checkpointName)
     : mImpl(make_shared<GAMSCheckpointImpl>(ws, checkpointName))
 {}
 

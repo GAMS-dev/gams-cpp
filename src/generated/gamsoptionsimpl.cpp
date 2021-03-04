@@ -45,7 +45,7 @@ const char* GAMSOptionsImpl::cGamsVersion = "0.0.0";
 const char* GAMSOptionsImpl::cGamsVersion = "32.0.0";
 #endif
 
-GAMSOptionsImpl::GAMSOptionsImpl(GAMSWorkspace& workspace, GAMSOptionsImpl* optFrom)
+GAMSOptionsImpl::GAMSOptionsImpl(const GAMSWorkspace &workspace, GAMSOptionsImpl* optFrom)
     : mWs(workspace)
 {
     setupOptionsBase();
@@ -61,7 +61,7 @@ GAMSOptionsImpl::GAMSOptionsImpl(GAMSWorkspace& workspace, GAMSOptionsImpl* optF
     }
 }
 
-GAMSOptionsImpl::GAMSOptionsImpl(GAMSWorkspace& workspace, const std::string& optFile)
+GAMSOptionsImpl::GAMSOptionsImpl(const GAMSWorkspace& workspace, const std::string& optFile)
     : mWs(workspace)
 {
     setupOptionsBase();

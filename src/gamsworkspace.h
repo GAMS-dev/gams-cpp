@@ -162,7 +162,7 @@ public:
     static int apiGoldRelNumber();
 
     /// Get the string used to prefix automatically generated files.
-    std::string scratchFilePrefix();
+    std::string scratchFilePrefix() const;
 
     /// Set the string used to prefix automatically generated files.
     /// \param prefix String used to prefix automatically generated files.
@@ -423,11 +423,11 @@ public:
     bool operator!=(const GAMSWorkspace& other) const;
 
     /// Get GAMS debug level.
-    GAMSEnum::DebugLevel debug();
+    GAMSEnum::DebugLevel debug() const;
 
     /// Get the GAMS log ID.
     /// \return Returns the GAMS log ID.
-    LogId logID();
+    LogId logID() const;
 
     /// Get all special values related to a system.
     double* specValues() const;
@@ -439,15 +439,15 @@ private:
     friend class GAMSCheckpointImpl;
     GAMSWorkspace(const std::shared_ptr<GAMSWorkspaceImpl>& impl);
 
-    GAMSDatabase addDatabaseFromGDXForcedName(std::string gdxFileName, std::string databaseName, std::string inModelName);
+    GAMSDatabase addDatabaseFromGDXForcedName(std::string gdxFileName, std::string databaseName, std::string inModelName) const;
 
-    bool usingTmpWorkingDir();
+    bool usingTmpWorkingDir() const;
 
     /// Add GAMSDatabase with given name to workspace
     /// \param databaseName Database name to add
     /// \returns True if everything worked, else false
     std::string registerDatabase(const std::string databaseName = "");
-    std::string nextDatabaseName();
+    std::string nextDatabaseName() const;
 
     /// Registers a ModelInstance to workspace
     /// \param databaseName Database name to add

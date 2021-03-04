@@ -42,24 +42,24 @@ GAMSDatabase::GAMSDatabase(const std::shared_ptr<GAMSDatabaseImpl>& impl)
 {}
 
 
-GAMSDatabase::GAMSDatabase(void* gmdPtr, GAMSWorkspace workspace)
+GAMSDatabase::GAMSDatabase(void* gmdPtr, const GAMSWorkspace& workspace)
     : mImpl(make_shared<GAMSDatabaseImpl>(gmdPtr, workspace))
 {}
 
 
-GAMSDatabase::GAMSDatabase(const string& gdxFileName, const GAMSWorkspace workspace, const double specValues[]
+GAMSDatabase::GAMSDatabase(const string& gdxFileName, const GAMSWorkspace& workspace, const double specValues[]
                            , const string& databaseName, const string& inModelName, bool forceName)
     : mImpl(make_shared<GAMSDatabaseImpl>(gdxFileName, workspace, specValues, databaseName, inModelName, forceName))
 {}
 
 
-GAMSDatabase::GAMSDatabase(const GAMSWorkspace workspace, const double specValues[], const string& databaseName
+GAMSDatabase::GAMSDatabase(const GAMSWorkspace& workspace, const double specValues[], const string& databaseName
                            , const string& inModelName, bool forceName)
     : mImpl(make_shared<GAMSDatabaseImpl>(workspace, specValues, databaseName, inModelName, forceName))
 {}
 
 
-GAMSDatabase::GAMSDatabase(const GAMSWorkspace workspace, const double specValues[], const GAMSDatabase &sourceDb
+GAMSDatabase::GAMSDatabase(const GAMSWorkspace& workspace, const double specValues[], const GAMSDatabase &sourceDb
                            , const string& dbName, const string& inModelName)
     : mImpl(make_shared<GAMSDatabaseImpl>(workspace, specValues, sourceDb.mImpl, dbName, inModelName))
 {}
@@ -308,7 +308,7 @@ int GAMSDatabase::getNrSymbols()
 GAMSWorkspace GAMSDatabase::workspace()
 {
     if (!mImpl) throw GAMSException("GAMSDatabase: The database has not been initialized.");
-    return GAMSWorkspace(this->mImpl->mWs);
+    return GAMSWorkspace(mImpl->mWs);
 }
 
 

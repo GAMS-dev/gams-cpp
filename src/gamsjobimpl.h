@@ -68,7 +68,7 @@ public:
     /// \param jobName Identifier of GAMSJob
     /// \param fileName File name
     /// \param checkpoint GAMSCheckpoint
-    GAMSJobImpl(GAMSWorkspace workspace, const std::string& mJobName, const std::string& mFileName,
+    GAMSJobImpl(const GAMSWorkspace& workspace, const std::string& mJobName, const std::string& mFileName,
                 const GAMSCheckpoint *checkpoint);
 
     bool operator!=(const GAMSJobImpl& other) const;
@@ -83,7 +83,7 @@ public:
     LogId logID() { return mWs.logID(); }
 
 public:
-    GAMSWorkspace mWs;
+    const GAMSWorkspace& mWs;
     std::string mJobName;
 
 private:

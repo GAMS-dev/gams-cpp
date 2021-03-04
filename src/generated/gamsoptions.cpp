@@ -44,11 +44,11 @@ namespace gams {
 GAMSOptions::~GAMSOptions()
 { }
 
-GAMSOptions::GAMSOptions(GAMSWorkspace workspace,  const GAMSOptions* optFrom)
+GAMSOptions::GAMSOptions(const GAMSWorkspace &workspace,  const GAMSOptions* optFrom)
     : mImpl(make_shared<GAMSOptionsImpl>(workspace, optFrom ? optFrom->mImpl.get() : nullptr))
 {}
 
-GAMSOptions::GAMSOptions(GAMSWorkspace workspace, const std::string& optFile)
+GAMSOptions::GAMSOptions(const GAMSWorkspace &workspace, const std::string& optFile)
     : mImpl(make_shared<GAMSOptionsImpl>(workspace, optFile))
 {}
 

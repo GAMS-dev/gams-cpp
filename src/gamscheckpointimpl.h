@@ -35,7 +35,7 @@ namespace gams {
 class GAMSCheckpointImpl
 {
 public:
-    GAMSCheckpointImpl(GAMSWorkspace workspace, const std::string& checkpointName = "");
+    GAMSCheckpointImpl(const GAMSWorkspace& workspace, const std::string& checkpointName = "");
     virtual ~GAMSCheckpointImpl();
 
     bool operator!=(const GAMSCheckpointImpl& other) const;

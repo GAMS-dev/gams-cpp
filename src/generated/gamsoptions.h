@@ -1589,8 +1589,8 @@ public:
 
 private:
     std::shared_ptr<GAMSOptionsImpl> mImpl;
-    GAMSOptions(GAMSWorkspace workspace, const GAMSOptions* optFrom);
-    GAMSOptions(GAMSWorkspace workspace, const std::string& optFile = "");
+    GAMSOptions(const GAMSWorkspace &workspace, const GAMSOptions* optFrom);
+    GAMSOptions(const GAMSWorkspace &workspace, const std::string& optFile = "");
     std::string restart();
     void setRestart(const std::string& value);
     std::string input();

@@ -50,12 +50,12 @@ GAMSWorkspace::GAMSWorkspace(const std::shared_ptr<GAMSWorkspaceImpl>& impl)
     DEB << "---- Entering GAMSWorkspace constructor ----";
 }
 
-GAMSDatabase GAMSWorkspace::addDatabaseFromGDXForcedName(string gdxFileName, string databaseName, string inModelName)
+GAMSDatabase GAMSWorkspace::addDatabaseFromGDXForcedName(string gdxFileName, string databaseName, string inModelName) const
 {
     return mImpl->addDatabaseFromGDXForcedName(*this, gdxFileName, databaseName, inModelName);
 }
 
-bool GAMSWorkspace::usingTmpWorkingDir()
+bool GAMSWorkspace::usingTmpWorkingDir() const
 {
     return mImpl->usingTmpWorkingDir();
 }
@@ -65,17 +65,17 @@ std::string GAMSWorkspace::registerDatabase(const string databaseName)
     return mImpl->registerDatabase(databaseName);
 }
 
-string GAMSWorkspace::nextDatabaseName()
+string GAMSWorkspace::nextDatabaseName() const
 {
     return mImpl->nextDatabaseName();
 }
 
-GAMSEnum::DebugLevel GAMSWorkspace::debug()
+GAMSEnum::DebugLevel GAMSWorkspace::debug() const
 {
     return mImpl->debug();
 }
 
-LogId GAMSWorkspace::logID()
+LogId GAMSWorkspace::logID() const
 {
     return mImpl->logID();
 }
@@ -89,27 +89,38 @@ GAMSWorkspace::GAMSWorkspace(const string& workingDir, const string& systemDir, 
     : mImpl(make_shared<GAMSWorkspaceImpl>(workingDir, systemDir, debug))
 {
     DEB << "---- Entering GAMSWorkspace constructor ----";
+    cout << "GAMSWorkspace 0" << endl;
 }
 
 GAMSWorkspace::GAMSWorkspace(const string& workingDir, const string& systemDir)
     : GAMSWorkspace(make_shared<GAMSWorkspaceImpl>(workingDir, systemDir, GAMSEnum::DebugLevel::Off))
-{}
+{
+    cout << "GAMSWorkspace wdir, sysdir, db off" << endl;
+}
 
 GAMSWorkspace::GAMSWorkspace(const string& workingDir, GAMSEnum::DebugLevel debug)
     : GAMSWorkspace(make_shared<GAMSWorkspaceImpl>(workingDir, "", debug))
-{}
+{
+    cout << "GAMSWorkspace wdir + debug" << endl;
+}
 
 GAMSWorkspace::GAMSWorkspace(GAMSEnum::DebugLevel debug)
     : GAMSWorkspace(make_shared<GAMSWorkspaceImpl>("", "", debug))
-{}
+{
+    cout << "GAMSWorkspace debug" << endl;
+}
 
 GAMSWorkspace::GAMSWorkspace()
     : GAMSWorkspace(make_shared<GAMSWorkspaceImpl>("", "", GAMSEnum::DebugLevel::Off))
-{}
+{
+    cout << "GAMSWorkspace DebugLvl Off" << endl;
+}
 
 GAMSWorkspace::GAMSWorkspace(const GAMSWorkspace& other)
     : GAMSWorkspace(other.mImpl)
-{}
+{
+    cout << "GAMSWorkspace copy" << endl;
+}
 
 GAMSWorkspace::GAMSWorkspace(const GAMSWorkspaceInfo& wsInfo)
     : GAMSWorkspace(wsInfo.workingDirectory(), wsInfo.systemDirectory(), wsInfo.debug())
@@ -117,6 +128,7 @@ GAMSWorkspace::GAMSWorkspace(const GAMSWorkspaceInfo& wsInfo)
 
 GAMSWorkspace::~GAMSWorkspace()
 {
+    cout << "~GAMSWorkspace" << endl;
     DEB << "---- Entering GAMSWorkspace destructor ----";
     //CW: no delete anymore
     //delete ws_;
@@ -411,7 +423,7 @@ int GAMSWorkspace::apiGoldRelNumber()
 }
 
 
-string GAMSWorkspace::scratchFilePrefix()
+string GAMSWorkspace::scratchFilePrefix() const
 {
     return mImpl->scratchFilePrefix();
 }
