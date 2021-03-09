@@ -44,8 +44,8 @@ namespace gams {
 class GAMSOptionsImpl
 {
 public:
-    GAMSOptionsImpl(const GAMSWorkspace &workspace, GAMSOptionsImpl* optFrom);
-    GAMSOptionsImpl(const GAMSWorkspace &workspace, const std::string& optFile = "");
+    GAMSOptionsImpl(GAMSWorkspace &workspace, GAMSOptionsImpl* optFrom);
+    GAMSOptionsImpl(GAMSWorkspace &workspace, const std::string& optFile = "");
     ~GAMSOptionsImpl();
 
     void setupOptionsBase();
@@ -659,7 +659,7 @@ public:
     int mIDirSize = 0;
     optHandle_t mOPT;
     cfgHandle_t mCFG;
-    const GAMSWorkspace& mWs;
+    GAMSWorkspace& mWs;
 
 };
 } // namespace gams

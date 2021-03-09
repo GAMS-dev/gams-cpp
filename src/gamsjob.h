@@ -145,7 +145,7 @@ public:
 private:
     friend class GAMSWorkspaceImpl;
     GAMSJob(const std::shared_ptr<::gams::GAMSJobImpl>& impl);
-    GAMSJob(const GAMSWorkspace& ws, const std::string& jobName = "", const std::string& fileName = ""
+    GAMSJob(gams::GAMSWorkspace &ws, const std::string& jobName = "", const std::string& fileName = ""
             , const GAMSCheckpoint *checkpoint = 0);
 
 private:

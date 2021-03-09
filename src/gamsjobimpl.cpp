@@ -40,7 +40,7 @@ using namespace std;
 
 namespace gams {
 
-GAMSJobImpl::GAMSJobImpl(const GAMSWorkspace& workspace,
+GAMSJobImpl::GAMSJobImpl(GAMSWorkspace& workspace,
                          const std::string& jobName,
                          const std::string& fileName,
                          const GAMSCheckpoint* checkpoint)

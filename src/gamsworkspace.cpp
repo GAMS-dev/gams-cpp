@@ -50,7 +50,7 @@ GAMSWorkspace::GAMSWorkspace(const std::shared_ptr<GAMSWorkspaceImpl>& impl)
     DEB << "---- Entering GAMSWorkspace constructor ----";
 }
 
-GAMSDatabase GAMSWorkspace::addDatabaseFromGDXForcedName(string gdxFileName, string databaseName, string inModelName) const
+GAMSDatabase GAMSWorkspace::addDatabaseFromGDXForcedName(string gdxFileName, string databaseName, string inModelName)
 {
     return mImpl->addDatabaseFromGDXForcedName(*this, gdxFileName, databaseName, inModelName);
 }
@@ -70,7 +70,7 @@ string GAMSWorkspace::nextDatabaseName() const
     return mImpl->nextDatabaseName();
 }
 
-GAMSEnum::DebugLevel GAMSWorkspace::debug() const
+GAMSEnum::DebugLevel GAMSWorkspace::debug()
 {
     return mImpl->debug();
 }

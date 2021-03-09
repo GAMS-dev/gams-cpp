@@ -79,13 +79,13 @@ public:
     GAMSDatabase addDatabase(GAMSWorkspace& ws, const GAMSDatabase& sourceDatabase, const std::string& databaseName = ""
             , const std::string& inModelName = "");
 
-    GAMSDatabase addDatabaseFromGDXForcedName(const GAMSWorkspace &ws, const std::string& gdxFileName
+    GAMSDatabase addDatabaseFromGDXForcedName(GAMSWorkspace &ws, const std::string& gdxFileName
                                               , const std::string& databaseName, const std::string& inModelName);
 
-    GAMSDatabase addDatabaseFromGDX(const GAMSWorkspace &ws, const std::string& gdxFileName, const std::string& databaseName = ""
+    GAMSDatabase addDatabaseFromGDX(GAMSWorkspace &ws, const std::string& gdxFileName, const std::string& databaseName = ""
             , const std::string& inModelName = "");
 
-    GAMSDatabase addDatabaseFromGMD(const GAMSWorkspace &ws, void* gmdPtr);
+    GAMSDatabase addDatabaseFromGMD(GAMSWorkspace &ws, void* gmdPtr);
 
     /// Registers a GAMSDatabase at the workspace
     /// \param databaseName Database name to add (empty: generate default name)
@@ -115,7 +115,7 @@ public:
 
     void xxxLib(std::string libname, std::string model);
 
-    GAMSEnum::DebugLevel debug() const { return mDebug; }
+    GAMSEnum::DebugLevel debug() { return mDebug; }
 
     GAMSPath workingDir() const {return mWorkingDir;}
     GAMSPath systemDir() const {return mSystemDir;}

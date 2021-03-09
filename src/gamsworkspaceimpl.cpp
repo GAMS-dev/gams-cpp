@@ -329,17 +329,17 @@ GAMSDatabase GAMSWorkspaceImpl::addDatabase(GAMSWorkspace& ws, const GAMSDatabas
     return GAMSDatabase(ws, specValues, sourceDatabase.mImpl, databaseName, inModelName);
 }
 
-GAMSDatabase GAMSWorkspaceImpl::addDatabaseFromGDXForcedName(const GAMSWorkspace& ws, const string& gdxFileName, const string& databaseName, const string& inModelName)
+GAMSDatabase GAMSWorkspaceImpl::addDatabaseFromGDXForcedName(GAMSWorkspace& ws, const string& gdxFileName, const string& databaseName, const string& inModelName)
 {
     return GAMSDatabase(gdxFileName, ws, specValues, databaseName, inModelName, true);
 }
 
-GAMSDatabase GAMSWorkspaceImpl::addDatabaseFromGDX(const GAMSWorkspace& ws, const string& gdxFileName, const string& databaseName, const string& inModelName)
+GAMSDatabase GAMSWorkspaceImpl::addDatabaseFromGDX(GAMSWorkspace& ws, const string& gdxFileName, const string& databaseName, const string& inModelName)
 {
     return GAMSDatabase(gdxFileName, ws, specValues, databaseName, inModelName);
 }
 
-GAMSDatabase GAMSWorkspaceImpl::addDatabaseFromGMD(const GAMSWorkspace& ws, void* gmdPtr)
+GAMSDatabase GAMSWorkspaceImpl::addDatabaseFromGMD(GAMSWorkspace& ws, void* gmdPtr)
 {
     return GAMSDatabase(gmdPtr, ws);
 }

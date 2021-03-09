@@ -423,7 +423,7 @@ public:
     bool operator!=(const GAMSWorkspace& other) const;
 
     /// Get GAMS debug level.
-    GAMSEnum::DebugLevel debug() const;
+    GAMSEnum::DebugLevel debug();
 
     /// Get the GAMS log ID.
     /// \return Returns the GAMS log ID.
@@ -439,7 +439,7 @@ private:
     friend class GAMSCheckpointImpl;
     GAMSWorkspace(const std::shared_ptr<GAMSWorkspaceImpl>& impl);
 
-    GAMSDatabase addDatabaseFromGDXForcedName(std::string gdxFileName, std::string databaseName, std::string inModelName) const;
+    GAMSDatabase addDatabaseFromGDXForcedName(std::string gdxFileName, std::string databaseName, std::string inModelName);
 
     bool usingTmpWorkingDir() const;
 

@@ -50,7 +50,7 @@ GAMSJob::GAMSJob(const std::shared_ptr<GAMSJobImpl>& impl)
 {
 }
 
-GAMSJob::GAMSJob(const GAMSWorkspace& ws, const string& jobName, const string& fileName, const GAMSCheckpoint* checkpoint)
+GAMSJob::GAMSJob(GAMSWorkspace& ws, const string& jobName, const string& fileName, const GAMSCheckpoint* checkpoint)
     : mImpl(make_shared<GAMSJobImpl>(ws, jobName, fileName, checkpoint))
 {}
 
