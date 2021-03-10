@@ -437,7 +437,6 @@ private:
     friend class GAMSJobImpl;
     friend class GAMSDatabaseImpl;
     friend class GAMSCheckpointImpl;
-    GAMSWorkspace(const std::shared_ptr<GAMSWorkspaceImpl>& impl);
 
     GAMSDatabase addDatabaseFromGDXForcedName(std::string gdxFileName, std::string databaseName, std::string inModelName);
 

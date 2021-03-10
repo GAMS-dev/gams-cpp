@@ -61,7 +61,6 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const GAMSWorkspaceImpl& ws)
 GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& systemDir, GAMSEnum::DebugLevel debug)
     : mDebug(debug)
 {
-    cout << "GAMSWorkspaceImpl::GAMSWorkspaceImpl" << endl;
     LoggerPool::instance().registerLogger(static_cast<LogId>(this), mDebug, stdout);
     DEB << "---- Entering GAMSWorkspaceImpl constructor ----";
 
@@ -163,7 +162,6 @@ GAMSWorkspaceImpl::~GAMSWorkspaceImpl()
             MSG << "Error on cleaning workspace.";
         }
     }
-    cout << "~GAMSWorkspaceImpl()" << endl;
     LoggerPool::instance().registerLogger(static_cast<LogId>(this), mDebug, stdout);
 }
 

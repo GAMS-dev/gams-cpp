@@ -34,4 +34,3 @@ set( CMAKE_BUILD_TYPE Debug ) # TODO(RG): when finished change this to Release
 add_subdirectory( src )
 #add_subdirectory( examples )
 #add_subdirectory( tests )
-add_subdirectory( bug/src )

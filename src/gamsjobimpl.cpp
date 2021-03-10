@@ -70,8 +70,7 @@ GAMSDatabase GAMSJobImpl::outDB()
 }
 
 GAMSJobImpl::~GAMSJobImpl() {
-    if (mCheckpointStart != nullptr)
-        delete mCheckpointStart; // this is intended to only free the wrapper, not the *Impl if used anywhere
+    delete mCheckpointStart; // this is intended to only free the wrapper, not the *Impl if used anywhere
 }
 
 void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostream* output, bool createOutDb,

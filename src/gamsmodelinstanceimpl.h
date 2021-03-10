@@ -83,7 +83,7 @@ public:
 public:
     gevHandle_t mGEV;
     gmoHandle_t mGMO;
-    GAMSCheckpoint& mCheckpoint;
+    GAMSCheckpoint mCheckpoint;
     std::string mModelInstanceName;
     GAMSDatabase mSyncDb;
 

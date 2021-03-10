@@ -122,7 +122,6 @@ void GAMSModelInstance::solve(GAMSEnum::SymbolUpdateType updateType)
     mImpl->solve(updateType, nullptr, GAMSModelInstanceOpt());
 }
 
-
 GAMSEnum::ModelStat GAMSModelInstance::modelStatus()
 {
     if (!mImpl) throw GAMSException("GAMSModelInstance: This model instance has not been initialized.");

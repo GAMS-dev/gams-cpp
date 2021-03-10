@@ -36,7 +36,7 @@ class GAMSCheckpointImpl
 {
 public:
     GAMSCheckpointImpl(const GAMSWorkspace& workspace, const std::string& checkpointName = "");
-    virtual ~GAMSCheckpointImpl();
+    ~GAMSCheckpointImpl();
 
     bool operator!=(const GAMSCheckpointImpl& other) const;
     bool operator==(const GAMSCheckpointImpl& other) const;
