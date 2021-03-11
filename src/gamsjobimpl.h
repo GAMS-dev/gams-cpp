@@ -83,7 +83,7 @@ public:
     LogId logID() { return mWs.logID(); }
 
 public:
-    GAMSWorkspace& mWs;
+    GAMSWorkspace mWs;
     std::string mJobName;
 
 private:

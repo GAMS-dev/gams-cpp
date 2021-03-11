@@ -659,7 +659,7 @@ public:
     int mIDirSize = 0;
     optHandle_t mOPT;
     cfgHandle_t mCFG;
-    GAMSWorkspace& mWs;
+    GAMSWorkspace mWs;
 
 };
 } // namespace gams
