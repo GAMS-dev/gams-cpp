@@ -40,7 +40,7 @@ GAMSCheckpoint::GAMSCheckpoint(const gams::GAMSCheckpoint &other)
     : mImpl(other.mImpl)
 {}
 
-GAMSCheckpoint& GAMSCheckpoint::operator=(const GAMSCheckpoint& other)
+GAMSCheckpoint& GAMSCheckpoint::operator=(const GAMSCheckpoint &other)
 {
     mImpl = other.mImpl;
     return *this;
@@ -50,7 +50,7 @@ GAMSCheckpoint::GAMSCheckpoint(const GAMSWorkspace &ws, const string &checkpoint
     : mImpl(make_shared<GAMSCheckpointImpl>(ws, checkpointName))
 {}
 
-GAMSModelInstance GAMSCheckpoint::addModelInstance(const std::string& modelInstanceName)
+GAMSModelInstance GAMSCheckpoint::addModelInstance(const std::string &modelInstanceName)
 {
     if (!mImpl) throw GAMSException("GAMSCheckpoint: The checkpoint has not been initialized.");
     return mImpl->addModelInstance(*this, modelInstanceName);

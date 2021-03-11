@@ -31,7 +31,7 @@ namespace gams {
 
 using namespace std;
 
-GAMSCheckpointImpl::GAMSCheckpointImpl(GAMSWorkspace workspace, const string& checkpointName)
+GAMSCheckpointImpl::GAMSCheckpointImpl(const GAMSWorkspace& workspace, const string& checkpointName)
    : mWs(workspace), mName(checkpointName)
 {
     DEB << "---- Entering GAMSCheckpointImpl constructor ----";

@@ -25,7 +25,7 @@
 
 include(include.cmake)
 
-add_subdirectory(testgamscheckpoint)
+#add_subdirectory(testgamscheckpoint)
 #add_subdirectory(testgamsdatabase)
 #add_subdirectory(testgamsdatabasedomainviolation)
 #add_subdirectory(testgamsdatabaseiter)

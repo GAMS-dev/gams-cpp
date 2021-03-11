@@ -52,7 +52,7 @@ public:
 
     /// Copy constructor.
     /// \param other GAMSCheckpoint used to initialize the new GAMSCheckpoint.
-    GAMSCheckpoint(const GAMSCheckpoint& other);
+    GAMSCheckpoint(const GAMSCheckpoint &other);
 
     /// Constructor.
     /// \param ws GAMSWorkspace containing GAMSCheckpoint.

@@ -39,7 +39,7 @@ using namespace std;
 namespace gams {
 
 
-GAMSDatabaseImpl::GAMSDatabaseImpl(const string& gdxFileName, const GAMSWorkspace workspace, const double specValues[]
+GAMSDatabaseImpl::GAMSDatabaseImpl(const string& gdxFileName, GAMSWorkspace& workspace, const double specValues[]
                                    , const string& databaseName, const string& inModelName, bool forceName)
     : GAMSDatabaseImpl::GAMSDatabaseImpl(workspace, specValues, databaseName, inModelName, forceName)
 {
@@ -57,7 +57,7 @@ GAMSDatabaseImpl::GAMSDatabaseImpl(const string& gdxFileName, const GAMSWorkspac
 }
 
 
-GAMSDatabaseImpl::GAMSDatabaseImpl(GAMSWorkspace workspace, const double specValues[], const std::string& databaseName
+GAMSDatabaseImpl::GAMSDatabaseImpl(GAMSWorkspace& workspace, const double specValues[], const std::string& databaseName
                                    , const std::string& inModelName, bool forceName)
     : mWs(workspace), mDatabaseName(databaseName)
 {
@@ -90,7 +90,7 @@ GAMSDatabaseImpl::GAMSDatabaseImpl(GAMSWorkspace workspace, const double specVal
 }
 
 
-GAMSDatabaseImpl::GAMSDatabaseImpl(const GAMSWorkspace workspace, const double specValues[]
+GAMSDatabaseImpl::GAMSDatabaseImpl(GAMSWorkspace& workspace, const double specValues[]
                                    , std::shared_ptr<GAMSDatabaseImpl> sourceDb, const string& databaseName
                                    , const string& inModelName)
     : GAMSDatabaseImpl(workspace, specValues, databaseName, inModelName)
@@ -100,7 +100,7 @@ GAMSDatabaseImpl::GAMSDatabaseImpl(const GAMSWorkspace workspace, const double s
 }
 
 
-GAMSDatabaseImpl::GAMSDatabaseImpl(void* gmdPtr, GAMSWorkspace workspace)
+GAMSDatabaseImpl::GAMSDatabaseImpl(void* gmdPtr, GAMSWorkspace& workspace)
     :mWs(workspace)
 {
     DEB << "---- Entering GAMSDatabaseImpl constructor ----";

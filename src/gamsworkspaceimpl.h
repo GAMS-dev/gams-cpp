@@ -115,7 +115,7 @@ public:
 
     void xxxLib(std::string libname, std::string model);
 
-    GAMSEnum::DebugLevel debug() const {return mDebug;}
+    GAMSEnum::DebugLevel debug() { return mDebug; }
 
     GAMSPath workingDir() const {return mWorkingDir;}
     GAMSPath systemDir() const {return mSystemDir;}
