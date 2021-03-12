@@ -22,10 +22,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-
 include(include.cmake)
 
-#add_subdirectory(testgamscheckpoint)
+add_subdirectory(testgamscheckpoint)
 #add_subdirectory(testgamsdatabase)
 #add_subdirectory(testgamsdatabasedomainviolation)
 #add_subdirectory(testgamsdatabaseiter)
@@ -51,4 +50,3 @@ include(include.cmake)
 #add_subdirectory(testgamsvariablerecord)
 #add_subdirectory(testgamsworkspace)
 #add_subdirectory(testgamsworkspaceinfo)
-

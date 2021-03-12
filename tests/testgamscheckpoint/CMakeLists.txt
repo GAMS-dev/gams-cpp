@@ -23,21 +23,14 @@
 # SOFTWARE.
 #
 include(../include.cmake)
-include_directories(. .. ../../src)
+include_directories(. .. ../../src ../../src/generated)
 
-set(HEADER ${HEADER} ../testgamsobject.h
-                     ../../src/gamspath.h)
+set(HEADER ${HEADER} ../testgamsobject.h)
 
 set(SOURCE ${SOURCE} ../testgamsobject.cpp
-                     testgamscheckpoint.cpp
-                     ../../src/gamspath.cpp)
-
-get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-foreach(dir ${dirs})
-    message(STATUS "dir='${dir}'")
-endforeach()
+                     testgamscheckpoint.cpp)
 
 add_executable(testgamscheckpoint ${SOURCE})
-target_link_libraries(testgamscheckpoint gtest gtest_main)
+target_link_libraries(testgamscheckpoint gtest gamscpp)
 add_test(testgamscheckpoint testgamscheckpoint)
 

@@ -22,15 +22,35 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-link_libraries(../../bin/gamscpp)
+project(tests)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+
+if (IS_IN_GAMS_DIR)
+    set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
+else()
+    set(BASEPATH "${GAMSPATH}/apifiles/")
+endif()
+include_directories("${BASEPATH}/C/api"
+                    "${BASEPATH}/C++/api")
+if(WIN32)
+    set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
+    link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
+else()
+    link_directories("${BASEPATH}/C++/lib")
+endif()
 
 if(UNIX) # Apple or Linux
-    link_libraries(dl)
+#    link_libraries(dl) # TODO(RG): this can maybe be removed
     if (APPLE)
         set(MACOSX_DEPLOYMENT_TARGET 10.15)
     else() # UNIX
-        set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath,${ORIGIN},-rpath,${ORIGIN}/../../..")
-        link_libraries(stdc++fs pthread)
+# TODO(RG): the following can probably be removed
+#        set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath,${ORIGIN},-rpath,${ORIGIN}/../../..")
+#        link_libraries(stdc++fs pthread)
         if (CMAKE_CXX_COMPILER_ID STREQUAL "G++")
             execute_process(COMMAND "gcc -dumpversion" OUTPUT_VARIABLE GCCMAJORVERSION)
             if (${GCCMAJORVERSION} LESS 9)
@@ -49,6 +69,10 @@ endif()
 
 set(GTEST_SRCDIR ${GOOGLETEST_DIR}/googletest)
 include_directories(${GTEST_SRCDIR} ${GTEST_SRCDIR}/include)
+
+file(GLOB_RECURSE google_test_headers ${GTEST_SRCDIR}/include/*.h)
+add_library(gtest STATIC ${GTEST_SRCDIR}/src/gtest-all.cc ${GTEST_SRCDIR}/src/gtest_main.cc ${google_test_headers})
+
 enable_testing()
 
 
