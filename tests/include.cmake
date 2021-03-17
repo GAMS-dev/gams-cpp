@@ -22,18 +22,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-project(tests)
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-
-if (IS_IN_GAMS_DIR)
+if (NOT DEFINED ${GAMS_BUILD_ENV})
     set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 else()
     set(BASEPATH "${GAMSPATH}/apifiles/")
 endif()
+
 include_directories("${BASEPATH}/C/api"
                     "${BASEPATH}/C++/api")
 if(WIN32)
@@ -61,6 +59,7 @@ if(UNIX) # Apple or Linux
     endif()
 endif()
 
+#TODO(RG): move this to its own subproject
 # GoogleTest
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../src)
 if(NOT DEFINED ${GOOGLETEST_DIR})

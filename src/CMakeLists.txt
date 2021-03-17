@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-set (IS_IN_GAMS_DIR false) # TODO(RG): make dynamic
 set (NO_WINDOWS_REGISTRY ${NO_WINDOWS_REGISTRY})
 include(../include.cmake)
 
@@ -78,7 +77,7 @@ add_library(gamscpp SHARED
         gamsexceptionexecution.cpp gamsexceptionexecution.h
         gamsjob.cpp gamsjob.h
         gamsjobimpl.cpp gamsjobimpl.h
-        gamslib_global.cpp gamslib_global.h
+        gamslib_global.h
         gamslog.cpp gamslog.h
         gamsmodelinstance.cpp gamsmodelinstance.h
         gamsmodelinstanceimpl.cpp gamsmodelinstanceimpl.h gamsmodelinstanceimpl_p.cpp

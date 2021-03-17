@@ -25,8 +25,6 @@
 include(../include.cmake)
 include_directories(. .. ../../src ../../src/generated)
 
-set(HEADER ${HEADER} ../testgamsobject.h)
-
 set(SOURCE ${SOURCE} ../testgamsobject.cpp
                      testgamscheckpoint.cpp)
 

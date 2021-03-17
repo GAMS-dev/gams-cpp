@@ -22,7 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-include(include.cmake)
+project(tests)
 
 add_subdirectory(testgamscheckpoint)
 #add_subdirectory(testgamsdatabase)

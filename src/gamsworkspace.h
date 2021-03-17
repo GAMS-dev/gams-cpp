@@ -26,8 +26,8 @@
 #ifndef GAMSWORKSPACE_H
 #define GAMSWORKSPACE_H
 
-#include "gamslib_global.h"
 #include <memory>
+#include "gamslib_global.h"
 #include "gamsenum.h"
 #include "gamsworkspaceinfo.h"
 
