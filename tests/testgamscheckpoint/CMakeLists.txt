@@ -26,6 +26,7 @@ include(../include.cmake)
 include_directories(. .. ../../src ../../src/generated)
 
 set(SOURCE ${SOURCE} ../testgamsobject.cpp
+                     ../../src/gamspath.cpp
                      testgamscheckpoint.cpp)
 
 add_executable(testgamscheckpoint ${SOURCE})
