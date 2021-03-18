@@ -26,6 +26,7 @@ include(../include.cmake)
 include_directories(. .. ../../src ../../src/generated)
 
 set(SOURCE ${SOURCE} ../testgamsobject.cpp
+                     ../../src/gamspath.cpp
                      testgamsdatabase.cpp)
 
 add_executable(testgamsdatabase ${SOURCE})

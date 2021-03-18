@@ -24,8 +24,10 @@
 #
 project(tests)
 
+add_subdirectory(googletest)
+
 add_subdirectory(testgamscheckpoint)
-#add_subdirectory(testgamsdatabase)
+add_subdirectory(testgamsdatabase)
 #add_subdirectory(testgamsdatabasedomainviolation)
 #add_subdirectory(testgamsdatabaseiter)
 #add_subdirectory(testgamsdomain)
