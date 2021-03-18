@@ -32,4 +32,3 @@ set(SOURCE ${SOURCE} ../testgamsobject.cpp
 add_executable(testgamsdatabase ${SOURCE})
 target_link_libraries(testgamsdatabase gtest gamscpp)
 add_test(testgamsdatabase testgamsdatabase)
-

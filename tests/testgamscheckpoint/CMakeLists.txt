@@ -32,4 +32,3 @@ set(SOURCE ${SOURCE} ../testgamsobject.cpp
 add_executable(testgamscheckpoint ${SOURCE})
 target_link_libraries(testgamscheckpoint gtest gamscpp)
 add_test(testgamscheckpoint testgamscheckpoint)
-

@@ -27,8 +27,6 @@
 #include "gamsexception.h"
 #include "testgamsobject.h"
 
-#include <QtTest>
-
 using namespace gams;
 
 class TestGAMSException: public TestGAMSObject

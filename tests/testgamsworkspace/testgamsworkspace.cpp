@@ -1106,7 +1106,7 @@ class ParameterizedTestAddOptions_OptFile
 INSTANTIATE_TEST_SUITE_P(testAddOptions_OptFile,
                         ParameterizedTestAddOptions_OptFile,
                         ::testing::Values (
-                            std::make_tuple("valid_optfile"  , "test.pf", true),
+                            std::make_tuple("valid_optfile"  , "validoptionfile.pf", true),
                             std::make_tuple("invalid_optfile", "ThereWillExistThisFile.pf", false)
                         ));
 
@@ -1118,7 +1118,7 @@ TEST_P(ParameterizedTestAddOptions_OptFile, testAddOptions_OptFile) {
     if (finalPath.mkDir())
         workdir = finalPath;
 
-    std::string filename="test.pf";
+    std::string filename="validoptionfile.pf";
     std::ofstream file;
     file.open(GAMSPath(workdir, filename), std::ios::out);
 
@@ -1156,7 +1156,7 @@ TEST_P(ParameterizedTestAddOptions_OptFile, testAddOptions_OptFile) {
 
     std::string appDir;
 #ifdef _WIN32
-    wchar_t result[MAX_PATH];
+    char result[MAX_PATH];
     appDir =  GetModuleFileName(NULL, result, MAX_PATH);
 #else
     char result[ PATH_MAX ];

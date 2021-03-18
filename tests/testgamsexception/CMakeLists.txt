@@ -1,163 +1,34 @@
-# Generated from testgamsexception.pro.
+#
+# GAMS - General Algebraic Modeling System C++ API
+#
+# Copyright (c) 2017-2020 GAMS Software GmbH <support@gams.com>
+# Copyright (c) 2017-2020 GAMS Development Corp. <support@gams.com>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+include(../include.cmake)
+include_directories(. .. ../../src ../../src/generated)
 
-#####################################################################
-## testgamsexception Binary:
-#####################################################################
+set(SOURCE ${SOURCE} ../testgamsobject.cpp
+                     ../../src/gamspath.cpp
+                     testgamsexception.cpp)
 
-qt_add_executable(testgamsexception
-    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin"
-    SOURCES
-        ../testgamsobject.cpp ../testgamsobject.h
-        testgamsexception.cpp
-    DEFINES
-        API_VERSION=\\\"'0'.'11'.'0'\\\"
-    INCLUDE_DIRECTORIES
-        ..
-        ../../src
-        ../../src/generated
-    PUBLIC_LIBRARIES
-        Qt::Test
-)
-
-#### Keys ignored in scope 1:.:.:testgamsexception.pro:<TRUE>:
-# TEMPLATE = "app"
-
-## Scopes:
-#####################################################################
-
-qt_extend_target(testgamsexception CONDITION WIN32
-    SOURCES
-        ../../src/gamspath.cpp
-    DEFINES
-        _CRT_SECURE_NO_WARNINGS
-    PUBLIC_LIBRARIES
-        # Remove: L../../bin/
-        gamscpp
-        user32
-)
-
-qt_extend_target(testgamsexception CONDITION UNIX
-    PUBLIC_LIBRARIES
-        # Remove: L../../bin
-        dl
-        gamscpp
-)
-
-qt_extend_target(testgamsexception CONDITION UNIX AND NOT MACOS
-    PUBLIC_LIBRARIES
-        stdc++fs
-)
-
-#### Keys ignored in scope 5:.:..:../tests.pri:NOT MACOS:
-# GCCMAJORVERSION = "$$system("gcc -dumpversion")"
-
-#### Keys ignored in scope 6:.:..:../tests.pri:(GCCMAJORVERSION LESS 9):
-# QMAKE_CC = "gcc-9"
-# QMAKE_CXX = "g++-9"
-
-#### Keys ignored in scope 7:.:..:../tests.pri:MACOS:
-# QMAKE_MACOSX_DEPLOYMENT_TARGET = "10.15"
-
-#### Keys ignored in scope 8:.:..:../tests.pri:GOOGLETEST_DIR_ISEMPTY:
-# GOOGLETEST_DIR = "$$(GOOGLETEST_DIR)"
-
-#### Keys ignored in scope 11:.:..:../tests.pri:NOT GOOGLETEST_DIR_ISEMPTY:
-# GMOCK_SRCDIR = "$$GOOGLETEST_DIR/googlemock"
-# GTEST_SRCDIR = "$$GOOGLETEST_DIR/googletest"
-
-#### Keys ignored in scope 14:.:..:../tests.pri:EXISTS /usr/src/gtest:
-# GTEST_SRCDIR = "/usr/src/gtest"
-
-#### Keys ignored in scope 15:.:..:../tests.pri:EXISTS /usr/src/gmock:
-# GMOCK_SRCDIR = "/usr/src/gmock"
-
-qt_extend_target(testgamsexception CONDITION NOT GTEST_SRCDIR_ISEMPTY
-    SOURCES
-        /src/gtest-all.cc
-    INCLUDE_DIRECTORIES
-        /include
-)
-
-#### Keys ignored in scope 22:.:../..:../../gamsdependency.pri:MACOS:
-# GAMSINC = "GAMS_DISTRIB=/Library/Frameworks/GAMS.framework/Versions/'$$GAMS_DISTRIB_MAJOR'/Resources" "GAMS_DISTRIB_C_API=\$$GAMS_DISTRIB/apifiles/C/api" "GAMS_DISTRIB_CPP_API=\$$GAMS_DISTRIB/apifiles/C++/api"
-
-#### Keys ignored in scope 23:.:../..:../../gamsdependency.pri:UNIX AND NOT MACOS:
-# GAMSINC = "GAMS_DISTRIB=$$(HOME)/gams/gams'$$GAMS_DISTRIB_MAJOR'.'$$GAMS_DISTRIB_MINOR'_linux_x64_64_sfx" "GAMS_DISTRIB_C_API=\$$GAMS_DISTRIB/apifiles/C/api" "GAMS_DISTRIB_CPP_API=\$$GAMS_DISTRIB/apifiles/C++/api"
-
-#### Keys ignored in scope 24:.:../..:../../gamsdependency.pri:WIN32:
-# GAMSINC = "GAMS_DISTRIB=C:/GAMS/win64/'$$GAMS_DISTRIB_MAJOR'.'$$GAMS_DISTRIB_MINOR'" "GAMS_DISTRIB_C_API=\$$GAMS_DISTRIB/apifiles/C/api" "GAMS_DISTRIB_CPP_API=\$$GAMS_DISTRIB/apifiles/C++/api"
-
-#### Keys ignored in scope 25:.:../..:../../gamsdependency.pri:else:
-# GAMSINC = "GAMS_DISTRIB=$$(GAMS_CORE_PATH)" "GAMS_DISTRIB_C_API=\$$GAMS_DISTRIB/apifiles/C/api" "GAMS_DISTRIB_CPP_API=\$$GAMS_DISTRIB/apifiles/C++/api"
-
-qt_extend_target(testgamsexception CONDITION GAMS_BUILD_ENV___equals___
-    SOURCES
-        /cfgmcc.c
-        /gclgms.c
-        /gcmt.c
-        /gevmcc.c
-        /gmdcc.c
-        /gmomcc.c
-        /optcc.c
-)
-
-qt_extend_target(testgamsexception CONDITION NOT GAMS_BUILD_ENV___equals___
-    SOURCES
-        $ENV{GPRODUCTS}/apiwrap/gmdobj/gmdcc.c
-        $ENV{GPRODUCTS}/apiwrap/joat/cfgmcc.c
-        $ENV{GPRODUCTS}/apiwrap/joat/gevmcc.c
-        $ENV{GPRODUCTS}/apiwrap/joat/gmomcc.c
-        $ENV{GPRODUCTS}/apiwrap/optobj/optcc.c
-        $ENV{GPRODUCTS}/gclib/gclgms.c
-        $ENV{GPRODUCTS}/gclib/gcmt.c
-    DEFINES
-        HAVE_MUTEX
-    INCLUDE_DIRECTORIES
-        $ENV{GPRODUCTS}/apiwrap/gmdobj
-        $ENV{GPRODUCTS}/apiwrap/joat
-        $ENV{GPRODUCTS}/apiwrap/optobj
-        $ENV{GPRODUCTS}/gclib
-)
-
-#### Keys ignored in scope 29:.:../..:../../gamsdependency.pri:else:
-# GSYS_ENV = "$$(GSYS)"
-
-qt_extend_target(testgamsexception CONDITION GSYS_ENV___equals___wei AND NOT GAMS_BUILD_ENV___equals___
-    DEFINES
-        CIA_WEX
-        WEI
-)
-
-qt_extend_target(testgamsexception CONDITION GSYS_ENV___equals___vs8 AND NOT GAMS_BUILD_ENV___equals___
-    DEFINES
-        CIA_WIN
-        VS8
-)
-
-qt_extend_target(testgamsexception CONDITION GSYS_ENV___equals___leg AND NOT GAMS_BUILD_ENV___equals___
-    DEFINES
-        CIA_LEX
-        LEG
-    COMPILE_OPTIONS
-        -Werror-implicit-function-declaration
-        -Wmissing-declarations
-        -Wreturn-type
-        -m64
-)
-
-#### Keys ignored in scope 32:.:../..:../../gamsdependency.pri:GSYS_ENV___equals___leg:
-# QMAKE_CFLAGS = "-Werror-implicit-function-declaration" "-Wreturn-type" "-Wmissing-prototypes" "-Wmissing-declarations" "-m64"
-
-qt_extend_target(testgamsexception CONDITION GSYS_ENV___equals___deg AND NOT GAMS_BUILD_ENV___equals___
-    DEFINES
-        CIA_DEX
-        DEG
-    COMPILE_OPTIONS
-        -Werror-implicit-function-declaration
-        -Wmissing-declarations
-        -Wreturn-type
-        -m64
-)
-
-#### Keys ignored in scope 33:.:../..:../../gamsdependency.pri:GSYS_ENV___equals___deg:
-# QMAKE_CFLAGS = "-Werror-implicit-function-declaration" "-Wreturn-type" "-Wmissing-prototypes" "-Wmissing-declarations" "-m64"
+add_executable(testgamsexception ${SOURCE})
+target_link_libraries(testgamsexception gtest gamscpp)
+add_test(testgamsexception testgamsexception)
