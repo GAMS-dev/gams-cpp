@@ -21,19 +21,19 @@ pipeline {
                     agent { label 'master' }
                     environment {
                         GAMS_CORE_PATH="${GAMS_FOR_LINUX}"
-                        PATH="${QT_FOR_LINUX}:${GAMS_FOR_LINUX}:${PATH}"
+                        PATH="${GAMS_FOR_LINUX}:${PATH}"
                     }
                     steps {
                         step([$class: 'WsCleanup'])
                         checkout scm
                         sh '''
-                            qmake gams-cpp.pro && make -j4
+                            cmake . && make -j4
                         '''
                     }
                     post {
                         always {
                             recordIssues aggregatingResults: true, enabledForFailure: true, tools: [gcc4(reportEncoding: 'UTF-8')]
-                            recordIssues enabledForFailure: true, tools: [taskScanner(ignoreCase: true, includePattern: '**/*.c, **/*.cpp, **/*.h, **/*.pro, **/*.pri', normalTags: 'TODO')]
+                            recordIssues enabledForFailure: true, tools: [taskScanner(ignoreCase: true, includePattern: '**/*.c, **/*.cpp, **/*.h, **/*.txt, **/*.cmake', normalTags: 'TODO')]
                         }
                     }
                 }
@@ -41,7 +41,7 @@ pipeline {
                     agent { label 'windowsX64' }
                     environment {
                         GAMS_CORE_PATH="${GAMS_FOR_WINDOWS}"
-                        PATH="${QT_FOR_WINDOWS};${GAMS_FOR_WINDOWS};${PATH}"
+                        PATH="${GAMS_FOR_WINDOWS};${PATH}"
                         NO_WINDOWS_REGISTRY=1
                     }
                     steps {
@@ -49,12 +49,12 @@ pipeline {
                         checkout scm
                         bat '''
                             @echo off
-                            echo Setting up environment for VS2017 usage...
-                            cd "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Auxiliary\\Build"
+                            echo Setting up environment for VS2019 usage...
+                            cd "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build"
                             call vcvars64.bat
                             set
                             cd %WORKSPACE%
-                            qmake gams-cpp.pro "CONFIG+=release"
+                            cmake --build . --target all
                             nmake
                         '''
                     }
@@ -73,7 +73,7 @@ pipeline {
                     steps {
                         step([$class: 'WsCleanup'])
                         checkout scm
-                        sh 'qmake gams-cpp.pro && make -j4'
+                        sh 'cmake . && make -j4'
                     }
                     post {
                         always {
@@ -88,7 +88,7 @@ pipeline {
                 stage ('linux') {
                     agent { label 'master' }
                     environment {
-                        PATH="${QT_FOR_LINUX}:${GAMS_FOR_LINUX}:${PATH}"
+                        PATH="${GAMS_FOR_LINUX}:${PATH}"
                     }
                     steps {
                         sh '''

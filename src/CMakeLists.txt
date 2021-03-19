@@ -42,9 +42,8 @@ elseif(UNIX) # Apple or Linux
     else() # UNIX
         set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath,${ORIGIN},-rpath,${ORIGIN}/../../..")
         link_libraries(stdc++fs pthread)
-        if (CMAKE_CXX_COMPILER_ID STREQUAL "G++")
-            execute_process(COMMAND "gcc -dumpversion" OUTPUT_VARIABLE GCCMAJORVERSION)
-            if (${GCCMAJORVERSION} LESS 9)
+        if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+            if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9)
                 set(CC "gcc-9")
                 set(CXX "g++-9")
             endif()
