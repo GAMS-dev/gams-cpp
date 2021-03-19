@@ -34,10 +34,9 @@ set( CMAKE_BUILD_TYPE Debug ) # TODO(RG): when finished change this to Release
 add_subdirectory( src )
 add_subdirectory( examples )
 
-option(PACKAGE_TESTS "Build tests" ON)
+set(PACKAGE_TESTS ON)
 if(PACKAGE_TESTS)
     enable_testing()
     set(gtest_force_shared_crt ON)
-    include(googletest)
     add_subdirectory(tests)
 endif()

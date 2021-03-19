@@ -1152,7 +1152,6 @@ TEST_P(ParameterizedTestAddOptions_OptFile, testAddOptions_OptFile) {
     } else {
        EXPECT_THROW( ws.addOptions(optfilename), GAMSException);
     }
-    // clean up only when working dir is not application dir
 
     std::string appDir;
 #ifdef _WIN32
