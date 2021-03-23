@@ -56,14 +56,14 @@ set(VERSION "${GAMSCPP_MAJOR_VERSION}.${GAMSCPP_MINOR_VERSION}.${GAMSCPP_PATCH_L
 # Project file version defines
 add_definitions(-DAPI_VERSION="${VERSION}")
 
-message("$ENV{GAMS_FOR_LINUX}")
-message("$ENV{GAMS_CORE_PATH}")
+message("a $ENV{GAMS_FOR_LINUX}")
+message("b $ENV{GAMS_CORE_PATH}")
+message("c $ENV{GAMS_BUILD_ENV}")
 
 # GAMS_CORE_PATH is Jenkins build switch
-set(GAMS_CORE_TMP $ENV{GAMS_CORE_PATH})
 if(NOT EXISTS ${PWD}/gamsinclude.pri)
     message("RGDBG1: $ENV{GAMS_CORE_TMP}")
-    if(NOT DEFINED $ENV{GAMS_CORE_TMP})
+    if(NOT DEFINED $ENV{GAMS_CORE_PATH})
         message("-- NOT DEFINED")
         if(APPLE)
             set(GAMS_DISTRIB /Library/Frameworks/GAMS.framework/Versions/${GAMS_DISTRIB_MAJOR}/Resources)
