@@ -83,7 +83,7 @@ GAMS_DISTRIB_CPP_API=${GAMS_DISTRIB}/apifiles/C++/api")
         endif()
 
         file(WRITE ${PWD}/gamsinclude.pri ${GAMSINC})
-    elseif()
+    else()
         set(GAMSINC
 "GAMS_DISTRIB=${GAMS_CORE_PATH}\n\
 GAMS_DISTRIB_C_API=${GAMS_DISTRIB}/apifiles/C/api\n\
@@ -120,10 +120,6 @@ else()
     set(GSYS_ENV ${GSYS})
     if (${GSYS_ENV} STREQUALS "wei")
         add_definitions(WEI CIA_WEX)
-    endif()
-
-    if (${GSYS_ENV} STREQUALS "vs8")
-        add_definitions(vs8 CIA_WIN)
     endif()
 
     if (${GSYS_ENV} STREQUALS "leg")
