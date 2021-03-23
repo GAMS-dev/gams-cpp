@@ -64,7 +64,7 @@ if(NOT EXISTS ${PWD}/gamsinclude.pri)
             set(GAMS_DISTRIB /Library/Frameworks/GAMS.framework/Versions/${GAMS_DISTRIB_MAJOR}/Resources)
             set(GAMSINC
 "GAMS_DISTRIB=${GAMS_DISTRIB}\n\
-GAMS_DISTRIB_C_API=${GAMS_DISTRIB}/apifiles/C/api\
+GAMS_DISTRIB_C_API=${GAMS_DISTRIB}/apifiles/C/api\n\
 GAMS_DISTRIB_CPP_API=${GAMS_DISTRIB}/apifiles/C++/api")
 
         elseif(UNIX AND NOT APPLE)
