@@ -56,15 +56,9 @@ set(VERSION "${GAMSCPP_MAJOR_VERSION}.${GAMSCPP_MINOR_VERSION}.${GAMSCPP_PATCH_L
 # Project file version defines
 add_definitions(-DAPI_VERSION="${VERSION}")
 
-message("a $ENV{GAMS_FOR_LINUX}")
-message("b $ENV{GAMS_CORE_PATH}")
-message("c $ENV{GAMS_BUILD_ENV}")
-
 # GAMS_CORE_PATH is Jenkins build switch
 if(NOT EXISTS ${PWD}/gamsinclude.pri)
-    message("RGDBG1: $ENV{GAMS_CORE_TMP}")
-    if(NOT DEFINED $ENV{GAMS_CORE_PATH})
-        message("-- NOT DEFINED")
+    if("$ENV{GAMS_CORE_PATH}" STREQUAL "")
         if(APPLE)
             set(GAMS_DISTRIB /Library/Frameworks/GAMS.framework/Versions/${GAMS_DISTRIB_MAJOR}/Resources)
             set(GAMSINC
@@ -87,12 +81,12 @@ GAMS_DISTRIB_C_API=${GAMS_DISTRIB}/apifiles/C/api\n\
 GAMS_DISTRIB_CPP_API=${GAMS_DISTRIB}/apifiles/C++/api")
         endif()
     else()
-        message("-- YES DEFINED")
         set(GAMSINC
-"GAMS_DISTRIB=${GAMS_CORE_PATH}\n\
-GAMS_DISTRIB_C_API=${GAMS_DISTRIB}/apifiles/C/api\n\
-GAMS_DISTRIB_CPP_API=${GAMS_DISTRIB}/apifiles/C++/api")
+"GAMS_DISTRIB=$ENV{GAMS_CORE_PATH}\n\
+GAMS_DISTRIB_C_API=$ENV{GAMS_CORE_PATH}/apifiles/C/api\n\
+GAMS_DISTRIB_CPP_API=$ENV{GAMS_CORE_PATH}/apifiles/C++/api")
     endif()
+
     file(WRITE ${PWD}/gamsinclude.pri ${GAMSINC})
 endif()
 
@@ -101,8 +95,7 @@ if(EXISTS ${PWD}/gamsinclude.pri)
 endif()
 
 # GAMS_BUILD is GAMS distrib build switch
-if(NOT DEFINED $ENV{GAMS_BUILD_ENV})
-    message("RGDBG2: NOT DEFINED $ENV{GAMS_BUILD_ENV}")
+if("$ENV{GAMS_BUILD_ENV}" STREQUAL "")
     include_directories(${GAMS_DISTRIB_C_API})
 
     set(SOURCE ${SOURCE} ${GAMS_DISTRIB_C_API}/gclgms.c
@@ -122,7 +115,6 @@ if(NOT DEFINED $ENV{GAMS_BUILD_ENV})
                              PARENT_SCOPE)
     endif()
 else()
-    message("RGDBG2: YES DEFINED $ENV{GAMS_BUILD_ENV}")
     set(GSYS_ENV ${GSYS})
     if (${GSYS_ENV} STREQUALS "wei")
         add_definitions(WEI CIA_WEX)
