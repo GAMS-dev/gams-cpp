@@ -56,7 +56,8 @@ set(VERSION "${GAMSCPP_MAJOR_VERSION}.${GAMSCPP_MINOR_VERSION}.${GAMSCPP_PATCH_L
 # Project file version defines
 add_definitions(-DAPI_VERSION="${VERSION}")
 
-message("$ENV{PATH}")
+message("$ENV{GAMS_FOR_LINUX}")
+message("$ENV{GAMS_CORE_PATH}")
 
 # GAMS_CORE_PATH is Jenkins build switch
 set(GAMS_CORE_TMP $ENV{GAMS_CORE_PATH})
