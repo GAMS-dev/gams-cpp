@@ -64,7 +64,7 @@ pipeline {
                     agent { label 'macos' }
                     environment {
                         GAMS_CORE_PATH="${GAMS_FOR_MACOS}"
-                        PATH="${QT_FOR_MACOS}:${GAMS_FOR_MACOS}:${PATH}"
+                        PATH="${GAMS_FOR_MACOS}:${PATH}"
                     }
                     steps {
                         step([$class: 'WsCleanup'])

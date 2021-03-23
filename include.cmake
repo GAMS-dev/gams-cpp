@@ -56,11 +56,13 @@ set(VERSION "${GAMSCPP_MAJOR_VERSION}.${GAMSCPP_MINOR_VERSION}.${GAMSCPP_PATCH_L
 # Project file version defines
 add_definitions(-DAPI_VERSION="${VERSION}")
 
+message("$ENV{PATH}")
+
 # GAMS_CORE_PATH is Jenkins build switch
-set(GAMS_CORE_TMP ${GAMS_CORE_PATH})
+set(GAMS_CORE_TMP $ENV{GAMS_CORE_PATH})
 if(NOT EXISTS ${PWD}/gamsinclude.pri)
-    message("RGDBG1: ${GAMS_CORE_TMP}")
-    if(NOT DEFINED ${GAMS_CORE_TMP})
+    message("RGDBG1: $ENV{GAMS_CORE_TMP}")
+    if(NOT DEFINED $ENV{GAMS_CORE_TMP})
         message("-- NOT DEFINED")
         if(APPLE)
             set(GAMS_DISTRIB /Library/Frameworks/GAMS.framework/Versions/${GAMS_DISTRIB_MAJOR}/Resources)
@@ -98,8 +100,8 @@ if(EXISTS ${PWD}/gamsinclude.pri)
 endif()
 
 # GAMS_BUILD is GAMS distrib build switch
-if(NOT DEFINED ${GAMS_BUILD_ENV})
-    message("RGDBG2: NOT DEFINED ${GAMS_BUILD_ENV}")
+if(NOT DEFINED $ENV{GAMS_BUILD_ENV})
+    message("RGDBG2: NOT DEFINED $ENV{GAMS_BUILD_ENV}")
     include_directories(${GAMS_DISTRIB_C_API})
 
     set(SOURCE ${SOURCE} ${GAMS_DISTRIB_C_API}/gclgms.c
@@ -119,7 +121,7 @@ if(NOT DEFINED ${GAMS_BUILD_ENV})
                              PARENT_SCOPE)
     endif()
 else()
-    message("RGDBG2: YES DEFINED ${GAMS_BUILD_ENV}")
+    message("RGDBG2: YES DEFINED $ENV{GAMS_BUILD_ENV}")
     set(GSYS_ENV ${GSYS})
     if (${GSYS_ENV} STREQUALS "wei")
         add_definitions(WEI CIA_WEX)
