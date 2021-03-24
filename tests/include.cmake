@@ -35,7 +35,6 @@ endif()
 include_directories("${GAMSPATH}/apifiles/C/api"
                     "${BASEPATH}/C++/api")
 if(WIN32)
-    # TODO(RG): this is wrong. cmake base path does not exist
     set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
     link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
 else()
@@ -58,3 +57,6 @@ if(UNIX) # Apple or Linux
         endif()
     endif()
 endif()
+
+message("RGDBG: ${CMAKE_BINARY_DIR}")
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests)
