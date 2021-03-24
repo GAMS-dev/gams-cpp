@@ -50,7 +50,8 @@ pipeline {
                             call vcvars64.bat
                             set
                             cd %WORKSPACE%
-                            cmake .
+                            cmake -G "NMake Makefiles" .
+                            nmake
                         '''
                     }
                     post {
@@ -90,9 +91,10 @@ pipeline {
                             mkdir reports
                             export LD_LIBRARY_PATH=$WORKSPACE/bin:$LD_LIBRARY_PATH
                             cd tests
-                            ls -l
                             for f in test*; do
-                                ./$f/$f -xunitxml -o $WORKSPACE/reports/$f.xml
+                                if [ -d $f ] && [ -e $f/$f ]; then
+                                ./$f/$f --gtest_output=xml:$WORKSPACE/reports/$f.xml
+                                fi
                             done
                         '''
                     }
@@ -105,27 +107,29 @@ pipeline {
                 stage ('windowsX64') {
                     agent { label 'windowsX64' }
                     environment {
-                        PATH="${QT_FOR_WINDOWS};${GAMS_FOR_WINDOWS};${PATH}"
+                        PATH="${GAMS_FOR_WINDOWS};${PATH}"
                     }
                     steps {
                         bat '''
                             mkdir reports
-                            set PATH=%WORKSPACE%/bin;%PATH%
                             cd tests
-                            ls -l
-                            for %%f in (test*) do %%f/%%f.exe -xunitxml -o %WORKSPACE%/reports/%%f.xml
+                            for /d %%f in (test*) do (
+                                %%f\\%%f.exe --gtest_output=xml:"%WORKSPACE%\\reports\\%%f.xml"
+                            )
+                            dir %WORKSPACE%\\reports
                         '''
                     }
                     post {
                         always {
                             junit allowEmptyResults: true, testResults: 'reports/*.xml'
+                            archiveArtifacts artifacts: 'reports/*.xml', fingerprint: true
                         }
                     }
                 }
                 stage ('macos') {
                     agent { label 'macos' }
                     environment {
-                        PATH="${QT_FOR_MACOS}:${GAMS_FOR_MACOS}:${PATH}"
+                        PATH="${GAMS_FOR_MACOS}:${PATH}"
                     }
                     steps {
                         sh '''
@@ -133,7 +137,9 @@ pipeline {
                             export DYLD_LIBRARY_PATH=$WORKSPACE/bin:$DYLD_LIBRARY_PATH
                             cd tests
                             for f in test*; do
-                                ./$f/$f -xunitxml -o $WORKSPACE/reports/$f.xml
+                                if [ -d $f ]; then
+                                    ./$f/$f --gtest_output=xml:$WORKSPACE/reports/$f.xml
+                                fi
                             done
                         '''
                     }

@@ -33,7 +33,9 @@ else()
 endif()
 
 include_directories("${GAMSPATH}/apifiles/C/api"
-                    "${BASEPATH}/C++/api")
+                    "${BASEPATH}/C++/api"
+                    "${gtest_SOURCE_DIR}/include")
+
 if(WIN32)
     set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
     link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
@@ -57,6 +59,3 @@ if(UNIX) # Apple or Linux
         endif()
     endif()
 endif()
-
-message("RGDBG: ${CMAKE_BINARY_DIR}")
-#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests)
