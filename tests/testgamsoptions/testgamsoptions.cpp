@@ -1,5 +1,8 @@
-/**
- * Copyright (c) 2017 GAMS Software GmbH <support@gams.com>
+/*
+ * GAMS - General Algebraic Modeling System C++ API
+ *
+ * Copyright (c) 2017-2020 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2020 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,254 +22,254 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+#include "testgamsobject.h"
+using namespace gams;
 
-#include "testgamsoptions.h"
+class TestGAMSOptions: public TestGAMSObject
+{
+};
 
-QString TestGAMSOptions::classname()  { return "TestGAMSOptions"; }
-
-void TestGAMSOptions::testDestructor() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testIDir() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testDefines() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetAllModelTypes() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetGdx() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetGdx() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetOutput() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetOutput() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetSymbol() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetSymbol() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetExpand() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetExpand() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetPageWidth() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetPageWidth() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetPageSize() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetPageSize() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetPageContr() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetPageContr() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetAction() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetAction() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetPutDir() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetPutDir() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetGridDir() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetGridDir() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetScriptExit() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetScriptExit() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetLogLine() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetLogLine() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetTrace() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetTrace() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetAppendOut() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetAppendOut() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetStepSum() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetStepSum() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetSuppress() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetSuppress() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetDFormat() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetDFormat() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetTFormat() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetTFormat() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetTabIn() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetTabIn() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetIntVarUp() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetIntVarUp() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetCase() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetCase() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetLicense() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetLicense() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetDumpParms() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetDumpParms() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetProfile() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetProfile() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetLibIncDir() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetLibIncDir() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetSysIncDir() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetSysIncDir() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetUser1() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetUser1() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetUser2() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetUser2() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetUser3() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetUser3() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetUser4() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetUser4() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetUser5() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetUser5() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetForceWork() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetForceWork() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetCErr() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetCErr() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetFErr() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetFErr() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetOptFile() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetOptFile() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetDumpOpt() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetDumpOpt() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetErrMsg() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetErrMsg() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetOpt() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetOpt() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetStringChk() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetStringChk() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetReference() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetReference() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetOptDir() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetOptDir() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetExecErr() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetExecErr() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetErrorLog() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetErrorLog() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetLimRow() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetLimRow() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetLimCol() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetLimCol() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetCharSet() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetCharSet() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetKeep() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetKeep() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetTraceOpt() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetTraceOpt() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetIterLim() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetIterLim() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetDomLim() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetDomLim() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetResLim() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetResLim() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetOptCR() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetOptCR() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetOptCA() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetOptCA() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetSysOut() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetSysOut() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetSolPrint() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetSolPrint() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetBratio() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetBratio() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetHoldFixed() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetHoldFixed() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetNodLim() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetNodLim() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetWorkFactor() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetWorkFactor() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetWorkSpace() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetWorkSpace() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetForLim() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetForLim() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetSeed() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetSeed() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetOn115() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetOn115() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetExecMode() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetExecMode() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetInteractiveSolver() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetInteractiveSolver() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetPLicense() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetPLicense() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetJobTrace() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetJobTrace() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetWarnings() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetWarnings() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetTraceLevel() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetTraceLevel() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetTimer() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetTimer() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetFileCase() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetFileCase() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetSavePoint() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetSavePoint() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetSolveLink() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetSolveLink() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetSys10() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetSys10() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetSys11() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetSys11() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetSys12() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetSys12() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetZeroRes() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetZeroRes() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetZeroResRep() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetZeroResRep() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetHeapLimit() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetHeapLimit() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetgdxCompress() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetgdxCompress() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetgdxConvert() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetgdxConvert() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetAppendExpand() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetAppendExpand() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetETLim() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetETLim() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetProfileTol() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetProfileTol() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetProfileFile() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetProfileFile() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetMaxProcDir() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetMaxProcDir() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetInteger1() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetInteger1() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetInteger2() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetInteger2() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetInteger3() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetInteger3() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetInteger4() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetInteger4() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetInteger5() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetInteger5() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetGridScript() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetGridScript() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetThreads() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetThreads() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetNoNewVarEqu() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetNoNewVarEqu() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetForceOptFile() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetForceOptFile() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetSymPrefix() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetSymPrefix() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetgdxUels() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetgdxUels() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetDumpParmsLogPrefix() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetDumpParmsLogPrefix() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetstrictSingleton() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetstrictSingleton() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetFDDelta() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetFDDelta() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetFDOpt() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetFDOpt() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetPrefixLoadPath() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetPrefixLoadPath() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetThreadsAsync() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetThreadsAsync() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetAsyncSolLst() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetAsyncSolLst() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetFileStem() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetFileStem() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetLP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetLP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetMIP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetMIP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetRMIP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetRMIP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetNLP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetNLP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetMCP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetMCP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetMPEC() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetMPEC() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetRMPEC() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetRMPEC() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetCNS() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetCNS() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetDNLP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetDNLP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetRMINLP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetRMINLP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetMINLP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetMINLP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetQCP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetQCP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetMIQCP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetMIQCP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetRMIQCP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetRMIQCP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testGetEMP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-void TestGAMSOptions::testSetEMP() { QEXPECT_FAIL("", "Test to be implemented ", Abort); QVERIFY(false); }
-
-QTEST_MAIN(TestGAMSOptions)
+TEST_F(TestGAMSOptions, testDestructor) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testIDir) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testDefines) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetAllModelTypes) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetGdx) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetGdx) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetOutput) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetOutput) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetSymbol) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetSymbol) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetExpand) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetExpand) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetPageWidth) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetPageWidth) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetPageSize) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetPageSize) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetPageContr) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetPageContr) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetAction) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetAction) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetPutDir) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetPutDir) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetGridDir) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetGridDir) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetScriptExit) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetScriptExit) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetLogLine) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetLogLine) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetTrace) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetTrace) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetAppendOut) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetAppendOut) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetStepSum) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetStepSum) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetSuppress) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetSuppress) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetDFormat) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetDFormat) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetTFormat) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetTFormat) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetTabIn) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetTabIn) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetIntVarUp) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetIntVarUp) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetCase) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetCase) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetLicense) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetLicense) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetDumpParms) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetDumpParms) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetProfile) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetProfile) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetLibIncDir) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetLibIncDir) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetSysIncDir) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetSysIncDir) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetUser1) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetUser1) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetUser2) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetUser2) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetUser3) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetUser3) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetUser4) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetUser4) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetUser5) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetUser5) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetForceWork) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetForceWork) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetCErr) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetCErr) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetFErr) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetFErr) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetOptFile) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetOptFile) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetDumpOpt) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetDumpOpt) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetErrMsg) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetErrMsg) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetOpt) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetOpt) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetStringChk) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetStringChk) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetReference) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetReference) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetOptDir) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetOptDir) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetExecErr) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetExecErr) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetErrorLog) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetErrorLog) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetLimRow) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetLimRow) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetLimCol) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetLimCol) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetCharSet) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetCharSet) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetKeep) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetKeep) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetTraceOpt) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetTraceOpt) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetIterLim) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetIterLim) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetDomLim) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetDomLim) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetResLim) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetResLim) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetOptCR) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetOptCR) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetOptCA) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetOptCA) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetSysOut) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetSysOut) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetSolPrint) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetSolPrint) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetBratio) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetBratio) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetHoldFixed) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetHoldFixed) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetNodLim) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetNodLim) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetWorkFactor) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetWorkFactor) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetWorkSpace) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetWorkSpace) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetForLim) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetForLim) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetSeed) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetSeed) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetOn115) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetOn115) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetExecMode) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetExecMode) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetInteractiveSolver) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetInteractiveSolver) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetPLicense) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetPLicense) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetJobTrace) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetJobTrace) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetWarnings) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetWarnings) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetTraceLevel) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetTraceLevel) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetTimer) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetTimer) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetFileCase) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetFileCase) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetSavePoint) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetSavePoint) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetSolveLink) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetSolveLink) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetSys10) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetSys10) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetSys11) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetSys11) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetSys12) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetSys12) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetZeroRes) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetZeroRes) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetZeroResRep) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetZeroResRep) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetHeapLimit) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetHeapLimit) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetgdxCompress) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetgdxCompress) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetgdxConvert) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetgdxConvert) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetAppendExpand) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetAppendExpand) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetETLim) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetETLim) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetProfileTol) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetProfileTol) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetProfileFile) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetProfileFile) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetMaxProcDir) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetMaxProcDir) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetInteger1) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetInteger1) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetInteger2) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetInteger2) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetInteger3) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetInteger3) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetInteger4) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetInteger4) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetInteger5) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetInteger5) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetGridScript) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetGridScript) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetThreads) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetThreads) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetNoNewVarEqu) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetNoNewVarEqu) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetForceOptFile) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetForceOptFile) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetSymPrefix) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetSymPrefix) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetgdxUels) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetgdxUels) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetDumpParmsLogPrefix) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetDumpParmsLogPrefix) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetstrictSingleton) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetstrictSingleton) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetFDDelta) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetFDDelta) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetFDOpt) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetFDOpt) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetPrefixLoadPath) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetPrefixLoadPath) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetThreadsAsync) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetThreadsAsync) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetAsyncSolLst) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetAsyncSolLst) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetFileStem) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetFileStem) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetLP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetLP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetMIP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetMIP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetRMIP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetRMIP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetNLP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetNLP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetMCP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetMCP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetMPEC) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetMPEC) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetRMPEC) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetRMPEC) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetCNS) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetCNS) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetDNLP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetDNLP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetRMINLP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetRMINLP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetMINLP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetMINLP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetQCP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetQCP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetMIQCP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetMIQCP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetRMIQCP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetRMIQCP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testGetEMP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }
+TEST_F(TestGAMSOptions, testSetEMP) { EXPECT_NO_FATAL_FAILURE(ADD_FAILURE()) << "Test to be implemented"; }

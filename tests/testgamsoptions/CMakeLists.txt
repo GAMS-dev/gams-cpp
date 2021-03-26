@@ -22,34 +22,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-project(tests)
+include(../include.cmake)
+include_directories(. .. ../../src ../../src/generated)
 
-add_subdirectory(googletest)
+set(SOURCE ${SOURCE} ../testgamsobject.cpp
+                     ../../src/gamspath.cpp
+                     testgamsoptions.cpp)
 
-add_subdirectory(testgamscheckpoint)
-add_subdirectory(testgamsdatabase)
-add_subdirectory(testgamsdatabasedomainviolation)
-add_subdirectory(testgamsdatabaseiter)
-add_subdirectory(testgamsdomain)
-add_subdirectory(testgamsenum)
-add_subdirectory(testgamsequation)
-add_subdirectory(testgamsequationrecord)
-add_subdirectory(testgamsexception)
-add_subdirectory(testgamsexceptionexecution)
-add_subdirectory(testgamsjob)
-add_subdirectory(testgamsmodelinstance)
-add_subdirectory(testgamsmodelinstanceopt)
-add_subdirectory(testgamsmodifier)
-#add_subdirectory(testgamsoptions) # Tests not implemented yet
-add_subdirectory(testgamsparameter)
-add_subdirectory(testgamsparameterrecord)
-add_subdirectory(testgamsset)
-add_subdirectory(testgamssetrecord)
-add_subdirectory(testgamssymbol)
-add_subdirectory(testgamssymboldomainviolation)
-add_subdirectory(testgamssymboliter)
-add_subdirectory(testgamssymbolrecord)
-add_subdirectory(testgamsvariable)
-add_subdirectory(testgamsvariablerecord)
-add_subdirectory(testgamsworkspace)
-add_subdirectory(testgamsworkspaceinfo)
+add_executable(testgamsoptions ${SOURCE})
+target_link_libraries(testgamsoptions gtest gamscpp)
+add_test(testgamsoptions testgamsoptions)
