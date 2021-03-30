@@ -37,16 +37,12 @@ if(WIN32)
 
 elseif(UNIX) # Apple or Linux
     link_libraries(dl)
-    if (APPLE)
-        set(MACOSX_DEPLOYMENT_TARGET 10.15)
-    else() # UNIX
-        set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath,${ORIGIN},-rpath,${ORIGIN}/../../..")
-        link_libraries(stdc++fs pthread)
-        if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-            if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9)
-                set(CMAKE_C_COMPILER "gcc-9")
-                set(CMAKE_CXX_COMPILER "g++-9")
-            endif()
+    set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath,${ORIGIN},-rpath,${ORIGIN}/../../..")
+    link_libraries(stdc++fs pthread)
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9)
+            set(CMAKE_C_COMPILER "gcc-9")
+            set(CMAKE_CXX_COMPILER "g++-9")
         endif()
     endif()
 endif()
@@ -111,3 +107,5 @@ add_library(gamscpp SHARED
         ../CHANGELOG ../version
         ${SOURCE} ${HEADER}
 )
+
+project(tests)
