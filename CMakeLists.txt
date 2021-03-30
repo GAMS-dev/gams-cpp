@@ -27,9 +27,6 @@ set(MACOSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment versi
 
 project( GAMS-cpp )
 
-message("cmake deploytarget: ${CMAKE_OSX_DEPLOYMENT_TARGET}")
-message("macos deploytarget: ${MACOSX_DEPLOYMENT_TARGET}")
-
 cmake_minimum_required(VERSION 3.8)
 
 set( CMAKE_CXX_STANDARD 17 )
