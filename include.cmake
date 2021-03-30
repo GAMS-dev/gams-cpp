@@ -95,7 +95,7 @@ if(EXISTS ${PWD}/gamsinclude.pri)
 endif()
 
 # GAMS_BUILD is GAMS distrib build switch
-if("$ENV{GAMS_BUILD_ENV}" STREQUAL "")
+if("$ENV{GAMS_BUILD}" STREQUAL "")
     include_directories(${GAMS_DISTRIB_C_API})
 
     set(SOURCE ${SOURCE} ${GAMS_DISTRIB_C_API}/gclgms.c
