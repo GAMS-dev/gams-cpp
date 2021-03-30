@@ -118,7 +118,7 @@ else()
     set(GSYS_ENV $ENV{GSYS})
 
     if ("${GSYS_ENV}" STREQUAL "leg")
-        add_definitions(LEG CIA_LEX)
+        add_definitions(-DLEG -DCIA_LEX)
         add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-declarations -m64)
         add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64)
         # original:
@@ -127,7 +127,7 @@ else()
     endif()
 
     if ("${GSYS_ENV}" STREQUAL "deg")
-        add_definitions(DEG CIA_DEX)
+        add_definitions(-DDEG -DCIA_DEX)
         add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-declarations -m64)
         add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64)
     endif()
