@@ -117,8 +117,7 @@ if("$ENV{GAMS_BUILD}" STREQUAL "")
 else()
     set(GSYS_ENV $ENV{GSYS})
 
-    message("RGDBG: ${GSYS_ENV}")
-    if ("${GSYS_ENV}" STREQUALS "leg")
+    if ("${GSYS_ENV}" STREQUAL "leg")
         add_definitions(LEG CIA_LEX)
         add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-declarations -m64)
         add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64)
@@ -127,29 +126,30 @@ else()
 #         QMAKE_CFLAGS += -Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64
     endif()
 
-    if ("${GSYS_ENV}" STREQUALS "deg")
+    if ("${GSYS_ENV}" STREQUAL "deg")
         add_definitions(DEG CIA_DEX)
         add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-declarations -m64)
         add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64)
     endif()
 
-    include_directories(${GPRODUCTS}/gclib
-                        ${GPRODUCTS}/apiwrap/gmdobj
-                        ${GPRODUCTS}/apiwrap/joat
-                        ${GPRODUCTS}/apiwrap/optobj)
+    set(GPRODUCTS_ENV $ENV{GPRODUCTS})
+    include_directories(${GPRODUCTS_ENV}/gclib
+                        ${GPRODUCTS_ENV}/apiwrap/gmdobj
+                        ${GPRODUCTS_ENV}/apiwrap/joat
+                        ${GPRODUCTS_ENV}/apiwrap/optobj)
 
-    set(SOURCE ${SOURCE} ${GPRODUCTS}/gclib/gclgms.c
-                         ${GPRODUCTS}/gclib/gcmt.c
-                         ${GPRODUCTS}/apiwrap/gmdobj/gmdcc.c
-                         ${GPRODUCTS}/apiwrap/joat/cfgmcc.c
-                         ${GPRODUCTS}/apiwrap/joat/gevmcc.c
-                         ${GPRODUCTS}/apiwrap/joat/gmomcc.c
-                         ${GPRODUCTS}/apiwrap/optobj/optcc.c)
+    set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/gclib/gclgms.c
+                         ${GPRODUCTS_ENV}/gclib/gcmt.c
+                         ${GPRODUCTS_ENV}/apiwrap/gmdobj/gmdcc.c
+                         ${GPRODUCTS_ENV}/apiwrap/joat/cfgmcc.c
+                         ${GPRODUCTS_ENV}/apiwrap/joat/gevmcc.c
+                         ${GPRODUCTS_ENV}/apiwrap/joat/gmomcc.c
+                         ${GPRODUCTS_ENV}/apiwrap/optobj/optcc.c)
 
     if (${USE_GAMS_DISTRIB_CPP_API_SRC})
-        include_directories(${GPRODUCTS}/apiexamples/C++/api)
-        set(SOURCE ${SOURCE} ${GPRODUCTS}/apiexamples/C++/api/gamsoptions.cpp
-                             ${GPRODUCTS}/apiexamples/C++/api/gamsoptionsimpl.cpp)
+        include_directories(${GPRODUCTS_ENV}/apiexamples/C++/api)
+        set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptions.cpp
+                             ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptionsimpl.cpp)
     endif()
 endif()
 # create variable GAMSPATH from gamsinclude.pri
