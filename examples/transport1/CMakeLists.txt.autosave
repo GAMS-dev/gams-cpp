@@ -22,31 +22,29 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version" FORCE)
-set(MACOSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version" FORCE)
-
-project( GAMS-cpp )
-
-message("cmake deploytarget: ${CMAKE_OSX_DEPLOYMENT_TARGET}")
-message("macos deploytarget: ${MACOSX_DEPLOYMENT_TARGET}")
-
 cmake_minimum_required(VERSION 3.8)
 
-set( CMAKE_CXX_STANDARD 17 )
-set( CMAKE_CXX_STANDARD_REQUIRED ON )
-set( CMAKE_INCLUDE_CURRENT_DIR ON )
-set( CMAKE_AUTOMOC OFF )
-set( CMAKE_BUILD_TYPE Release )
+project(transport1 C CXX)
 
-add_subdirectory( src )
-add_subdirectory( examples )
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(PACKAGE_TESTS ON)
-if(PACKAGE_TESTS)
-    enable_testing()
-    if(WIN32)
-        set(BUILD_SHARED_LIBS ON)
-        set(gtest_force_shared_crt ON)
-    endif()
-    add_subdirectory(tests)
+if (NOT DEFINED ${GAMS_BUILD_ENV})
+    set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
+else()
+    set(BASEPATH "${GAMSPATH}/apifiles/")
 endif()
+include_directories("${BASEPATH}/C/api"
+                    "${BASEPATH}/C++/api")
+
+if(WIN32)
+  set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
+  link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
+else()
+  link_directories("${BASEPATH}/C++/lib")
+endif()
+
+add_executable(${PROJECT_NAME} "transport1.cpp")
+
+target_link_libraries(${PROJECT_NAME} gamscpp)
+
