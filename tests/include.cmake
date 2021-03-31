@@ -44,11 +44,12 @@ else()
 endif()
 
 if(UNIX) # Apple or Linux
-    link_libraries(dl) # TODO(RG): this can maybe be removed
-    set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath,${ORIGIN},-rpath,${ORIGIN}/../../..")
+    link_libraries(dl)
     if (APPLE)
-        link_libraries(c++fs pthread)
+        set(MACOSX_DEPLOYMENT_TARGET "10.15")
+#        link_libraries(stdc++fs pthread)
     else()
+        # set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath,${ORIGIN},-rpath,${ORIGIN}/../../..")
         link_libraries(stdc++fs pthread)
     endif()
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")

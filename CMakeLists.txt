@@ -23,7 +23,6 @@
 # SOFTWARE.
 #
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version" FORCE)
-set(MACOSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version" FORCE)
 
 project( GAMS-cpp )
 
