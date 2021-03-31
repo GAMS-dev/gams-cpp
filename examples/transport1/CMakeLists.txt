@@ -29,11 +29,13 @@ project(transport1 C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if ("$ENV{GAMS_BUILD}" STREQUAL "")
+if (IS_IN_GAMS_DIR)
+    message("IS THIS EVER TRUE")
     set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 else()
     set(BASEPATH "${GAMSPATH}/apifiles/")
 endif()
+message("using ${BASEPATH}")
 include_directories("${BASEPATH}/C/api"
                     "${BASEPATH}/C++/api")
 

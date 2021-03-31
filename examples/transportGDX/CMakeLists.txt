@@ -10,7 +10,7 @@ foreach(dir ${dirs})
   message(STATUS "dir='${dir}'")
 endforeach()
 
-if ("$ENV{GAMS_BUILD}" STREQUAL "")
+if (IS_IN_GAMS_DIR)
     message("RGDBG0.A: user git checkout")
     set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 else()
