@@ -22,6 +22,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
+project(tests)
+
 add_subdirectory(googletest)
 
 add_subdirectory(testgamscheckpoint)

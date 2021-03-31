@@ -114,4 +114,3 @@ add_library(gamscpp SHARED
         ${SOURCE} ${HEADER}
 )
 
-project(tests)
