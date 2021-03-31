@@ -5,13 +5,19 @@ project(transportGDX C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-message("RGDBG1: ${GAMS_BUILD_ENV}")
-if (NOT DEFINED ${GAMS_BUILD_ENV})
+get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+foreach(dir ${dirs})
+  message(STATUS "dir='${dir}'")
+endforeach()
+
+if ("$ENV{GAMS_BUILD}" STREQUAL "")
+    message("RGDBG0.A: user git checkout")
     set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 else()
+    message("RGDBG0.B: jenkins ${GAMSPATH}")
     set(BASEPATH "${GAMSPATH}/apifiles/")
 endif()
-message("RGDBG2: ${BASEPATH}")
+
 include_directories("${BASEPATH}/C/api"
                     "${BASEPATH}/C++/api")
 

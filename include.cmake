@@ -114,6 +114,10 @@ if("$ENV{GAMS_BUILD}" STREQUAL "")
                              ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.cpp
                              PARENT_SCOPE)
     endif()
+
+    # create variable GAMSPATH from gamsinclude.pri
+    file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../gamsinclude.pri" GAMSINCLUDE LIMIT_COUNT 1)
+    string(REGEX MATCH "[^=]+$" GAMSPATH ${GAMSINCLUDE})
 else()
     set(GSYS_ENV $ENV{GSYS})
 
@@ -152,6 +156,3 @@ else()
                              ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptionsimpl.cpp)
     endif()
 endif()
-# create variable GAMSPATH from gamsinclude.pri
-file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../gamsinclude.pri" GAMSINCLUDE LIMIT_COUNT 1)
-string(REGEX MATCH "[^=]+$" GAMSPATH ${GAMSINCLUDE})
