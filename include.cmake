@@ -94,7 +94,6 @@ if(EXISTS ${PWD}/gamsinclude.pri)
     ReadFromFileAndSet(${PWD}/gamsinclude.pri)
 endif()
 
-# TODO(RG): this should be adjusted for the gams build system, currently the path is wrong there
 # create variable GAMSPATH from gamsinclude.pri
 if("$ENV{GAMS_BUILD}" STREQUAL "")
     message("RGDBG TRUE")
@@ -102,7 +101,7 @@ if("$ENV{GAMS_BUILD}" STREQUAL "")
     string(REGEX MATCH "[^=]+$" GAMSPATH ${GAMSINCLUDE})
 else()
     message("RGDBG FALSE")
-    set(GAMSPATH "${CMAKE_CURRENT_SOURCE_DIR}/../../../")
+    set(GAMSPATH "${CMAKE_CURRENT_SOURCE_DIR}/../../..")
 endif()
 message("RGDBG: set gamspath to: ${GAMSPATH}")
 
