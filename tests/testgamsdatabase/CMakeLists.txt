@@ -25,7 +25,6 @@
 include(../include.cmake)
 
 message("RGDBG: set gamspath to: ${GAMSPATH}")
-message("RGDBG: pwd: ${CMAKE_CURRENT_SOURCE_DIR}")
 message("RGDBG: using basepath: ${BASEPATH}")
 include_directories(. .. ../../src ../../src/generated)
 
