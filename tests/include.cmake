@@ -37,7 +37,7 @@ else()
     endif()
 endif()
 
-include_directories("${GAMSPATH}/apifiles/C/api"
+include_directories("${BASEPATH}/C/api"
                     "${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api"
                     "${gtest_SOURCE_DIR}/include")
 
