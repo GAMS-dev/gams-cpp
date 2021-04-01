@@ -24,8 +24,6 @@
 #
 include(../include.cmake)
 
-message("RGDBG: set gamspath to: ${GAMSPATH}")
-message("RGDBG: using basepath: ${BASEPATH}")
 include_directories(. .. ../../src ../../src/generated)
 
 set(SOURCE ${SOURCE} ../testgamsobject.cpp

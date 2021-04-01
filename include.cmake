@@ -96,15 +96,11 @@ endif()
 
 # create variable GAMSPATH from gamsinclude.pri
 if("$ENV{GAMS_BUILD}" STREQUAL "")
-    message("RGDBG TRUE")
     file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../gamsinclude.pri" GAMSINCLUDE LIMIT_COUNT 1)
     string(REGEX MATCH "[^=]+$" GAMSPATH ${GAMSINCLUDE})
 else()
-    message("RGDBG FALSE")
     set(GAMSPATH "${CMAKE_CURRENT_SOURCE_DIR}/../../..")
 endif()
-message("RGDBG: set gamspath to: ${GAMSPATH}")
-
 
 # GAMS_BUILD is GAMS distrib build switch
 if("$ENV{GAMS_BUILD}" STREQUAL "")
