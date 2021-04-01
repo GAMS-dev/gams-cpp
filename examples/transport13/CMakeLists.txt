@@ -4,14 +4,16 @@ project(transport13 C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-if (IS_IN_GAMS_DIR)
+if (NOT $ENV{GAMS_BUILD})
     set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 else()
     set(BASEPATH "${GAMSPATH}/apifiles/")
 endif()
 include_directories("${BASEPATH}/C/api"
                     "${BASEPATH}/C++/api"
-                    "${BASEPATH}/C++/transport")
+                    "${CMAKE_CURRENT_SOURCE_DIR}/../../src"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/../../src/generated"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/../transport")
 
 if(WIN32)
   set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")

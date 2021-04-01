@@ -94,6 +94,17 @@ if(EXISTS ${PWD}/gamsinclude.pri)
     ReadFromFileAndSet(${PWD}/gamsinclude.pri)
 endif()
 
+# TODO(RG): this should be adjusted for the gams build system, currently the path is wrong there
+# create variable GAMSPATH from gamsinclude.pri
+if(NOT $ENV{GAMS_BUILD})
+    file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../gamsinclude.pri" GAMSINCLUDE LIMIT_COUNT 1)
+    string(REGEX MATCH "[^=]+$" GAMSPATH ${GAMSINCLUDE})
+else()
+    set(GAMSPATH "${CMAKE_CURRENT_SOURCE_DIR}/../../../apiexamples/")
+endif()
+message("RGDBG: set gamspath to: ${GAMSPATH}")
+
+
 # GAMS_BUILD is GAMS distrib build switch
 if("$ENV{GAMS_BUILD}" STREQUAL "")
     include_directories(${GAMS_DISTRIB_C_API})
@@ -114,26 +125,19 @@ if("$ENV{GAMS_BUILD}" STREQUAL "")
                              ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.cpp
                              PARENT_SCOPE)
     endif()
-
-    # create variable GAMSPATH from gamsinclude.pri
-    file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../gamsinclude.pri" GAMSINCLUDE LIMIT_COUNT 1)
-    string(REGEX MATCH "[^=]+$" GAMSPATH ${GAMSINCLUDE})
 else()
     set(GSYS_ENV $ENV{GSYS})
 
     if ("${GSYS_ENV}" STREQUAL "leg")
         add_definitions(-DLEG -DCIA_LEX)
-        add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-declarations -m64)
-        add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64)
-        # original:
-#         QMAKE_CXXFLAGS += -Werror-implicit-function-declaration -Wreturn-type -Wmissing-declarations -m64
-#         QMAKE_CFLAGS += -Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64
+#        add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-declarations -m64)
+#        add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64)
     endif()
 
     if ("${GSYS_ENV}" STREQUAL "deg")
         add_definitions(-DDEG -DCIA_DEX)
-        add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-declarations -m64)
-        add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64)
+#        add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-declarations -m64)
+#        add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64)
     endif()
 
     set(GPRODUCTS_ENV $ENV{GPRODUCTS})

@@ -29,10 +29,10 @@ add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 if ("$ENV{GAMS_BUILD}" STREQUAL "")
     set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 else()
-    set(BASEPATH "${GAMSPATH}/apifiles/")
+    set(BASEPATH "${GAMSPATH}/apiexamples/")
 endif()
 
-include_directories("${GAMSPATH}/apifiles/C/api"
+include_directories("${BASEPATH}/C/api"
                     "${BASEPATH}/C++/api"
                     "${gtest_SOURCE_DIR}/include")
 

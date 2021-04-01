@@ -10,7 +10,9 @@ if (IS_IN_GAMS_DIR)
 else()
     set(BASEPATH "${GAMSPATH}/apifiles/")
 endif()
-include_directories("${BASEPATH}/C/api")
+include_directories("${BASEPATH}/C/api"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/../../src"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/../../src/generated")
 
 add_executable(${PROJECT_NAME}
     "xp_example2.cpp"

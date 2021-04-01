@@ -11,7 +11,9 @@ else()
     set(BASEPATH "${GAMSPATH}/apifiles/")
 endif()
 include_directories("${BASEPATH}/C/api"
-                    "${BASEPATH}/C++/api")
+                    "${BASEPATH}/C++/api"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/../../src"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/../../src/generated")
 
 if(WIN32)
   set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
