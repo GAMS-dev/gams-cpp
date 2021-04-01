@@ -96,11 +96,13 @@ endif()
 
 # TODO(RG): this should be adjusted for the gams build system, currently the path is wrong there
 # create variable GAMSPATH from gamsinclude.pri
-if(NOT $ENV{GAMS_BUILD})
+if("$ENV{GAMS_BUILD}" STREQUAL "")
+    message("RGDBG TRUE")
     file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../gamsinclude.pri" GAMSINCLUDE LIMIT_COUNT 1)
     string(REGEX MATCH "[^=]+$" GAMSPATH ${GAMSINCLUDE})
 else()
-    set(GAMSPATH "${CMAKE_CURRENT_SOURCE_DIR}/../../../apiexamples/")
+    message("RGDBG FALSE")
+    set(GAMSPATH "${CMAKE_CURRENT_SOURCE_DIR}/../../../")
 endif()
 message("RGDBG: set gamspath to: ${GAMSPATH}")
 

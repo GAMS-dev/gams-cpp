@@ -32,7 +32,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if (NOT $ENV{GAMS_BUILD})
     set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 else()
-    set(BASEPATH "${GAMSPATH}/apifiles/")
+    set(BASEPATH "${GAMSPATH}/apiexamples/")
 endif()
 include_directories("${BASEPATH}/C/api"
                     "${BASEPATH}/C++/api"
