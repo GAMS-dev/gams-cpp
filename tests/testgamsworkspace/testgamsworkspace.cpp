@@ -1120,37 +1120,41 @@ TEST_P(ParameterizedTestAddOptions_OptFile, testAddOptions_OptFile) {
 
     std::string filename="validoptionfile.pf";
     std::ofstream file;
-    file.open(GAMSPath(workdir, filename), std::ios::out);
+    file.open(GAMSPath(workdir, filename));
 
-    if ( file.is_open() )  {
-      file << "IterLim=1" << std::endl;
-      file << "LimCol=4" << std::endl;
-      file << "LimRow=5" << std::endl;
-      file.close();
-   }
+    if (file.is_open()) {
+        file << "IterLim=1" << std::endl;
+        file << "LimCol=4" << std::endl;
+        file << "LimRow=5" << std::endl;
+    }
+    file.close();
 
     // when
     std::string optfilename = std::get<1>(GetParam());
     bool exists             = std::get<2>(GetParam());
 
-    GAMSPath dir(std::filesystem::current_path());
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
-    wsInfo.setWorkingDirectory( dir );
+    wsInfo.setWorkingDirectory( workdir );
     wsInfo.setDebug(GAMSEnum::DebugLevel::KeepFiles);
     GAMSWorkspace ws(wsInfo);
     GAMSOptions o = ws.addOptions();
     if (exists) {
         try {
-           std::string filename = GAMSPath(dir, optfilename);
-           GAMSOptions opt = ws.addOptions(filename);
-           EXPECT_EQ( opt.iterLim(), 1 );
-           EXPECT_EQ( opt.limCol(), 4 );
-           EXPECT_EQ( opt.limRow(), 5 );
+            std::cout << "1" << std::endl; // rogo: delete
+            std::string filename = GAMSPath(workdir, optfilename);
+            std::cout << "2, dir: " << filename << std::endl; // rogo: delete
+            GAMSOptions opt = ws.addOptions(filename);
+            std::cout << "3" << std::endl; // rogo: delete
+            EXPECT_EQ( opt.iterLim(), 1 );
+            std::cout << "4" << std::endl; // rogo: delete
+            EXPECT_EQ( opt.limCol(), 4 );
+            std::cout << "5" << std::endl; // rogo: delete
+            EXPECT_EQ( opt.limRow(), 5 );
         } catch (GAMSException& e) {
             FAIL() <<  "AddOptions from existing optfile should not fail: " << e.what();
         }
     } else {
-       EXPECT_THROW( ws.addOptions(optfilename), GAMSException);
+        EXPECT_THROW( ws.addOptions(optfilename), GAMSException);
     }
 
     std::string appDir;
