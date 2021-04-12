@@ -109,7 +109,7 @@ add_library(gamscpp SHARED
         generated/gamsoptions.cpp
         generated/gamsoptionsimpl.cpp
         solveroptions.cpp solveroptions.h
-        ../CHANGELOG ../version
+        ../CHANGELOG ../version ../jenkinsfile
         ${SOURCE} ${HEADER}
 )
 

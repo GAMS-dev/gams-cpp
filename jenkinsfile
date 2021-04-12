@@ -22,9 +22,7 @@ pipeline {
                     steps {
                         step([$class: 'WsCleanup'])
                         checkout scm
-                        sh '''
-                            cmake . && make -j4
-                        '''
+                        cmakeBuild buildDir: 'build', installation: 'InSearchPath', steps: [[args: '-j4']]
                     }
                     post {
                         always {
@@ -50,7 +48,9 @@ pipeline {
                             call vcvars64.bat
                             set
                             cd %WORKSPACE%
-                            cmake -G "NMake Makefiles" .
+                            mkdir build
+                            cd build
+                            cmake -G "NMake Makefiles" ..
                             nmake
                         '''
                     }
@@ -69,7 +69,7 @@ pipeline {
                     steps {
                         step([$class: 'WsCleanup'])
                         checkout scm
-                        sh 'cmake . && make -j4'
+                        cmakeBuild buildDir: 'build', installation: 'InSearchPath', steps: [[args: '-j4']]
                     }
                     post {
                         always {
@@ -87,22 +87,14 @@ pipeline {
                         PATH="${GAMS_FOR_LINUX}:${PATH}"
                     }
                     steps {
-                        sh '''
-                            mkdir reports
-                            export LD_LIBRARY_PATH=$WORKSPACE/bin:$LD_LIBRARY_PATH
-                            cd tests
-                            for f in test*; do
-                                if [ -d $f ] && [ -e $f/$f ]; then
-                                ./$f/$f --gtest_output=xml:$WORKSPACE/reports/$f.xml
-                                fi
-                            done
-                        '''
+                        ctest ignoredExitCodes: '1-65535', installation: 'InSearchPath', workingDir: 'build'
                     }
-                    post {
-                        always {
-                            junit allowEmptyResults: true, testResults: 'reports/*.xml'
-                        }
-                    }
+                    //post { // TODO
+                    //    always {
+                    //        xunit([CTest(excludesPattern: '', pattern: 'build/Testing/**/LastTest.log', stopProcessingIfError: true)])
+                    //        archiveArtifacts artifacts: 'build/Testing/**/LastTest.log', fingerprint: true
+                    //    }
+                    //}
                 }
                 stage ('windowsX64') {
                     agent { label 'windowsX64' }
@@ -111,20 +103,19 @@ pipeline {
                     }
                     steps {
                         bat '''
-                            mkdir reports
-                            cd tests
-                            for /d %%f in (test*) do (
-                                %%f\\%%f.exe --gtest_output=xml:"%WORKSPACE%\\reports\\%%f.xml"
-                            )
-                            dir %WORKSPACE%\\reports
+                            cd build
+                            dir
                         '''
+                        // TODO ctest missing on Windows
+                        //ctest ignoredExitCodes: '1-65535', installation: 'InSearchPath', workingDir: 'build'
+                        //bat ' ctest --version '
                     }
-                    post {
-                        always {
-                            junit allowEmptyResults: true, testResults: 'reports/*.xml'
-                            archiveArtifacts artifacts: 'reports/*.xml', fingerprint: true
-                        }
-                    }
+                    //post { // TODO
+                    //    always {
+                    //        junit allowEmptyResults: true, testResults: 'reports/*.xml'
+                    //        archiveArtifacts artifacts: 'reports/*.xml', fingerprint: true
+                    //    }
+                    //}
                 }
                 stage ('macos') {
                     agent { label 'macos' }
@@ -132,22 +123,13 @@ pipeline {
                         PATH="${GAMS_FOR_MACOS}:${PATH}"
                     }
                     steps {
-                        sh '''
-                            mkdir reports
-                            export DYLD_LIBRARY_PATH=$WORKSPACE/bin:$DYLD_LIBRARY_PATH
-                            cd tests
-                            for f in test*; do
-                                if [ -d $f ]; then
-                                    ./$f/$f --gtest_output=xml:$WORKSPACE/reports/$f.xml
-                                fi
-                            done
-                        '''
+                        ctest ignoredExitCodes: '1-65535', installation: 'InSearchPath', workingDir: 'build'
                     }
-                    post {
-                        always {
-                            junit allowEmptyResults: true, testResults: 'reports/*.xml'
-                        }
-                    }
+                    //post { // TODO
+                    //    always {
+                    //        archiveArtifacts artifacts: 'build/Testing/**/LastTest.log', fingerprint: true
+                    //    }
+                    //}
                 }
             }
         }
