@@ -5,7 +5,7 @@ project(warehouse C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if (NOT $ENV{GAMS_BUILD})
+if ("$ENV{GAMS_BUILD}" STREQUAL "")
     set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 else()
     set(BASEPATH "${GAMSPATH}/apifiles")
