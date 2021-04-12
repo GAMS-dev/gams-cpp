@@ -75,12 +75,10 @@ struct LIBSPEC GAMSPlatform
     static int runProcess(const std::string where, const std::string what, const std::string args, std::string& output);
 
     ///
-    /// Runs a process without waiting for it to end. Returns process id of started process.
-    /// \brief runProcessParallel
-    /// \param where Directory of execution.
-    /// \param what Name of process to run.
+    /// Runs a process without waiting for it to end. Returns std::thread of started process.
+    /// \param executable Filepath of process to run.
     /// \param args Process arguments.
-    /// \return Process ID
+    /// \return thread
     ///
     static std::thread runProcessParallel(const std::string executable, const std::string args);
 private:

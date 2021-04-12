@@ -109,12 +109,12 @@ public:
     const char* c_str() const;
 
     /// Create a GAMSPath to a temporary directory.
-    /// \param templatePath Template temporary directory.
+    /// \param tempPath Template temporary directory.
     /// \return Returns a GAMSPath to the temporary directory.
     GAMSPath tempDir(const std::string &tempPath = std::string());
 
     /// Create a GAMSPath to a temporary file.
-    /// \param templateName Template for temporary file name.
+    /// \param tempName Template for temporary file name.
     /// \return Returns a GAMSPath to the temporary file.
     GAMSPath tempFile(const std::string &tempName = "XXXXXX.tmp");
 
