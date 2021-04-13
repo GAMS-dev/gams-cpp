@@ -55,7 +55,7 @@ GAMSOptionsImpl::GAMSOptionsImpl(GAMSWorkspace &workspace, GAMSOptionsImpl* optF
         optReadParameterFile(mOPT, pfPath.c_str());
 
         if (mWs.debug() == GAMSEnum::DebugLevel::Off)
-            GAMSPath(pfPath).remove();
+            pfPath.remove();
     } else {
         setDefaultSolver();
     }

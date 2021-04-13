@@ -270,11 +270,14 @@ int GAMSPlatform::runProcess(const string where, const string what, const string
     ostringstream ssp;
     string result;
     FILE* out;
+
 #ifdef _WIN32
     filesystem::path p = filesystem::current_path();
-    ssp << what << " " << args;
+
+    ssp << "\"" << what << "\"" << " " << args ;
     _chdir(where.c_str()); // for some reason we need to do this on windows
     out = _popen(ssp.str().c_str(), "r");
+
     _chdir(p.string().c_str()); // change back to old working dir
 #else
     ssp << "cd " << where << " && " << what << " " << args;
