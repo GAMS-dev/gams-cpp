@@ -32,7 +32,6 @@
 #include "gamsset.h"
 #include "gamsequation.h"
 #include <iostream>
-#include <QString>
 
 using namespace std;
 

@@ -25,30 +25,28 @@
  */
 
 #include "gamsexception.h"
-#include "testgamsexception.h"
-
-#include <QtTest>
+#include "testgamsobject.h"
 
 using namespace gams;
 
-QString TestGAMSException::classname()  { return "TestGAMSException"; }
+class TestGAMSException: public TestGAMSObject
+{
+};
 
-void TestGAMSException::testConstructor_string() {
+TEST_F(TestGAMSException, testConstructor_string) {
     std::string what = "testConstructor_string()";
     try {
         throw GAMSException(what);
     } catch(GAMSException & e) {
-        QCOMPARE( e.what(), what.c_str());
+        EXPECT_STREQ( e.what(), what.c_str());
     }
 }
 
-void TestGAMSException::testConstructor_charptr() {
+TEST_F(TestGAMSException, testConstructor_charptr) {
     try {
        throw GAMSException("testConstructor_charptr()");
     } catch(GAMSException & e) {
-        QCOMPARE( e.what(), "testConstructor_charptr()");
+        EXPECT_STREQ( e.what(), "testConstructor_charptr()");
     }
 
 }
-
-QTEST_MAIN(TestGAMSException)

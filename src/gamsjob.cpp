@@ -50,7 +50,7 @@ GAMSJob::GAMSJob(const std::shared_ptr<GAMSJobImpl>& impl)
 {
 }
 
-GAMSJob::GAMSJob(const GAMSWorkspace& ws, const string& jobName, const string& fileName, const GAMSCheckpoint* checkpoint)
+GAMSJob::GAMSJob(GAMSWorkspace& ws, const string& jobName, const string& fileName, const GAMSCheckpoint* checkpoint)
     : mImpl(make_shared<GAMSJobImpl>(ws, jobName, fileName, checkpoint))
 {}
 
@@ -65,7 +65,6 @@ bool GAMSJob::isValid() const
 void GAMSJob::run()
 {
     if (!mImpl) throw GAMSException("GAMSJob: This job has not been initialized.");
-    //ostream* empty = nullptr;
     mImpl->run();
 }
 
@@ -90,9 +89,7 @@ void GAMSJob::run(GAMSOptions& gamsOptions, std::ostream& outstream)
 void GAMSJob::run(GAMSOptions& gamsOptions, GAMSDatabase db)
 {
     if (!mImpl) throw GAMSException("GAMSJob: This job has not been initialized.");
-    vector<GAMSDatabase> databases;
-    databases.push_back(db);
-    mImpl->run(&gamsOptions, nullptr, nullptr, true, databases);
+    mImpl->run(&gamsOptions, nullptr, nullptr, true, vector<GAMSDatabase>{db} );
 }
 
 void GAMSJob::run(GAMSCheckpoint gamsCheckpoint)

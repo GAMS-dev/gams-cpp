@@ -22,7 +22,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 #include "gamscheckpointimpl.h"
 #include "gamslog.h"
 #include "gamspath.h"
@@ -32,12 +31,12 @@ namespace gams {
 
 using namespace std;
 
-GAMSCheckpointImpl::GAMSCheckpointImpl(GAMSWorkspace workspace, const string& checkpointName)
+GAMSCheckpointImpl::GAMSCheckpointImpl(const GAMSWorkspace& workspace, const string& checkpointName)
    : mWs(workspace), mName(checkpointName)
 {
     DEB << "---- Entering GAMSCheckpointImpl constructor ----";
     GAMSPath cpFilePath(mName);
-    if (!cpFilePath.isAbsolute())
+    if (!cpFilePath.is_absolute())
       cpFilePath = GAMSPath(mWs.workingDirectory()) / mName;
     cpFilePath.setSuffix(".g00");
     mCheckpointFileName = cpFilePath.toStdString();

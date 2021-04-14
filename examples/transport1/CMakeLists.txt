@@ -1,20 +1,52 @@
-cmake_minimum_required(VERSION 2.8.11)
+#
+# GAMS - General Algebraic Modeling System C++ API
+#
+# Copyright (c) 2017-2020 GAMS Software GmbH <support@gams.com>
+# Copyright (c) 2017-2020 GAMS Development Corp. <support@gams.com>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+cmake_minimum_required(VERSION 3.8)
 
 project(transport1 C CXX)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../../C/api"
-    "${CMAKE_CURRENT_SOURCE_DIR}/../api")
+if ("$ENV{GAMS_BUILD}" STREQUAL "")
+    set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
+else()
+    set(BASEPATH "${GAMSPATH}/apiexamples")
+endif()
+include_directories("${BASEPATH}/C/api"
+                    "${BASEPATH}/C++/api"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/../../src"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/../../src/generated")
 
-IF (WIN32)
-  SET(VSVERSION "vs2017" CACHE STRING "Visual Studio version")
-  LINK_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../lib/${VSVERSION}")
-ELSE()
-  LINK_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../lib")
-ENDIF()
+if(WIN32)
+  set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
+  link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
+else()
+  link_directories("${BASEPATH}/C++/lib")
+endif()
 
 add_executable(${PROJECT_NAME} "transport1.cpp")
 
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} gamscpp)
+target_link_libraries(${PROJECT_NAME} gamscpp)
+

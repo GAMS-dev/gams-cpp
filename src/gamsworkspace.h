@@ -26,8 +26,8 @@
 #ifndef GAMSWORKSPACE_H
 #define GAMSWORKSPACE_H
 
-#include "gamslib_global.h"
 #include <memory>
+#include "gamslib_global.h"
 #include "gamsenum.h"
 #include "gamsworkspaceinfo.h"
 
@@ -162,7 +162,7 @@ public:
     static int apiGoldRelNumber();
 
     /// Get the string used to prefix automatically generated files.
-    std::string scratchFilePrefix();
+    std::string scratchFilePrefix() const;
 
     /// Set the string used to prefix automatically generated files.
     /// \param prefix String used to prefix automatically generated files.
@@ -427,7 +427,7 @@ public:
 
     /// Get the GAMS log ID.
     /// \return Returns the GAMS log ID.
-    LogId logID();
+    LogId logID() const;
 
     /// Get all special values related to a system.
     double* specValues() const;
@@ -437,17 +437,16 @@ private:
     friend class GAMSJobImpl;
     friend class GAMSDatabaseImpl;
     friend class GAMSCheckpointImpl;
-    GAMSWorkspace(const std::shared_ptr<GAMSWorkspaceImpl>& impl);
 
     GAMSDatabase addDatabaseFromGDXForcedName(std::string gdxFileName, std::string databaseName, std::string inModelName);
 
-    bool usingTmpWorkingDir();
+    bool usingTmpWorkingDir() const;
 
     /// Add GAMSDatabase with given name to workspace
     /// \param databaseName Database name to add
     /// \returns True if everything worked, else false
-    std::string registerDatabase(const std::string databaseName = "");
-    std::string nextDatabaseName();
+    std::string registerDatabase(const std::string databaseName = "") const;
+    std::string nextDatabaseName() const;
 
     /// Registers a ModelInstance to workspace
     /// \param databaseName Database name to add

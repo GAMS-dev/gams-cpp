@@ -23,54 +23,42 @@
  * SOFTWARE.
  */
 
-#define NOMINMAX // we need this in ordre for numerical_limits<double>::min() to work
+#define NOMINMAX // we need this in order  for numerical_limits<double>::min() to work
 
-#include "gamslog.h"
-#include "gamsworkspace.h"
-#include "gamsworkspaceimpl.h"
-#include "gamsoptions.h"
-#include "gamsjob.h"
 #include <iostream>
 #include <cstdlib>
 #include <sstream>
 #include <fstream>
 #include <vector>
 #include <string>
-#include <QSettings>
-#include <QProcess>
-#include <QDir>
-#include <QDebug>
-
 #include <limits>
 #include <stdio.h>
+#include "gamslog.h"
+#include "gamsworkspace.h"
+#include "gamsworkspaceimpl.h"
+#include "gamsoptions.h"
+#include "gamsjob.h"
 
 using namespace std;
 
 namespace gams {
-
-
-GAMSWorkspace::GAMSWorkspace(const std::shared_ptr<GAMSWorkspaceImpl>& impl)
-    : mImpl(impl)
-{
-    DEB << "---- Entering GAMSWorkspace constructor ----";
-}
 
 GAMSDatabase GAMSWorkspace::addDatabaseFromGDXForcedName(string gdxFileName, string databaseName, string inModelName)
 {
     return mImpl->addDatabaseFromGDXForcedName(*this, gdxFileName, databaseName, inModelName);
 }
 
-bool GAMSWorkspace::usingTmpWorkingDir()
+bool GAMSWorkspace::usingTmpWorkingDir() const
 {
     return mImpl->usingTmpWorkingDir();
 }
 
-std::string GAMSWorkspace::registerDatabase(const string databaseName)
+std::string GAMSWorkspace::registerDatabase(const string databaseName) const
 {
     return mImpl->registerDatabase(databaseName);
 }
 
-string GAMSWorkspace::nextDatabaseName()
+string GAMSWorkspace::nextDatabaseName() const
 {
     return mImpl->nextDatabaseName();
 }
@@ -80,7 +68,7 @@ GAMSEnum::DebugLevel GAMSWorkspace::debug()
     return mImpl->debug();
 }
 
-LogId GAMSWorkspace::logID()
+LogId GAMSWorkspace::logID() const
 {
     return mImpl->logID();
 }
@@ -97,24 +85,29 @@ GAMSWorkspace::GAMSWorkspace(const string& workingDir, const string& systemDir, 
 }
 
 GAMSWorkspace::GAMSWorkspace(const string& workingDir, const string& systemDir)
-    : GAMSWorkspace(make_shared<GAMSWorkspaceImpl>(workingDir, systemDir, GAMSEnum::DebugLevel::Off))
-{}
+    : GAMSWorkspace(workingDir, systemDir, GAMSEnum::DebugLevel::Off)
+{
+}
 
 GAMSWorkspace::GAMSWorkspace(const string& workingDir, GAMSEnum::DebugLevel debug)
-    : GAMSWorkspace(make_shared<GAMSWorkspaceImpl>(workingDir, "", debug))
-{}
+    : GAMSWorkspace(workingDir, "", debug)
+{
+}
 
 GAMSWorkspace::GAMSWorkspace(GAMSEnum::DebugLevel debug)
-    : GAMSWorkspace(make_shared<GAMSWorkspaceImpl>("", "", debug))
-{}
+    : GAMSWorkspace("", "", debug)
+{
+}
 
 GAMSWorkspace::GAMSWorkspace()
-    : GAMSWorkspace(make_shared<GAMSWorkspaceImpl>("", "", GAMSEnum::DebugLevel::Off))
-{}
+    : GAMSWorkspace("", "", GAMSEnum::DebugLevel::Off)
+{
+}
 
 GAMSWorkspace::GAMSWorkspace(const GAMSWorkspace& other)
-    : GAMSWorkspace(other.mImpl)
-{}
+{
+    *this = other;
+}
 
 GAMSWorkspace::GAMSWorkspace(const GAMSWorkspaceInfo& wsInfo)
     : GAMSWorkspace(wsInfo.workingDirectory(), wsInfo.systemDirectory(), wsInfo.debug())
@@ -416,7 +409,7 @@ int GAMSWorkspace::apiGoldRelNumber()
 }
 
 
-string GAMSWorkspace::scratchFilePrefix()
+string GAMSWorkspace::scratchFilePrefix() const
 {
     return mImpl->scratchFilePrefix();
 }

@@ -24,68 +24,68 @@
  * SOFTWARE.
  */
 
-#include "testgamsexceptionexecution.h"
+#include "testgamsobject.h"
 #include "gamsexceptionexecution.h"
 
 using namespace gams;
 
-QString TestGAMSExceptionExecution::classname()  { return "TestGAMSExceptionExecution"; }
+class TestGAMSExceptionExecution: public TestGAMSObject
+{
+};
 
-void TestGAMSExceptionExecution::testConstructor_string() {
+TEST_F(TestGAMSExceptionExecution, testConstructor_string) {
     std::string what = "testConstructor_string()";
     try {
         throw GAMSExceptionExecution(what, 13);
     } catch(GAMSExceptionExecution & e) {
-        QCOMPARE( e.rc(), 13 );
-        QCOMPARE( e.what(), what.c_str());
+        EXPECT_EQ( e.rc(), 13 );
+        EXPECT_STREQ( e.what(), what.c_str());
     }
 
     try{
        try {
             throw GAMSException(what);
        } catch(GAMSExceptionExecution & ) {
-           QFAIL("do not expect GAMSExceptionExecution to be thrown");
+           FAIL() << "do not expect GAMSExceptionExecution to be thrown";
        }
     } catch(GAMSException & e) {
-        QCOMPARE( e.what(), what.c_str());
+        EXPECT_STREQ( e.what(), what.c_str());
     }
 }
 
-void TestGAMSExceptionExecution::testConstructor_charptr() {
+TEST_F(TestGAMSExceptionExecution, testConstructor_charptr) {
     try {
         throw GAMSExceptionExecution("testConstructor_charptr()", 17);
     } catch(GAMSExceptionExecution & e) {
-        QCOMPARE( e.rc(), 17 );
-        QCOMPARE( e.what(), "testConstructor_charptr()");
+        EXPECT_EQ( e.rc(), 17 );
+        EXPECT_STREQ( e.what(), "testConstructor_charptr()");
     }
 
     try{
        try {
             throw GAMSException("testConstructor_charptr()");
        } catch(GAMSExceptionExecution & ) {
-           QFAIL("do not expect GAMSExceptionExecution to be thrown");
+           FAIL() << "do not expect GAMSExceptionExecution to be thrown";
        }
     } catch(GAMSException & e) {
-        QCOMPARE( e.what(), "testConstructor_charptr()");
+        EXPECT_STREQ( e.what(), "testConstructor_charptr()");
     }
 }
 
-void TestGAMSExceptionExecution::testGetRc() {
+TEST_F(TestGAMSExceptionExecution, testGetRc) {
     try {
         throw GAMSExceptionExecution("testGetRc()", 13);
     } catch(GAMSExceptionExecution & e) {
-        QCOMPARE( e.rc(), 13 );
+        EXPECT_EQ( e.rc(), 13 );
     }
     try {
         throw GAMSExceptionExecution("testGetRc()", 0);
     } catch(GAMSExceptionExecution & e) {
-        QCOMPARE( e.rc(), 0 );
+        EXPECT_EQ( e.rc(), 0 );
     }
     try {
         throw GAMSExceptionExecution("testGetRc()", -1);
     } catch(GAMSExceptionExecution & e) {
-        QCOMPARE( e.rc(), -1 );
+        EXPECT_EQ( e.rc(), -1 );
     }
 }
-
-QTEST_MAIN(TestGAMSExceptionExecution)

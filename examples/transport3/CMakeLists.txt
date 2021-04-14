@@ -1,21 +1,28 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.8)
 
 project(transport3 C CXX)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../../C/api"
-    "${CMAKE_CURRENT_SOURCE_DIR}/../api")
+if ("$ENV{GAMS_BUILD}" STREQUAL "")
+    set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
+else()
+    set(BASEPATH "${GAMSPATH}/apifiles")
+endif()
+include_directories("${BASEPATH}/C/api"
+                    "${BASEPATH}/C++/api"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/../../src"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/../../src/generated")
 
-IF (WIN32)
-  SET(VSVERSION "vs2017" CACHE STRING "Visual Studio version")
-  LINK_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../lib/${VSVERSION}")
-ELSE()
-  LINK_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../lib")
-ENDIF()
+if(WIN32)
+  set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
+  link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
+else()
+  link_directories("${BASEPATH}/C++/lib")
+endif()
 
 add_executable(${PROJECT_NAME}
     "transport3.cpp")
 
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} gamscpp)
+target_link_libraries(${PROJECT_NAME} gamscpp)

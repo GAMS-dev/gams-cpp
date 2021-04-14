@@ -51,7 +51,7 @@ GAMSModelInstanceImpl::GAMSModelInstanceImpl(GAMSCheckpoint& checkpoint, const s
     : mCheckpoint(checkpoint), mModelInstanceName(modelInstanceName)
 {
     char msg[GMS_SSSIZE];
-    const GAMSWorkspace &ws = mCheckpoint.workspace();
+    GAMSWorkspace ws = mCheckpoint.workspace();
     mScrDir = GAMSPath(ws.workingDirectory()) / mModelInstanceName;
     mSyncDb = GAMSDatabase(ws, ws.specValues());
     dbLockRecords();

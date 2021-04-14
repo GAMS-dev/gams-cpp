@@ -24,134 +24,157 @@
  * SOFTWARE.
  */
 
+#include "testgamsobject.h"
 #include "gamsmodelinstanceopt.h"
-#include "testgamsmodelinstanceopt.h"
 
 using namespace gams;
 
-QString TestGAMSModelInstanceOpt::classname()  { return "TestGAMSModelInstanceOpt"; }
+class TestGAMSModelInstanceOpt: public TestGAMSObject
+{
+};
 
-void TestGAMSModelInstanceOpt::testDefaultConstructor()  {
+TEST_F(TestGAMSModelInstanceOpt, testDefaultConstructor) {
     GAMSModelInstanceOpt miopt;
-    QVERIFY( miopt.solver().empty() );
-    QCOMPARE( miopt.optFile(), -1 );
-    QCOMPARE( miopt.noMatchLimit(), 0);
-    QVERIFY( ! miopt.debug() );
+    ASSERT_TRUE( miopt.solver().empty() );
+    EXPECT_EQ( miopt.optFile(), -1 );
+    EXPECT_EQ( miopt.noMatchLimit(), 0);
+    ASSERT_TRUE( ! miopt.debug() );
 }
 
-void TestGAMSModelInstanceOpt::testConstructor()  {
+TEST_F(TestGAMSModelInstanceOpt, testConstructor) {
     GAMSModelInstanceOpt miopt("x", 1, 1, true);
-    QCOMPARE( miopt.solver().c_str(), "x" );
-    QCOMPARE( miopt.noMatchLimit(), 1 );
-    QCOMPARE( miopt.optFile(), 1 );
-    QVERIFY( miopt.debug() );
+    EXPECT_STREQ( miopt.solver().c_str(), "x" );
+    EXPECT_EQ( miopt.noMatchLimit(), 1 );
+    EXPECT_EQ( miopt.optFile(), 1 );
+    ASSERT_TRUE( miopt.debug() );
 }
 
-void TestGAMSModelInstanceOpt::testAssignmentOperator()  {
+TEST_F(TestGAMSModelInstanceOpt, testAssignmentOperator) {
     GAMSModelInstanceOpt miopt1;
 
     GAMSModelInstanceOpt miopt = miopt1;
-    QVERIFY( miopt == miopt1 );
+    ASSERT_TRUE( miopt == miopt1 );
 
     GAMSModelInstanceOpt miopt2("x", 1, 0, true);
     miopt = miopt2;
-    QVERIFY( miopt == miopt2 );
+    ASSERT_TRUE( miopt == miopt2 );
 }
 
-void TestGAMSModelInstanceOpt::testEqualToOperator()  {
+TEST_F(TestGAMSModelInstanceOpt, testEqualToOperator) {
     GAMSModelInstanceOpt miopt1;
 
     GAMSModelInstanceOpt miopt = miopt1;
-    QCOMPARE( miopt.solver(), miopt1.solver() );
-    QCOMPARE( miopt.noMatchLimit(), miopt1.noMatchLimit() );
-    QCOMPARE( miopt.optFile(), miopt1.optFile() );
-    QCOMPARE( miopt.debug(), miopt1.debug() );
-    QVERIFY( miopt == miopt1 );
+    EXPECT_EQ( miopt.solver(), miopt1.solver() );
+    EXPECT_EQ( miopt.noMatchLimit(), miopt1.noMatchLimit() );
+    EXPECT_EQ( miopt.optFile(), miopt1.optFile() );
+    EXPECT_EQ( miopt.debug(), miopt1.debug() );
+    ASSERT_TRUE( miopt == miopt1 );
 
     GAMSModelInstanceOpt miopt2("x", 1, 0, true);
     miopt = miopt2;
-    QCOMPARE( miopt.solver(), miopt2.solver() );
-    QCOMPARE( miopt.noMatchLimit(), miopt2.noMatchLimit() );
-    QCOMPARE( miopt.optFile(), miopt2.optFile() );
-    QCOMPARE( miopt.debug(), miopt2.debug() );
-    QVERIFY( miopt == miopt2 );
+    EXPECT_EQ( miopt.solver(), miopt2.solver() );
+    EXPECT_EQ( miopt.noMatchLimit(), miopt2.noMatchLimit() );
+    EXPECT_EQ( miopt.optFile(), miopt2.optFile() );
+    EXPECT_EQ( miopt.debug(), miopt2.debug() );
+    ASSERT_TRUE( miopt == miopt2 );
 }
 
-void TestGAMSModelInstanceOpt::testGetSetSolver_data()  {
-    QTest::addColumn<QString>("solver");
+class ParameterizedTestGetSetOptFile
+        : public ::testing::WithParamInterface<std::tuple<std::string,int>>,
+          public TestGAMSModelInstanceOpt {
+};
 
-    QTest::newRow("empty")        << "";
-    QTest::newRow("x")            << "x";
-    QTest::newRow("conopt")       << "conopt";
-}
+INSTANTIATE_TEST_SUITE_P(testGetSetOptFile,
+                        ParameterizedTestGetSetOptFile,
+                        ::testing::Values (
+                            std::make_tuple("minus", -1),
+                             std::make_tuple("zero", 0),
+                             std::make_tuple("one", 1),
+                             std::make_tuple("onehundread", 100)
+                        ));
 
-void TestGAMSModelInstanceOpt::testGetSetSolver()  {
-    QFETCH(QString, solver);
-
-    GAMSModelInstanceOpt miopt1(solver.toStdString(), -1, 0, false);
-    QCOMPARE(  miopt1.solver(), solver.toStdString() );
-
-    GAMSModelInstanceOpt miopt2;
-    miopt2.setSolver( solver.toStdString() );
-    QCOMPARE(  miopt2.solver(), solver.toStdString() );
-}
-
-void TestGAMSModelInstanceOpt::testGetSetOptFile_data()  {
-    QTest::addColumn<int>("optfile");
-    QTest::newRow("minus")        << -1;
-    QTest::newRow("zero")         << 0;
-    QTest::newRow("one")          << 1;
-    QTest::newRow("onehundread")  << 100;
-}
-
-void TestGAMSModelInstanceOpt::testGetSetOptFile()  {
-    QFETCH(int, optfile);
+TEST_P(ParameterizedTestGetSetOptFile, testGetSetOptFile) {
+    int optfile = std::get<1>(GetParam());
 
     GAMSModelInstanceOpt miopt1("x", optfile, 0, false);
-    QCOMPARE(  miopt1.optFile(), optfile );
+    EXPECT_EQ(  miopt1.optFile(), optfile );
 
     GAMSModelInstanceOpt miopt2;
     miopt2.setOptFile( optfile );
-    QCOMPARE(  miopt2.optFile(), optfile );
+    EXPECT_EQ(  miopt2.optFile(), optfile );
 }
 
-void TestGAMSModelInstanceOpt::testGetSetNoMatchLimit_data()  {
-    QTest::addColumn<int>("limit");
-    QTest::newRow("minus")        << -1;
-    QTest::newRow("zero")         << 0;
-    QTest::newRow("one")          << 1;
-    QTest::newRow("onehundread")  << 100;
-}
+class ParameterizedtestGetSetNoMatchLimit
+        : public ::testing::WithParamInterface<std::tuple<std::string,int>>,
+          public TestGAMSModelInstanceOpt {
+};
 
-void TestGAMSModelInstanceOpt::testGetSetNoMatchLimit()  {
-    QFETCH(int, limit);
+INSTANTIATE_TEST_SUITE_P(testGetSetNoMatchLimit,
+                        ParameterizedtestGetSetNoMatchLimit,
+                        ::testing::Values (
+                            std::make_tuple("minus"       ,  -1),
+                             std::make_tuple("zero"       ,   0),
+                             std::make_tuple("one"        ,   1),
+                             std::make_tuple("onehundread", 100)
+                        ));
+
+TEST_P(ParameterizedtestGetSetNoMatchLimit, testGetSetNoMatchLimit) {
+    int limit = std::get<1>(GetParam());
 
     GAMSModelInstanceOpt miopt1("x", 1, limit, false);
-    QCOMPARE(  miopt1.noMatchLimit(), limit );
+    EXPECT_EQ(  miopt1.noMatchLimit(), limit );
 
     GAMSModelInstanceOpt miopt2;
     miopt2.setNoMatchLimit( limit );
-    QCOMPARE(  miopt2.noMatchLimit(), limit );
+    EXPECT_EQ(  miopt2.noMatchLimit(), limit );
 }
 
-void TestGAMSModelInstanceOpt::testGetSetDebug_data()  {
-    QTest::addColumn<bool>("debug");
-    QTest::newRow("true")   << true;
-    QTest::newRow("false")   << true;
-}
+class ParameterizedTestGetSetDebug
+        : public ::testing::WithParamInterface<bool>,
+          public TestGAMSModelInstanceOpt {
+};
 
-void TestGAMSModelInstanceOpt::testGetSetDebug()  {
-    QFETCH(bool, debug);
+INSTANTIATE_TEST_SUITE_P(testGetSetDebug,
+                        ParameterizedTestGetSetDebug,
+                        ::testing::Values (
+                            true,
+                            false
+                        ));
+
+TEST_P(ParameterizedTestGetSetDebug, testGetSetDebug) {
+    bool debug = GetParam();
 
     GAMSModelInstanceOpt miopt1("x", 1, 0, debug);
-    QVERIFY( debug ? miopt1.debug() : ! miopt1.debug() );
+    ASSERT_TRUE( debug ? miopt1.debug() : ! miopt1.debug() );
 
     miopt1.setDebug( debug );
-    QVERIFY( debug ? miopt1.debug() : ! miopt1.debug() );
+    ASSERT_TRUE( debug ? miopt1.debug() : ! miopt1.debug() );
 
     GAMSModelInstanceOpt miopt2;
     miopt2.setDebug( debug );
-    QVERIFY( debug ? miopt2.debug() : ! miopt2.debug() );
+    ASSERT_TRUE( debug ? miopt2.debug() : ! miopt2.debug() );
 }
 
-QTEST_MAIN(TestGAMSModelInstanceOpt)
+class ParameterizedTestGetSetSolver
+        : public ::testing::WithParamInterface<std::tuple<std::string,std::string>>,
+          public TestGAMSModelInstanceOpt {
+};
+
+INSTANTIATE_TEST_SUITE_P(testGetSetSolver,
+                        ParameterizedTestGetSetSolver,
+                        ::testing::Values (
+                            std::make_tuple("empty", ""),
+                            std::make_tuple("x"    , "x"),
+                            std::make_tuple("conopt","conopt")
+                        ));
+
+TEST_P(ParameterizedTestGetSetSolver, testGetSetSolver) {
+    std::string solver = std::get<1>(GetParam());
+
+    GAMSModelInstanceOpt miopt1(solver, -1, 0, false);
+    EXPECT_EQ(  miopt1.solver(), solver );
+
+    GAMSModelInstanceOpt miopt2;
+    miopt2.setSolver( solver );
+    EXPECT_EQ(  miopt2.solver(), solver );
+}

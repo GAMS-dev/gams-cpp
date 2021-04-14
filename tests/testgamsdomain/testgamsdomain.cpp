@@ -25,52 +25,54 @@
  */
 
 #include "gamsdomain.h"
-#include "testgamsdomain.h"
+#include "testgamsobject.h"
 
 using namespace gams;
 
-QString TestGAMSDomain::classname()  { return "TestGAMSDomain"; }
+class TestGAMSDomain: public TestGAMSObject
+{
+};
 
-void TestGAMSDomain::testConstructor_Set() {
+TEST_F(TestGAMSDomain, testConstructor_Set) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
     // when, then
     { GAMSSet i;
-      QVERIFY_EXCEPTION_THROWN( GAMSDomain domain( i ), GAMSException );
+      EXPECT_THROW( GAMSDomain domain( i ), GAMSException );
     }
     { GAMSSet i = db.getSet("i");
       GAMSDomain domain( i );
-      QCOMPARE( domain.name(), i.name() );
-      QVERIFY( ! domain.isRelaxed() );
-      QVERIFY( domain.getSet() == i );
+      EXPECT_EQ( domain.name(), i.name() );
+      ASSERT_TRUE( ! domain.isRelaxed() );
+      ASSERT_TRUE( domain.getSet() == i );
     }
 }
 
-void TestGAMSDomain::testConstructor_StringRelaxedName() {
+TEST_F(TestGAMSDomain, testConstructor_StringRelaxedName) {
    // given
    std::string setName = "x";
    // when, then
    GAMSDomain domain( setName );
-   QVERIFY( domain.isRelaxed() );
-   QCOMPARE( domain.name(), setName );
-   QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
+   ASSERT_TRUE( domain.isRelaxed() );
+   EXPECT_EQ( domain.name(), setName );
+   EXPECT_THROW( domain.getSet(), GAMSException );
 }
 
-void TestGAMSDomain::testConstructor_CharPtrRelaxedName() {
+TEST_F(TestGAMSDomain, testConstructor_CharPtrRelaxedName) {
     // given
     GAMSDomain domain( "x" );
     // when, then
-    QVERIFY( domain.isRelaxed() );
-    QCOMPARE( domain.name().c_str(), "x" );
-    QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
+    ASSERT_TRUE( domain.isRelaxed() );
+    EXPECT_STREQ( domain.name().c_str(), "x" );
+    EXPECT_THROW( domain.getSet(), GAMSException );
 }
 
-void TestGAMSDomain::testCopyConstructor() {
+TEST_F(TestGAMSDomain, testCopyConstructor) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
 
@@ -84,57 +86,57 @@ void TestGAMSDomain::testCopyConstructor() {
 
     // when, then
     { GAMSDomain domain( domain_i );
-      QVERIFY( ! domain.isRelaxed() );
-      QVERIFY( domain.getSet() == domain_i.getSet() );
+      ASSERT_TRUE( ! domain.isRelaxed() );
+      ASSERT_TRUE( domain.getSet() == domain_i.getSet() );
     }
     { GAMSDomain domain( domain_j );
-      QVERIFY( domain.isRelaxed() );
-      QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
+      ASSERT_TRUE( domain.isRelaxed() );
+      EXPECT_THROW( domain.getSet(), GAMSException );
     }
     { GAMSDomain domain( domain_k );
-      QVERIFY( domain.isRelaxed() );
-      QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
+      ASSERT_TRUE( domain.isRelaxed() );
+      EXPECT_THROW( domain.getSet(), GAMSException );
     }
 }
 
-void TestGAMSDomain::testAssignmentOperator_Set() {
+TEST_F(TestGAMSDomain, testAssignmentOperator_Set) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
     GAMSSet i = db.getSet( "i" );
     // when, then
     { GAMSDomain domain_i = i;
-      QVERIFY( domain_i.getSet() == i );
-      QCOMPARE( domain_i.name(), i.name() );
-      QVERIFY( ! domain_i.isRelaxed() );
+      ASSERT_TRUE( domain_i.getSet() == i );
+      EXPECT_EQ( domain_i.name(), i.name() );
+      ASSERT_TRUE( ! domain_i.isRelaxed() );
     }
     { GAMSSet j;
-      QVERIFY_EXCEPTION_THROWN( GAMSDomain domain_j = j, GAMSException);
+      EXPECT_THROW( GAMSDomain domain_j = j, GAMSException);
     }
 }
 
-void TestGAMSDomain::testAssignmentOperator_StringReleaxedName() {
+TEST_F(TestGAMSDomain, testAssignmentOperator_StringReleaxedName) {
     // given, when, then
     std::string setName = "i";
     GAMSDomain domain = setName;
-    QVERIFY( domain.isRelaxed() );
-    QCOMPARE( domain.name(), setName );
-    QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
+    ASSERT_TRUE( domain.isRelaxed() );
+    EXPECT_EQ( domain.name(), setName );
+    EXPECT_THROW( domain.getSet(), GAMSException );
 }
 
-void TestGAMSDomain::testAssignmentOperator_CharPtrReleaxedName() {
+TEST_F(TestGAMSDomain, testAssignmentOperator_CharPtrReleaxedName) {
     // given, when, then
     GAMSDomain domain = "i";
-    QVERIFY( domain.isRelaxed() );
-    QCOMPARE( domain.name().c_str(), "i" );
-    QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
+    ASSERT_TRUE( domain.isRelaxed() );
+    EXPECT_STREQ( domain.name().c_str(), "i" );
+    EXPECT_THROW( domain.getSet(), GAMSException );
 }
 
-void TestGAMSDomain::testAssignmentOperator_GAMSDomain() {
+TEST_F(TestGAMSDomain, testAssignmentOperator_GAMSDomain) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -142,47 +144,47 @@ void TestGAMSDomain::testAssignmentOperator_GAMSDomain() {
     { GAMSSet i = db.getSet( "i" );
       GAMSDomain domain_i( i );
       GAMSDomain domain = domain_i;
-      QVERIFY( domain.getSet() == i );
-      QVERIFY( domain.getSet() == domain_i.getSet() );
-      QVERIFY( ! domain.isRelaxed() );
+      ASSERT_TRUE( domain.getSet() == i );
+      ASSERT_TRUE( domain.getSet() == domain_i.getSet() );
+      ASSERT_TRUE( ! domain.isRelaxed() );
     }
     { std::string setName = "i";
       GAMSDomain domain_i( setName );
       GAMSDomain domain = domain_i;
-      QCOMPARE( domain.name(), setName );
-      QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
-      QVERIFY( domain.isRelaxed() );
+      EXPECT_EQ( domain.name(), setName );
+      EXPECT_THROW( domain.getSet(), GAMSException );
+      ASSERT_TRUE( domain.isRelaxed() );
     }
     { GAMSDomain domain_i( "i" );
       GAMSDomain domain = domain_i;
-      QCOMPARE( domain.name().c_str(), "i" );
-      QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
-      QVERIFY( domain.isRelaxed() );
+      EXPECT_STREQ( domain.name().c_str(), "i" );
+      EXPECT_THROW( domain.getSet(), GAMSException );
+      ASSERT_TRUE( domain.isRelaxed() );
     }
 }
 
-void TestGAMSDomain::testGetName() {
+TEST_F(TestGAMSDomain, testGetName) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_markets_j( db );
     // when, then
     { GAMSDomain domain( db.getSet("j") );
-      QCOMPARE( domain.name().c_str(), "j" );
+      EXPECT_STREQ( domain.name().c_str(), "j" );
     }
     { std::string setName = "SetX";;
       GAMSDomain domain( setName );
-      QCOMPARE( domain.name(), setName );
+      EXPECT_EQ( domain.name(), setName );
     }
     { GAMSDomain domain( "SetX" );
-      QCOMPARE( domain.name().c_str(), "SetX" );
+      EXPECT_STREQ( domain.name().c_str(), "SetX" );
     }
 }
 
-void TestGAMSDomain::testGetSet() {
+TEST_F(TestGAMSDomain, testGetSet) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -190,22 +192,22 @@ void TestGAMSDomain::testGetSet() {
     // when, then
     { GAMSSet i = db.getSet("i");
       GAMSDomain domain( i );
-      QCOMPARE( domain.getSet().name(), i.name() );
-      QCOMPARE( domain.getSet().numberRecords(), i.numberRecords() );
-      QVERIFY( domain.getSet() == i );
+      EXPECT_EQ( domain.getSet().name(), i.name() );
+      EXPECT_EQ( domain.getSet().numberRecords(), i.numberRecords() );
+      ASSERT_TRUE( domain.getSet() == i );
     }
     { std::string dom = "i";
       GAMSDomain domain( dom );
-      QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
+      EXPECT_THROW( domain.getSet(), GAMSException );
     }
     { GAMSDomain domain("i");
-      QVERIFY_EXCEPTION_THROWN( domain.getSet(), GAMSException );
+      EXPECT_THROW( domain.getSet(), GAMSException );
     }
 }
 
-void TestGAMSDomain::testIsRelaxed() {
+TEST_F(TestGAMSDomain, testIsRelaxed) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Set_plants_i( db );
@@ -213,15 +215,13 @@ void TestGAMSDomain::testIsRelaxed() {
     // when, then
     { GAMSSet i = db.getSet("i");
       GAMSDomain domain( i );
-      QVERIFY( ! domain.isRelaxed() );
+      ASSERT_TRUE( ! domain.isRelaxed() );
     }
     { std::string dom = "i";
       GAMSDomain domain( dom );
-      QVERIFY( domain.isRelaxed() );
+      ASSERT_TRUE( domain.isRelaxed() );
     }
     { GAMSDomain domain("i");
-      QVERIFY( domain.isRelaxed() );
+      ASSERT_TRUE( domain.isRelaxed() );
     }
 }
-
-QTEST_MAIN(TestGAMSDomain)

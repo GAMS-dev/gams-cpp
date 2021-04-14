@@ -24,6 +24,7 @@
  * SOFTWARE.
  */
 
+#include "testgamsobject.h"
 #include "gamsequation.h"
 #include "gamsequationrecord.h"
 #include "gamsparameter.h"
@@ -32,78 +33,83 @@
 #include "gamssetrecord.h"
 #include "gamsvariable.h"
 #include "gamsvariablerecord.h"
-#include "testgamsparameterrecord.h"
 
 using namespace gams;
 
-QString TestGAMSParameterRecord::classname()  { return "TestGAMSParameterRecord"; }
+class TestGAMSParameterRecord: public TestGAMSObject
+{
+};
 
-void TestGAMSParameterRecord::testDefaultConstructor() {
+TEST_F(TestGAMSParameterRecord, testDefaultConstructor) {
     // when
     GAMSParameterRecord rec;
     // then
-    QVERIFY( ! rec.isValid() );
-    QVERIFY_EXCEPTION_THROWN( rec.type(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( rec.logID(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( rec.setValue( 0.0 ), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( rec.keys(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( rec.moveNext(), GAMSException );
+    ASSERT_TRUE( ! rec.isValid() );
+    EXPECT_THROW( rec.type(), GAMSException );
+    EXPECT_THROW( rec.logID(), GAMSException );
+    EXPECT_THROW( rec.setValue( 0.0 ), GAMSException );
+    EXPECT_THROW( rec.keys(), GAMSException );
+    EXPECT_THROW( rec.moveNext(), GAMSException );
 }
 
-void TestGAMSParameterRecord::testCopyConstructor() {
+TEST_F(TestGAMSParameterRecord, testCopyConstructor) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_capacity_a( db );
     GAMSParameterRecord rec = db.getParameter("a").firstRecord();
     // when
     GAMSParameterRecord newRecord( rec );
-    QCOMPARE( newRecord, rec );
+    EXPECT_EQ( newRecord, rec );
 }
 
-void TestGAMSParameterRecord::testCopyConstructor_IncorrectType() {
+TEST_F(TestGAMSParameterRecord, testCopyConstructor_IncorrectType) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
     GAMSDatabase db = job.outDB();
     // when
-    QVERIFY_EXCEPTION_THROWN( GAMSParameterRecord newRecord( db.getSet("i").firstRecord() ), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( GAMSParameterRecord newRecord( db.getVariable("x").firstRecord() ), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( GAMSParameterRecord newRecord( db.getEquation("demand").firstRecord() ), GAMSException );
+    EXPECT_THROW( GAMSParameterRecord newRecord( db.getSet("i").firstRecord() ), GAMSException );
+    EXPECT_THROW( GAMSParameterRecord newRecord( db.getVariable("x").firstRecord() ), GAMSException );
+    EXPECT_THROW( GAMSParameterRecord newRecord( db.getEquation("demand").firstRecord() ), GAMSException );
 }
 
-void TestGAMSParameterRecord::testAssignmentOperator() {
+TEST_F(TestGAMSParameterRecord, testAssignmentOperator) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_capacity_a( db );
     GAMSParameterRecord rec = db.getParameter("a").firstRecord();
     // when
     GAMSParameterRecord newRecord = rec;
-    QCOMPARE( newRecord, rec );
-    QVERIFY( newRecord == rec );
+    EXPECT_EQ( newRecord, rec );
+    ASSERT_TRUE( newRecord == rec );
 }
+class ParameterizedTtestIncorrectType
+        : public ::testing::WithParamInterface<std::tuple<std::string, int, std::string>>,
+          public TestGAMSParameterRecord {
+};
 
-void TestGAMSParameterRecord::testIncorrectType_data() {
-    QTest::addColumn<int>("symbolType");
-    QTest::addColumn<QString>("symbolID");
+INSTANTIATE_TEST_SUITE_P(testIncorrectType,
+                        ParameterizedTtestIncorrectType,
+                        ::testing::Values (
+                            std::make_tuple("markets_i",  0, "i"),
+                            std::make_tuple("shipment_x", 2, "x"),
+                            std::make_tuple("obj_z",      2, "z"),
+                            std::make_tuple("supply",     3, "supply")
+                        ));
 
-    QTest::newRow("markets_i"  )   << 0 << "i"       ;
-    QTest::newRow("shipment_x")    << 2 << "x"       ;
-    QTest::newRow("obj_z")         << 2 << "z"       ;
-    QTest::newRow("supply")        << 3 << "supply"  ;
-}
+TEST_P(ParameterizedTtestIncorrectType, testIncorrectType) {
+    int symbolType = std::get<1>(GetParam());
+    std::string symbolID = std::get<2>(GetParam());
 
-void TestGAMSParameterRecord::testIncorrectType() {
-    QFETCH(int, symbolType);
-    QFETCH(QString, symbolID);
 
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -113,64 +119,64 @@ void TestGAMSParameterRecord::testIncorrectType() {
     switch(symbolType) {
       case GAMSEnum::SymbolType::SymTypeSet :
         {
-          GAMSSet symbol = db.getSet( symbolID.toStdString() );
+          GAMSSet symbol = db.getSet( symbolID );
           GAMSSymbolRecord rec1 = symbol.firstRecord();
-          QVERIFY_EXCEPTION_THROWN( GAMSSymbolRecord rec2 = GAMSParameterRecord( symbol.firstRecord()), GAMSException );
-          QVERIFY_EXCEPTION_THROWN( GAMSParameterRecord r = rec1, GAMSException );
+          EXPECT_THROW( GAMSSymbolRecord rec2 = GAMSParameterRecord( symbol.firstRecord()), GAMSException );
+          EXPECT_THROW( GAMSParameterRecord r = rec1, GAMSException );
           break;
         }
       case GAMSEnum::SymbolType::SymTypeVar :
         {
-          GAMSVariable symbol = db.getVariable( symbolID.toStdString() );
+          GAMSVariable symbol = db.getVariable( symbolID );
           GAMSSymbolRecord rec1 = symbol.firstRecord();
-          QVERIFY_EXCEPTION_THROWN( GAMSSymbolRecord rec2 = GAMSParameterRecord( symbol.firstRecord() ), GAMSException );
-          QVERIFY_EXCEPTION_THROWN( GAMSParameterRecord r = rec1, GAMSException );
+          EXPECT_THROW( GAMSSymbolRecord rec2 = GAMSParameterRecord( symbol.firstRecord() ), GAMSException );
+          EXPECT_THROW( GAMSParameterRecord r = rec1, GAMSException );
           break;
         }
       case GAMSEnum::SymbolType::SymTypeEqu :
         {
-          GAMSEquation symbol = db.getEquation( symbolID.toStdString() );
+          GAMSEquation symbol = db.getEquation( symbolID );
           GAMSSymbolRecord rec1 = symbol.firstRecord();
-          QVERIFY_EXCEPTION_THROWN( GAMSSymbolRecord rec2 = GAMSParameterRecord( symbol.firstRecord() ), GAMSException );
-          QVERIFY_EXCEPTION_THROWN( GAMSParameterRecord r = rec1, GAMSException );
+          EXPECT_THROW( GAMSSymbolRecord rec2 = GAMSParameterRecord( symbol.firstRecord() ), GAMSException );
+          EXPECT_THROW( GAMSParameterRecord r = rec1, GAMSException );
           break;
         }
       default: break;
     }
 }
 
-void TestGAMSParameterRecord::testGetValue() {
+TEST_F(TestGAMSParameterRecord, testGetValue) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_distance_d( db );
 
     GAMSParameter param = db.getParameter("d");
-    QVERIFY( equals(param.findRecord("seattle", "new-york").value(), 2.5) );
-    QVERIFY( equals(param.findRecord("seattle", "chicago").value(), 1.7) );
-    QVERIFY( equals(param.findRecord("seattle", "topeka").value(), 1.8) );
-    QVERIFY( equals(param.findRecord("san-diego", "new-york").value(), 2.5) );
-    QVERIFY( equals(param.findRecord("san-diego", "chicago").value(), 1.8) );
-    QVERIFY( equals(param.findRecord("san-diego", "topeka").value(), 1.4) );
+    ASSERT_TRUE( equals(param.findRecord("seattle", "new-york").value(), 2.5) );
+    ASSERT_TRUE( equals(param.findRecord("seattle", "chicago").value(), 1.7) );
+    ASSERT_TRUE( equals(param.findRecord("seattle", "topeka").value(), 1.8) );
+    ASSERT_TRUE( equals(param.findRecord("san-diego", "new-york").value(), 2.5) );
+    ASSERT_TRUE( equals(param.findRecord("san-diego", "chicago").value(), 1.8) );
+    ASSERT_TRUE( equals(param.findRecord("san-diego", "topeka").value(), 1.4) );
 
     param.addRecord("alburquerque", "topeka");
-    QVERIFY( equals(param.findRecord("alburquerque", "topeka").value(), 0.0) );
+    ASSERT_TRUE( equals(param.findRecord("alburquerque", "topeka").value(), 0.0) );
 }
 
-void TestGAMSParameterRecord::testSetValue() {
+TEST_F(TestGAMSParameterRecord, testSetValue) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase db = ws.addDatabase();
     TestGAMSObject::getTestData_Parameter_demand_b( db );
 
     GAMSParameter param = db.getParameter("b");
     param.findRecord("new-york").setValue( 3.2 );
-    QVERIFY( equals(param.findRecord("new-york").value(), 3.2) );
+    ASSERT_TRUE( equals(param.findRecord("new-york").value(), 3.2) );
 
     param.addRecord("alburquerque").setValue( 4.2 );
-    QVERIFY( equals(param.findRecord("alburquerque").value(), 4.2) );
+    ASSERT_TRUE( equals(param.findRecord("alburquerque").value(), 4.2) );
 }
 
-QTEST_MAIN(TestGAMSParameterRecord)
+

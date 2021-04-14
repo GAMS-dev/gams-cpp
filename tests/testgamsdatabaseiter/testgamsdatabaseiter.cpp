@@ -29,15 +29,17 @@
 #include "gamsexception.h"
 #include "gamsset.h"
 #include "gamsdatabaseiter.h"
-#include "testgamsdatabaseiter.h"
+#include "testgamsobject.h"
 
 using namespace gams;
 
-QString TestGAMSDatabaseIter::classname()  { return "TestGAMSDatabaseIter"; }
+class TestGAMSDatabaseIter: public TestGAMSObject
+{
+};
 
-void TestGAMSDatabaseIter::testConstructor() {
+TEST_F(TestGAMSDatabaseIter, testConstructor) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -45,13 +47,13 @@ void TestGAMSDatabaseIter::testConstructor() {
     { // when
         GAMSDatabaseIter it = db.begin();
         // then
-        QVERIFY( (*it) == db.getSet("i") );
+        ASSERT_TRUE( (*it) == db.getSet("i") );
     }
 }
 
-void TestGAMSDatabaseIter::testInvalidIterator() {
+TEST_F(TestGAMSDatabaseIter, testInvalidIterator) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -61,15 +63,15 @@ void TestGAMSDatabaseIter::testInvalidIterator() {
         // when
         GAMSDatabaseIter it = db.end();
         // then
-        QVERIFY_EXCEPTION_THROWN( (*it), GAMSException);
+        EXPECT_THROW( (*it), GAMSException);
         // when
         ++it;
         // then
-        QVERIFY_EXCEPTION_THROWN( (*it), GAMSException);
+        EXPECT_THROW( (*it), GAMSException);
         // when
         ++it;
         // then
-        QVERIFY_EXCEPTION_THROWN( (*it), GAMSException);
+        EXPECT_THROW( (*it), GAMSException);
     }
 
     {
@@ -78,17 +80,17 @@ void TestGAMSDatabaseIter::testInvalidIterator() {
         // when
         GAMSDatabaseIter it = emptydb.begin();
         // then
-        QVERIFY_EXCEPTION_THROWN( (*it), GAMSException);
+        EXPECT_THROW( (*it), GAMSException);
         // when
         ++it;
         // then
-        QVERIFY_EXCEPTION_THROWN( (*it), GAMSException);
+        EXPECT_THROW( (*it), GAMSException);
     }
 }
 
-void TestGAMSDatabaseIter::testEqualToOperator_EmptyDatabase() {
+TEST_F(TestGAMSDatabaseIter, testEqualToOperator_EmptyDatabase) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSDatabase emptydb1 = ws.addDatabase();
     GAMSDatabase emptydb2 = ws.addDatabase();
@@ -97,7 +99,7 @@ void TestGAMSDatabaseIter::testEqualToOperator_EmptyDatabase() {
         // when
         GAMSDatabaseIter it1 = emptydb1.begin();
         GAMSDatabaseIter it2 = emptydb1.begin();
-        QVERIFY( it1 == it2 );
+        ASSERT_TRUE( it1 == it2 );
     }
 
     {
@@ -105,7 +107,7 @@ void TestGAMSDatabaseIter::testEqualToOperator_EmptyDatabase() {
         GAMSDatabaseIter it1 = emptydb1.end();
         GAMSDatabaseIter it2 = emptydb1.end();
         // then
-        QVERIFY( it1 == it2 );
+        ASSERT_TRUE( it1 == it2 );
     }
 
     {
@@ -113,13 +115,13 @@ void TestGAMSDatabaseIter::testEqualToOperator_EmptyDatabase() {
         GAMSDatabaseIter it1 = emptydb1.begin();
         GAMSDatabaseIter it2 = emptydb2.begin();
         // then, they are different because ws.addDatabase() creates a new object
-        QVERIFY( it1 != it2 );
+        ASSERT_TRUE( it1 != it2 );
     }
 }
 
-void TestGAMSDatabaseIter::testEqualToOperator() {
+TEST_F(TestGAMSDatabaseIter, testEqualToOperator) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -130,11 +132,11 @@ void TestGAMSDatabaseIter::testEqualToOperator() {
         GAMSDatabaseIter it1 = db.begin();
         GAMSDatabaseIter it2 = db.begin();
         // then
-        QVERIFY( it1 == it2 );
+        ASSERT_TRUE( it1 == it2 );
         while( it1 != db.end() || it2 !=db.end() ) {
             ++it1;
             ++it2;
-            QVERIFY( it1 == it2 );
+            ASSERT_TRUE( it1 == it2 );
         }
     }
 
@@ -143,23 +145,23 @@ void TestGAMSDatabaseIter::testEqualToOperator() {
         GAMSDatabaseIter it1 = db.end();
         GAMSDatabaseIter it2 = db.end();
         // then
-        QVERIFY( it1 == it2 );
+        ASSERT_TRUE( it1 == it2 );
 
         // when
         ++it1;
         // then
-        QVERIFY( it1 != it2 );
+        ASSERT_TRUE( it1 != it2 );
 
         // when
         ++it2;
         // then
-        QVERIFY( it1 == it2 );
+        ASSERT_TRUE( it1 == it2 );
     }
 }
 
-void TestGAMSDatabaseIter::testNotEqualToOperator() {
+TEST_F(TestGAMSDatabaseIter, testNotEqualToOperator) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -170,13 +172,13 @@ void TestGAMSDatabaseIter::testNotEqualToOperator() {
         GAMSDatabaseIter it1 = db.begin();
         GAMSDatabaseIter it2 = emptydb.begin();
         // then
-        QVERIFY( it1 != it2 );
+        ASSERT_TRUE( it1 != it2 );
     }
     {  // when
         GAMSDatabaseIter it1 = db.end();
         GAMSDatabaseIter it2 = emptydb.end();
         // then
-        QVERIFY( it1 != it2 );
+        ASSERT_TRUE( it1 != it2 );
     }
     {  // when
         GAMSDatabaseIter it1 = db.begin();
@@ -184,21 +186,21 @@ void TestGAMSDatabaseIter::testNotEqualToOperator() {
         while( it1 != db.end() ) {
             ++it1;
             // then
-            QVERIFY( it1 != it2 );
+            ASSERT_TRUE( it1 != it2 );
         }
         // when
         ++it2;
         while( it2 != db.end() ) {
             // then
-            QVERIFY( it1 != it2 );
+            ASSERT_TRUE( it1 != it2 );
             ++it2;
         }
     }
 }
 
-void TestGAMSDatabaseIter::testPointerAndIncrementOperator() {
+TEST_F(TestGAMSDatabaseIter, testPointerAndIncrementOperator) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -211,19 +213,17 @@ void TestGAMSDatabaseIter::testPointerAndIncrementOperator() {
         symbolCounter[(*it).name()] = (*it).type();
         ++it;
     }
-    QCOMPARE( symbolCounter.size(), size_t(12) );
-    QCOMPARE( symbolCounter["i"], GAMSEnum::SymbolType::SymTypeSet );
-    QCOMPARE( symbolCounter["j"], GAMSEnum::SymbolType::SymTypeSet );
-    QCOMPARE( symbolCounter["a"], GAMSEnum::SymbolType::SymTypePar );
-    QCOMPARE( symbolCounter["b"], GAMSEnum::SymbolType::SymTypePar );
-    QCOMPARE( symbolCounter["d"], GAMSEnum::SymbolType::SymTypePar );
-    QCOMPARE( symbolCounter["f"], GAMSEnum::SymbolType::SymTypePar );
-    QCOMPARE( symbolCounter["c"], GAMSEnum::SymbolType::SymTypePar );
-    QCOMPARE( symbolCounter["x"], GAMSEnum::SymbolType::SymTypeVar );
-    QCOMPARE( symbolCounter["z"], GAMSEnum::SymbolType::SymTypeVar );
-    QCOMPARE( symbolCounter["cost"], GAMSEnum::SymbolType::SymTypeEqu );
-    QCOMPARE( symbolCounter["supply"], GAMSEnum::SymbolType::SymTypeEqu );
-    QCOMPARE( symbolCounter["demand"], GAMSEnum::SymbolType::SymTypeEqu );
+    EXPECT_EQ( symbolCounter.size(), size_t(12) );
+    EXPECT_EQ( symbolCounter["i"], GAMSEnum::SymbolType::SymTypeSet );
+    EXPECT_EQ( symbolCounter["j"], GAMSEnum::SymbolType::SymTypeSet );
+    EXPECT_EQ( symbolCounter["a"], GAMSEnum::SymbolType::SymTypePar );
+    EXPECT_EQ( symbolCounter["b"], GAMSEnum::SymbolType::SymTypePar );
+    EXPECT_EQ( symbolCounter["d"], GAMSEnum::SymbolType::SymTypePar );
+    EXPECT_EQ( symbolCounter["f"], GAMSEnum::SymbolType::SymTypePar );
+    EXPECT_EQ( symbolCounter["c"], GAMSEnum::SymbolType::SymTypePar );
+    EXPECT_EQ( symbolCounter["x"], GAMSEnum::SymbolType::SymTypeVar );
+    EXPECT_EQ( symbolCounter["z"], GAMSEnum::SymbolType::SymTypeVar );
+    EXPECT_EQ( symbolCounter["cost"], GAMSEnum::SymbolType::SymTypeEqu );
+    EXPECT_EQ( symbolCounter["supply"], GAMSEnum::SymbolType::SymTypeEqu );
+    EXPECT_EQ( symbolCounter["demand"], GAMSEnum::SymbolType::SymTypeEqu );
 }
-
-QTEST_MAIN(TestGAMSDatabaseIter)

@@ -26,71 +26,61 @@
 #ifndef TESTGAMSCPP_H
 #define TESTGAMSCPP_H
 
+#include <gtest/gtest.h>
+
+#include <cmath>
+#include <limits>
+#include <unordered_set>
+
 #include "gamsdatabase.h"
 #include "gamsjob.h"
 #include "gamsworkspace.h"
 
-#include <cmath>
-#include <limits>
-#include <QObject>
-#include <QDir>
-#include <QDebug>
-#include <QTest>
-#include <QSet>
-
-class TestGAMSObject: public QObject
+class TestGAMSObject : public ::testing::Test
 {
-  Q_OBJECT
-  private slots:
-    void initTestCase();
-    void cleanupTestCase();
+public:
+    void SetUp() override;
+    void TearDown() override;
     void init();
     void cleanup();
-  protected:
-     virtual QString classname() = 0;
 
-     static std::string getShortModelText();
-     static std::string getLongModelText();
-     static std::string getDataText();
+    static std::string getShortModelText();
+    static std::string getLongModelText();
+    static std::string getDataText();
 
-     std::string defaultScratchFilePrefix = "_gams_cpp_";
-     double defaultUNDEF = 1.0E300;
-     double defaultNA    = std::numeric_limits<double>::quiet_NaN();
-     double defaultPINF  = std::numeric_limits<double>::infinity();
-     double defaultMINF  = - std::numeric_limits<double>::infinity();
-     double defaultEPS   = std::numeric_limits<double>::min();
+    std::string defaultScratchFilePrefix = "_gams_cpp_";
+    double defaultUNDEF = 1.0E300;
+    double defaultNA    = std::numeric_limits<double>::quiet_NaN();
+    double defaultPINF  = std::numeric_limits<double>::infinity();
+    double defaultMINF  = - std::numeric_limits<double>::infinity();
+    double defaultEPS   = std::numeric_limits<double>::min();
 
-     double tolerance = 2e-6;
+    double tolerance = 2e-6;
 
-     bool equals(double actual, double expect) {
-         return std::abs(actual - expect) <= tolerance ;
-     }
-     void testDir(QString dir);
-     void testJobBeforeRun(gams::GAMSJob job, gams::GAMSWorkspace ws);
-     void testEmptyDatabase(gams::GAMSDatabase db, gams::GAMSWorkspace ws);
+    bool equals(double actual, double expect) {
+        return std::abs(actual - expect) <= tolerance ;
+    }
+    void testDir(std::string dir);
+    void testJobBeforeRun(gams::GAMSJob job, gams::GAMSWorkspace ws);
+    void testEmptyDatabase(gams::GAMSDatabase db, gams::GAMSWorkspace ws);
 
-     void getTestData_DebugLevel();
-     void getTestData_ModelLibraries();
-     void getTestData_InvalidModelLibraries();
-     void getTestData_SpecialValues();
-     void getTestData_TransportModel(gams::GAMSDatabase db);
-     void getTestData_Set_plants_i(gams::GAMSDatabase db);
-     void getTestData_Set_markets_j(gams::GAMSDatabase db);
-     void getTestData_Parameter_capacity_a(gams::GAMSDatabase db);
-     void getTestData_Parameter_demand_b(gams::GAMSDatabase db);
-     void getTestData_Parameter_distance_d(gams::GAMSDatabase db);
-     void getTestData_Parameter_freightcost_f(gams::GAMSDatabase db);
-     void getTestData_Database_DomainViolations(gams::GAMSDatabase db);
+    void getTestData_TransportModel(gams::GAMSDatabase db);
+    void getTestData_Set_plants_i(gams::GAMSDatabase db);
+    void getTestData_Set_markets_j(gams::GAMSDatabase db);
+    void getTestData_Parameter_capacity_a(gams::GAMSDatabase db);
+    void getTestData_Parameter_demand_b(gams::GAMSDatabase db);
+    void getTestData_Parameter_distance_d(gams::GAMSDatabase db);
+    void getTestData_Parameter_freightcost_f(gams::GAMSDatabase db);
+    void getTestData_Database_DomainViolations(gams::GAMSDatabase db);
 
-     QDir testSystemDir;
-     QString testGAMSVersion;
-     QString testAPIVersion;
-     QString testDebugLevel;
-     QSet<QString> testCleanupDirs;
+    std::string testSystemDir;
+    std::string testGAMSVersion;
+    std::string testAPIVersion;
+    std::string testDebugLevel;
+    std::unordered_set<std::string> testCleanupDirs;
 
-     int tests_Executed;
-     int tests_Failed;
-
+    int tests_Executed;
+    int tests_Failed;
 };
 
 #endif // TESTGAMSCPP_H

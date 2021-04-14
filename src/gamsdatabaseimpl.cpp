@@ -26,7 +26,7 @@
 #include "gamslog.h"
 #include "gamsdatabaseimpl.h"
 #include <iostream>
-#include <cctype> // std::tolower
+#include <algorithm>
 #include "gamsset.h"
 #include "gamsparameter.h"
 #include "gamsvariable.h"
@@ -39,24 +39,25 @@ using namespace std;
 namespace gams {
 
 
-GAMSDatabaseImpl::GAMSDatabaseImpl(const string& gdxFileName, const GAMSWorkspace workspace, const double specValues[]
+GAMSDatabaseImpl::GAMSDatabaseImpl(const string& gdxFileName, GAMSWorkspace& workspace, const double specValues[]
                                    , const string& databaseName, const string& inModelName, bool forceName)
     : GAMSDatabaseImpl::GAMSDatabaseImpl(workspace, specValues, databaseName, inModelName, forceName)
 {
     DEB << "---- Entering GAMSDatabaseImpl constructor ----";
     // assigning databaseName catching nullptr
-    string databaseNameTmp = QString::fromStdString(databaseName).toLower().toStdString();
+    string databaseNameTmp = databaseName;
+    std::transform(databaseNameTmp.begin(), databaseNameTmp.end(), databaseNameTmp.begin(), ::tolower);
     GAMSPath gdxFile(gdxFileName);
     if (databaseNameTmp == gdxFile.suffix("").toStdString())
         throw GAMSException("GAMSDatabase name and gdx file name for initialization must be different (saw " + databaseName + " for both)");
-    if (gdxFile.isAbsolute())
+    if (gdxFile.is_absolute())
         checkForGMDError(gmdInitFromGDX(mGMD, gdxFile.c_str()), __FILE__, __LINE__);
     else
         checkForGMDError(gmdInitFromGDX(mGMD, (GAMSPath(workspace.workingDirectory()) / gdxFileName).c_str()), __FILE__, __LINE__);
 }
 
 
-GAMSDatabaseImpl::GAMSDatabaseImpl(GAMSWorkspace workspace, const double specValues[], const std::string& databaseName
+GAMSDatabaseImpl::GAMSDatabaseImpl(GAMSWorkspace& workspace, const double specValues[], const std::string& databaseName
                                    , const std::string& inModelName, bool forceName)
     : mWs(workspace), mDatabaseName(databaseName)
 {
@@ -65,7 +66,8 @@ GAMSDatabaseImpl::GAMSDatabaseImpl(GAMSWorkspace workspace, const double specVal
     if (mDatabaseName == "") {
         mDatabaseName = mWs.registerDatabase();
     } else {
-        QString extensionTmp = GAMSPath(mDatabaseName).suffix().toLower();
+        string extensionTmp = GAMSPath(mDatabaseName).suffix();
+        std::transform(extensionTmp.begin(), extensionTmp.end(), extensionTmp.begin(), ::tolower);
         if (extensionTmp == ".gdx")
             mDatabaseName = GAMSPath(mDatabaseName).suffix("").toStdString();
         if (mWs.registerDatabase(mDatabaseName).empty() && !forceName)
@@ -88,7 +90,7 @@ GAMSDatabaseImpl::GAMSDatabaseImpl(GAMSWorkspace workspace, const double specVal
 }
 
 
-GAMSDatabaseImpl::GAMSDatabaseImpl(const GAMSWorkspace workspace, const double specValues[]
+GAMSDatabaseImpl::GAMSDatabaseImpl(GAMSWorkspace& workspace, const double specValues[]
                                    , std::shared_ptr<GAMSDatabaseImpl> sourceDb, const string& databaseName
                                    , const string& inModelName)
     : GAMSDatabaseImpl(workspace, specValues, databaseName, inModelName)
@@ -98,7 +100,7 @@ GAMSDatabaseImpl::GAMSDatabaseImpl(const GAMSWorkspace workspace, const double s
 }
 
 
-GAMSDatabaseImpl::GAMSDatabaseImpl(void* gmdPtr, GAMSWorkspace workspace)
+GAMSDatabaseImpl::GAMSDatabaseImpl(void* gmdPtr, GAMSWorkspace& workspace)
     :mWs(workspace)
 {
     DEB << "---- Entering GAMSDatabaseImpl constructor ----";
@@ -158,7 +160,7 @@ void GAMSDatabaseImpl::doExport(const string& filePath)
     } else {
         GAMSPath filePathTmp(filePath);
         filePathTmp.setSuffix(".gdx");
-        if (filePathTmp.isAbsolute())
+        if (filePathTmp.is_absolute())
             checkForGMDError(gmdWriteGDX(mGMD, filePathTmp.c_str(), mSuppressAutoDomainChecking), __FILE__, __LINE__);
         else
             checkForGMDError(gmdWriteGDX(mGMD, (GAMSPath(mWs.workingDirectory()) / filePathTmp).c_str()
@@ -304,7 +306,7 @@ std::vector<GAMSDatabaseDomainViolation> GAMSDatabaseImpl::getDatabaseDVs(const 
         int maxViolNextSym = maxViolPerSym;
         if (maxViol > 0) {
             if (maxViolNextSym > 0)
-                maxViolNextSym = qMin(maxViol - violAll, maxViolPerSym);
+                maxViolNextSym = min(maxViol - violAll, maxViolPerSym);
             else
                 maxViolNextSym = maxViol - violAll;
         }

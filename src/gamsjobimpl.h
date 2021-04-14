@@ -28,7 +28,6 @@
 
 #include <string>
 #include <memory>
-#include <QProcess>
 #include <vector>
 #include "gamsenum.h"
 #include "gamsworkspace.h"
@@ -69,7 +68,7 @@ public:
     /// \param jobName Identifier of GAMSJob
     /// \param fileName File name
     /// \param checkpoint GAMSCheckpoint
-    GAMSJobImpl(GAMSWorkspace workspace, const std::string& mJobName, const std::string& mFileName,
+    GAMSJobImpl(GAMSWorkspace &workspace, const std::string& mJobName, const std::string& mFileName,
                 const GAMSCheckpoint *checkpoint);
 
     bool operator!=(const GAMSJobImpl& other) const;
@@ -91,7 +90,6 @@ private:
     GAMSDatabase mOutDb;
     std::string mFileName;
     GAMSCheckpoint* mCheckpointStart = nullptr;
-    QProcess mProc;
 };
 }
 #endif // GAMSJOBIMPL_H

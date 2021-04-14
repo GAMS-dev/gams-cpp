@@ -405,12 +405,12 @@ private:
     friend class GAMSDatabaseIter;
 
     GAMSDatabase(const std::shared_ptr<GAMSDatabaseImpl>& impl);
-    GAMSDatabase(void* gmdPtr, GAMSWorkspace workspace); ///> TODO(JM) experimental for addDatabaseFromGMD only
-    GAMSDatabase(const std::string& gdxFileName, const GAMSWorkspace workspace, const double specValues[]
+    GAMSDatabase(void* gmdPtr, gams::GAMSWorkspace &workspace); ///> TODO(JM) experimental for addDatabaseFromGMD only
+    GAMSDatabase(const std::string& gdxFileName, gams::GAMSWorkspace& workspace, const double specValues[]
                  , const std::string& databaseName = "", const std::string& inModelName = "", bool forceName = false);
-    GAMSDatabase(const GAMSWorkspace workspace, const double specValues[], const std::string& databaseName = ""
+    GAMSDatabase(gams::GAMSWorkspace& workspace, const double specValues[], const std::string& databaseName = ""
             , const std::string& inModelName = "", bool forceName = false);
-    GAMSDatabase(const GAMSWorkspace workspace, const double specValues[], const GAMSDatabase& sourceDb
+    GAMSDatabase(gams::GAMSWorkspace &workspace, const double specValues[], const GAMSDatabase& sourceDb
                  , const std::string& dbName = "", const std::string& inModelName = "");
     std::string inModelName();
 

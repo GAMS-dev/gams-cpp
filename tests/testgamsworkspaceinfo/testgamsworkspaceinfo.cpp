@@ -24,65 +24,66 @@
  * SOFTWARE.
  */
 
+#include "testgamsobject.h"
 #include "gamsenum.h"
+#include "gamspath.h"
 #include "gamsworkspaceinfo.h"
-#include "testgamsworkspaceinfo.h"
-
-#include <QString>
 
 using namespace gams;
 
-QString TestGAMSWorkspaceInfo::classname() { return "TestGAMSWorkspaceInfo"; }
-
-void TestGAMSWorkspaceInfo::testConstructorDefaultValue()
+class TestGAMSWorkspaceInfo: public TestGAMSObject
 {
+};
+
+TEST_F(TestGAMSWorkspaceInfo, testConstructorDefaultValue) {
     // when
     GAMSWorkspaceInfo wsInfo;
     // then
-    QVERIFY(QString::fromStdString(wsInfo.systemDirectory()).isEmpty());
-    QVERIFY(QString::fromStdString(wsInfo.workingDirectory()).isEmpty());
-    QCOMPARE(wsInfo.debug(), GAMSEnum::DebugLevel::Off);
+    ASSERT_TRUE(wsInfo.systemDirectory().empty());
+    ASSERT_TRUE(wsInfo.workingDirectory().empty());
+    EXPECT_EQ(wsInfo.debug(), GAMSEnum::DebugLevel::Off);
 
 }
 
-void TestGAMSWorkspaceInfo::testSetSystemDirectory()
-{
+TEST_F(TestGAMSWorkspaceInfo, testSetSystemDirectory) {
     // given
     GAMSWorkspaceInfo wsInfo;
-    QTemporaryDir dir;
+    GAMSPath dir;
     // when
-    wsInfo.setSystemDirectory( dir.path().toStdString() );
+    wsInfo.setSystemDirectory(dir.path().toStdString());
     // then
-    QCOMPARE( QString::fromStdString(wsInfo.systemDirectory()), dir.path() );
+    EXPECT_EQ(wsInfo.systemDirectory(), dir.path());
 }
 
-void TestGAMSWorkspaceInfo::testSetWorkingDirectory()
-{
+TEST_F(TestGAMSWorkspaceInfo, testSetWorkingDirectory) {
     // given
     GAMSWorkspaceInfo wsInfo;
-    QTemporaryDir dir;
+    GAMSPath dir;
     // when
-    wsInfo.setWorkingDirectory( dir.path().toStdString() );
+    wsInfo.setWorkingDirectory(dir.path().toStdString());
     // then
-    QCOMPARE( QString::fromStdString(wsInfo.workingDirectory()), dir.path() );
+    EXPECT_EQ(wsInfo.workingDirectory(), dir.path());
 }
 
-void TestGAMSWorkspaceInfo::testSetDebug_data()
-{
-    TestGAMSObject::getTestData_DebugLevel();
-}
+class ParameterizedTestSetDebug
+        : public ::testing::WithParamInterface<std::tuple<std::string, GAMSEnum::DebugLevel>>,
+          public TestGAMSWorkspaceInfo {
+};
 
-void TestGAMSWorkspaceInfo::testSetDebug()
-{
-    // given
-    QFETCH(QString, debugLevel);
+INSTANTIATE_TEST_SUITE_P(testSetDebug,
+                        ParameterizedTestSetDebug,
+                        ::testing::Values (
+                             std::make_tuple("Off", GAMSEnum::DebugLevel::Off),
+                             std::make_tuple("KeepFiles", GAMSEnum::DebugLevel::KeepFiles),
+                             std::make_tuple("ShowLog", GAMSEnum::DebugLevel::ShowLog),
+                             std::make_tuple("Verbose", GAMSEnum::DebugLevel::Verbose)
+                        ));
 
+TEST_P(ParameterizedTestSetDebug, testSetDebug) {
     GAMSWorkspaceInfo wsInfo;
-    GAMSEnum::DebugLevel debug = static_cast<GAMSEnum::DebugLevel>(debugLevel.toInt());
+    GAMSEnum::DebugLevel debug = std::get<1>(GetParam());
     // when
     wsInfo.setDebug( debug );
     // then
-    QCOMPARE( wsInfo.debug(), debug ) ;
+    EXPECT_EQ( wsInfo.debug(), debug ) ;
 }
-
-QTEST_MAIN(TestGAMSWorkspaceInfo)

@@ -23,20 +23,22 @@
  * SOFTWARE.
  */
 
+#include <string>
+#include <sstream>
+#include <regex>
+#include <vector>
+
 #include "gamsversion.h"
 #include "gamsoptions.h"
 #include "gamsexception.h"
 #include "gamspath.h"
 
-#include <QStringList>
-#include <QProcess>
-#include <string>
-
+using namespace std;
 namespace gams {
 
 const char* GAMSVersion::mApiVersion = API_VERSION;
 const char* GAMSVersion::mApiBuildTime = GAMSOptions::gamsBuild();
-const char* GAMSVersion::mApiDetail = std::string(API_VERSION).append(" (").append(GAMSVersion::mApiBuildTime)
+const char* GAMSVersion::mApiDetail = string(API_VERSION).append(" (").append(GAMSVersion::mApiBuildTime)
                                                               .append(")").c_str();
 
 const char* GAMSVersion::mGamsVersion = GAMSOptions::gamsVersion();
@@ -44,12 +46,17 @@ const char* GAMSVersion::mGamsVersion = GAMSOptions::gamsVersion();
 static const char* mApiName = "API version";
 static const char* mGamsName = "required GAMS version";
 
-static int part(const char* vString, const int index, const std::string typeName)
+static int part(const char* vString, const int index, const string typeName)
 {
-    QStringList parts = QString(vString).split('.');
-    if (parts.size() <= index)
+    vector<string> parts;
+    string s;
+    istringstream iss(vString);
+    while (getline(iss, s, '.'))
+        parts.push_back(s);
+
+    if (parts.size() <= (unsigned)index)
         throw GAMSException("GAMSVersion: invalid version definition for " + typeName + " " + vString);
-    return parts[index].toInt();
+    return stoi(parts.at(index));
 }
 
 const char* GAMSVersion::apiDetail()
@@ -102,18 +109,20 @@ int GAMSVersion::gamsBuild()
     return part(gamsVersion(), 2, mGamsName);
 }
 
-std::string GAMSVersion::systemVersion(std::string gamsSystemDir)
+string GAMSVersion::systemVersion(string gamsSystemDir)
 {
-    std::string gams = "gams";
+    string gams = "gams";
     gams.append(cExeSuffix);
 
     GAMSPath sys(gamsSystemDir);
-    QProcess proc;
-    proc.start(sys / gams, QStringList() << "audit" << "lo=3");
-    proc.waitForFinished();
-    QRegExp regex("[0-9]*\\.[][0-9]*\\.[0-9]*");
-    regex.indexIn(proc.readAllStandardOutput());
-    return regex.cap().toStdString();
+
+    string result;
+    GAMSPlatform::runProcess(gamsSystemDir, gams, "audit lo=3", result);
+    regex regex("[0-9]*\\.[][0-9]*\\.[0-9]*");
+    smatch match;
+    regex_match(result, match, regex);
+
+    return match.str();
 }
 
 GAMSVersion::GAMSVersion()

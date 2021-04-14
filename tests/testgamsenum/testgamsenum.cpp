@@ -24,14 +24,16 @@
  * SOFTWARE.
  */
 
-#include "testgamsenum.h"
+#include "testgamsobject.h"
 #include "gamsenum.h"
 
 using namespace gams;
 
-QString TestGAMSEnum::classname()  { return "TestGAMSEnum"; }
+class TestGAMSEnum: public TestGAMSObject
+{
+};
 
-void  TestGAMSEnum::testGamsReturnCodeToText() {
+TEST_F(TestGAMSEnum, testGamsReturnCodeToText) {
     // given
     const int valid[] = {0,1,2,3,4,5,6,7,8,9,10,11
                         ,109,110, 112,113,114,115
@@ -44,11 +46,9 @@ void  TestGAMSEnum::testGamsReturnCodeToText() {
         std::string code = GAMSEnum::text(static_cast<GAMSEnum::GAMSExitCode>(i));
         // then
         if (std::find(std::begin(valid), std::end(valid), i) != std::end(valid)) {
-            QVERIFY(invalid.compare(code) != 0);
+            ASSERT_TRUE(invalid.compare(code) != 0);
         } else {
-            QCOMPARE(code, invalid);
+            EXPECT_EQ(code, invalid);
         }
     }
 }
-
-QTEST_MAIN(TestGAMSEnum)

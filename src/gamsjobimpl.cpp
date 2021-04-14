@@ -34,14 +34,13 @@
 
 #include <sstream>
 #include <fstream>
-#include <QProcess>
-#include <QDebug>
+#include <iostream>
 
 using namespace std;
 
 namespace gams {
 
-GAMSJobImpl::GAMSJobImpl(GAMSWorkspace workspace,
+GAMSJobImpl::GAMSJobImpl(GAMSWorkspace& workspace,
                          const std::string& jobName,
                          const std::string& fileName,
                          const GAMSCheckpoint* checkpoint)
@@ -71,65 +70,20 @@ GAMSDatabase GAMSJobImpl::outDB()
 }
 
 GAMSJobImpl::~GAMSJobImpl() {
-    if (mCheckpointStart != nullptr)
-        delete mCheckpointStart; // this is intended to only free the wrapper, not the *Impl if used anywhere
+    delete mCheckpointStart; // this is intended to only free the wrapper, not the *Impl if used anywhere
 }
-
-//   shared_ptr<GAMSJobImpl> GAMSJobImpl::fromString(GAMSWorkspace workspace, string gamsSource, const GAMSCheckpoint *checkpoint, string jobName)
-//   {
-//      shared_ptr<GAMSJobImpl> jobImpl = make_shared<GAMSJobImpl>(workspace, "", "", checkpoint);
-//      if (jobName == "")
-//         jobImpl->mJobName = workspace.mImpl->jobAdd();
-//      else
-//      {
-//         jobImpl->mJobName = jobName;
-//         if (!workspace.mImpl->jobAdd(jobImpl->mJobName))
-//            throw GAMSException("Job with name " + jobName + " already exists");
-//      }
-
-//      jobImpl->mFileName = GPath(workspace.workingDirectory()) / (jobImpl->mJobName + ".gms");
-
-//      std::ofstream sourceWriter(jobImpl->mFileName);
-//      sourceWriter << gamsSource;
-//      sourceWriter.close();
-
-//      return jobImpl;
-//   }
-
-//   shared_ptr<GAMSJobImpl> GAMSJobImpl::fromFile(GAMSWorkspace workspace, string fileName, const GAMSCheckpoint *checkpoint, string jobName)
-//   {
-//      shared_ptr<GAMSJobImpl> jobImpl = make_shared<GAMSJobImpl>(workspace, "", "", checkpoint);
-//      if (jobName == "")
-//         jobImpl->mJobName = workspace.mImpl->jobAdd();
-//      else
-//      {
-//         jobImpl->mJobName = jobName;
-//         if (!workspace.mImpl->jobAdd(jobImpl->mJobName))
-//            throw GAMSException("Job with name " + jobName + " already exists");
-//      }
-//      if (GPath(fileName).isAbsolute())
-//         jobImpl->mFileName = fileName;
-//      else
-//         jobImpl->mFileName = GPath(workspace.workingDirectory()) / fileName;
-
-//      if (!GPath::exists(jobImpl->mFileName))
-//         throw GAMSException("Could not create GAMSJob instance from non-existing file [" + jobImpl->mFileName + "]");
-
-//      return jobImpl;
-//   }
 
 void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostream* output, bool createOutDb,
                       vector<GAMSDatabase> databases)
 {
     // TODO(JM) backward replacement of pointer logic with instance of gamsOptions
-
     GAMSOptions tmpOpt = GAMSOptions(mWs, gamsOptions);
     GAMSCheckpoint* tmpCP = nullptr;
 
-    if (mCheckpointStart != nullptr)
+    if (mCheckpointStart)
         tmpOpt.setRestart(mCheckpointStart->fileName());
 
-    if (checkpoint != nullptr) {
+    if (checkpoint) {
         if (mCheckpointStart != checkpoint) {
             tmpCP = new GAMSCheckpoint(mWs, "");
             tmpOpt.setSave(tmpCP->fileName());
@@ -156,31 +110,14 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
                 tmpOpt.setDefine(db.inModelName(), db.name());
         }
     }
-    // TODO: c sharp, solver options
-    //if (tmpOpt.SolverOptions.size() > size_t(0))
-    //{
-    //    for each (tuple<string, int> slvOpt in tmpOpt.SolverOptions)
-    //    {
-    //        string path = workspace.workingDirectory;
-    //        path += PATHSEPERATOR;
-    //        path += get<0>(slvOpt) + OptFileExtension(get<1>(slvOpt));
-    //        optWriteParameterFile(tmpOpt.OPT, path.c_str()); // TODO: which OPT do we need here?
-    //    }
-    //        // TODO: continue: GAMSJob::run [l513]
-    //}
-
     GAMSPath jobFileInfo(GAMSPath(mWs.workingDirectory()) / mJobName);
 
-    // This has been set directly in the constructor
-//    char buffer[GMS_SSSIZE];
-//    for (int i = 1; i < gmoProc_nrofmodeltypes; i++)  // TODO(JM) change type of i to int and adapt casts
-//        optSetStrStr(tmpOpt.optPtr(), cfgModelTypeName(tmpOpt.optPtr(), i, buffer), tmpOpt.SelectedSolvers[i].c_str());
-
-    if (createOutDb && tmpOpt.gdx() == "") {
+    if (createOutDb && tmpOpt.gdx() == "")
         tmpOpt.setGdx(mWs.nextDatabaseName());
-    }
+
     if (tmpOpt.logFile() == "")
         tmpOpt.setLogFile(jobFileInfo.suffix(".log").toStdString());
+
     tmpOpt.setOutput(mJobName + ".lst");
     tmpOpt.setCurDir(mWs.workingDirectory());
     tmpOpt.setInput(mFileName);
@@ -191,72 +128,59 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
         throw GAMSException(e.what() + (" for GAMSJob " + mJobName));
     }
 
-    //TODO(CW): we might need to check if the GAMSJob is already running and avoid multiple starts. Also check this in C# an other languages
-    mProc.setProgram(GAMSPath(mWs.systemDirectory()) / "gams" + cExeSuffix);
-    mProc.setArguments(QStringList() << "dummy" << "pf=" + QString::fromStdString(mJobName) + ".pf");
-    mProc.setWorkingDirectory(QString::fromStdString(mWs.workingDirectory()));
+    string gamsExe = mWs.systemDirectory() + "/gams";
+    gamsExe.append(cExeSuffix);
 
-    QMetaObject::Connection connection;
-    if (output && mWs.debug() >= GAMSEnum::DebugLevel::ShowLog)
-        connection = QObject::connect(&mProc, &QProcess::readyReadStandardOutput, [=] () { MSG << mProc.readAllStandardOutput().toStdString(); });
-    else if (output)
-        connection = QObject::connect(&mProc, &QProcess::readyReadStandardOutput, [=] () { *output << mProc.readAllStandardOutput().toStdString(); });
+    string args = "dummy pf=" + mJobName + ".pf";
 
-    mProc.start();
-    if (!mProc.waitForStarted())
-        qDebug() << "Error starting '" << mProc.program() << " " << mProc.arguments().join(" ");
-
-    mProc.waitForFinished(-1);
-    QObject::disconnect(connection);
+    string result;
+    int exitCode = GAMSPlatform::runProcess(mWs.workingDirectory(), gamsExe, args, result);
 
     if (createOutDb) {
         //TODO: should we always delete the outDB before a new run? Affects C#, Pytohn and Java as well
         //outdb = nullptr;
         GAMSPath gdxPath(tmpOpt.gdx());
-        if (!gdxPath.isAbsolute())
+        if (!gdxPath.is_absolute())
             gdxPath = GAMSPath(mWs.workingDirectory()) / gdxPath;
+
         gdxPath.setSuffix(".gdx");
-        if (gdxPath.exists()) {
-            mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.toStdString(), gdxPath.suffix("").fileName().toStdString(), "");
-        }
+        if (gdxPath.exists())
+            mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.toStdString(), gdxPath.suffix("").filename().string(), "");
     }
 
-    if (mProc.exitCode() != 0) {
+    if (output && mWs.debug() >= GAMSEnum::DebugLevel::ShowLog)
+        MSG << result;
+    else if (output)
+        *output << result;
+    if (exitCode != 0) {
         if ((mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) && mWs.usingTmpWorkingDir())
-            throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(mProc.exitCode()) +
+            throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +
                                          "), set GAMSWorkspace.Debug to KeepFiles or higher or define the \
                                          GAMSWorkspace.WorkingDirectory to receive a listing file with more details",
-                                         mProc.exitCode());
+                                         exitCode);
         else
-            throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(mProc.exitCode()) + "), check " +
+            throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) + "), check " +
                                          (GAMSPath(mWs.workingDirectory()) / tmpOpt.output()).toStdString() +
-                                         " for more details", mProc.exitCode());
+                                         " for more details", exitCode);
     }
-
-
-    //TODO(CW): we reuse the same QProcess for each run of one specific GAMSJob. Do we need to reset it somehow before reusing?
-
     if (tmpCP) {
         GAMSPath implFile(checkpoint->fileName());
-        if (implFile.exists()) {
+        if (implFile.exists())
             implFile.remove();
-        }
+
         implFile = tmpCP->fileName();
         implFile.rename(checkpoint->fileName());
         delete tmpCP; tmpCP=nullptr;
     }
-
-    if (mWs.debug() < GAMSEnum::DebugLevel::KeepFiles)
-    {
-        try { GAMSPath(pfFileName).remove(); }
-        catch(...) { }
+    if (mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) {
+        // TODO(RG): this is not good style, but apparently needed
+        try { pfFileName.remove(); } catch (...) { }
     }
 }
 
 bool GAMSJobImpl::interrupt()
 {
-    //TODO(CW): implement for linux and mac
-    qint64 pid = mProc.processId();
+    /*qint64*/ int pid = 0 /*mProc.processId()*/; // TODO(RG): we need std process handling here
     if(pid == 0)
         return false;
     return GAMSPlatform::interrupt(pid);

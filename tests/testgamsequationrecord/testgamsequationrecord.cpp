@@ -24,33 +24,37 @@
  * SOFTWARE.
  */
 
+#include <tuple>
+
 #include "gamsequation.h"
 #include "gamsparameter.h"
 #include "gamsset.h"
 #include "gamsvariable.h"
 #include "gamsequationrecord.h"
-#include "testgamsequationrecord.h"
+#include "testgamsobject.h"
 
 using namespace gams;
 
-QString TestGAMSEquationRecord::classname()  { return "TestGAMSEquationRecord"; }
+class TestGAMSEquationRecord: public TestGAMSObject
+{
+};
 
-void TestGAMSEquationRecord::testDefaultConstructor() {
+TEST_F(TestGAMSEquationRecord, testDefaultConstructor) {
     // when
     GAMSEquationRecord rec;
     // then
-    QVERIFY( ! rec.isValid() );
-    QVERIFY_EXCEPTION_THROWN( rec.type(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( rec.logID(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( rec.upper(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( rec.setLevel( 0.0 ), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( rec.keys(), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( rec.moveNext(), GAMSException );
+    ASSERT_TRUE( ! rec.isValid() );
+    EXPECT_THROW( rec.type(), GAMSException );
+    EXPECT_THROW( rec.logID(), GAMSException );
+    EXPECT_THROW( rec.upper(), GAMSException );
+    EXPECT_THROW( rec.setLevel( 0.0 ), GAMSException );
+    EXPECT_THROW( rec.keys(), GAMSException );
+    EXPECT_THROW( rec.moveNext(), GAMSException );
 }
 
-void TestGAMSEquationRecord::testCopyConstructor() {
+TEST_F(TestGAMSEquationRecord, testCopyConstructor) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -62,28 +66,28 @@ void TestGAMSEquationRecord::testCopyConstructor() {
     // when
     GAMSEquationRecord newRecord( rec  );
     // then
-    QCOMPARE( newRecord, rec );
-    QVERIFY( newRecord == rec );
-    QCOMPARE( supply.numberRecords(), numberOfRecords );
+    EXPECT_EQ( newRecord, rec );
+    ASSERT_TRUE( newRecord == rec );
+    EXPECT_EQ( supply.numberRecords(), numberOfRecords );
 }
 
 
-void TestGAMSEquationRecord::testCopyConstructor_IncorrectType() {
+TEST_F(TestGAMSEquationRecord, testCopyConstructor_IncorrectType) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
     GAMSDatabase db = job.outDB();
     // when
-    QVERIFY_EXCEPTION_THROWN( GAMSEquationRecord newRecord( db.getSet("i").firstRecord() ), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( GAMSEquationRecord newRecord( db.getParameter("d").firstRecord() ), GAMSException );
-    QVERIFY_EXCEPTION_THROWN( GAMSEquationRecord newRecord( db.getVariable("x").firstRecord() ), GAMSException );
+    EXPECT_THROW( GAMSEquationRecord newRecord( db.getSet("i").firstRecord() ), GAMSException );
+    EXPECT_THROW( GAMSEquationRecord newRecord( db.getParameter("d").firstRecord() ), GAMSException );
+    EXPECT_THROW( GAMSEquationRecord newRecord( db.getVariable("x").firstRecord() ), GAMSException );
 }
 
-void TestGAMSEquationRecord::testAssignmentOperator() {
+TEST_F(TestGAMSEquationRecord, testAssignmentOperator) {
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -91,26 +95,174 @@ void TestGAMSEquationRecord::testAssignmentOperator() {
     GAMSEquationRecord rec = db.getEquation("demand").firstRecord();
     // when
     GAMSEquationRecord newRecord = rec;
-    QCOMPARE( newRecord, rec );
-    QVERIFY( newRecord == rec );
+    EXPECT_EQ( newRecord, rec );
+    ASSERT_TRUE( newRecord == rec );
 }
 
-void TestGAMSEquationRecord::testIncorrectType_data() {
-    QTest::addColumn<int>("symbolType");
-    QTest::addColumn<QString>("symbolID");
+TEST_F(TestGAMSEquationRecord, testGetSetLevel) {
+    // given
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
+    GAMSWorkspace ws(wsInfo);
+    GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
+    job.run();
+    GAMSDatabase db = job.outDB();
+    // when, then
+    GAMSEquation supply = db.getEquation("supply");
+    ASSERT_TRUE( equals(supply.findRecord("seattle").level(), 350.0) );
+    ASSERT_TRUE( equals(supply.findRecord("san-diego").level(), 550.0) );
 
-    QTest::newRow("plants_i")      << 0 << "i"       ;
-    QTest::newRow("distance_d")    << 1 << "d"       ;
-    QTest::newRow("freightcost_f") << 1 << "f"       ;
-    QTest::newRow("shipment_x")    << 2 << "x"       ;
+    GAMSEquation demand = db.getEquation("demand");
+    ASSERT_TRUE( equals(demand.findRecord("topeka").level(), 275.0) );
+    ASSERT_TRUE( equals(demand.findRecord("chicago").level(), 300.0) );
+    ASSERT_TRUE( equals(demand.findRecord("new-york").level(), 325.0) );
+
+    supply.addRecord("alburquerque");
+    // when, then
+    ASSERT_TRUE( equals(supply.findRecord("alburquerque").level(), 0.0));
+
+    demand.firstRecord().setLevel( 123.45 );
+    // when, then
+    ASSERT_TRUE( equals(demand.firstRecord().level(), 123.45) );
+
+    GAMSEquation cost = db.getEquation("cost");
+    // when, then
+    ASSERT_TRUE( equals(cost.firstRecord().level(), 0.0) );
 }
 
-void TestGAMSEquationRecord::testIncorrectType() {
-    QFETCH(int, symbolType);
-    QFETCH(QString, symbolID);
+TEST_F(TestGAMSEquationRecord, testGetSetMarginal) {
+    // given
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
+    GAMSWorkspace ws(wsInfo);
+    GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
+    job.run();
+    GAMSDatabase db = job.outDB();
+
+    // when, then
+    GAMSEquation supply = db.getEquation("supply");
+    ASSERT_TRUE( equals( supply.findRecord("seattle").marginal(), defaultEPS ) );
+    ASSERT_TRUE( equals(supply.findRecord("san-diego").marginal(), 0.0) );
+
+    // when, then
+    GAMSEquation demand = db.getEquation("demand");
+    ASSERT_TRUE( equals(demand.findRecord("topeka").marginal(), 0.126) );
+    ASSERT_TRUE( equals(demand.findRecord("chicago").marginal(), 0.153) );
+    ASSERT_TRUE( equals(demand.findRecord("new-york").marginal(), 0.225) );
+
+    // when, then
+    GAMSEquation cost = db.getEquation("cost");
+    ASSERT_TRUE( equals(cost.firstRecord().marginal(), 1.0) );
+
+    // when, then
+    cost.firstRecord().setLevel( 1.2345 );
+    ASSERT_TRUE( equals(cost.firstRecord().level(), 1.2345) );
+}
+
+TEST_F(TestGAMSEquationRecord, testGetSetUpper) {
+    // given
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
+    GAMSWorkspace ws(wsInfo);
+    GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
+    job.run();
+    GAMSDatabase db = job.outDB();
+
+    // supply(i) ..   sum(j, x(i,j))  =l=  a(i) ;
+    GAMSEquation supply = db.getEquation("supply");
+    // when, then
+    ASSERT_TRUE( equals( supply.findRecord("seattle").upper(), 350.0 ) );
+    ASSERT_TRUE( equals(supply.findRecord("san-diego").upper(), 600.0) );
+
+    // demand(j) ..   sum(i, x(i,j))  =g=  b(j) ;
+    GAMSEquation demand = db.getEquation("demand");
+    // when, then
+    ASSERT_TRUE( std::isinf(demand.findRecord("topeka").upper()) );
+    ASSERT_TRUE( std::isinf(demand.findRecord("chicago").upper()) );
+    ASSERT_TRUE( std::isinf(demand.findRecord("new-york").upper()) );
+
+    // cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;
+    GAMSEquation cost = db.getEquation("cost");
+    // when, then
+    ASSERT_TRUE( equals(cost.firstRecord().upper(), 0.0) );
+
+    // when, then
+    cost.firstRecord().setUpper( 123.45 );
+    ASSERT_TRUE( equals(cost.firstRecord().upper(), 123.45) );
+}
+
+TEST_F(TestGAMSEquationRecord, testGetSetLower) {
+    // given
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
+    GAMSWorkspace ws(wsInfo);
+    GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
+    job.run();
+    GAMSDatabase db = job.outDB();
+
+    // supply(i) ..   sum(j, x(i,j))  =l=  a(i) ;
+    GAMSEquation supply = db.getEquation("supply");
+    //when, then
+    ASSERT_TRUE( std::isinf( - supply.findRecord("seattle").lower()) );
+    ASSERT_TRUE( std::isinf( - supply.findRecord("san-diego").lower()) );
+
+    // demand(j) ..   sum(i, x(i,j))  =g=  b(j) ;
+    GAMSEquation demand = db.getEquation("demand");
+    // when, then
+    ASSERT_TRUE( equals(demand.findRecord("new-york").lower(), 325.0) );
+    ASSERT_TRUE( equals(demand.findRecord("chicago").lower(), 300.0) );
+    ASSERT_TRUE( equals(demand.findRecord("topeka").lower(), 275.0) );
+
+    // cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;
+    GAMSEquation cost = db.getEquation("cost");
+    // when , then
+    ASSERT_TRUE( equals(cost.firstRecord().lower(), 0.0) );
+}
+
+TEST_F(TestGAMSEquationRecord, testGetSetScale) {
+    // given
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
+    GAMSWorkspace ws(wsInfo);
+    GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
+    job.run();
+    GAMSDatabase db = job.outDB();
+
+    // when, then
+    GAMSEquation supply = db.getEquation("supply");
+    ASSERT_TRUE( equals( supply.findRecord("seattle").scale(), 1.0 ) );
+    ASSERT_TRUE( equals(supply.findRecord("san-diego").scale(), 1.0) );
+
+    // when, then
+    GAMSEquation demand = db.getEquation("demand");
+    ASSERT_TRUE( equals(demand.findRecord("topeka").scale(), 1.0) );
+    ASSERT_TRUE( equals(demand.findRecord("chicago").scale(), 1.0) );
+    ASSERT_TRUE( equals(demand.findRecord("new-york").scale(), 1.0) );
+
+    // when, then
+    GAMSEquation cost = db.getEquation("cost");
+    ASSERT_TRUE( equals(cost.firstRecord().scale(), 1.0) );
+
+    // when, then
+    cost.firstRecord().setScale( 1.2345 );
+    ASSERT_TRUE( equals(cost.firstRecord().scale(), 1.2345) );
+}
+
+class ParameterizedTestGAMSEquationRecord
+        : public ::testing::WithParamInterface<std::tuple<std::string, int, std::string>>,
+          public TestGAMSEquationRecord {
+};
+
+INSTANTIATE_TEST_SUITE_P(testIncorrectType,
+                        ParameterizedTestGAMSEquationRecord,
+                        ::testing::Values (
+                            std::make_tuple("plants_i",      0, "i"),
+                            std::make_tuple("distance_d",    1, "d"),
+                            std::make_tuple("freightcost_f", 1, "f"),
+                            std::make_tuple("shipment_x",    2, "x")
+                        ));
+
+TEST_P(ParameterizedTestGAMSEquationRecord, testIncorrectType) {
+    int symbolType = std::get<1>(GetParam());
+    std::string symbolID = std::get<2>(GetParam());
 
     // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
+    GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
     job.run();
@@ -120,174 +272,28 @@ void TestGAMSEquationRecord::testIncorrectType() {
     switch(symbolType) {
       case GAMSEnum::SymbolType::SymTypeSet :
         {
-          GAMSSet symbol = db.getSet( symbolID.toStdString() );
+          GAMSSet symbol = db.getSet( symbolID );
           GAMSSymbolRecord rec1 = symbol.firstRecord();
-          QVERIFY_EXCEPTION_THROWN( GAMSSymbolRecord rec2 = GAMSParameterRecord( symbol.firstRecord()), GAMSException );
-          QVERIFY_EXCEPTION_THROWN( GAMSParameterRecord r = rec1, GAMSException );
+          EXPECT_THROW( GAMSSymbolRecord rec2 = GAMSParameterRecord( symbol.firstRecord()), GAMSException );
+          EXPECT_THROW( GAMSParameterRecord r = rec1, GAMSException );
           break;
         }
       case GAMSEnum::SymbolType::SymTypeVar :
         {
-          GAMSVariable symbol = db.getVariable( symbolID.toStdString() );
+          GAMSVariable symbol = db.getVariable( symbolID );
           GAMSSymbolRecord rec1 = symbol.firstRecord();
-          QVERIFY_EXCEPTION_THROWN( GAMSSymbolRecord rec2 = GAMSParameterRecord( symbol.firstRecord() ), GAMSException );
-          QVERIFY_EXCEPTION_THROWN( GAMSParameterRecord r = rec1, GAMSException );
+          EXPECT_THROW( GAMSSymbolRecord rec2 = GAMSParameterRecord( symbol.firstRecord() ), GAMSException );
+          EXPECT_THROW( GAMSParameterRecord r = rec1, GAMSException );
           break;
         }
       case GAMSEnum::SymbolType::SymTypePar :
       {
-        GAMSParameter symbol = db.getParameter( symbolID.toStdString() );
+        GAMSParameter symbol = db.getParameter( symbolID );
         GAMSSymbolRecord rec1 = symbol.firstRecord();
-        QVERIFY_EXCEPTION_THROWN( GAMSSymbolRecord rec2 = GAMSSetRecord( symbol.firstRecord() ), GAMSException );
-        QVERIFY_EXCEPTION_THROWN( GAMSSetRecord r = rec1, GAMSException );
+        EXPECT_THROW( GAMSSymbolRecord rec2 = GAMSSetRecord( symbol.firstRecord() ), GAMSException );
+        EXPECT_THROW( GAMSSetRecord r = rec1, GAMSException );
         break;
       }
       default: break;
     }
 }
-
-void TestGAMSEquationRecord::testGetSetLevel() {
-    // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
-    GAMSWorkspace ws(wsInfo);
-    GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
-    job.run();
-    GAMSDatabase db = job.outDB();
-    // when, then
-    GAMSEquation supply = db.getEquation("supply");
-    QVERIFY( equals(supply.findRecord("seattle").level(), 350.0) );
-    QVERIFY( equals(supply.findRecord("san-diego").level(), 550.0) );
-
-    GAMSEquation demand = db.getEquation("demand");
-    QVERIFY( equals(demand.findRecord("topeka").level(), 275.0) );
-    QVERIFY( equals(demand.findRecord("chicago").level(), 300.0) );
-    QVERIFY( equals(demand.findRecord("new-york").level(), 325.0) );
-
-    supply.addRecord("alburquerque");
-    // when, then
-    QVERIFY( equals(supply.findRecord("alburquerque").level(), 0.0));
-
-    demand.firstRecord().setLevel( 123.45 );
-    // when, then
-    QVERIFY( equals(demand.firstRecord().level(), 123.45) );
-
-    GAMSEquation cost = db.getEquation("cost");
-    // when, then
-    QVERIFY( equals(cost.firstRecord().level(), 0.0) );
-}
-
-void TestGAMSEquationRecord::testGetSetMarginal() {
-    // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
-    GAMSWorkspace ws(wsInfo);
-    GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
-    job.run();
-    GAMSDatabase db = job.outDB();
-
-    // when, then
-    GAMSEquation supply = db.getEquation("supply");
-    QVERIFY( equals( supply.findRecord("seattle").marginal(), defaultEPS ) );
-    QVERIFY( equals(supply.findRecord("san-diego").marginal(), 0.0) );
-
-    // when, then
-    GAMSEquation demand = db.getEquation("demand");
-    QVERIFY( equals(demand.findRecord("topeka").marginal(), 0.126) );
-    QVERIFY( equals(demand.findRecord("chicago").marginal(), 0.153) );
-    QVERIFY( equals(demand.findRecord("new-york").marginal(), 0.225) );
-
-    // when, then
-    GAMSEquation cost = db.getEquation("cost");
-    QVERIFY( equals(cost.firstRecord().marginal(), 1.0) );
-
-    // when, then
-    cost.firstRecord().setLevel( 1.2345 );
-    QVERIFY( equals(cost.firstRecord().level(), 1.2345) );
-}
-
-void TestGAMSEquationRecord::testGetSetUpper() {
-    // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
-    GAMSWorkspace ws(wsInfo);
-    GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
-    job.run();
-    GAMSDatabase db = job.outDB();
-
-    // supply(i) ..   sum(j, x(i,j))  =l=  a(i) ;
-    GAMSEquation supply = db.getEquation("supply");
-    // when, then
-    QVERIFY( equals( supply.findRecord("seattle").upper(), 350.0 ) );
-    QVERIFY( equals(supply.findRecord("san-diego").upper(), 600.0) );
-
-    // demand(j) ..   sum(i, x(i,j))  =g=  b(j) ;
-    GAMSEquation demand = db.getEquation("demand");
-    // when, then
-    QVERIFY( std::isinf(demand.findRecord("topeka").upper()) );
-    QVERIFY( std::isinf(demand.findRecord("chicago").upper()) );
-    QVERIFY( std::isinf(demand.findRecord("new-york").upper()) );
-
-    // cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;
-    GAMSEquation cost = db.getEquation("cost");
-    // when, then
-    QVERIFY( equals(cost.firstRecord().upper(), 0.0) );
-
-    // when, then
-    cost.firstRecord().setUpper( 123.45 );
-    QVERIFY( equals(cost.firstRecord().upper(), 123.45) );
-}
-
-void TestGAMSEquationRecord::testGetSetLower() {
-    // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
-    GAMSWorkspace ws(wsInfo);
-    GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
-    job.run();
-    GAMSDatabase db = job.outDB();
-
-    // supply(i) ..   sum(j, x(i,j))  =l=  a(i) ;
-    GAMSEquation supply = db.getEquation("supply");
-    //when, then
-    QVERIFY( std::isinf( - supply.findRecord("seattle").lower()) );
-    QVERIFY( std::isinf( - supply.findRecord("san-diego").lower()) );
-
-    // demand(j) ..   sum(i, x(i,j))  =g=  b(j) ;
-    GAMSEquation demand = db.getEquation("demand");
-    // when, then
-    QVERIFY( equals(demand.findRecord("new-york").lower(), 325.0) );
-    QVERIFY( equals(demand.findRecord("chicago").lower(), 300.0) );
-    QVERIFY( equals(demand.findRecord("topeka").lower(), 275.0) );
-
-    // cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;
-    GAMSEquation cost = db.getEquation("cost");
-    // when , then
-    QVERIFY( equals(cost.firstRecord().lower(), 0.0) );
-}
-
-void TestGAMSEquationRecord::testGetSetScale() {
-    // given
-    GAMSWorkspaceInfo wsInfo("", testSystemDir.path().toStdString());
-    GAMSWorkspace ws(wsInfo);
-    GAMSJob job = ws.addJobFromGamsLib( "trnsport" );
-    job.run();
-    GAMSDatabase db = job.outDB();
-
-    // when, then
-    GAMSEquation supply = db.getEquation("supply");
-    QVERIFY( equals( supply.findRecord("seattle").scale(), 1.0 ) );
-    QVERIFY( equals(supply.findRecord("san-diego").scale(), 1.0) );
-
-    // when, then
-    GAMSEquation demand = db.getEquation("demand");
-    QVERIFY( equals(demand.findRecord("topeka").scale(), 1.0) );
-    QVERIFY( equals(demand.findRecord("chicago").scale(), 1.0) );
-    QVERIFY( equals(demand.findRecord("new-york").scale(), 1.0) );
-
-    // when, then
-    GAMSEquation cost = db.getEquation("cost");
-    QVERIFY( equals(cost.firstRecord().scale(), 1.0) );
-
-    // when, then
-    cost.firstRecord().setScale( 1.2345 );
-    QVERIFY( equals(cost.firstRecord().scale(), 1.2345) );
-}
-
-QTEST_MAIN(TestGAMSEquationRecord)

@@ -1,21 +1,28 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.1)
 
 project(xp_example2 C CXX)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../../C/api")
+if (IS_IN_GAMS_DIR)
+    set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
+else()
+    set(BASEPATH "${GAMSPATH}/apifiles/")
+endif()
+include_directories("${BASEPATH}/C/api"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/../../src"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/../../src/generated")
 
 add_executable(${PROJECT_NAME}
     "xp_example2.cpp"
-    "../../C/api/gcmt.c"
-    "../../C/api/gdxcc.c"
-    "../../C/api/optcc.c"
-    "../../C/api/gamsxcc.c")
+    "${BASEPATH}/C/api/gcmt.c"
+    "${BASEPATH}/C/api/gdxcc.c"
+    "${BASEPATH}/C/api/optcc.c"
+    "${BASEPATH}/C/api/gamsxcc.c")
 
-IF (WIN32)
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} user32)
-ELSEIF(UNIX)
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} dl pthread)
-ENDIF()
+if(WIN32)
+target_link_libraries(${PROJECT_NAME} user32)
+elseif(UNIX)
+target_link_libraries(${PROJECT_NAME} dl pthread)
+endif()

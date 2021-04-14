@@ -25,21 +25,21 @@
 
 #define NOMINMAX // we need this in ordre for numerical_limits<double>::min() to work
 
-#include "gamslog.h"
-#include "gamsworkspaceimpl.h"
 #include <iostream>
 #include <cstdlib>
 #include <sstream>
 #include <fstream>
+#include <array>
 #include <vector>
 #include <string>
-#include <QSettings>
-#include <QProcess>
-#include <QString>
-#include <QDir>
-
+#include <algorithm>
 #include <limits>
 #include <stdio.h>
+#include <string.h>
+#include <array>
+
+#include "gamslog.h"
+#include "gamsworkspaceimpl.h"
 #include "gamsplatform.h"
 #include "gamsoptions.h"
 #include "gamsworkspacepool.h"
@@ -69,68 +69,69 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
 
     std::copy(std::begin(CSpecValues), std::end(CSpecValues), std::begin(specValues));
 
-    char const* tmpEnvDebug = getenv("GAMSOOAPIDEBUG");
-    if (tmpEnvDebug != NULL) {
-        string envDebug(QString(tmpEnvDebug).toLower().toStdString());
+    char* envDebug = getenv("GAMSOOAPIDEBUG");
+    if (envDebug && envDebug[0] == '\0') {
+        for (unsigned int i = 0; i < (unsigned)strlen(envDebug); i++)
+            envDebug[i] = tolower(envDebug[i]);
+
         DEB << envDebug;
-        if ("off" == envDebug)
+        if (strcmp("off", envDebug))
             mDebug = GAMSEnum::Off;
-        else if ("keepfiles" == envDebug)
+        else if (strcmp("keepfiles", envDebug))
             mDebug = GAMSEnum::KeepFiles;
-        else if ("showlog" == envDebug)
+        else if (strcmp("showlog", envDebug))
             mDebug = GAMSEnum::ShowLog;
-        else if ("verbose" == envDebug)
+        else if (strcmp("verbose", envDebug))
             mDebug = GAMSEnum::Verbose;
     }
 
     // handle working directory
     mUsingTmpWorkingDir = workingDir.empty();
     if (mUsingTmpWorkingDir) {
-        GAMSPath tempDir = mWorkingDir.tempDir(QDir::tempPath());
-        if (!tempDir.isDir()) {
+        GAMSPath tempDir = mWorkingDir.tempDir(std::filesystem::temp_directory_path().string());
+        if (!tempDir.exists()) {
             throw GAMSException("Cannot create temp-workspace directory: " + tempDir.toStdString());
         }
         mWorkingDir = tempDir;
     } else {
         mWorkingDir = workingDir;
     }
-    if (!mWorkingDir.mkDir()) {
+
+    if (!mWorkingDir.exists() && !mWorkingDir.mkDir()) {
         throw GAMSException("Cannot create workspace directory: " + mWorkingDir.toStdString());
     }
     mWorkingDir.pack();
     GAMSWorkspacePool::registerWorkspacePath(mWorkingDir.toStdString());
 
     // handle system directory
-    mSystemDir = systemDir.empty() ? findGAMS() : systemDir;
+    mSystemDir = systemDir.empty() ? GAMSPlatform::findGams(logID()) : systemDir;
     if (!mSystemDir.exists()) {
         throw GAMSException("Invalid GAMS system directory: " + systemDir);
     }
     mSystemDir.pack();
 
-    GAMSPath joat64File = mSystemDir / (QString(cLibPrefix) + "joatdclib64" + cLibSuffix);
-    int bitness = sizeof(int*);
+    ostringstream sstream;
+    sstream << cLibPrefix << "joatdclib64" << cLibSuffix;
+    string lib = sstream.str();
 
-    DEB << joat64File.absoluteFilePath();
-    const char* bitsuf = (bitness == 8) ? "64" : "";
+    GAMSPath joat64File = mSystemDir / lib;
 
-    // if 32 bit
-    if (bitness == 4 && joat64File.exists()) {
-        ERR << "Expected GAMS system to be 32 bit but found 64 bit instead. System directory: " << mSystemDir.c_str() << endl;
-        throw GAMSException("Expected GAMS system to be 32 bit but found 64 bit instead. System directory: " + mSystemDir.toStdString());
-    }
-    // if 64 bit
-    if (bitness == 8 && !joat64File.exists()) {
+    DEB << joat64File.string();
+    if (!joat64File.exists()) {
         ERR << "Expected GAMS system to be 64 bit but found 32 bit instead. System directory: " << mSystemDir.c_str() << endl;
         throw GAMSException("Expected GAMS system to be 64 bit but found 32 bit instead. System directory: " + mSystemDir.toStdString());
     }
 
     if (mSystemDir != mWorkingDir) {
-        QStringList libstems = QStringList() << "gamsxdc" << "gdxdc" << "gmdcc" << "joatdc" << "optdc";
-        QString libTmpl = QString(cLibPrefix) + "%1lib" + bitsuf + cLibSuffix;
-        for (QString lib: libstems) {
-            GAMSPath tmpLib = mWorkingDir / libTmpl.arg(lib);
+        vector<string> libstems = {"gamsxdc", "gdxdc", "gmdcc", "joatdc", "optdc"};
+        for (string lib: libstems) {
+            ostringstream libstream;
+            libstream << cLibPrefix << lib << "64" << cLibSuffix;
+            string libTmpl = libstream.str();
+
+            GAMSPath tmpLib = mWorkingDir / libTmpl;
             if (tmpLib.exists()) {
-                MSG   << "\n--- Warning: Found library " << tmpLib.fileName() << " in the Working Directory (" << mWorkingDir.toStdString() << ")."
+                MSG   << "\n--- Warning: Found library " << tmpLib.filename() << " in the Working Directory (" << mWorkingDir.toStdString() << ")."
                       << "\n---          This could cause a problem when it is a different version than"
                       << "\n---          the one in the System Directory (" + mSystemDir.toStdString() + ").";
             }
@@ -138,11 +139,10 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     }
 
     GAMSPlatform::ensureEnvPathContains(mSystemDir.c_str());
-
     // Check GAMS version of the system directory
-    QString compiledVersion = GAMSVersion::gamsVersion();
-    QString systemVersion = QString::fromStdString(GAMSVersion::systemVersion(mSystemDir.toStdString()));
-    if (systemVersion.isEmpty()) {
+    string compiledVersion = GAMSVersion::gamsVersion();
+    string systemVersion = GAMSVersion::systemVersion(mSystemDir.toStdString());
+    if (systemVersion.empty()) {
         MSG << "Warning: The GAMS version at '" << mSystemDir.c_str() << "' could not be determined.";
     } else if (compiledVersion != systemVersion) {
         MSG << "\n--- Warning: This library is developed for GAMS version " << compiledVersion << "."
@@ -151,14 +151,13 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     }
 
     // TODO: all the ProcessStartInfo stuff.
-
 }
 
 GAMSWorkspaceImpl::~GAMSWorkspaceImpl()
 {
     DEB << "---- Entering GAMSWorkspaceImpl destructor ----";
     GAMSWorkspacePool::unregisterWorkspacePath(mWorkingDir.toStdString());
-    if ((mDebug != GAMSEnum::DebugLevel::KeepFiles) && mUsingTmpWorkingDir) {
+    if ((mDebug < GAMSEnum::DebugLevel::KeepFiles) && mUsingTmpWorkingDir) { // TODO(RG): what is expected of the debuglevel here?
         if (!mWorkingDir.rmDirRecurse()) {
             MSG << "Error on cleaning workspace.";
         }
@@ -257,7 +256,7 @@ std::string GAMSWorkspaceImpl::writeSource(const string& gamsSource, const strin
 std::string GAMSWorkspaceImpl::findSourceFile(const string& fileName)
 {
     std::string fName;
-    if (GAMSPath(fileName).isAbsolute())
+    if (GAMSPath(fileName).is_absolute())
        fName = fileName;
     else
        fName = mWorkingDir / fileName;
@@ -343,27 +342,15 @@ GAMSDatabase GAMSWorkspaceImpl::addDatabaseFromGMD(GAMSWorkspace& ws, void* gmdP
     return GAMSDatabase(gmdPtr, ws);
 }
 
-string GAMSWorkspaceImpl::findGAMS()
-{
-    string GAMSDir = GAMSPlatform::findGams(logID());
-    return GAMSDir;
-}
-
 void GAMSWorkspaceImpl::xxxLib(string libname, string model)
 {
-    QProcess proc;
-    proc.setProgram(mSystemDir / (libname + "lib" + cExeSuffix));
-    proc.setArguments(QStringList() << QString::fromStdString(model));
-    proc.setWorkingDirectory(mWorkingDir);
-    proc.start();
-    if (!proc.waitForStarted())
-        throw GAMSException(libname + "lib process could not be started");
-    proc.waitForFinished(-1);
+    string lib = libname + "lib" + cExeSuffix;
+    GAMSPath libPath(mSystemDir / lib);
 
-    MSG << proc.readAll();
-
-    if (proc.exitCode() != 0)
-        throw GAMSException(libname + "lib return code not 0 (" + std::to_string(proc.exitCode()) + ")");
+    string output;
+    int exitCode = GAMSPlatform::runProcess(mWorkingDir.string(), libPath.string(), model, output);
+    if (exitCode != 0)
+        throw GAMSException(libname + "lib return code not 0 (" + std::to_string(exitCode) + ")");
 }
 
 void GAMSWorkspaceImpl::setScratchFilePrefix(const string& scratchFilePrefix)

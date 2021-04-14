@@ -27,9 +27,7 @@
 #define GAMSLOG_H
 
 #include <sstream>
-#include <QTextStream>
-#include <QHash>
-#include <QSet>
+#include <unordered_set>
 #include "gamsenum.h"
 #include "gamslib_global.h"
 
@@ -41,10 +39,10 @@ class LoggerPool
     struct TargetSet {
         TargetSet() : mDebug(GAMSEnum::DebugLevel::Verbose) {}
         TargetSet(const GAMSEnum::DebugLevel debug, FILE *target = 0) : mDebug(debug) {
-            mTargets << (target ? target : stdout);
+            mTargets.insert(mTargets.end(), (target ? target : stdout));
         }
         GAMSEnum::DebugLevel mDebug;
-        QSet<FILE*> mTargets;
+        std::unordered_set<FILE*> mTargets;
     };
 
 public:
@@ -67,12 +65,12 @@ public:
     /// \param logId A GAMS logger ID.
     /// \param debug A GAMS debug level.
     /// \return Returns all file targets.
-    QSet<FILE*> targets(const LogId logId, const GAMSEnum::DebugLevel debug) const {
-        if (!mBinds.contains(logId))
-            return QSet<FILE*>();
-        TargetSet lc = mBinds.value(logId);
+    std::unordered_set<FILE*> targets(const LogId logId, const GAMSEnum::DebugLevel debug) const {
+        if (mBinds.find(logId) == mBinds.end())
+            return std::unordered_set<FILE*>();
+        TargetSet lc = mBinds.at(logId);
         if (lc.mDebug < debug)
-            return QSet<FILE*>();
+            return std::unordered_set<FILE*>();
         return lc.mTargets;
     }
 
@@ -80,12 +78,15 @@ public:
     /// \param logId A GAMS logger ID.
     /// \return Returns the GAMS debug level of a certain logger.
     GAMSEnum::DebugLevel debug(const LogId logId) const {
-        return mBinds.value(logId, TargetSet()).mDebug;
+        if (mBinds.count(logId) > 0)
+            return mBinds.at(logId).mDebug;
+        else
+            return GAMSEnum::DebugLevel::Off;
     }
 
 private:
     static LoggerPool *mInstance;
-    QHash<LogId, TargetSet> mBinds;
+    std::map<LogId, TargetSet> mBinds;
     LoggerPool() {}
     LoggerPool(LoggerPool const&) {}
     void operator=(LoggerPool const&) {}
@@ -101,7 +102,7 @@ public:
     /// \param debug A GAMS debug level.
     /// \param where Location of the log file.
     Logger(const LogId logID, const GAMSEnum::DebugLevel debug, const char* where)
-        : mBufferStream(&mBuffer), mWhere(where), mTargets(LoggerPool::instance().targets(logID, debug))
+        : mBufferStream(mBuffer), mWhere(where), mTargets(LoggerPool::instance().targets(logID, debug))
     {}
 
     /// Destructor.
@@ -132,10 +133,10 @@ public:
     }
 
 private:
-    QString mBuffer;
-    QTextStream mBufferStream;
-    QString mWhere;
-    QSet<FILE*> mTargets;
+    std::string mBuffer;
+    std::stringstream mBufferStream;
+    std::string mWhere;
+    std::unordered_set<FILE*> mTargets;
 };
 
 }

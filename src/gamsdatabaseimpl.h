@@ -47,16 +47,16 @@ class GAMSDatabaseImpl
 {
 public:
     // Constructor
-    GAMSDatabaseImpl(const std::string& gdxFileName, const GAMSWorkspace workspace, const double specValues[]
+    GAMSDatabaseImpl(const std::string& gdxFileName, GAMSWorkspace &workspace, const double specValues[]
                      , const std::string& databaseName = "", const std::string& inModelName = "", bool forceName = false);
 
-    GAMSDatabaseImpl(GAMSWorkspace workspace, const double specValues[], const std::string& databaseName = ""
+    GAMSDatabaseImpl(GAMSWorkspace &workspace, const double specValues[], const std::string& databaseName = ""
                      , const std::string& inModelName = "", bool forceName = false);
 
-    GAMSDatabaseImpl(const GAMSWorkspace workspace, const double specValues[], std::shared_ptr<GAMSDatabaseImpl> sourceDb
+    GAMSDatabaseImpl(GAMSWorkspace &workspace, const double specValues[], std::shared_ptr<GAMSDatabaseImpl> sourceDb
                      , const std::string& dbName = "", const std::string& inModelName = "");
 
-    GAMSDatabaseImpl(void* gmdPtr, GAMSWorkspace workspace);
+    GAMSDatabaseImpl(void* gmdPtr, GAMSWorkspace &workspace);
     ~GAMSDatabaseImpl();
 
     bool operator!=(const GAMSDatabaseImpl& other) const;

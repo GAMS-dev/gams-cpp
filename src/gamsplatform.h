@@ -27,6 +27,7 @@
 #define GAMSPLATFORM_H
 
 #include "gamslib_global.h"
+#include <thread>
 
 namespace gams {
 
@@ -42,10 +43,14 @@ extern LIBSPEC const char *cLibSuffix;
 /// Encapsulates all platform specific calls of the API.
 struct LIBSPEC GAMSPlatform
 {
-    /// Get the GAMS path.
-    /// \param logId GAMS logging ID.
-    /// \return Returns the path to GAMS.
-    static std::string findGams(LogId logId);
+    // TODO(RG): double check if this is accurate:
+    /// find GAMS system directory from related environment.
+    ///  - on windows : first search "PATH" if not found then search windows registry "gams.location",
+    ///  - on Mac : first search "PATH" if not found then "DYLD_LIBRARAY_PATH",
+    ///  - on other platforms : first search "PATH" if not found then "LD_LIBRARAY_PATH".
+    /// After two attempts of search and GAMS directory is still not found, returns null String.
+    /// \returns  GAMS directory if found, null otherwise.
+    static std::string findGams(LogId logId = 0);
 
     /// Ensures that the directory name is contained in the environment path.
     /// \param dirName A directory name.
@@ -59,15 +64,32 @@ struct LIBSPEC GAMSPlatform
     ///         the interrupt and waits unitl gams has finished.
     static bool interrupt(long pid);
 
+    ///
+    /// Runs a process in a specified location.
+    /// \param where Directory of execution.
+    /// \param what Name of process to run.
+    /// \param args Process arguments.
+    /// \param output Process output as string.
+    /// \return Exit code.
+    ///
+    static int runProcess(const std::string where, const std::string what, const std::string args, std::string& output);
+
+    ///
+    /// Runs a process without waiting for it to end. Returns std::thread of started process.
+    /// \param executable Filepath of process to run.
+    /// \param args Process arguments.
+    /// \return thread
+    ///
+    static std::thread runProcessParallel(const std::string executable, const std::string args);
 private:
     GAMSPlatform() {}
 
     static std::string findGamsOnApple(LogId logId);
     static void ensureEnvPathSetOnApple(const char *dirName);
-    static bool interruptOnNonWindows(long pid);
 
-    static std::string findGamsOnLinux(LogId logId);
-    static void ensureEnvPathSetOnLinux(const char *dirName);
+    static std::string findGamsOnUnix(LogId logId);
+    static void ensureEnvPathSetOnUnix(const char *dirName);
+    static bool interruptOnNonWindows(long pid);
 
     static std::string findGamsOnWindows(LogId logId);
     static void ensureEnvPathSetOnWindows(const char *dirName);
