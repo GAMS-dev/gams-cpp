@@ -7,3 +7,4 @@ Makefile
 .directory
 **/*.dylib
 gamsinclude.pri
+**/.DS_Store
