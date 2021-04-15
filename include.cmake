@@ -57,8 +57,9 @@ set(VERSION "${GAMSCPP_MAJOR_VERSION}.${GAMSCPP_MINOR_VERSION}.${GAMSCPP_PATCH_L
 add_definitions(-DAPI_VERSION="${VERSION}")
 
 # GAMS_CORE_PATH is Jenkins build switch
+file(TO_CMAKE_PATH "$ENV{GAMS_CORE_PATH}" GAMS_PATH)
 if(NOT EXISTS ${PWD}/gamsinclude.pri)
-    if("$ENV{GAMS_CORE_PATH}" STREQUAL "")
+    if("${GAMS_PATH}" STREQUAL "")
         if(APPLE)
             set(GAMS_DISTRIB /Library/Frameworks/GAMS.framework/Versions/${GAMS_DISTRIB_MAJOR}/Resources)
             set(GAMSINC
@@ -82,9 +83,9 @@ GAMS_DISTRIB_CPP_API=${GAMS_DISTRIB}/apifiles/C++/api")
         endif()
     else()
         set(GAMSINC
-"GAMS_DISTRIB=$ENV{GAMS_CORE_PATH}\n\
-GAMS_DISTRIB_C_API=$ENV{GAMS_CORE_PATH}/apifiles/C/api\n\
-GAMS_DISTRIB_CPP_API=$ENV{GAMS_CORE_PATH}/apifiles/C++/api")
+"GAMS_DISTRIB=${GAMS_PATH}\n\
+GAMS_DISTRIB_C_API=${GAMS_PATH}/apifiles/C/api\n\
+GAMS_DISTRIB_CPP_API=${GAMS_PATH}/apifiles/C++/api")
     endif()
 
     file(WRITE ${PWD}/gamsinclude.pri ${GAMSINC})
