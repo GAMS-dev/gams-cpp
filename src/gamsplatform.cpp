@@ -280,7 +280,7 @@ int GAMSPlatform::runProcess(const string where, const string what, const string
 
     _chdir(p.string().c_str()); // change back to old working dir
 #else
-    ssp << "cd " << where << " && " << what << " " << args;
+    ssp << "cd \"" << where << "\" && \"" << what << "\" " << args;
     out = popen(ssp.str().c_str(), "r");
 #endif
     if (!out) {
