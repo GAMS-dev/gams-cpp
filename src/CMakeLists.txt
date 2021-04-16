@@ -52,8 +52,7 @@ elseif(UNIX) # Apple or Linux
     endif()
 endif()
 
-# TODO(RG):  we need to find a solution for how to handle generated files...
-include_directories(../src/generated PUBLIC_LIBRARIES)
+include_directories(${GAMS_DISTRIB_CPP_API} PUBLIC_LIBRARIES)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -106,8 +105,6 @@ add_library(gamscpp SHARED
         gamsworkspaceinfo.cpp gamsworkspaceinfo.h
         gamsworkspaceinfoimpl.cpp gamsworkspaceinfoimpl.h
         gamsworkspacepool.cpp gamsworkspacepool.h
-        generated/gamsoptions.cpp
-        generated/gamsoptionsimpl.cpp
         solveroptions.cpp solveroptions.h
         ../CHANGELOG ../version ../jenkinsfile
         ${SOURCE} ${HEADER}
