@@ -128,13 +128,13 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
         throw GAMSException(e.what() + (" for GAMSJob " + mJobName));
     }
 
-    string gamsExe = mWs.systemDirectory() + "/gams";
-    gamsExe.append(cExeSuffix);
+    auto gamsExe = filesystem::path(mWs.systemDirectory());
+    gamsExe.append(string("gams") + cExeSuffix);
 
     string args = "dummy pf=" + mJobName + ".pf";
 
     string result;
-    int exitCode = GAMSPlatform::runProcess(mWs.workingDirectory(), gamsExe, args, result);
+    int exitCode = GAMSPlatform::runProcess(mWs.workingDirectory(), gamsExe.string(), args, result);
 
     if (createOutDb) {
         //TODO: should we always delete the outDB before a new run? Affects C#, Pytohn and Java as well
