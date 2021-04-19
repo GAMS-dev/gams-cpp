@@ -25,6 +25,7 @@
 
 #include "gamspath.h"
 #include "gamsexception.h"
+#include "gamslog.h"
 #include <fstream>
 #include <algorithm>
 
@@ -140,10 +141,15 @@ bool GAMSPath::mkDir() const
 
 bool GAMSPath::rmDirRecurse()
 {
+    bool result;
+    std::error_code ec;
     if (std::filesystem::is_regular_file(*this))
-        return std::filesystem::exists(*this);
+        result = std::filesystem::exists(*this, ec);
     else
-        return std::filesystem::remove_all(*this);
+        result = std::filesystem::remove_all(*this, ec);
+    //if (ec) // TODO error/exception handling??
+        //MSG << "GAMSPath::rmDirRecurse error: " << ec.message();
+    return result;
 }
 
 void GAMSPath::pack()
