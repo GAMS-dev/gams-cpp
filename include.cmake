@@ -128,14 +128,15 @@ else()
 
     if ("${GSYS_ENV}" STREQUAL "leg")
         add_definitions(-DLEG -DCIA_LEX)
-#        add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-declarations -m64)
-#        add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64)
     endif()
 
     if ("${GSYS_ENV}" STREQUAL "deg")
         add_definitions(-DDEG -DCIA_DEX)
-#        add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-declarations -m64)
-#        add_definitions(-Werror-implicit-function-declaration -Wreturn-type -Wmissing-prototypes -Wmissing-declarations -m64)
+        # use gcc on macos:
+        set(CMAKE_C_COMPILER "gcc")
+        set(CMAKE_CXX_COMPILER "g++")
+        set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath,$ORIGIN,-rpath,$ORIGIN/../../..")
+        link_libraries(stdc++fs pthread)
     endif()
 
     set(GPRODUCTS_ENV $ENV{GPRODUCTS})
