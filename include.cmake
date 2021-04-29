@@ -139,6 +139,7 @@ else()
         link_libraries(stdc++fs pthread)
 
         message("! RGDBG2 !")
+        message(${CMAKE_CXX_COMPILER})
         message(${CMAKE_CXX_COMPILER_ID})
         message(${CMAKE_CXX_COMPILER_VERSION})
     endif()
