@@ -132,16 +132,8 @@ else()
 
     if ("${GSYS_ENV}" STREQUAL "deg")
         add_definitions(-DDEG -DCIA_DEX)
-        # use gcc on macos:
-        set(CMAKE_C_COMPILER "gcc")
-        set(CMAKE_CXX_COMPILER "g++")
         set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath,$ORIGIN,-rpath,$ORIGIN/../../..")
         link_libraries(stdc++fs pthread)
-
-        message("! RGDBG2 !")
-        message(${CMAKE_CXX_COMPILER})
-        message(${CMAKE_CXX_COMPILER_ID})
-        message(${CMAKE_CXX_COMPILER_VERSION})
     endif()
 
     set(GPRODUCTS_ENV $ENV{GPRODUCTS})
