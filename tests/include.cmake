@@ -52,6 +52,10 @@ if(UNIX) # Apple or Linux
     link_libraries(dl)
     if (APPLE)
         set(MACOSX_DEPLOYMENT_TARGET "10.15")
+        # use gcc on macos:
+        set(CMAKE_C_COMPILER "gcc")
+        set(CMAKE_CXX_COMPILER "g++")
+        link_libraries(stdc++fs pthread)
     else()
         link_libraries(stdc++fs pthread)
     endif()
