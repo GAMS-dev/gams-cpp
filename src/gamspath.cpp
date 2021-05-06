@@ -34,6 +34,8 @@
 #include <wchar.h>
 #endif
 
+#pragma warning( disable : 4244)
+
 namespace gams {
 
 GAMSPath& GAMSPath::operator=(const GAMSPath& other)
@@ -224,11 +226,16 @@ const char* GAMSPath::c_str() const
 // TODO(RG): these tempdir/tempfile functions create neither in the OS' tmp folder, nor is there any automatic cleanup. so why are they called temp?
 GAMSPath GAMSPath::tempDir(const std::string &tempPath)
 {
+    if (!seedGenerated) {
+        std::srand(std::time(0));
+        seedGenerated = true;
+    }
+
     GAMSPath baseLocation = tempPath.empty() ? path().string() : tempPath;
     if (!baseLocation.exists()) baseLocation.mkDir();
 
     std::string folderName("gams-cpp");
-    folderName += "-" + std::to_string(rand());
+    folderName += "-" + std::to_string(std::rand());
     GAMSPath tempDir(baseLocation + folderName);
     tempDir.mkDir();
 
@@ -239,9 +246,14 @@ GAMSPath GAMSPath::tempDir(const std::string &tempPath)
 
 GAMSPath GAMSPath::tempFile(const std::string &tempName)
 {
+    if (!seedGenerated) {
+        std::srand(std::time(0));
+        seedGenerated = true;
+    }
+
     GAMSPath tmpFile(tempName);
     std::filesystem::path ext = tmpFile.extension();
-    tmpFile.replace_filename(tmpFile.stem().string() + "_" + std::to_string(rand()));
+    tmpFile.replace_filename(tmpFile.stem().string() + "_" + std::to_string(std::rand()));
     tmpFile.replace_extension(ext);
 
     std::ofstream of;
