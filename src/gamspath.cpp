@@ -28,6 +28,7 @@
 #include "gamslog.h"
 #include <fstream>
 #include <algorithm>
+#include <iostream>
 
 #ifdef _WIN32
 #include <wchar.h>
@@ -147,8 +148,8 @@ bool GAMSPath::rmDirRecurse()
         result = std::filesystem::exists(*this, ec);
     else
         result = std::filesystem::remove_all(*this, ec);
-    //if (ec) // TODO error/exception handling??
-        //MSG << "GAMSPath::rmDirRecurse error: " << ec.message();
+    if (ec) std::cerr << "GAMSPath::rmDirRecurse error: " << ec.message().c_str()
+                      << "\n  For: " << c_str() << std::endl;
     return result;
 }
 
@@ -162,7 +163,10 @@ void GAMSPath::pack()
 
 bool GAMSPath::remove()
 {
-    return std::filesystem::remove_all(*this);
+    std::error_code ec;
+    bool result = std::filesystem::remove_all(*this, ec);
+    if (ec) std::cerr << "GAMSPath::remove error: " << ec.message().c_str() << "\n  For: " << c_str();
+    return result;
 }
 
 bool GAMSPath::rename(const std::string &newFileName)
