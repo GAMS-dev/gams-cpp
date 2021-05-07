@@ -153,6 +153,9 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     else if (output)
         *output << result;
     if (exitCode != 0) {
+        std::cerr << "GAMS Error code: " << exitCode << std::endl;
+        std::cerr << "  with args: " << args << std::endl;
+        std::cerr << "  in " << mWs.workingDirectory() << std::endl;
         if ((mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) && mWs.usingTmpWorkingDir())
             throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +
                                          "), set GAMSWorkspace.Debug to KeepFiles or higher or define the \

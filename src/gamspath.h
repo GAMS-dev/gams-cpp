@@ -185,7 +185,7 @@ public:
     static bool exists(const char *file);
 
 };
-    static bool seedGenerated;
+    static thread_local bool seedGenerated;
 }
 
 #endif // GPATH_H

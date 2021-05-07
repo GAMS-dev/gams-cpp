@@ -29,12 +29,11 @@
 #include <fstream>
 #include <algorithm>
 #include <iostream>
+#include <random>
 
 #ifdef _WIN32
 #include <wchar.h>
 #endif
-
-#pragma warning( disable : 4244)
 
 namespace gams {
 
@@ -167,7 +166,9 @@ bool GAMSPath::remove()
 {
     std::error_code ec;
     bool result = std::filesystem::remove_all(*this, ec);
-    if (ec) std::cerr << "GAMSPath::remove error: " << ec.message().c_str() << "\n  For: " << c_str();
+    if (ec)
+        std::cerr << "GAMSPath::remove error: " << ec.message().c_str()
+                  << "\n  For: " << c_str() << std::endl;
     return result;
 }
 
@@ -227,7 +228,8 @@ const char* GAMSPath::c_str() const
 GAMSPath GAMSPath::tempDir(const std::string &tempPath)
 {
     if (!seedGenerated) {
-        std::srand(std::time(0));
+        std::random_device rd;
+        std::srand(rd());
         seedGenerated = true;
     }
 
@@ -247,7 +249,8 @@ GAMSPath GAMSPath::tempDir(const std::string &tempPath)
 GAMSPath GAMSPath::tempFile(const std::string &tempName)
 {
     if (!seedGenerated) {
-        std::srand(std::time(0));
+        std::random_device rd;
+        std::srand(rd());
         seedGenerated = true;
     }
 
