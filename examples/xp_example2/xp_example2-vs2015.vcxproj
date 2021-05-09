@@ -74,7 +74,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\C\api\gamsxcc.c" />
     <ClCompile Include="..\..\C\api\gclgms.c" />
     <ClCompile Include="..\..\C\api\gdxcc.c" />
     <ClCompile Include="..\..\C\api\optcc.c" />
