@@ -123,7 +123,7 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     }
 
     if (mSystemDir != mWorkingDir) {
-        vector<string> libstems = {"gamsxdc", "gdxdc", "gmdcc", "joatdc", "optdc"};
+        vector<string> libstems = {"gdxdc", "gmdcc", "joatdc", "optdc"};
         for (string lib: libstems) {
             ostringstream libstream;
             libstream << cLibPrefix << lib << "64" << cLibSuffix;

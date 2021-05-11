@@ -19,7 +19,6 @@ add_executable(${PROJECT_NAME}
     "${BASEPATH}/C/api/gcmt.c"
     "${BASEPATH}/C/api/gdxcc.c"
     "${BASEPATH}/C/api/optcc.c"
-    "${BASEPATH}/C/api/gamsxcc.c")
 
 if(WIN32)
 target_link_libraries(${PROJECT_NAME} user32)
