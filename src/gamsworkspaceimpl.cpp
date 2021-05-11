@@ -125,7 +125,7 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     }
 
     if (mSystemDir != mWorkingDir) {
-        QStringList libstems = QStringList() << "gamsxdc" << "gdxdc" << "gmdcc" << "joatdc" << "optdc";
+        QStringList libstems = QStringList() << "gdxdc" << "gmdcc" << "joatdc" << "optdc";
         QString libTmpl = QString(cLibPrefix) + "%1lib" + bitsuf + cLibSuffix;
         for (QString lib: libstems) {
             GAMSPath tmpLib = mWorkingDir / libTmpl.arg(lib);
