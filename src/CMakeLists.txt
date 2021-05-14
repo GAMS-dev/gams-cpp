@@ -51,7 +51,6 @@ elseif(UNIX) # Apple or Linux
         endif()
     endif()
 endif()
-
 include_directories(${GAMS_DISTRIB_CPP_API} PUBLIC_LIBRARIES)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)

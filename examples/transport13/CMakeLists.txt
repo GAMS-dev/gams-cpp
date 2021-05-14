@@ -12,8 +12,9 @@ endif()
 include_directories("${BASEPATH}/C/api"
                     "${BASEPATH}/C++/api"
                     "${CMAKE_CURRENT_SOURCE_DIR}/../../src"
-                    "${CMAKE_CURRENT_SOURCE_DIR}/../../src/generated"
                     "${CMAKE_CURRENT_SOURCE_DIR}/../transport")
+include_directories(${GAMS_DISTRIB_CPP_API} PUBLIC_LIBRARIES)
+
 
 if(WIN32)
   set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
