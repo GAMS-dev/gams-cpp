@@ -25,8 +25,8 @@
 
 # Current GAMS C++ API version.
 GAMSCPP_MAJOR_VERSION=0
-GAMSCPP_MINOR_VERSION=12
-GAMSCPP_PATCH_LEVEL=1
+GAMSCPP_MINOR_VERSION=13
+GAMSCPP_PATCH_LEVEL=0
 
 # Minimum required GAMS Distribution version, which
 # is the latest official GAMS release.

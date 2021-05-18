@@ -16,9 +16,9 @@ include_directories("${BASEPATH}/C/api"
 
 add_executable(${PROJECT_NAME}
     "xp_example2.cpp"
-    "${BASEPATH}/C/api/gcmt.c"
-    "${BASEPATH}/C/api/gdxcc.c"
-    "${BASEPATH}/C/api/optcc.c"
+    "../../C/api/gcmt.c"
+    "../../C/api/gdxcc.c"
+    "../../C/api/optcc.c")
 
 if(WIN32)
 target_link_libraries(${PROJECT_NAME} user32)
