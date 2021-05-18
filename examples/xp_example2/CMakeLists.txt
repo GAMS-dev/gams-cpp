@@ -11,7 +11,7 @@ add_executable(${PROJECT_NAME}
     "xp_example2.cpp"
     "../../C/api/gcmt.c"
     "../../C/api/gdxcc.c"
-    "../../C/api/optcc.c"
+    "../../C/api/optcc.c")
 
 IF (WIN32)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} user32)
