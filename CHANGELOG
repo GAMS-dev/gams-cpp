@@ -1,3 +1,7 @@
+Version 0.12.2
+========================
+- replace the gamsx API dependency with the use of the GAMS executable
+
 Version 0.12.1
 ========================
 - fixed issue with removal of Qt GUI library
