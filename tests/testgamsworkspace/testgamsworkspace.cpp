@@ -1140,15 +1140,10 @@ TEST_P(ParameterizedTestAddOptions_OptFile, testAddOptions_OptFile) {
     GAMSOptions o = ws.addOptions();
     if (exists) {
         try {
-            std::cout << "1" << std::endl; // rogo: delete
             std::string filename = GAMSPath(workdir, optfilename);
-            std::cout << "2, dir: " << filename << std::endl; // rogo: delete
             GAMSOptions opt = ws.addOptions(filename);
-            std::cout << "3" << std::endl; // rogo: delete
             EXPECT_EQ( opt.iterLim(), 1 );
-            std::cout << "4" << std::endl; // rogo: delete
             EXPECT_EQ( opt.limCol(), 4 );
-            std::cout << "5" << std::endl; // rogo: delete
             EXPECT_EQ( opt.limRow(), 5 );
         } catch (GAMSException& e) {
             FAIL() <<  "AddOptions from existing optfile should not fail: " << e.what();
