@@ -267,6 +267,7 @@ bool GAMSPlatform::interruptOnWindows(long pid)
 
 int GAMSPlatform::runProcess(const string where, const string what, const string args, string& output)
 {
+    lock_guard lck(mMutex);
     ostringstream ssp;
     string result;
     FILE* out;
@@ -299,7 +300,6 @@ int GAMSPlatform::runProcess(const string where, const string what, const string
 #else
     exitCode = pclose(out);
 #endif
-
     return exitCode;
 }
 
