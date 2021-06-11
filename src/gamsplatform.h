@@ -41,8 +41,6 @@ extern LIBSPEC const char *cExeSuffix;
 extern LIBSPEC const char *cLibPrefix;
 extern LIBSPEC const char *cLibSuffix;
 
-static std::mutex mMutex;
-
 /// Encapsulates all platform specific calls of the API.
 struct LIBSPEC GAMSPlatform
 {

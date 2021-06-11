@@ -35,6 +35,12 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
+#include <array>
+#include <thread>
+
+#ifdef _WIN32
+#include <direct.h>
+#endif
 
 using namespace std;
 
@@ -135,7 +141,7 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     string args = "dummy pf=" + mJobName + ".pf";
 
     string result;
-    int exitCode = GAMSPlatform::runProcess(mWs.workingDirectory(), gamsExe.string(), args, result);
+    int exitCode = runProcess(mWs.workingDirectory(), gamsExe.string(), args, result);
 
     if (createOutDb) {
         GAMSPath gdxPath(tmpOpt.gdx());
@@ -186,6 +192,45 @@ bool GAMSJobImpl::interrupt()
     if(pid == 0)
         return false;
     return GAMSPlatform::interrupt(pid);
+}
+
+int GAMSJobImpl::runProcess(const string where, const string what, const string args, string& output)
+{
+    lock_guard lck(mRunMutex);
+
+    ostringstream ssp;
+    string result;
+    FILE* out;
+
+#ifdef _WIN32
+    filesystem::path p = filesystem::current_path();
+
+    ssp << "\"" << what << "\"" << " " << args ;
+    _chdir(where.c_str()); // for some reason we need to do this on windows
+    out = _popen(ssp.str().c_str(), "r");
+
+    _chdir(p.string().c_str()); // change back to old working dir
+#else
+    ssp << "cd \"" << where << "\" && \"" << what << "\" " << args;
+    out = popen(ssp.str().c_str(), "r");
+#endif
+    if (!out) {
+        std::cerr << "Couldn't start command: " << ssp.str() << std::endl;
+        return -1;
+    }
+    std::array<char, 128> buffer;
+    while (fgets(buffer.data(), 128, out))
+        result += buffer.data();
+
+    output = result;
+
+    int exitCode;
+#ifdef _WIN32
+    exitCode = _pclose(out);
+#else
+    exitCode = pclose(out);
+#endif
+    return exitCode;
 }
 
 }

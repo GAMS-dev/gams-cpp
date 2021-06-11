@@ -265,9 +265,16 @@ bool GAMSPlatform::interruptOnWindows(long pid)
 #endif
 }
 
+///
+/// \brief GAMSPlatform::runProcess Non-thread safe helper function to quickly get the output of a executable
+/// \param where working directory
+/// \param what path to executable
+/// \param args arguments
+/// \param output output
+/// \return exit code of called executable
+///
 int GAMSPlatform::runProcess(const string where, const string what, const string args, string& output)
 {
-    lock_guard lck(mMutex);
     ostringstream ssp;
     string result;
     FILE* out;
