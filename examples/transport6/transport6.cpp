@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
         mutex ioMutex;
         vector<thread> v;
         for(double b : bmultlist)
-            v.emplace_back([&ws, cp, &ioMutex, b]{runScenario(&ws, cp,&ioMutex,b);});
+            v.emplace_back([&ws, cp, &ioMutex, b]{runScenario(&ws, cp, &ioMutex, b);});
         for (auto& t : v)
             t.join();
 

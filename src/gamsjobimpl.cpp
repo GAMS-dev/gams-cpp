@@ -91,6 +91,7 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
             tmpOpt.setSave(checkpoint->fileName());
         }
     }
+
     if (mWs.debug() >= GAMSEnum::DebugLevel::ShowLog) {
         tmpOpt.setLogOption(3);
     } else {
@@ -137,8 +138,6 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     int exitCode = GAMSPlatform::runProcess(mWs.workingDirectory(), gamsExe.string(), args, result);
 
     if (createOutDb) {
-        //TODO: should we always delete the outDB before a new run? Affects C#, Pytohn and Java as well
-        //outdb = nullptr;
         GAMSPath gdxPath(tmpOpt.gdx());
         if (!gdxPath.is_absolute())
             gdxPath = GAMSPath(mWs.workingDirectory()) / gdxPath;

@@ -67,7 +67,7 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     // TODO: do we want to use these special values? What about quiet_NaN vs signaling_NaN ? Is this the right (and only)
     //       place where we need to initialize specValues?
 
-    std::copy(std::begin(CSpecValues), std::end(CSpecValues), std::begin(specValues));
+    copy(begin(CSpecValues), end(CSpecValues), begin(specValues));
 
     char* envDebug = getenv("GAMSOOAPIDEBUG");
     if (envDebug && envDebug[0] == '\0') {
@@ -88,7 +88,7 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     // handle working directory
     mUsingTmpWorkingDir = workingDir.empty();
     if (mUsingTmpWorkingDir) {
-        GAMSPath tempDir = mWorkingDir.tempDir(std::filesystem::temp_directory_path().string());
+        GAMSPath tempDir = mWorkingDir.tempDir(filesystem::temp_directory_path().string());
         if (!tempDir.exists()) {
             throw GAMSException("Cannot create temp-workspace directory: " + tempDir.toStdString());
         }
@@ -176,9 +176,9 @@ bool GAMSWorkspaceImpl::operator!=(const GAMSWorkspaceImpl& other) const
 }
 
 
-string GAMSWorkspaceImpl::registerCheckpoint(std::string checkpointName)
+string GAMSWorkspaceImpl::registerCheckpoint(string checkpointName)
 {
-    std::lock_guard<std::mutex> lck(mCheckpointLock);
+    lock_guard<std::mutex> lck(mCheckpointLock);
     string name = "";
     if (checkpointName.empty()) {
         name = mScratchFilePrefix + mDefCheckpointNameStem + to_string(mDefCheckpointNameCnt);
@@ -198,7 +198,7 @@ string GAMSWorkspaceImpl::registerCheckpoint(std::string checkpointName)
 
 string GAMSWorkspaceImpl::registerModelInstance(const string miName)
 {
-    std::lock_guard<std::mutex> lck(mModelInstanceLock);
+    lock_guard<std::mutex> lck(mModelInstanceLock);
     string name;
     if (miName == "") {
         name = mScratchFilePrefix + mDefModeliNameStem + to_string(mDefModeliNameCnt);
@@ -218,7 +218,7 @@ string GAMSWorkspaceImpl::registerModelInstance(const string miName)
 
 string GAMSWorkspaceImpl::registerJob(const string jobName)
 {
-    std::lock_guard<std::mutex> lck(mJobLock);
+    lock_guard<std::mutex> lck(mJobLock);
     string name;
     if (jobName == "") {
         name = mScratchFilePrefix + mDefJobNameStem + to_string(mDefJobNameCnt);
@@ -244,18 +244,18 @@ GAMSOptions GAMSWorkspaceImpl::addOptions(GAMSWorkspace& ws, const string& optFi
     return GAMSOptions(ws, optFile);
 }
 
-std::string GAMSWorkspaceImpl::writeSource(const string& gamsSource, const string& jobName)
+string GAMSWorkspaceImpl::writeSource(const string& gamsSource, const string& jobName)
 {
-    std::string fName = mWorkingDir / (jobName + ".gms");
-    std::ofstream sourceWriter(fName);
+    string fName = mWorkingDir / (jobName + ".gms");
+    ofstream sourceWriter(fName);
     sourceWriter << gamsSource;
     sourceWriter.close();
     return fName;
 }
 
-std::string GAMSWorkspaceImpl::findSourceFile(const string& fileName)
+string GAMSWorkspaceImpl::findSourceFile(const string& fileName)
 {
-    std::string fName;
+    string fName;
     if (GAMSPath(fileName).is_absolute())
        fName = fileName;
     else
@@ -282,38 +282,38 @@ GAMSCheckpoint GAMSWorkspaceImpl::addCheckpoint(GAMSWorkspace& ws, const string 
 
 GAMSJob GAMSWorkspaceImpl::addJobFromFile(GAMSWorkspace& ws, const string& fileName, const string& jobName)
 {
-    std::string jName = registerJob(jobName);
+    string jName = registerJob(jobName);
     if (jName.empty())
        throw GAMSException("Job with name " + jobName + " already exists");
-    std::string fName = findSourceFile(fileName);
+    string fName = findSourceFile(fileName);
     return GAMSJob(ws, jName, fName, nullptr);
 
 }
 
 GAMSJob GAMSWorkspaceImpl::addJobFromFile(GAMSWorkspace& ws, const string& fileName, const GAMSCheckpoint& checkpoint, const string& jobName)
 {
-    std::string jName = registerJob(jobName);
+    string jName = registerJob(jobName);
     if (jName.empty())
        throw GAMSException("Job with name " + jobName + " already exists");
-    std::string fName = findSourceFile(fileName);
+    string fName = findSourceFile(fileName);
     return GAMSJob(ws, jName, fName, &checkpoint);
 }
 
 GAMSJob GAMSWorkspaceImpl::addJobFromString(GAMSWorkspace& ws, const string& gamsSource, const string& jobName)
 {
-    std::string jName = registerJob(jobName);
+    string jName = registerJob(jobName);
     if (jName.empty())
        throw GAMSException("Job with name " + jobName + " already exists");
-    std::string fName = writeSource(gamsSource, jName);
+    string fName = writeSource(gamsSource, jName);
     return GAMSJob(ws, jName, fName, nullptr);
 }
 
 GAMSJob GAMSWorkspaceImpl::addJobFromString(GAMSWorkspace& ws, const string& gamsSource, const GAMSCheckpoint& checkpoint, const string& jobName)
 {
-    std::string jName = registerJob(jobName);
+    string jName = registerJob(jobName);
     if (jName.empty())
        throw GAMSException("Job with name " + jobName + " already exists");
-    std::string fName = writeSource(gamsSource, jName);
+    string fName = writeSource(gamsSource, jName);
     return GAMSJob(ws, jName, fName, &checkpoint);
 }
 
@@ -350,7 +350,7 @@ void GAMSWorkspaceImpl::xxxLib(string libname, string model)
     string output;
     int exitCode = GAMSPlatform::runProcess(mWorkingDir.string(), libPath.string(), model, output);
     if (exitCode != 0)
-        throw GAMSException(libname + "lib return code not 0 (" + std::to_string(exitCode) + ")");
+        throw GAMSException(libname + "lib return code not 0 (" + to_string(exitCode) + ")");
 }
 
 void GAMSWorkspaceImpl::setScratchFilePrefix(const string& scratchFilePrefix)
@@ -363,7 +363,7 @@ void GAMSWorkspaceImpl::setScratchFilePrefix(const string& scratchFilePrefix)
 
 string GAMSWorkspaceImpl::registerDatabase(const string databaseName)
 {
-    std::lock_guard<std::mutex> lck(mRegisterDatabaseLock);
+    lock_guard<std::mutex> lck(mRegisterDatabaseLock);
     string name;
     if (databaseName == "")
         name = nextDatabaseName();
@@ -377,7 +377,7 @@ string GAMSWorkspaceImpl::registerDatabase(const string databaseName)
 
 string GAMSWorkspaceImpl::nextDatabaseName()
 {
-    std::lock_guard<std::mutex> lck(mNextDatabaseNameLock);
+    lock_guard<std::mutex> lck(mNextDatabaseNameLock);
     string name = mScratchFilePrefix + mDefDBNameStem + to_string(mDefDBNameCnt);
     while (mGamsDatabases.find(name) != mGamsDatabases.end())
         name = mScratchFilePrefix + mDefDBNameStem + to_string(++mDefDBNameCnt);
@@ -391,11 +391,11 @@ string GAMSWorkspaceImpl::optFileExtension(int optfile)
     if (optfile < 2)
         return "opt";
     else if (optfile < 10)
-        return "op" + std::to_string(optfile);
+        return "op" + to_string(optfile);
     else if (optfile < 100)
-        return "o" + std::to_string(optfile);
+        return "o" + to_string(optfile);
     else
-        return "" + std::to_string(optfile);
+        return "" + to_string(optfile);
 }
 
 } // namespace gams
