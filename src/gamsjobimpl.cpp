@@ -196,8 +196,6 @@ bool GAMSJobImpl::interrupt()
 
 int GAMSJobImpl::runProcess(const string where, const string what, const string args, string& output)
 {
-    lock_guard lck(mRunMutex);
-
     ostringstream ssp;
     string result;
     FILE* out;
@@ -206,8 +204,8 @@ int GAMSJobImpl::runProcess(const string where, const string what, const string 
     filesystem::path p = filesystem::current_path();
 
     ssp << "\"" << what << "\"" << " " << args ;
-    _chdir(where.c_str()); // for some reason we need to do this on windows
-    out = _popen(ssp.str().c_str(), "r");
+    _chdir(where.c_str()); // for some reason we need this on windows
+    out = _popen(ssp.str().c_str(), "rt");
 
     _chdir(p.string().c_str()); // change back to old working dir
 #else
