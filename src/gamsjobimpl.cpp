@@ -200,10 +200,10 @@ int GAMSJobImpl::runProcess(const string what, const string args, string& output
 #ifdef _WIN32
     filesystem::path p = filesystem::current_path();
 
-    ssp << "\"" << what << "\"" << " " << args ;
+    ssp << "\"" << what << "\" " << args ;
     out = _popen(ssp.str().c_str(), "rt");
 #else
-    ssp << "cd \"" << where << "\" && \"" << what << "\" " << args;
+    ssp << "\"" << what << "\" " << args;
     out = popen(ssp.str().c_str(), "r");
 #endif
     if (!out) {
