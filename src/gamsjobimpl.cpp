@@ -36,11 +36,6 @@
 #include <fstream>
 #include <iostream>
 #include <array>
-#include <thread>
-
-#ifdef _WIN32
-#include <direct.h>
-#endif
 
 using namespace std;
 
@@ -143,7 +138,7 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     args.append(pf.string());
 
     string result;
-    int exitCode = runProcess(mWs.workingDirectory(), gamsExe.string(), args, result);
+    int exitCode = runProcess(gamsExe.string(), args, result);
 
     if (createOutDb) {
         GAMSPath gdxPath(tmpOpt.gdx());
@@ -196,7 +191,7 @@ bool GAMSJobImpl::interrupt()
     return GAMSPlatform::interrupt(pid);
 }
 
-int GAMSJobImpl::runProcess(const string where, const string what, const string args, string& output)
+int GAMSJobImpl::runProcess(const string what, const string args, string& output)
 {
     ostringstream ssp;
     string result;

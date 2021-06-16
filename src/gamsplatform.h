@@ -28,7 +28,6 @@
 
 #include "gamslib_global.h"
 #include <thread>
-#include <mutex>
 
 namespace gams {
 

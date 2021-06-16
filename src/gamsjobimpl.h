@@ -29,7 +29,6 @@
 #include <string>
 #include <memory>
 #include <vector>
-#include <mutex>
 #include "gamsenum.h"
 #include "gamsworkspace.h"
 #include "gamsdatabase.h"
@@ -88,12 +87,11 @@ public:
     std::string mJobName;
 
 private:
-    int runProcess(const std::string where, const std::string what, const std::string args, std::string &output);
+    int runProcess(const std::string what, const std::string args, std::string &output);
 
     GAMSDatabase mOutDb;
     std::string mFileName;
     GAMSCheckpoint* mCheckpointStart = nullptr;
-    std::mutex mRunMutex;
 };
 }
 #endif // GAMSJOBIMPL_H
