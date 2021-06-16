@@ -138,7 +138,9 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     auto gamsExe = filesystem::path(mWs.systemDirectory());
     gamsExe.append(string("gams") + cExeSuffix);
 
-    string args = "dummy pf=" + mJobName + ".pf";
+    string args = "dummy pf=";
+    GAMSPath pf(mWs.workingDirectory(), mJobName + ".pf");
+    args.append(pf.string());
 
     string result;
     int exitCode = runProcess(mWs.workingDirectory(), gamsExe.string(), args, result);
@@ -158,9 +160,9 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     else if (output)
         *output << result;
     if (exitCode != 0) {
-        std::cerr << "GAMS Error code: " << exitCode << std::endl;
-        std::cerr << "  with args: " << args << std::endl;
-        std::cerr << "  in " << mWs.workingDirectory() << std::endl;
+        cerr << "GAMS Error code: " << exitCode << std::endl;
+        cerr << "  with args: " << args << std::endl;
+        cerr << "  in " << mWs.workingDirectory() << std::endl;
         if ((mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) && mWs.usingTmpWorkingDir())
             throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +
                                          "), set GAMSWorkspace.Debug to KeepFiles or higher or define the \
@@ -204,10 +206,7 @@ int GAMSJobImpl::runProcess(const string where, const string what, const string 
     filesystem::path p = filesystem::current_path();
 
     ssp << "\"" << what << "\"" << " " << args ;
-    _chdir(where.c_str()); // for some reason we need this on windows
     out = _popen(ssp.str().c_str(), "rt");
-
-    _chdir(p.string().c_str()); // change back to old working dir
 #else
     ssp << "cd \"" << where << "\" && \"" << what << "\" " << args;
     out = popen(ssp.str().c_str(), "r");
