@@ -2290,7 +2290,6 @@ void GAMSOptionsImpl::setupOptionsBase()
     // TODO: check if sys/workDir are always absolute paths
     GAMSPath defFile = GAMSPath(mWs.systemDirectory()) / "optgams.def";
 
-    // TODO: lock(optLock); (c++11 added support for lock, find alternative for older versions)
     if (optReadDefinition(mOPT, defFile.string().c_str())) {
         for (int i = 1, itype=0; i <= optMessageCount(mOPT); i++) {
             optGetMessage(mOPT, i, msg, &itype);

@@ -35,6 +35,7 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
+#include <array>
 
 using namespace std;
 
@@ -91,6 +92,7 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
             tmpOpt.setSave(checkpoint->fileName());
         }
     }
+
     if (mWs.debug() >= GAMSEnum::DebugLevel::ShowLog) {
         tmpOpt.setLogOption(3);
     } else {
@@ -128,17 +130,17 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
         throw GAMSException(e.what() + (" for GAMSJob " + mJobName));
     }
 
-    string gamsExe = mWs.systemDirectory() + "/gams";
-    gamsExe.append(cExeSuffix);
+    auto gamsExe = filesystem::path(mWs.systemDirectory());
+    gamsExe.append(string("gams") + cExeSuffix);
 
-    string args = "dummy pf=" + mJobName + ".pf";
+    string args = "dummy pf=";
+    GAMSPath pf(mWs.workingDirectory(), mJobName + ".pf");
+    args.append(pf.string());
 
     string result;
-    int exitCode = GAMSPlatform::runProcess(mWs.workingDirectory(), gamsExe, args, result);
+    int exitCode = runProcess(gamsExe.string(), args, result);
 
     if (createOutDb) {
-        //TODO: should we always delete the outDB before a new run? Affects C#, Pytohn and Java as well
-        //outdb = nullptr;
         GAMSPath gdxPath(tmpOpt.gdx());
         if (!gdxPath.is_absolute())
             gdxPath = GAMSPath(mWs.workingDirectory()) / gdxPath;
@@ -153,6 +155,9 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     else if (output)
         *output << result;
     if (exitCode != 0) {
+        cerr << "GAMS Error code: " << exitCode << std::endl;
+        cerr << "  with args: " << args << std::endl;
+        cerr << "  in " << mWs.workingDirectory() << std::endl;
         if ((mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) && mWs.usingTmpWorkingDir())
             throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +
                                          "), set GAMSWorkspace.Debug to KeepFiles or higher or define the \
@@ -184,6 +189,40 @@ bool GAMSJobImpl::interrupt()
     if(pid == 0)
         return false;
     return GAMSPlatform::interrupt(pid);
+}
+
+int GAMSJobImpl::runProcess(const string what, const string args, string& output)
+{
+    ostringstream ssp;
+    string result;
+    FILE* out;
+
+#ifdef _WIN32
+    filesystem::path p = filesystem::current_path();
+
+    ssp << "\"" << what << "\"" << " " << args ;
+    out = _popen(ssp.str().c_str(), "rt");
+#else
+    ssp << "cd \"" << where << "\" && \"" << what << "\" " << args;
+    out = popen(ssp.str().c_str(), "r");
+#endif
+    if (!out) {
+        std::cerr << "Couldn't start command: " << ssp.str() << std::endl;
+        return -1;
+    }
+    std::array<char, 128> buffer;
+    while (fgets(buffer.data(), 128, out))
+        result += buffer.data();
+
+    output = result;
+
+    int exitCode;
+#ifdef _WIN32
+    exitCode = _pclose(out);
+#else
+    exitCode = pclose(out);
+#endif
+    return exitCode;
 }
 
 }

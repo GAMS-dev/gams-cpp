@@ -183,8 +183,9 @@ public:
     /// \param file The file name.
     /// \return Returns <c>true</c> if the file exists; otherwise <c>false</c>.
     static bool exists(const char *file);
-};
 
+};
+    static thread_local bool seedGenerated;
 }
 
 #endif // GPATH_H

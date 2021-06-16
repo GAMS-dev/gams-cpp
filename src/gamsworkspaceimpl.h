@@ -168,8 +168,6 @@ private:
     std::string mDefJobNameStem = "gjo";
     std::string mDefCheckpointNameStem = "gcp";
     std::string mDefModeliNameStem = "gmi";
-
-
 };
 
 } // namespace gams

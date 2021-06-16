@@ -25,8 +25,11 @@
 
 #include "gamspath.h"
 #include "gamsexception.h"
+#include "gamslog.h"
 #include <fstream>
 #include <algorithm>
+#include <iostream>
+#include <random>
 
 #ifdef _WIN32
 #include <wchar.h>
@@ -140,10 +143,15 @@ bool GAMSPath::mkDir() const
 
 bool GAMSPath::rmDirRecurse()
 {
+    bool result;
+    std::error_code ec;
     if (std::filesystem::is_regular_file(*this))
-        return std::filesystem::exists(*this);
+        result = std::filesystem::exists(*this, ec);
     else
-        return std::filesystem::remove_all(*this);
+        result = std::filesystem::remove_all(*this, ec);
+    if (ec) std::cerr << "GAMSPath::rmDirRecurse error: " << ec.message().c_str()
+                      << "\n  For: " << c_str() << std::endl;
+    return result;
 }
 
 void GAMSPath::pack()
@@ -156,7 +164,12 @@ void GAMSPath::pack()
 
 bool GAMSPath::remove()
 {
-    return std::filesystem::remove_all(*this);
+    std::error_code ec;
+    bool result = std::filesystem::remove_all(*this, ec);
+    if (ec)
+        std::cerr << "GAMSPath::remove error: " << ec.message().c_str()
+                  << "\n  For: " << c_str() << std::endl;
+    return result;
 }
 
 bool GAMSPath::rename(const std::string &newFileName)
@@ -214,11 +227,17 @@ const char* GAMSPath::c_str() const
 // TODO(RG): these tempdir/tempfile functions create neither in the OS' tmp folder, nor is there any automatic cleanup. so why are they called temp?
 GAMSPath GAMSPath::tempDir(const std::string &tempPath)
 {
+    if (!seedGenerated) {
+        std::random_device rd;
+        std::srand(rd());
+        seedGenerated = true;
+    }
+
     GAMSPath baseLocation = tempPath.empty() ? path().string() : tempPath;
     if (!baseLocation.exists()) baseLocation.mkDir();
 
     std::string folderName("gams-cpp");
-    folderName += "-" + std::to_string(rand());
+    folderName += "-" + std::to_string(std::rand());
     GAMSPath tempDir(baseLocation + folderName);
     tempDir.mkDir();
 
@@ -229,9 +248,15 @@ GAMSPath GAMSPath::tempDir(const std::string &tempPath)
 
 GAMSPath GAMSPath::tempFile(const std::string &tempName)
 {
+    if (!seedGenerated) {
+        std::random_device rd;
+        std::srand(rd());
+        seedGenerated = true;
+    }
+
     GAMSPath tmpFile(tempName);
     std::filesystem::path ext = tmpFile.extension();
-    tmpFile.replace_filename(tmpFile.stem().string() + "_" + std::to_string(rand()));
+    tmpFile.replace_filename(tmpFile.stem().string() + "_" + std::to_string(std::rand()));
     tmpFile.replace_extension(ext);
 
     std::ofstream of;

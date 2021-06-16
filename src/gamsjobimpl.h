@@ -87,6 +87,8 @@ public:
     std::string mJobName;
 
 private:
+    int runProcess(const std::string what, const std::string args, std::string &output);
+
     GAMSDatabase mOutDb;
     std::string mFileName;
     GAMSCheckpoint* mCheckpointStart = nullptr;
