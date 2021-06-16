@@ -397,7 +397,7 @@ TEST_F(TestGAMSSymbolRecord, testGetKey_index) {
     // when, then
     GAMSSymbolRecord rec_i = db.getSet("i").lastRecord();
     EXPECT_STREQ( rec_i.key(0).c_str(), "san-diego");
-    EXPECT_THROW( rec_i.key(1).c_str(), GAMSException );
+    EXPECT_THROW( rec_i.key(1), GAMSException );
 
     GAMSSymbolRecord rec_d = db.getParameter("d").lastRecord();
     EXPECT_STREQ( rec_d.key(0).c_str(), "san-diego");
@@ -410,14 +410,14 @@ TEST_F(TestGAMSSymbolRecord, testGetKey_index) {
     GAMSSymbolRecord rec_x = db.getVariable("x").lastRecord();
     EXPECT_STREQ( rec_x.key(0).c_str(), "san-diego");
     EXPECT_STREQ( rec_x.key(1).c_str(), "topeka");
-    EXPECT_THROW( rec_x.key(2).c_str(), GAMSException );
+    EXPECT_THROW( rec_x.key(2), GAMSException );
 
     GAMSSymbolRecord rec_cost = db.getEquation("cost").lastRecord();
     EXPECT_THROW( rec_cost.key(0), GAMSException );
 
     GAMSSymbolRecord rec_supply = db.getEquation("supply").lastRecord();
     EXPECT_STREQ( rec_supply.key(0).c_str(), "san-diego");
-    EXPECT_THROW( rec_supply.key(1).c_str(), GAMSException );
+    EXPECT_THROW( rec_supply.key(1), GAMSException );
 }
 
 TEST_F(TestGAMSSymbolRecord, testIndexOperator) {
@@ -444,7 +444,7 @@ TEST_F(TestGAMSSymbolRecord, testIndexOperator) {
     GAMSSymbolRecord rec_x = db.getVariable("x").lastRecord();
     EXPECT_STREQ( rec_x[0].c_str(), "san-diego");
     EXPECT_STREQ( rec_x[1].c_str(), "topeka");
-    EXPECT_THROW( rec_x[2].c_str(), GAMSException );
+    EXPECT_THROW( rec_x[2], GAMSException );
 
     GAMSSymbolRecord rec_cost = db.getEquation("cost").lastRecord();
     EXPECT_THROW( rec_cost[0], GAMSException );
