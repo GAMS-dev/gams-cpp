@@ -87,7 +87,7 @@ pipeline {
                         PATH="${GAMS_FOR_LINUX}:${PATH}"
                     }
                     steps {
-                        ctest arguments: '--verbose', ignoredExitCodes: '1-65535', installation: 'InSearchPath', workingDir: 'build'
+                        ctest ignoredExitCodes: '1-65535', installation: 'InSearchPath', workingDir: 'build'
                     }
                     //post { // TODO
                     //    always {
@@ -123,7 +123,7 @@ pipeline {
                         PATH="${GAMS_FOR_MACOS}:${PATH}"
                     }
                     steps {
-                        ctest arguments: '--verbose', ignoredExitCodes: '1-65535', installation: 'InSearchPath', workingDir: 'build'
+                        ctest ignoredExitCodes: '1-65535', installation: 'InSearchPath', workingDir: 'build'
                     }
                     //post { // TODO
                     //    always {
