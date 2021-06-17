@@ -23,41 +23,13 @@
 # SOFTWARE.
 #
 set(PWD ${CMAKE_CURRENT_SOURCE_DIR}/..)
-
-function(ReadFromFileAndSet FILEPATH)
-    file(STRINGS ${FILEPATH} FileContents)
-    foreach(NameAndValue ${FileContents})
-
-        # Strip leading spaces
-        string(REGEX REPLACE "^[ ]+" "" NameAndValue ${NameAndValue})
-
-        # ignore comments
-        if(${NameAndValue} MATCHES "^#")
-            continue()
-        endif()
-
-        # Find variable name
-        string(REGEX MATCH "^[^=]+" Name ${NameAndValue})
-        # Find the value
-        string(REPLACE "${Name}=" "" Value ${NameAndValue})
-        # Set the variable
-        set(${Name} "${Value}" PARENT_SCOPE)
-    endforeach()
-endfunction()
-
 if(WIN32)
     # Switch off warnings caused by GAMS headers
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
-ReadFromFileAndSet(${PWD}/version)
-set(VERSION "${GAMSCPP_MAJOR_VERSION}.${GAMSCPP_MINOR_VERSION}.${GAMSCPP_PATCH_LEVEL}")
-set(CMAKE_PROJECT_VERSION ${VERSION})
-set(CMAKE_PROJECT_VERSION_MAJOR ${GAMSCPP_MAJOR_VERSION})
-set(CMAKE_PROJECT_VERSION_MINOR ${GAMSCPP_MINOR_VERSION})
-set(CMAKE_PROJECT_VERSION_PATCH ${GAMSCPP_PATCH_LEVEL})
-
 # Project file version defines
+message("Version: ${VERSION}")
 add_definitions(-DAPI_VERSION="${VERSION}")
 
 # GAMS_CORE_PATH is Jenkins build switch
@@ -95,6 +67,7 @@ GAMS_DISTRIB_CPP_API=${GAMS_PATH}/apifiles/C++/api")
     file(WRITE ${PWD}/gamsinclude.pri ${GAMSINC})
 endif()
 
+include(../version.cmake)
 if(EXISTS ${PWD}/gamsinclude.pri)
     ReadFromFileAndSet(${PWD}/gamsinclude.pri)
 endif()

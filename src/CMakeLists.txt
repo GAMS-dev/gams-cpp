@@ -23,6 +23,9 @@
 # SOFTWARE.
 #
 set (NO_WINDOWS_REGISTRY ${NO_WINDOWS_REGISTRY})
+include(../version.cmake)
+
+set(VERSION ${VERSION} PARENT_SCOPE)
 include(../include.cmake)
 
 set(GAMSPATH ${GAMSPATH} PARENT_SCOPE) # this is needed to make this var available to siblings
