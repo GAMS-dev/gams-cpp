@@ -29,7 +29,6 @@ if(WIN32)
 endif()
 
 # Project file version defines
-message("Version: ${VERSION}")
 add_definitions(-DAPI_VERSION="${VERSION}")
 
 # GAMS_CORE_PATH is Jenkins build switch
@@ -133,3 +132,7 @@ else()
                              ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptionsimpl.cpp)
     endif()
 endif()
+
+include_directories(${GAMS_DISTRIB_CPP_API})
+set(SOURCE ${SOURCE} ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.cpp ${GAMS_DISTRIB_CPP_API}/gamsoptions.cpp)
+set(HEADER ${HEADER} ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.h ${GAMS_DISTRIB_CPP_API}/gamsoptions.h)
