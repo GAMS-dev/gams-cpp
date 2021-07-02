@@ -82,6 +82,7 @@ endif()
 # GAMS_BUILD is GAMS distrib build switch
 if("$ENV{GAMS_BUILD}" STREQUAL "")
     include_directories(${GAMS_DISTRIB_C_API})
+    include_directories(${GAMS_DISTRIB_CPP_API})
 
     set(SOURCE ${SOURCE} ${GAMS_DISTRIB_C_API}/gclgms.c
                          ${GAMS_DISTRIB_C_API}/gmdcc.c
@@ -91,14 +92,10 @@ if("$ENV{GAMS_BUILD}" STREQUAL "")
                          ${GAMS_DISTRIB_C_API}/gmomcc.c
                          ${GAMS_DISTRIB_C_API}/optcc.c)
 
-    if(${USE_GAMS_DISTRIB_CPP_API_SRC})
-        set(HEADER ${HEADER} ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.h
-                             ${GAMS_DISTRIB_CPP_API}/gamsoptions.h
-                             PARENT_SCOPE)
-        set(SOURCE ${SOURCE} ${GAMS_DISTRIB_CPP_API}/gamsoptions.cpp
-                             ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.cpp
-                             PARENT_SCOPE)
-    endif()
+    set(SOURCE ${SOURCE} ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.cpp
+                         ${GAMS_DISTRIB_CPP_API}/gamsoptions.cpp)
+    set(HEADER ${HEADER} ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.h
+                         ${GAMS_DISTRIB_CPP_API}/gamsoptions.h)
 else()
     set(GSYS_ENV $ENV{GSYS})
 
@@ -126,13 +123,8 @@ else()
                          ${GPRODUCTS_ENV}/apiwrap/joat/gmomcc.c
                          ${GPRODUCTS_ENV}/apiwrap/optobj/optcc.c)
 
-    if (${USE_GAMS_DISTRIB_CPP_API_SRC})
         include_directories(${GPRODUCTS_ENV}/apiexamples/C++/api)
         set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptions.cpp
                              ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptionsimpl.cpp)
-    endif()
 endif()
 
-include_directories(${GAMS_DISTRIB_CPP_API})
-set(SOURCE ${SOURCE} ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.cpp ${GAMS_DISTRIB_CPP_API}/gamsoptions.cpp)
-set(HEADER ${HEADER} ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.h ${GAMS_DISTRIB_CPP_API}/gamsoptions.h)
