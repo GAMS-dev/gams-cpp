@@ -90,6 +90,12 @@ if("$ENV{GAMS_BUILD}" STREQUAL "")
                          ${GAMS_DISTRIB_C_API}/gevmcc.c
                          ${GAMS_DISTRIB_C_API}/gmomcc.c
                          ${GAMS_DISTRIB_C_API}/optcc.c)
+
+
+     configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.cpp COPYONLY)
+     configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.h ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.h COPYONLY)
+     configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptions.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptions.cpp COPYONLY)
+     configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptions.h ${CMAKE_BINARY_DIR}/inc/gamsoptions.h COPYONLY)
 else()
     set(GSYS_ENV $ENV{GSYS})
 
@@ -117,8 +123,9 @@ else()
                          ${GPRODUCTS_ENV}/apiwrap/joat/gmomcc.c
                          ${GPRODUCTS_ENV}/apiwrap/optobj/optcc.c)
 
-        include_directories(${GPRODUCTS_ENV}/apiexamples/C++/api)
-        set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptions.cpp
-                             ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptionsimpl.cpp)
+    configure_file(${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptionsimpl.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.cpp COPYONLY)
+    configure_file(${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptionsimpl.h ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.h COPYONLY)
+    configure_file(${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptions.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptions.cpp COPYONLY)
+    configure_file(${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptions.h ${CMAKE_BINARY_DIR}/inc/gamsoptions.h COPYONLY)
 endif()
 
