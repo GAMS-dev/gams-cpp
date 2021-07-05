@@ -23,7 +23,7 @@
 # SOFTWARE.
 #
 include(../include.cmake)
-include_directories(. .. ../../src ${GAMS_DISTRIB_CPP_API})
+include_directories(. .. ../../src ${CMAKE_BINARY_DIR}/inc/)
 
 set(SOURCE ${SOURCE} ../testgamsobject.cpp
                      ../../src/gamspath.cpp

@@ -43,7 +43,7 @@ set( CMAKE_INCLUDE_CURRENT_DIR ON )
 set( CMAKE_AUTOMOC OFF )
 
 add_subdirectory( src )
-add_subdirectory( examples )
+#add_subdirectory( examples )
 
 set(PACKAGE_TESTS ON)
 if(PACKAGE_TESTS)

@@ -82,7 +82,6 @@ endif()
 # GAMS_BUILD is GAMS distrib build switch
 if("$ENV{GAMS_BUILD}" STREQUAL "")
     include_directories(${GAMS_DISTRIB_C_API})
-    include_directories(${GAMS_DISTRIB_CPP_API})
 
     set(SOURCE ${SOURCE} ${GAMS_DISTRIB_C_API}/gclgms.c
                          ${GAMS_DISTRIB_C_API}/gmdcc.c
@@ -91,11 +90,6 @@ if("$ENV{GAMS_BUILD}" STREQUAL "")
                          ${GAMS_DISTRIB_C_API}/gevmcc.c
                          ${GAMS_DISTRIB_C_API}/gmomcc.c
                          ${GAMS_DISTRIB_C_API}/optcc.c)
-
-    set(SOURCE ${SOURCE} ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.cpp
-                         ${GAMS_DISTRIB_CPP_API}/gamsoptions.cpp)
-    set(HEADER ${HEADER} ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.h
-                         ${GAMS_DISTRIB_CPP_API}/gamsoptions.h)
 else()
     set(GSYS_ENV $ENV{GSYS})
 
