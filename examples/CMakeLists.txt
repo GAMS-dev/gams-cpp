@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 
-include(../version.cmake)
-include(../include.cmake)
+include(include.cmake)
 
 project(examples)
 
