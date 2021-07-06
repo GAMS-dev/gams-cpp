@@ -28,17 +28,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 if ("$ENV{GAMS_BUILD}" STREQUAL "")
     set(BASEPATH "${GAMSPATH}/apifiles")
+    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api")
 else()
     # jenkins switch:
     if("$ENV{GAMS_CORE_PATH}" STREQUAL "")
         set(BASEPATH "${GAMSPATH}/apiexamples")
+        include_directories("${BASEPATH}/C++/api")
     else()
         set(BASEPATH "${GAMSPATH}/apifiles")
     endif()
 endif()
 
 include_directories("${BASEPATH}/C/api"
-                    "${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api"
                     "${gtest_SOURCE_DIR}/include")
 
 if(WIN32)

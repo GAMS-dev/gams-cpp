@@ -128,6 +128,6 @@ else()
 
     include_directories(${GPRODUCTS_ENV}/apiexamples/C++/api)
     set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptions.cpp
-                                          ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptionsimpl.cpp)
+                         ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptionsimpl.cpp)
 endif()
 
