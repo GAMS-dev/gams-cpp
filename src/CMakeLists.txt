@@ -106,8 +106,6 @@ add_library(gamscpp SHARED
         gamsworkspaceinfoimpl.cpp gamsworkspaceinfoimpl.h
         gamsworkspacepool.cpp gamsworkspacepool.h
         solveroptions.cpp solveroptions.h
-        ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.h
-        ${CMAKE_BINARY_DIR}/inc/gamsoptions.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptions.h
         ../CHANGELOG ../version ../jenkinsfile
         ${SOURCE} ${HEADER}
 )
