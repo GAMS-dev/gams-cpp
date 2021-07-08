@@ -22,8 +22,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if(WIN32)
+    set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
+    link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
+else()
+    link_directories("${BASEPATH}/C++/lib")
+endif()
+
+if(UNIX) # Apple or Linux
+    link_libraries(dl)
+    if (NOT APPLE)
+        link_libraries(stdc++fs pthread)
+    endif()
+endif()
 
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 if ("$ENV{GAMS_BUILD}" STREQUAL "")
@@ -41,22 +52,3 @@ include_directories("${BASEPATH}/C/api"
                     "${BASEPATH}/C++/api"
                     "${gtest_SOURCE_DIR}/include")
 
-if(WIN32)
-    set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
-    link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
-else()
-    link_directories("${BASEPATH}/C++/lib")
-endif()
-
-if(UNIX) # Apple or Linux
-    link_libraries(dl)
-    if (NOT APPLE)
-        link_libraries(stdc++fs pthread)
-    endif()
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8)
-            set(CMAKE_C_COMPILER "gcc-8")
-            set(CMAKE_CXX_COMPILER "g++-8")
-        endif()
-    endif()
-endif()
