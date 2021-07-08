@@ -2,6 +2,8 @@
 
 gams-cpp is a C++ API for the General Algebraic Modeling System (GAMS). For further information about GAMS please visit [GAMS](https://www.gams.com) or the [GAMS documentation](https://www.gams.com/latest/docs/).
 
+gams-cpp uses [GoogleTest](https://github.com/google/googletest) which is licensed under the [Revised BSD License](https://github.com/google/googletest/blob/master/LICENSE).
+
 # How to build #
 
 ## 1. Download and install GAMS ##
