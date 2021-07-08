@@ -23,7 +23,6 @@
 # SOFTWARE.
 #
 set (NO_WINDOWS_REGISTRY ${NO_WINDOWS_REGISTRY})
-include(../version.cmake)
 
 set(VERSION ${VERSION} PARENT_SCOPE)
 include(../include.cmake)
@@ -52,12 +51,11 @@ elseif(UNIX) # Apple or Linux
     endif()
 endif()
 
-# TODO(RG):  we need to find a solution for how to handle generated files...
-include_directories(../src/generated PUBLIC_LIBRARIES)
-
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+include_directories(${CMAKE_BINARY_DIR}/inc)
 
 add_library(gamscpp SHARED
         gams.h
@@ -106,10 +104,7 @@ add_library(gamscpp SHARED
         gamsworkspaceinfo.cpp gamsworkspaceinfo.h
         gamsworkspaceinfoimpl.cpp gamsworkspaceinfoimpl.h
         gamsworkspacepool.cpp gamsworkspacepool.h
-        generated/gamsoptions.cpp
-        generated/gamsoptionsimpl.cpp
         solveroptions.cpp solveroptions.h
         ../CHANGELOG ../version ../jenkinsfile
         ${SOURCE} ${HEADER}
 )
-

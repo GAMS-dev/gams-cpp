@@ -1,8 +1,8 @@
 #
 # GAMS - General Algebraic Modeling System C++ API
 #
-# Copyright (c) 2017-2021 GAMS Software GmbH <support@gams.com>
-# Copyright (c) 2017-2021 GAMS Development Corp. <support@gams.com>
+# Copyright (c) 2017-2020 GAMS Software GmbH <support@gams.com>
+# Copyright (c) 2017-2020 GAMS Development Corp. <support@gams.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,33 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-include(../include.cmake)
-include_directories(. .. ../../src ${CMAKE_BINARY_DIR}/inc/)
+if(WIN32)
+    set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
+    link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
+else()
+    link_directories("${BASEPATH}/C++/lib")
+endif()
 
-set(SOURCE ${SOURCE} ../testgamsobject.cpp
-                     ../../src/gamspath.cpp
-                     testgamsjob.cpp)
+if(UNIX) # Apple or Linux
+    link_libraries(dl)
+    if (NOT APPLE)
+        link_libraries(stdc++fs pthread)
+    endif()
+endif()
 
-add_executable(testgamsjob ${SOURCE})
-target_link_libraries(testgamsjob gtest gamscpp)
-add_test(testgamsjob testgamsjob)
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+if ("$ENV{GAMS_BUILD}" STREQUAL "")
+    set(BASEPATH "${GAMSPATH}/apifiles")
+else()
+    # jenkins switch:
+    if("$ENV{GAMS_CORE_PATH}" STREQUAL "")
+        set(BASEPATH "${GAMSPATH}/apiexamples")
+    else()
+        set(BASEPATH "${GAMSPATH}/apifiles")
+    endif()
+endif()
+
+include_directories("${BASEPATH}/C/api"
+                    "${BASEPATH}/C++/api"
+                    "${gtest_SOURCE_DIR}/include")
+

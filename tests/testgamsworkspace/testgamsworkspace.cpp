@@ -53,7 +53,6 @@ class TestGAMSWorkspace: public TestGAMSObject
 {
 };
 
-// TODO(RG): is this test expected to fail?!
 TEST_F(TestGAMSWorkspace, testDefaultConstructor) {
     try {
         GAMSWorkspace ws;

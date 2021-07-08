@@ -29,7 +29,6 @@ if(WIN32)
 endif()
 
 # Project file version defines
-message("Version: ${VERSION}")
 add_definitions(-DAPI_VERSION="${VERSION}")
 
 # GAMS_CORE_PATH is Jenkins build switch
@@ -92,14 +91,14 @@ if("$ENV{GAMS_BUILD}" STREQUAL "")
                          ${GAMS_DISTRIB_C_API}/gmomcc.c
                          ${GAMS_DISTRIB_C_API}/optcc.c)
 
-    if(${USE_GAMS_DISTRIB_CPP_API_SRC})
-        set(HEADER ${HEADER} ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.h
-                             ${GAMS_DISTRIB_CPP_API}/gamsoptions.h
-                             PARENT_SCOPE)
-        set(SOURCE ${SOURCE} ${GAMS_DISTRIB_CPP_API}/gamsoptions.cpp
-                             ${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.cpp
-                             PARENT_SCOPE)
-    endif()
+
+     configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.cpp COPYONLY)
+     configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.h ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.h COPYONLY)
+     configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptions.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptions.cpp COPYONLY)
+     configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptions.h ${CMAKE_BINARY_DIR}/inc/gamsoptions.h COPYONLY)
+
+     set(SOURCE ${SOURCE} ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptions.cpp )
+     set(HEADER ${HEADER} ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.h ${CMAKE_BINARY_DIR}/inc/gamsoptions.h)
 else()
     set(GSYS_ENV $ENV{GSYS})
 
@@ -127,9 +126,8 @@ else()
                          ${GPRODUCTS_ENV}/apiwrap/joat/gmomcc.c
                          ${GPRODUCTS_ENV}/apiwrap/optobj/optcc.c)
 
-    if (${USE_GAMS_DISTRIB_CPP_API_SRC})
-        include_directories(${GPRODUCTS_ENV}/apiexamples/C++/api)
-        set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptions.cpp
-                             ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptionsimpl.cpp)
-    endif()
+    include_directories(${GPRODUCTS_ENV}/apiexamples/C++/api)
+    set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptions.cpp
+                         ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptionsimpl.cpp)
 endif()
+

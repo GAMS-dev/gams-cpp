@@ -23,7 +23,8 @@
 # SOFTWARE.
 #
 include(../include.cmake)
-include_directories(. .. ../../src ../../src/generated)
+
+include_directories(. .. ../../src ${CMAKE_BINARY_DIR}/inc/)
 
 set(SOURCE ${SOURCE} ../testgamsobject.cpp
                      ../../src/gamspath.cpp
