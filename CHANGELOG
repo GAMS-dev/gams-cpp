@@ -1,6 +1,7 @@
 Version 0.13.0
 ========================
 - removed Qt dependency and replaced it with C++17
+- replaced qmake build system with cmake
 
 Version 0.12.2
 ========================
