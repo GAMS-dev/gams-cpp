@@ -1,8 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017-2020 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017-2020 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,13 +35,13 @@ std::set<std::string> GAMSWorkspacePool::mWorspacePaths;
 void GAMSWorkspacePool::registerWorkspacePath(std::string path)
 {
     // Create unique lockfile in path (throw on missing write access).
-    GAMSPath lockPath = GAMSPath(path).tempFile("gams_XXXXXX.lock");
+    GAMSPath lockPath = GAMSPath(path).tempFile("gams.lock");
     if (!lockPath.exists())
         throw GAMSException("GAMSWorkspacePool: failed to create lockfile in path " + path);
 
     // Iterate through the paths for the lockfile (throw if exists).
     for (auto iPath = mWorspacePaths.cbegin(); iPath != mWorspacePaths.cend(); ++iPath) {
-        GAMSPath checkFile = GAMSPath(*iPath) / lockPath.fileName();
+        GAMSPath checkFile = GAMSPath(*iPath) / lockPath.string();
         if (checkFile.exists()) {
             lockPath.remove();
             if (path != *iPath)

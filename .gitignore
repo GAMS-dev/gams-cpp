@@ -1,4 +1,5 @@
 *.pro.user
+*.txt.user
 build*
 *.o
 **/.qmake.stash
@@ -6,3 +7,4 @@ Makefile
 .directory
 **/*.dylib
 gamsinclude.pri
+**/.DS_Store

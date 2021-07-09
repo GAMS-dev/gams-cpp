@@ -1,8 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017-2020 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017-2020 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -121,7 +121,6 @@ void GAMSModelInstance::solve(GAMSEnum::SymbolUpdateType updateType)
     if (!mImpl) throw GAMSException("GAMSModelInstance: This model instance has not been initialized.");
     mImpl->solve(updateType, nullptr, GAMSModelInstanceOpt());
 }
-
 
 GAMSEnum::ModelStat GAMSModelInstance::modelStatus()
 {

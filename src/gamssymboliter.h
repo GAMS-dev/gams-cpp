@@ -1,8 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017-2020 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017-2020 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ template <class T>
 
 /// Iterates through the records of a specific GAMSSymbol.
 /// \remark This class can be used with all GAMSSymbol types.
-class LIBSPEC GAMSSymbolIter
+class LIBSPEC GAMSSymbolIter // TODO(RG): what about this LIBSPEC?
 {
 public:
 

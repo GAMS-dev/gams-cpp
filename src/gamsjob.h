@@ -1,8 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017-2020 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017-2020 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -145,7 +145,7 @@ public:
 private:
     friend class GAMSWorkspaceImpl;
     GAMSJob(const std::shared_ptr<::gams::GAMSJobImpl>& impl);
-    GAMSJob(const GAMSWorkspace& ws, const std::string& jobName = "", const std::string& fileName = ""
+    GAMSJob(gams::GAMSWorkspace &ws, const std::string& jobName = "", const std::string& fileName = ""
             , const GAMSCheckpoint *checkpoint = 0);
 
 private:

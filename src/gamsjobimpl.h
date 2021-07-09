@@ -1,8 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017-2020 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017-2020 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,6 @@
 
 #include <string>
 #include <memory>
-#include <QProcess>
 #include <vector>
 #include "gamsenum.h"
 #include "gamsworkspace.h"
@@ -69,7 +68,7 @@ public:
     /// \param jobName Identifier of GAMSJob
     /// \param fileName File name
     /// \param checkpoint GAMSCheckpoint
-    GAMSJobImpl(GAMSWorkspace workspace, const std::string& mJobName, const std::string& mFileName,
+    GAMSJobImpl(GAMSWorkspace &workspace, const std::string& mJobName, const std::string& mFileName,
                 const GAMSCheckpoint *checkpoint);
 
     bool operator!=(const GAMSJobImpl& other) const;
@@ -88,10 +87,11 @@ public:
     std::string mJobName;
 
 private:
+    int runProcess(const std::string what, const std::string args, std::string &output);
+
     GAMSDatabase mOutDb;
     std::string mFileName;
     GAMSCheckpoint* mCheckpointStart = nullptr;
-    QProcess mProc;
 };
 }
 #endif // GAMSJOBIMPL_H

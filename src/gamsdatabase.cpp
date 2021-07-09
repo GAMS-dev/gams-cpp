@@ -1,8 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017-2020 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017-2020 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,24 +42,24 @@ GAMSDatabase::GAMSDatabase(const std::shared_ptr<GAMSDatabaseImpl>& impl)
 {}
 
 
-GAMSDatabase::GAMSDatabase(void* gmdPtr, GAMSWorkspace workspace)
+GAMSDatabase::GAMSDatabase(void* gmdPtr, GAMSWorkspace& workspace)
     : mImpl(make_shared<GAMSDatabaseImpl>(gmdPtr, workspace))
 {}
 
 
-GAMSDatabase::GAMSDatabase(const string& gdxFileName, const GAMSWorkspace workspace, const double specValues[]
+GAMSDatabase::GAMSDatabase(const string& gdxFileName, GAMSWorkspace& workspace, const double specValues[]
                            , const string& databaseName, const string& inModelName, bool forceName)
     : mImpl(make_shared<GAMSDatabaseImpl>(gdxFileName, workspace, specValues, databaseName, inModelName, forceName))
 {}
 
 
-GAMSDatabase::GAMSDatabase(const GAMSWorkspace workspace, const double specValues[], const string& databaseName
+GAMSDatabase::GAMSDatabase(GAMSWorkspace& workspace, const double specValues[], const string& databaseName
                            , const string& inModelName, bool forceName)
     : mImpl(make_shared<GAMSDatabaseImpl>(workspace, specValues, databaseName, inModelName, forceName))
 {}
 
 
-GAMSDatabase::GAMSDatabase(const GAMSWorkspace workspace, const double specValues[], const GAMSDatabase &sourceDb
+GAMSDatabase::GAMSDatabase(GAMSWorkspace& workspace, const double specValues[], const GAMSDatabase &sourceDb
                            , const string& dbName, const string& inModelName)
     : mImpl(make_shared<GAMSDatabaseImpl>(workspace, specValues, sourceDb.mImpl, dbName, inModelName))
 {}
@@ -308,7 +308,7 @@ int GAMSDatabase::getNrSymbols()
 GAMSWorkspace GAMSDatabase::workspace()
 {
     if (!mImpl) throw GAMSException("GAMSDatabase: The database has not been initialized.");
-    return GAMSWorkspace(this->mImpl->mWs);
+    return GAMSWorkspace(mImpl->mWs);
 }
 
 

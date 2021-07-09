@@ -11,5 +11,5 @@ Please test the MR on
 **Review**
 - [ ] Code
 - [ ] CHANGELOG
+- [ ] GAMS documentation
 - [ ] Unit Tests
-- [ ] UI Tests

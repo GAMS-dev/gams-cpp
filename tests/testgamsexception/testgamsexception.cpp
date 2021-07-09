@@ -2,8 +2,8 @@
  *
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017-2020 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017-2020 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,30 +25,28 @@
  */
 
 #include "gamsexception.h"
-#include "testgamsexception.h"
-
-#include <QtTest>
+#include "testgamsobject.h"
 
 using namespace gams;
 
-QString TestGAMSException::classname()  { return "TestGAMSException"; }
+class TestGAMSException: public TestGAMSObject
+{
+};
 
-void TestGAMSException::testConstructor_string() {
+TEST_F(TestGAMSException, testConstructor_string) {
     std::string what = "testConstructor_string()";
     try {
         throw GAMSException(what);
     } catch(GAMSException & e) {
-        QCOMPARE( e.what(), what.c_str());
+        EXPECT_STREQ( e.what(), what.c_str());
     }
 }
 
-void TestGAMSException::testConstructor_charptr() {
+TEST_F(TestGAMSException, testConstructor_charptr) {
     try {
        throw GAMSException("testConstructor_charptr()");
     } catch(GAMSException & e) {
-        QCOMPARE( e.what(), "testConstructor_charptr()");
+        EXPECT_STREQ( e.what(), "testConstructor_charptr()");
     }
 
 }
-
-QTEST_MAIN(TestGAMSException)

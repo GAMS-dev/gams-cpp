@@ -1,8 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017-2020 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017-2020 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -61,14 +61,6 @@ public:
 
     double specValues[5];
 
-    /// find GAMS system directory from related environment.
-    ///  - on windows : first search "PATH" if not found then search windows registry "gams.location",
-    ///  - on Mac : first search "PATH" if not found then "DYLD_LIBRARAY_PATH",
-    ///  - on other platforms : first search "PATH" if not found then "LD_LIBRARAY_PATH".
-    /// After two attempts of search and GAMS directory is still not found, returns null String.
-    /// \returns  GAMS directory if found, null otherwise.
-    std::string findGAMS();
-
     std::string writeSource(const std::string &gamsSource, const std::string &jobName);
     std::string findSourceFile(const std::string &fileName);
 
@@ -123,7 +115,7 @@ public:
 
     void xxxLib(std::string libname, std::string model);
 
-    GAMSEnum::DebugLevel debug() const {return mDebug;}
+    GAMSEnum::DebugLevel debug() { return mDebug; }
 
     GAMSPath workingDir() const {return mWorkingDir;}
     GAMSPath systemDir() const {return mSystemDir;}
@@ -176,8 +168,6 @@ private:
     std::string mDefJobNameStem = "gjo";
     std::string mDefCheckpointNameStem = "gcp";
     std::string mDefModeliNameStem = "gmi";
-
-
 };
 
 } // namespace gams

@@ -1,21 +1,18 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.8)
 
 project(transport4 C CXX)
 
-set(CMAKE_CXX_STANDARD 11)
+include(../include.cmake)
+
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../../C/api"
-    "${CMAKE_CURRENT_SOURCE_DIR}/../api")
-
-IF (WIN32)
-  SET(VSVERSION "vs2017" CACHE STRING "Visual Studio version")
-  LINK_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../lib/${VSVERSION}")
-ELSE()
-  LINK_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/../lib")
-ENDIF()
+include_directories("${BASEPATH}/C/api"
+                    "${BASEPATH}/C++/api"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/../../src")
+include_directories(${GAMS_DISTRIB_CPP_API} PUBLIC_LIBRARIES)
 
 add_executable(${PROJECT_NAME}
     "transport4.cpp")
 
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} gamscpp)
+target_link_libraries(${PROJECT_NAME} gamscpp)

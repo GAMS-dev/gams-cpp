@@ -1,8 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017-2020 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017-2020 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2021 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,8 +23,11 @@
  * SOFTWARE.
  */
 
+#include <stdio.h>
+
 #include "gamslog.h"
 
+using namespace std;
 namespace gams {
 
 LoggerPool *LoggerPool::mInstance = 0;
@@ -35,22 +38,18 @@ LoggerPool &LoggerPool::instance() {
 }
 
 void LoggerPool::registerLogger(const LogId logId, const GAMSEnum::DebugLevel debug, FILE *target) {
-    mBinds.insert(logId, TargetSet(debug, target));
+    mBinds[logId] = TargetSet(debug, target);
 }
 
 void LoggerPool::unregisterLogger(const LogId logId)
 {
-    mBinds.remove(logId);
+    mBinds.erase(logId);
 }
 
 Logger::~Logger()
 {
-    for (auto f: mTargets) {
-        QTextStream ts(f);
-        ts << "[" << qSetFieldWidth(30) << mWhere << qSetFieldWidth(0) << "] " << mBuffer;
-        //TODO (JM) Sometimes fails with access violation (with MSys at WEI and VS8)
-        ts.flush();
-    }
+    for (FILE* f: mTargets)
+        fprintf(f, "[%30s] %s\n", mWhere.c_str(), mBuffer.c_str());
 }
 
 }
