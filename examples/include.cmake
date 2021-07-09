@@ -22,6 +22,33 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+if ("$ENV{GAMS_BUILD}" STREQUAL "")
+    # stand alone subproject
+    if ("${GAMSPATH}" STREQUAL "")
+        message("STANDALONE: ${CMAKE_CURRENT_SOURCE_DIR}")
+        set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
+    else()
+        set(BASEPATH "${GAMSPATH}/apifiles")
+    endif()
+    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api")
+else()
+    # jenkins switch:
+    if("$ENV{GAMS_CORE_PATH}" STREQUAL "")
+        set(BASEPATH "${GAMSPATH}/apiexamples")
+        include_directories("${BASEPATH}/C++/api")
+    else()
+        set(BASEPATH "${GAMSPATH}/apifiles")
+    endif()
+endif()
+
+include_directories("${BASEPATH}/C/api"
+                    "${BASEPATH}/C++/api")
+
 if(WIN32)
     set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
     link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
@@ -35,20 +62,4 @@ if(UNIX) # Apple or Linux
         link_libraries(stdc++fs pthread)
     endif()
 endif()
-
-add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-if ("$ENV{GAMS_BUILD}" STREQUAL "")
-    set(BASEPATH "${GAMSPATH}/apifiles")
-else()
-    # jenkins switch:
-    if("$ENV{GAMS_CORE_PATH}" STREQUAL "")
-        set(BASEPATH "${GAMSPATH}/apiexamples")
-    else()
-        set(BASEPATH "${GAMSPATH}/apifiles")
-    endif()
-endif()
-
-include_directories("${BASEPATH}/C/api"
-                    "${BASEPATH}/C++/api"
-                    "${gtest_SOURCE_DIR}/include")
 

@@ -8,12 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories("../../C/api"
     "../api")
 
-if(WIN32)
-  set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
-  link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
-else()
-  link_directories("${BASEPATH}/C++/lib")
-endif()
+
 
 add_executable(${PROJECT_NAME}
     "main.cpp"
