@@ -28,7 +28,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 if ("$ENV{GAMS_BUILD}" STREQUAL "")
-    set(BASEPATH "${GAMSPATH}/apifiles")
+    # stand alone subproject
+    if ("${GAMSPATH}" STREQUAL "")
+        message("STANDALONE: ${CMAKE_CURRENT_SOURCE_DIR}")
+        set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
+    else()
+        set(BASEPATH "${GAMSPATH}/apifiles")
+    endif()
     include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api")
 else()
     # jenkins switch:
