@@ -41,8 +41,7 @@ else()
 endif()
 
 include_directories("${BASEPATH}/C/api"
-                    "${BASEPATH}/C++/api"
-                    "${gtest_SOURCE_DIR}/include")
+                    "${BASEPATH}/C++/api")
 
 if(WIN32)
     set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
