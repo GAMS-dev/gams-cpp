@@ -113,10 +113,11 @@ else()
     endif()
 
     set(GPRODUCTS_ENV $ENV{GPRODUCTS})
+    set(GPRODUCTS_OBTOBJ_ENV $ENV{BTREE}/optobj/$ENV{GSYS})
     include_directories(${GPRODUCTS_ENV}/gclib
                         ${GPRODUCTS_ENV}/apiwrap/gmdobj
                         ${GPRODUCTS_ENV}/apiwrap/joat
-                        ${BTREE}/optobj/${GSYS})
+                        ${GPRODUCTS_OBTOBJ_ENV})
 
     set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/gclib/gclgms.c
                          ${GPRODUCTS_ENV}/gclib/gcmt.c
@@ -124,7 +125,7 @@ else()
                          ${GPRODUCTS_ENV}/apiwrap/joat/cfgmcc.c
                          ${GPRODUCTS_ENV}/apiwrap/joat/gevmcc.c
                          ${GPRODUCTS_ENV}/apiwrap/joat/gmomcc.c
-                         ${BTREE}/optobj/optcc.c)
+                         ${GPRODUCTS_OBTOBJ_ENV}/optcc.c)
 
     include_directories(${GPRODUCTS_ENV}/apiexamples/C++/api)
     set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptions.cpp
