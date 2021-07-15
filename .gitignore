@@ -6,5 +6,5 @@ build*
 Makefile
 .directory
 **/*.dylib
-gamsinclude.pri
+gamsinclude.txt
 **/.DS_Store
