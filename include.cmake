@@ -58,6 +58,8 @@ include(../version.cmake)
 if(EXISTS ${PWD}/gamsinclude.txt)
     ReadFromFileAndSet(${PWD}/gamsinclude.txt)
 endif()
+set(GAMS_DISTRIB_C_API "${GAMS_DISTRIB}/apifiles/C/api")
+set(GAMS_DISTRIB_CPP_API "${GAMS_DISTRIB}/apifiles/C++/api")
 
 # create variable GAMSPATH from gamsinclude.txt
 if("$ENV{GAMS_BUILD}" STREQUAL "")
