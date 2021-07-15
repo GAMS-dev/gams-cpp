@@ -24,11 +24,14 @@
 #
 set(GSYS_ENV $ENV{GSYS})
 if ("${GSYS_ENV}" STREQUAL "deg")
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.14" CACHE STRING "Minimum OS X deployment version" FORCE)
-
-    # use gcc on macos:
-    set(CMAKE_C_COMPILER "/usr/local/gcc-10.3/bin/gcc" CACHE STRING "C Compiler" FORCE)
-    set(CMAKE_CXX_COMPILER "/usr/local/gcc-10.3/bin/g++" CACHE STRING "C++ Compiler " FORCE)
+    if ("${MACOS_LEGACY}" STREQUAL "")
+        set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version" FORCE)
+    else()
+        # use gcc for macos targets:
+        set(CMAKE_OSX_DEPLOYMENT_TARGET "10.14" CACHE STRING "Minimum OS X deployment version" FORCE)
+        set(CMAKE_C_COMPILER "/usr/local/gcc-10.3/bin/gcc" CACHE STRING "C Compiler" FORCE)
+        set(CMAKE_CXX_COMPILER "/usr/local/gcc-10.3/bin/g++" CACHE STRING "C++ Compiler " FORCE)
+    endif()
 endif()
 
 project( GAMS-cpp )
