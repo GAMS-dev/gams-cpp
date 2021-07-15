@@ -33,47 +33,35 @@ add_definitions(-DAPI_VERSION="${VERSION}")
 
 # GAMS_CORE_PATH is Jenkins build switch
 file(TO_CMAKE_PATH "$ENV{GAMS_CORE_PATH}" GAMS_PATH)
-if(NOT EXISTS ${PWD}/gamsinclude.pri)
+if(NOT EXISTS ${PWD}/gamsinclude.txt)
     if("${GAMS_PATH}" STREQUAL "")
         if(APPLE)
             set(GAMS_DISTRIB /Library/Frameworks/GAMS.framework/Versions/${GAMS_DISTRIB_MAJOR}/Resources)
-            set(GAMSINC
-"GAMS_DISTRIB=${GAMS_DISTRIB}\n\
-GAMS_DISTRIB_C_API=${GAMS_DISTRIB}/apifiles/C/api\n\
-GAMS_DISTRIB_CPP_API=${GAMS_DISTRIB}/apifiles/C++/api")
+            set(GAMSINC "GAMS_DISTRIB=${GAMS_DISTRIB}")
 
         elseif(UNIX AND NOT APPLE)
             set(GAMS_DISTRIB $ENV{HOME}/gams/gams${GAMS_DISTRIB_MAJOR}.${GAMS_DISTRIB_MINOR}_linux_x64_64_sfx)
-            set(GAMSINC
-"GAMS_DISTRIB=${GAMS_DISTRIB}\n\
-GAMS_DISTRIB_C_API=${GAMS_DISTRIB}/apifiles/C/api\n\
-GAMS_DISTRIB_CPP_API=${GAMS_DISTRIB}/apifiles/C++/api")
+            set(GAMSINC "GAMS_DISTRIB=${GAMS_DISTRIB}")
 
         elseif(WIN32)
             set(GAMS_DISTRIB C:/GAMS/${GAMS_DISTRIB_MAJOR})
-            set(GAMSINC
-"GAMS_DISTRIB=${GAMS_DISTRIB}\n\
-GAMS_DISTRIB_C_API=${GAMS_DISTRIB}/apifiles/C/api\n\
-GAMS_DISTRIB_CPP_API=${GAMS_DISTRIB}/apifiles/C++/api")
+            set(GAMSINC "GAMS_DISTRIB=${GAMS_DISTRIB}")
         endif()
     else()
-        set(GAMSINC
-"GAMS_DISTRIB=${GAMS_PATH}\n\
-GAMS_DISTRIB_C_API=${GAMS_PATH}/apifiles/C/api\n\
-GAMS_DISTRIB_CPP_API=${GAMS_PATH}/apifiles/C++/api")
+        set(GAMSINC "GAMS_DISTRIB=${GAMS_PATH}")
     endif()
 
-    file(WRITE ${PWD}/gamsinclude.pri ${GAMSINC})
+    file(WRITE ${PWD}/gamsinclude.txt ${GAMSINC})
 endif()
 
 include(../version.cmake)
-if(EXISTS ${PWD}/gamsinclude.pri)
-    ReadFromFileAndSet(${PWD}/gamsinclude.pri)
+if(EXISTS ${PWD}/gamsinclude.txt)
+    ReadFromFileAndSet(${PWD}/gamsinclude.txt)
 endif()
 
-# create variable GAMSPATH from gamsinclude.pri
+# create variable GAMSPATH from gamsinclude.txt
 if("$ENV{GAMS_BUILD}" STREQUAL "")
-    file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../gamsinclude.pri" GAMSINCLUDE LIMIT_COUNT 1)
+    file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../gamsinclude.txt" GAMSINCLUDE LIMIT_COUNT 1)
     string(REGEX MATCH "[^=]+$" GAMSPATH ${GAMSINCLUDE})
 else()
     set(GAMSPATH "${CMAKE_CURRENT_SOURCE_DIR}/../../..")
