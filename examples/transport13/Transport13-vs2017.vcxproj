@@ -57,8 +57,7 @@
       <AdditionalDependencies>gamscpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(ProjectDir)..\..\..\gamscpp.dll" "$(OutDir)"
-xcopy /Y "$(ProjectDir)..\..\..\Qt*.dll" "$(OutDir)"</Command>
+      <Command>xcopy /Y "$(ProjectDir)..\..\..\gamscpp.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
