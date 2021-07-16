@@ -98,8 +98,10 @@ else()
 
     if ("${GSYS_ENV}" STREQUAL "deg")
         add_definitions(-DDEG -DCIA_DEX)
-        set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath,$ORIGIN,-rpath,$ORIGIN/../../..")
-        link_libraries(stdc++fs pthread)
+        if ("${MACOS_LEGACY}" STREQUAL "true")
+            set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath,$ORIGIN,-rpath,$ORIGIN/../../..")
+            link_libraries(stdc++fs pthread)
+        endif()
     endif()
 
     set(GPRODUCTS_ENV $ENV{GPRODUCTS})
