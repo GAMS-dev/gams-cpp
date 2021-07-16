@@ -19,10 +19,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport7-vs2017", "Transp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport8-vs2017", "Transport8\Transport8-vs2017.vcxproj", "{C226F7F6-CB62-4191-965A-E791A7814002}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport9-vs2017", "Transport9\Transport9-vs2017.vcxproj", "{B6A01BEE-5E89-44AB-BCDD-052260C38398}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport10-vs2017", "Transport10\Transport10-vs2017.vcxproj", "{0274DCB0-BDD8-4ECC-AF23-03285217BB92}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport11-vs2017", "Transport11\Transport11-vs2017.vcxproj", "{66E916B1-A55A-4526-A7C6-C5576F20293F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport12-vs2017", "Transport12\Transport12-vs2017.vcxproj", "{06DDF61F-DA88-448E-8E83-DD4CFAE7496F}"
@@ -34,16 +30,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DomainChecking-vs2017", "DomainChecking\DomainChecking-vs2017.vcxproj", "{5468B164-8DD8-4AAF-9051-88252D52903F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Warehouse-vs2017", "Warehouse\Warehouse-vs2017.vcxproj", "{5DA5AD19-1D4C-4695-AA8F-346F02C1EDB7}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xp_associative-vs2017", "xp_associative\xp_associative-vs2017.vcxproj", "{4C6CCDFF-6D0C-4336-BC67-092812915DE8}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xp_associative_vec-vs2017", "xp_associative_vec\xp_associative_vec-vs2017.vcxproj", "{1ADF761B-30E5-4904-A569-D2CF72564651}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xp_dataWrite-vs2017", "xp_dataWrite\xp_dataWrite-vs2017.vcxproj", "{2D7F308D-D9F0-4477-BF45-E8920754AD0A}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xp_example1-vs2017", "xp_example1\xp_example1-vs2017.vcxproj", "{95C10F54-0A87-4242-A2C2-E0B6F952BAD4}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xp_example2-vs2017", "xp_example2\xp_example2-vs2017.vcxproj", "{82492646-7322-4CA2-807D-1DD31254E47D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TransportGDX-vs2017", "transportGDX\TransportGDX-vs2017.vcxproj", "{B4B7BB66-3456-4A7F-966F-8C25E0AEEC13}"
 EndProject
@@ -68,10 +54,6 @@ Global
 		{F46AF2AB-09F5-4A3D-A3FB-DB3B95132519}.Release|x64.Build.0 = Release|x64
 		{C226F7F6-CB62-4191-965A-E791A7814002}.Release|x64.ActiveCfg = Release|x64
 		{C226F7F6-CB62-4191-965A-E791A7814002}.Release|x64.Build.0 = Release|x64
-		{B6A01BEE-5E89-44AB-BCDD-052260C38398}.Release|x64.ActiveCfg = Release|x64
-		{B6A01BEE-5E89-44AB-BCDD-052260C38398}.Release|x64.Build.0 = Release|x64
-		{0274DCB0-BDD8-4ECC-AF23-03285217BB92}.Release|x64.ActiveCfg = Release|x64
-		{0274DCB0-BDD8-4ECC-AF23-03285217BB92}.Release|x64.Build.0 = Release|x64
 		{66E916B1-A55A-4526-A7C6-C5576F20293F}.Release|x64.ActiveCfg = Release|x64
 		{66E916B1-A55A-4526-A7C6-C5576F20293F}.Release|x64.Build.0 = Release|x64
 		{06DDF61F-DA88-448E-8E83-DD4CFAE7496F}.Release|x64.ActiveCfg = Release|x64
@@ -84,16 +66,6 @@ Global
 		{5468B164-8DD8-4AAF-9051-88252D52903F}.Release|x64.Build.0 = Release|x64
 		{5DA5AD19-1D4C-4695-AA8F-346F02C1EDB7}.Release|x64.ActiveCfg = Release|x64
 		{5DA5AD19-1D4C-4695-AA8F-346F02C1EDB7}.Release|x64.Build.0 = Release|x64
-		{4C6CCDFF-6D0C-4336-BC67-092812915DE8}.Release|x64.ActiveCfg = Release|x64
-		{4C6CCDFF-6D0C-4336-BC67-092812915DE8}.Release|x64.Build.0 = Release|x64
-		{1ADF761B-30E5-4904-A569-D2CF72564651}.Release|x64.ActiveCfg = Release|x64
-		{1ADF761B-30E5-4904-A569-D2CF72564651}.Release|x64.Build.0 = Release|x64
-		{2D7F308D-D9F0-4477-BF45-E8920754AD0A}.Release|x64.ActiveCfg = Release|x64
-		{2D7F308D-D9F0-4477-BF45-E8920754AD0A}.Release|x64.Build.0 = Release|x64
-		{95C10F54-0A87-4242-A2C2-E0B6F952BAD4}.Release|x64.ActiveCfg = Release|x64
-		{95C10F54-0A87-4242-A2C2-E0B6F952BAD4}.Release|x64.Build.0 = Release|x64
-		{82492646-7322-4CA2-807D-1DD31254E47D}.Release|x64.ActiveCfg = Release|x64
-		{82492646-7322-4CA2-807D-1DD31254E47D}.Release|x64.Build.0 = Release|x64
 		{B4B7BB66-3456-4A7F-966F-8C25E0AEEC13}.Release|x64.ActiveCfg = Release|x64
 		{B4B7BB66-3456-4A7F-966F-8C25E0AEEC13}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
