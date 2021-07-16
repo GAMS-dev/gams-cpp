@@ -19,6 +19,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport7-vs2019", "Transp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport8-vs2019", "Transport8\Transport8-vs2019.vcxproj", "{C226F7F6-CB62-4191-965A-E791A7814002}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport9-vs2019", "Transport9\Transport9-vs2019.vcxproj", "{B6A01BEE-5E89-44AB-BCDD-052260C38398}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport10-vs2019", "Transport10\Transport10-vs2019.vcxproj", "{0274DCB0-BDD8-4ECC-AF23-03285217BB92}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport11-vs2019", "Transport11\Transport11-vs2019.vcxproj", "{66E916B1-A55A-4526-A7C6-C5576F20293F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport12-vs2019", "Transport12\Transport12-vs2019.vcxproj", "{06DDF61F-DA88-448E-8E83-DD4CFAE7496F}"

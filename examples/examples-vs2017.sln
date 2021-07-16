@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2002
@@ -18,6 +18,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport7-vs2017", "Transport7\Transport7-vs2017.vcxproj", "{F46AF2AB-09F5-4A3D-A3FB-DB3B95132519}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport8-vs2017", "Transport8\Transport8-vs2017.vcxproj", "{C226F7F6-CB62-4191-965A-E791A7814002}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport9-vs2017", "Transport9\Transport9-vs2017.vcxproj", "{B6A01BEE-5E89-44AB-BCDD-052260C38398}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport10-vs2017", "Transport10\Transport10-vs2017.vcxproj", "{0274DCB0-BDD8-4ECC-AF23-03285217BB92}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport11-vs2017", "Transport11\Transport11-vs2017.vcxproj", "{66E916B1-A55A-4526-A7C6-C5576F20293F}"
 EndProject
