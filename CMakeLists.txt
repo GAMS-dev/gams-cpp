@@ -23,8 +23,9 @@
 # SOFTWARE.
 #
 set(GSYS_ENV $ENV{GSYS})
+set(MACOS_LEGACY_ENV $ENV{MACOS_LEGACY})
 if ("${GSYS_ENV}" STREQUAL "deg")
-    if ("${MACOS_LEGACY}" STREQUAL "")
+    if ("${MACOS_LEGACY_ENV}" STREQUAL "")
         set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version" FORCE)
     else()
         # use gcc for macos targets:
