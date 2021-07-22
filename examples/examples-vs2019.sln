@@ -1,0 +1,82 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2002
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport1-vs2019", "Transport1\Transport1-vs2019.vcxproj", "{A53DE2F6-6674-40A4-8650-39DB5F6021BA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport2-vs2019", "Transport2\Transport2-vs2019.vcxproj", "{9327214C-484E-4C9D-A8CA-7ACE2B80029F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport3-vs2019", "Transport3\Transport3-vs2019.vcxproj", "{CAB67112-221B-4FEB-8349-12A7A8881AD0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport4-vs2019", "Transport4\Transport4-vs2019.vcxproj", "{F155F832-74C9-4FA6-B2CC-183AC13D9FC7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport5-vs2019", "Transport5\Transport5-vs2019.vcxproj", "{3781351E-DD12-498B-99A6-3E79C6F19477}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport6-vs2019", "Transport6\Transport6-vs2019.vcxproj", "{DF6E7223-3C39-45D9-9F4C-820C44457BCA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport7-vs2019", "Transport7\Transport7-vs2019.vcxproj", "{F46AF2AB-09F5-4A3D-A3FB-DB3B95132519}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport8-vs2019", "Transport8\Transport8-vs2019.vcxproj", "{C226F7F6-CB62-4191-965A-E791A7814002}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport9-vs2019", "Transport9\Transport9-vs2019.vcxproj", "{B6A01BEE-5E89-44AB-BCDD-052260C38398}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport10-vs2019", "Transport10\Transport10-vs2019.vcxproj", "{0274DCB0-BDD8-4ECC-AF23-03285217BB92}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport11-vs2019", "Transport11\Transport11-vs2019.vcxproj", "{66E916B1-A55A-4526-A7C6-C5576F20293F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport12-vs2019", "Transport12\Transport12-vs2019.vcxproj", "{06DDF61F-DA88-448E-8E83-DD4CFAE7496F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport13-vs2019", "Transport13\Transport13-vs2019.vcxproj", "{C95B1141-361D-4E66-A05E-B046ABC717A5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport14-vs2019", "Transport14\Transport14-vs2019.vcxproj", "{CAC569CB-4CE4-443C-86AD-062647DC8450}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DomainChecking-vs2019", "DomainChecking\DomainChecking-vs2019.vcxproj", "{5468B164-8DD8-4AAF-9051-88252D52903F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Warehouse-vs2019", "Warehouse\Warehouse-vs2019.vcxproj", "{5DA5AD19-1D4C-4695-AA8F-346F02C1EDB7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TransportGDX-vs2019", "transportGDX\TransportGDX-vs2019.vcxproj", "{B4B7BB66-3456-4A7F-966F-8C25E0AEEC13}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A53DE2F6-6674-40A4-8650-39DB5F6021BA}.Release|x64.ActiveCfg = Release|x64
+		{A53DE2F6-6674-40A4-8650-39DB5F6021BA}.Release|x64.Build.0 = Release|x64
+		{9327214C-484E-4C9D-A8CA-7ACE2B80029F}.Release|x64.ActiveCfg = Release|x64
+		{9327214C-484E-4C9D-A8CA-7ACE2B80029F}.Release|x64.Build.0 = Release|x64
+		{CAB67112-221B-4FEB-8349-12A7A8881AD0}.Release|x64.ActiveCfg = Release|x64
+		{CAB67112-221B-4FEB-8349-12A7A8881AD0}.Release|x64.Build.0 = Release|x64
+		{F155F832-74C9-4FA6-B2CC-183AC13D9FC7}.Release|x64.ActiveCfg = Release|x64
+		{F155F832-74C9-4FA6-B2CC-183AC13D9FC7}.Release|x64.Build.0 = Release|x64
+		{3781351E-DD12-498B-99A6-3E79C6F19477}.Release|x64.ActiveCfg = Release|x64
+		{3781351E-DD12-498B-99A6-3E79C6F19477}.Release|x64.Build.0 = Release|x64
+		{DF6E7223-3C39-45D9-9F4C-820C44457BCA}.Release|x64.ActiveCfg = Release|x64
+		{DF6E7223-3C39-45D9-9F4C-820C44457BCA}.Release|x64.Build.0 = Release|x64
+		{F46AF2AB-09F5-4A3D-A3FB-DB3B95132519}.Release|x64.ActiveCfg = Release|x64
+		{F46AF2AB-09F5-4A3D-A3FB-DB3B95132519}.Release|x64.Build.0 = Release|x64
+		{C226F7F6-CB62-4191-965A-E791A7814002}.Release|x64.ActiveCfg = Release|x64
+		{C226F7F6-CB62-4191-965A-E791A7814002}.Release|x64.Build.0 = Release|x64
+		{66E916B1-A55A-4526-A7C6-C5576F20293F}.Release|x64.ActiveCfg = Release|x64
+		{66E916B1-A55A-4526-A7C6-C5576F20293F}.Release|x64.Build.0 = Release|x64
+		{06DDF61F-DA88-448E-8E83-DD4CFAE7496F}.Release|x64.ActiveCfg = Release|x64
+		{06DDF61F-DA88-448E-8E83-DD4CFAE7496F}.Release|x64.Build.0 = Release|x64
+		{C95B1141-361D-4E66-A05E-B046ABC717A5}.Release|x64.ActiveCfg = Release|x64
+		{C95B1141-361D-4E66-A05E-B046ABC717A5}.Release|x64.Build.0 = Release|x64
+		{CAC569CB-4CE4-443C-86AD-062647DC8450}.Release|x64.ActiveCfg = Release|x64
+		{CAC569CB-4CE4-443C-86AD-062647DC8450}.Release|x64.Build.0 = Release|x64
+		{5468B164-8DD8-4AAF-9051-88252D52903F}.Release|x64.ActiveCfg = Release|x64
+		{5468B164-8DD8-4AAF-9051-88252D52903F}.Release|x64.Build.0 = Release|x64
+		{5DA5AD19-1D4C-4695-AA8F-346F02C1EDB7}.Release|x64.ActiveCfg = Release|x64
+		{5DA5AD19-1D4C-4695-AA8F-346F02C1EDB7}.Release|x64.Build.0 = Release|x64
+		{B4B7BB66-3456-4A7F-966F-8C25E0AEEC13}.Release|x64.ActiveCfg = Release|x64
+		{B4B7BB66-3456-4A7F-966F-8C25E0AEEC13}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D2B1B949-890E-4539-A315-C1F72AFC1BD2}
+	EndGlobalSection
+EndGlobal
