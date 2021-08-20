@@ -61,6 +61,11 @@ endif()
 set(GAMS_DISTRIB_C_API "${GAMS_DISTRIB}/apifiles/C/api")
 set(GAMS_DISTRIB_CPP_API "${GAMS_DISTRIB}/apifiles/C++/api")
 
+if (NOT EXISTS ${GAMS_DISTRIB_C_API})
+    message(FATAL_ERROR "No GAMS found in path ${GAMS_DISTRIB}. GAMS is required to compile the C++ API.
+Please adjust ${CMAKE_SOURCE_DIR}/gamsinclude.txt to point to your GAMS installation.")
+endif()
+
 # create variable GAMSPATH from gamsinclude.txt
 if("$ENV{GAMS_BUILD}" STREQUAL "")
     file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../gamsinclude.txt" GAMSINCLUDE LIMIT_COUNT 1)
