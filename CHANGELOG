@@ -1,3 +1,7 @@
+Version 0.13.1
+========================
+- improved user feedback for when GAMS was not found
+
 Version 0.13.0
 ========================
 - removed Qt dependency and replaced it with C++17
