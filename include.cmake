@@ -106,18 +106,19 @@ else()
     endif()
 
     set(GPRODUCTS_ENV $ENV{GPRODUCTS})
+    set(GPRODUCTS_JOAT_ENV $ENV{BTREE}/joat/$ENV{GSYS})
     set(GPRODUCTS_OBTOBJ_ENV $ENV{BTREE}/optobj/$ENV{GSYS})
     include_directories(${GPRODUCTS_ENV}/gclib
                         ${GPRODUCTS_ENV}/apiwrap/gmdobj
-                        ${GPRODUCTS_ENV}/apiwrap/joat
+                        ${GPRODUCTS_JOAT_ENV}
                         ${GPRODUCTS_OBTOBJ_ENV})
 
     set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/gclib/gclgms.c
                          ${GPRODUCTS_ENV}/gclib/gcmt.c
                          ${GPRODUCTS_ENV}/apiwrap/gmdobj/gmdcc.c
-                         ${GPRODUCTS_ENV}/apiwrap/joat/cfgmcc.c
-                         ${GPRODUCTS_ENV}/apiwrap/joat/gevmcc.c
-                         ${GPRODUCTS_ENV}/apiwrap/joat/gmomcc.c
+                         ${GPRODUCTS_JOAT_ENV}/cfgmcc.c
+                         ${GPRODUCTS_JOAT_ENV}/gevmcc.c
+                         ${GPRODUCTS_JOAT_ENV}/gmomcc.c
                          ${GPRODUCTS_OBTOBJ_ENV}/optcc.c)
 
     include_directories(${GPRODUCTS_ENV}/apiexamples/C++/api)
