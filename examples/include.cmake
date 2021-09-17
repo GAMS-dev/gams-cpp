@@ -34,7 +34,9 @@ if ("$ENV{GAMS_BUILD}" STREQUAL "")
     else()
         set(BASEPATH "${GAMSPATH}/apifiles")
     endif()
-    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api")
+    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api"
+                        "${BASEPATH}/C/api"
+                        "${BASEPATH}/C++/api")
 else()
     # jenkins switch:
     if("$ENV{GAMS_CORE_PATH}" STREQUAL "")
@@ -43,10 +45,9 @@ else()
     else()
         set(BASEPATH "${GAMSPATH}/apifiles")
     endif()
+    include_directories("${BASEPATH}/../gclib"
+                        "${BASEPATH}/C++/api")
 endif()
-
-include_directories("${BASEPATH}/C/api"
-                    "${BASEPATH}/C++/api")
 
 if(WIN32)
     set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")

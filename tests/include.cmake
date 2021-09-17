@@ -28,7 +28,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 if ("$ENV{GAMS_BUILD}" STREQUAL "")
     set(BASEPATH "${GAMSPATH}/apifiles")
-    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api")
+    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api"
+                        "${BASEPATH}/C/api"
+                        "${gtest_SOURCE_DIR}/include")
 else()
     # jenkins switch:
     if("$ENV{GAMS_CORE_PATH}" STREQUAL "")
@@ -37,10 +39,9 @@ else()
     else()
         set(BASEPATH "${GAMSPATH}/apifiles")
     endif()
+    include_directories("${BASEPATH}/../gclib"
+                        "${gtest_SOURCE_DIR}/include")
 endif()
-
-include_directories("${BASEPATH}/C/api"
-                    "${gtest_SOURCE_DIR}/include")
 
 if(WIN32)
     set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
