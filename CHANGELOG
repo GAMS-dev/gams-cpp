@@ -1,3 +1,7 @@
+Version 0.14.0
+========================
+- fixed unwanted overwrite of GAMSOption::setOutput during gams run
+
 Version 0.13.1
 ========================
 - improved user feedback for when GAMS was not found
