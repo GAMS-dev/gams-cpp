@@ -1,6 +1,6 @@
-Version 0.15.0  *
+Version 0.15.0
 ========================
-- 
+- removed conversion of mapped network drives to UNC paths
 
 Version 0.14.0
 ========================
