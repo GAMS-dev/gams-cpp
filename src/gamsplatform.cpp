@@ -230,9 +230,7 @@ void GAMSPlatform::ensureEnvPathSetOnWindows(const char *dirName)
     if (!g.empty()) {
         ostringstream ps;
         ps << "PATH=" << getenv("PATH") << ";" << dirName;
-        const char* p = ps.str().c_str();
-
-        _putenv(p);
+        _putenv(ps.str().c_str());
     }
 #else
     throw GAMSException("ensureEnvPathSetOnWindows only impemented on Windows");

@@ -1,6 +1,7 @@
-Version 0.15.0  *
+Version 0.15.0
 ========================
-- 
+- removed conversion of mapped network drives to UNC paths
+- fixed addition of GAMS to PATH not working on windows
 
 Version 0.14.0
 ========================

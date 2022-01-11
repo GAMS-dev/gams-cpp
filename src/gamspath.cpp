@@ -156,10 +156,7 @@ bool GAMSPath::rmDirRecurse()
 
 void GAMSPath::pack()
 {
-    if (exists())
-        this->assign(std::filesystem::canonical(*this));
-    else
-        this->assign(std::filesystem::absolute(*this));
+    this->assign(std::filesystem::absolute(*this));
 }
 
 bool GAMSPath::remove()
