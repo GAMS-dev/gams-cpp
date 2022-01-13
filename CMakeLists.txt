@@ -6,8 +6,8 @@ if ("${GSYS_ENV}" STREQUAL "deg")
     else()
         # use gcc for macos targets:
         set(CMAKE_OSX_DEPLOYMENT_TARGET "10.14" CACHE STRING "Minimum OS X deployment version" FORCE)
-        set(CMAKE_C_COMPILER "/usr/local/gcc-10.3/bin/gcc" CACHE STRING "C Compiler" FORCE)
-        set(CMAKE_CXX_COMPILER "/usr/local/gcc-10.3/bin/g++" CACHE STRING "C++ Compiler " FORCE)
+        set(CMAKE_C_COMPILER "$ENV{SYSLIBDIR}/../bin/gcc" CACHE STRING "C Compiler" FORCE)
+        set(CMAKE_CXX_COMPILER "$ENV{SYSLIBDIR}/../bin/g++" CACHE STRING "C++ Compiler " FORCE)
     endif()
 endif()
 
