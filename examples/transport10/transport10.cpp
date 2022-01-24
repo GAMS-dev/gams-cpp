@@ -176,7 +176,7 @@ int main(int argc, char* argv[])
 
         // Creating the GAMSDatabase and fill with the workbook data
         GAMSDatabase db = ws.addDatabase();
-        QString fileName = QString::fromStdString(ws.systemDirectory())+ cPathSep + "apifiles" + cPathSep + "Data" + cPathSep + "transport.xls";
+        QString fileName = QString::fromStdString(ws.systemDirectory())+ cPathSep + "apifiles" + cPathSep + "Data" + cPathSep + "transport.xlsx";
 
         QAxObject* excel = new QAxObject( "Excel.Application", 0 );
         QAxObject* workbooks = excel->querySubObject( "Workbooks" );
