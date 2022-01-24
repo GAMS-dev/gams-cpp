@@ -2,8 +2,8 @@
  *
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017-2021 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017-2021 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2022 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2022 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -176,7 +176,7 @@ int main(int argc, char* argv[])
 
         // Creating the GAMSDatabase and fill with the workbook data
         GAMSDatabase db = ws.addDatabase();
-        QString fileName = QString::fromStdString(ws.systemDirectory())+ cPathSep + "apifiles" + cPathSep + "Data" + cPathSep + "transport.xls";
+        QString fileName = QString::fromStdString(ws.systemDirectory())+ cPathSep + "apifiles" + cPathSep + "Data" + cPathSep + "transport.xlsx";
 
         QAxObject* excel = new QAxObject( "Excel.Application", 0 );
         QAxObject* workbooks = excel->querySubObject( "Workbooks" );

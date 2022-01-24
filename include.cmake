@@ -1,27 +1,3 @@
-#
-# GAMS - General Algebraic Modeling System C++ API
-#
-# Copyright (c) 2017-2020 GAMS Software GmbH <support@gams.com>
-# Copyright (c) 2017-2020 GAMS Development Corp. <support@gams.com>
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-#
 set(PWD ${CMAKE_CURRENT_SOURCE_DIR}/..)
 if(WIN32)
     # Switch off warnings caused by GAMS headers
@@ -63,6 +39,10 @@ set(GAMS_DISTRIB_CPP_API "${GAMS_DISTRIB}/apifiles/C++/api")
 
 # create variable GAMSPATH from gamsinclude.txt
 if("$ENV{GAMS_BUILD}" STREQUAL "")
+    if (NOT EXISTS ${GAMS_DISTRIB_C_API})
+        message(FATAL_ERROR "No GAMS found in path ${GAMS_DISTRIB}. GAMS is required to compile the C++ API.
+            Please adjust ${CMAKE_SOURCE_DIR}/gamsinclude.txt to point to your GAMS installation.")
+    endif()
     file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../gamsinclude.txt" GAMSINCLUDE LIMIT_COUNT 1)
     string(REGEX MATCH "[^=]+$" GAMSPATH ${GAMSINCLUDE})
 else()
@@ -106,19 +86,21 @@ else()
     endif()
 
     set(GPRODUCTS_ENV $ENV{GPRODUCTS})
-    set(GPRODUCTS_OBTOBJ_ENV $ENV{BTREE}/optobj/$ENV{GSYS})
+    set(BTREE_GMD_ENV $ENV{BTREE}/gmdxxx/$ENV{GSYS})
+    set(BTREE_JOAT_ENV $ENV{BTREE}/joat/$ENV{GSYS})
+    set(BTREE_OPT_ENV $ENV{BTREE}/optobj/$ENV{GSYS})
     include_directories(${GPRODUCTS_ENV}/gclib
-                        ${GPRODUCTS_ENV}/apiwrap/gmdobj
-                        ${GPRODUCTS_ENV}/apiwrap/joat
-                        ${GPRODUCTS_OBTOBJ_ENV})
+                        ${BTREE_GMD_ENV}
+                        ${BTREE_JOAT_ENV}
+                        ${BTREE_OPT_ENV})
 
     set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/gclib/gclgms.c
                          ${GPRODUCTS_ENV}/gclib/gcmt.c
-                         ${GPRODUCTS_ENV}/apiwrap/gmdobj/gmdcc.c
-                         ${GPRODUCTS_ENV}/apiwrap/joat/cfgmcc.c
-                         ${GPRODUCTS_ENV}/apiwrap/joat/gevmcc.c
-                         ${GPRODUCTS_ENV}/apiwrap/joat/gmomcc.c
-                         ${GPRODUCTS_OBTOBJ_ENV}/optcc.c)
+                         ${BTREE_GMD_ENV}/gmdcc.c
+                         ${BTREE_JOAT_ENV}/cfgmcc.c
+                         ${BTREE_JOAT_ENV}/gevmcc.c
+                         ${BTREE_JOAT_ENV}/gmomcc.c
+                         ${BTREE_OPT_ENV}/optcc.c)
 
     include_directories(${GPRODUCTS_ENV}/apiexamples/C++/api)
     set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptions.cpp

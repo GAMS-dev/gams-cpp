@@ -1,8 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017-2021 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017-2021 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2022 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2022 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -120,7 +120,8 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
     if (tmpOpt.logFile() == "")
         tmpOpt.setLogFile(jobFileInfo.suffix(".log").toStdString());
 
-    tmpOpt.setOutput(mJobName + ".lst");
+    if (!tmpOpt.output().empty())
+        tmpOpt.setOutput(mJobName + ".lst");
     tmpOpt.setCurDir(mWs.workingDirectory());
     tmpOpt.setInput(mFileName);
     GAMSPath pfFileName = jobFileInfo.suffix(".pf");

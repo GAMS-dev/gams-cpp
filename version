@@ -1,8 +1,8 @@
 #
 # GAMS - General Algebraic Modeling System C++ API
 #
-# Copyright (c) 2017-2018 GAMS Software GmbH <support@gams.com>
-# Copyright (c) 2017-2018 GAMS Development Corp. <support@gams.com>
+# Copyright (c) 2017-2021 GAMS Software GmbH <support@gams.com>
+# Copyright (c) 2017-2021 GAMS Development Corp. <support@gams.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +25,11 @@
 
 # Current GAMS C++ API version.
 GAMSCPP_MAJOR_VERSION=0
-GAMSCPP_MINOR_VERSION=13
-GAMSCPP_PATCH_LEVEL=0
+GAMSCPP_MINOR_VERSION=15
+GAMSCPP_PATCH_LEVEL=1
 
 # Minimum required GAMS Distribution version, which
 # is the latest official GAMS release.
-GAMS_DISTRIB_MAJOR=36
-GAMS_DISTRIB_MINOR=0
+GAMS_DISTRIB_MAJOR=38
+GAMS_DISTRIB_MINOR=1
 GAMS_DISTRIB_GOLD=0

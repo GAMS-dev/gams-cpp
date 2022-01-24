@@ -1,8 +1,8 @@
 /*
  * GAMS - General Algebraic Modeling System C++ API
  *
- * Copyright (c) 2017-2021 GAMS Software GmbH <support@gams.com>
- * Copyright (c) 2017-2021 GAMS Development Corp. <support@gams.com>
+ * Copyright (c) 2017-2022 GAMS Software GmbH <support@gams.com>
+ * Copyright (c) 2017-2022 GAMS Development Corp. <support@gams.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -230,9 +230,7 @@ void GAMSPlatform::ensureEnvPathSetOnWindows(const char *dirName)
     if (!g.empty()) {
         ostringstream ps;
         ps << "PATH=" << getenv("PATH") << ";" << dirName;
-        const char* p = ps.str().c_str();
-
-        _putenv(p);
+        _putenv(ps.str().c_str());
     }
 #else
     throw GAMSException("ensureEnvPathSetOnWindows only impemented on Windows");
