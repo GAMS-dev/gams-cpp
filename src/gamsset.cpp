@@ -72,7 +72,7 @@ GAMSSet::~GAMSSet()
 
 GAMSEnum::SetType GAMSSet::setType()
 {
-    if (!mImpl) throw GAMSException("GAMSSet: The variable has not been initialized.");
+    if (!mImpl) throw GAMSException("GAMSSet: The set has not been initialized.");
     return mImpl->mSetType;
 }
 
