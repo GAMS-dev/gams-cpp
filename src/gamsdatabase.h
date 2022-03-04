@@ -257,7 +257,8 @@ public:
     /// \param explanatoryText Explanatory text of set.
     /// \returns Returns the GAMSSet.
     /// \see addEquation, addParameter, addVariable
-    GAMSSet addSet(const std::string& name, const int dimension, const std::string& explanatoryText = "");
+    GAMSSet addSet(const std::string& name, const int dimension, const std::string& explanatoryText = "",
+                   GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
     /// Add set symbol to database.
     /// \param name Set name.
@@ -266,7 +267,8 @@ public:
     /// \returns Returns the GAMSSet.
     /// \see addEquation, addParameter, addVariable
     GAMSSet addSet(const std::string& name, const std::string& explanatoryText
-                   , const std::vector<GAMSDomain>& domains = std::vector<GAMSDomain>());
+                   , const std::vector<GAMSDomain>& domains = std::vector<GAMSDomain>(),
+                   GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
     /// Add set symbol to database.
     /// \param name Set name.

@@ -130,19 +130,19 @@ GAMSEquation GAMSDatabase::getEquation(const std::string& name)
     return mImpl->getSymbol(*this, name);
 }
 
-GAMSSet GAMSDatabase::addSet(const string& name, const int dimension, const string& explanatoryText)
+GAMSSet GAMSDatabase::addSet(const string& name, const int dimension, const string& explanatoryText, GAMSEnum::SetType setType)
 {
     if (!mImpl) throw GAMSException("GAMSDatabase: The database has not been initialized.");
     if (mImpl->symbolLock()) throw GAMSException("Cannot add symbols to symbol-locked database");
-    return mImpl->addSet(*this, name, dimension, explanatoryText);
+    return mImpl->addSet(*this, name, dimension, explanatoryText, setType);
 }
 
 GAMSSet GAMSDatabase::addSet(const std::string& name, const std::string& explanatoryText
-                             , const std::vector<GAMSDomain>& domains)
+                             , const std::vector<GAMSDomain>& domains, GAMSEnum::SetType setType)
 {
     if (!mImpl) throw GAMSException("GAMSDatabase: The database has not been initialized.");
     if (mImpl->symbolLock()) throw GAMSException("Cannot add symbols to symbol-locked database");
-    return mImpl->addSet(*this, name, explanatoryText, domains);
+    return mImpl->addSet(*this, name, explanatoryText, domains, setType);
 }
 
 GAMSSet GAMSDatabase::addSet(const std::string& name, const std::string& explanatoryText
