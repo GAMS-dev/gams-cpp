@@ -38,10 +38,9 @@ using namespace std;
 namespace gams {
 
 GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, void* symPtr, int dim, const string &name, const string &text,
-                               GAMSEnum::SymbolType symType, GAMSEnum::VarType varType, GAMSEnum::EquType equType)
+                               GAMSEnum::SymbolType symType, GAMSEnum::VarType varType, GAMSEnum::EquType equType, GAMSEnum::SetType setType)
     : mDatabase(database), mName(name), mDim(dim), mSymType(symType), mVarType(varType), mEquType(equType), mExplanatoryText(text), mSymPtr(symPtr)
 {}
-
 
 GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, void* symPtr)
     : mDatabase(database), mSymPtr(symPtr)
@@ -65,30 +64,36 @@ GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, void* symPtr)
     mExplanatoryText = string(sval);
 }
 
-
-GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, int dim, const std::string& name, const std::string& text,
-                               GAMSEnum::SymbolType symType, GAMSEnum::VarType varType, GAMSEnum::EquType equType)
-    : mDatabase(database), mName(name), mDim(dim), mSymType(symType), mVarType(varType), mEquType(equType), mExplanatoryText(text)
+GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, int dim, const std::string& name,
+                               const std::string& text, GAMSEnum::SymbolType symType,
+                               GAMSEnum::VarType varType, GAMSEnum::EquType equType,
+                               GAMSEnum::SetType setType)
+    : mDatabase(database), mName(name), mDim(dim), mSymType(symType), mVarType(varType),
+      mEquType(equType), mExplanatoryText(text), mSetType(setType)
 {
     if (mDim < 0 || mDim > GLOBAL_MAX_INDEX_DIM)
         throw GAMSException("Invalid dimension");
     int varEquType = 0;
     if (symType == GAMSEnum::SymTypeVar) varEquType = static_cast<int>(varType);
+    if (symType == GAMSEnum::SymTypeSet) varEquType = static_cast<int>(setType);
     if (symType == GAMSEnum::SymTypeEqu) varEquType = static_cast<int>(equType);
 
-    checkForGMDError(gmdAddSymbol(gmd(), mName.c_str(), static_cast<int>(mDim), symType, varEquType, mExplanatoryText.c_str()
-                                  , &mSymPtr), __FILE__, __LINE__);
+    checkForGMDError(gmdAddSymbol(gmd(), mName.c_str(), static_cast<int>(mDim), symType,
+                                  varEquType, mExplanatoryText.c_str(), &mSymPtr), __FILE__, __LINE__);
 }
 
-
-GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, std::string name, std::string text, GAMSEnum::SymbolType symType,
-               GAMSEnum::VarType varType, GAMSEnum::EquType equType, const std::vector<GAMSDomain>& domains)
-    : mDatabase(database), mName(name), mDim(static_cast<int>(domains.size())), mSymType(symType), mVarType(varType), mEquType(equType), mExplanatoryText(text)
+GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, std::string name, std::string text,
+                               GAMSEnum::SymbolType symType, GAMSEnum::VarType varType,
+                               GAMSEnum::EquType equType, const std::vector<GAMSDomain>& domains,
+                               GAMSEnum::SetType setType)
+    : mDatabase(database), mName(name), mDim(static_cast<int>(domains.size())), mSymType(symType),
+      mVarType(varType), mEquType(equType), mExplanatoryText(text), mSetType(setType)
 {
     if (mDim > GLOBAL_MAX_INDEX_DIM)
         throw GAMSException("Invalid dimension");
     int varEquType = 0;
     if (symType == GAMSEnum::SymTypeVar) varEquType = static_cast<int>(varType);
+    if (symType == GAMSEnum::SymTypeSet) varEquType = static_cast<int>(setType);
     if (symType == GAMSEnum::SymTypeEqu) varEquType = static_cast<int>(equType);
 
     void* domPtr[GMS_MAX_INDEX_DIM];
@@ -104,7 +109,6 @@ GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, std::string name, std::str
     checkForGMDError(gmdAddSymbolX(gmd(), mName.c_str(), mDim, symType, varEquType, mExplanatoryText.c_str()
                                    , domPtr, mIndexC.cPtrs(), &mSymPtr), __FILE__, __LINE__);
 }
-
 
 GAMSSymbolImpl::~GAMSSymbolImpl()
 {
@@ -335,55 +339,5 @@ std::vector<GAMSSymbolDomainViolation> GAMSSymbolImpl::getSymbolDVs(GAMSSymbol& 
     }
     return violations;
 }
-
-
-/*
-   //TODO: should we use templates for this or implementations in subclasses?
-   vector<GAMSSymbolDomainViolation> GAMSSymbolImpl::getSymbolDVs(bool skipCleanup, int maxViol = 0)
-   {
-      vector<GAMSSymbolDomainViolation> violations;
-      void *dvHandle = nullptr;
-      bool hasNext = false;
-
-      checkForGMDError(gmdGetFirstDVInSymbol(gmd(), this->symPtr, &dvHandle));
-
-      if (dvHandle != nullptr)
-         hasNext = true;
-
-      while (hasNext && ((maxViol == 0) || (violations.size() < maxViol))) {
-         int *viol = new int[this->dim];
-         bool *violTmp = new bool[this->dim];
-
-         void *symIterPtr;
-         checkForGMDError(gmdGetDVSymbolRecord(gmd(), dvHandle, &symIterPtr), __FILE__, __LINE__);
-
-         checkForGMDError(gmdGetDVIndicator(gmd(), dvHandle, &viol), __FILE__, __LINE__);
-         for (int i = 0; i < this->dim; i++)
-            violTmp[i] = viol[i] != 0;
-
-         // TODO: complete implementation
-
-         if (this is GAMSVariable)
-            Violations.Add(new GAMSSymbolDomainViolation(violTmp, new GAMSVariableRecord((GAMSVariable)this, symIterPtr)));
-         if (this is GAMSEquation)
-            Violations.Add(new GAMSSymbolDomainViolation(violTmp, new GAMSEquationRecord((GAMSEquation)this, symIterPtr)));
-         if (this is GAMSParameter)
-            Violations.Add(new GAMSSymbolDomainViolation(violTmp, new GAMSParameterRecord((GAMSParameter)this, symIterPtr)));
-         if (this is GAMSSet)
-            Violations.Add(new GAMSSymbolDomainViolation(violTmp, new GAMSSetRecord((GAMSSet)this, symIterPtr)));
-
-         checkForGMDError(fGAMSDatabase.GMD.gmdMoveNextDVInSymbol(dvHandle, ref hasNext));
-      }
-
-
-      //Cleanup
-      if (!skipCleanup)
-      {
-         checkForGMDError(fGAMSDatabase.GMD.gmdDomainCheckDone());
-         checkForGMDError(fGAMSDatabase.GMD.gmdFreeDVHandle(dvHandle));
-      }
-      return Violations;
-
-   }      */
 
 }

@@ -48,6 +48,11 @@ public:
     /// Destructor.
     ~GAMSSet();
 
+    /// Retrieve subtype of set (Multi or Singleton)
+    /// \return Type of this set
+    ///
+    GAMSEnum::SetType setType();
+
     /// Interator to the begining.
     /// \return Iterator to the first GAMSEquation.
     GAMSSymbolIter<GAMSSet> begin();
@@ -202,9 +207,10 @@ private:
     friend class GAMSSymbolIter<GAMSSet>;
     GAMSSet(GAMSDatabase& database, void* symPtr);
     GAMSSet(GAMSDatabase& database, void* symPtr, int dim, std::string name, std::string text);
-    GAMSSet(GAMSDatabase& database, const std::string& name, const int dim, const std::string& text);
-    GAMSSet(GAMSDatabase& database, const std::string& name, const std::string& text, const std::vector<GAMSDomain>& domains);
-
+    GAMSSet(GAMSDatabase& database, const std::string& name, const int dim, const std::string& text,
+            GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
+    GAMSSet(GAMSDatabase& database, const std::string& name, const std::string& text,
+            const std::vector<GAMSDomain>& domains, GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 };
 
 } // namespace gams

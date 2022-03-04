@@ -63,7 +63,6 @@ public:
     bool operator==(const GAMSDatabaseImpl& other) const;
 
     std::string name() { return mDatabaseName; }
-    //GAMSSet addSet(const std::string& _identifier, const int _dimension, const std::string& _explanatoryText, const std::string& rDom0);
 
     void checkForGMDError(int retcode, const std::string& file, int linenr);
     LogId logID() { return mWs.logID(); }
@@ -82,10 +81,12 @@ public:
                              , const std::string& explanatoryText = ""
                              , const std::vector<GAMSDomain>& domains = std::vector<GAMSDomain>());
 
-    GAMSSet addSet(GAMSDatabase& db, const std::string& name, const int dimension, const std::string& explanatoryText = "");
+    GAMSSet addSet(GAMSDatabase& db, const std::string& name, const int dimension,
+                   const std::string& explanatoryText = "", GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
     GAMSSet addSet(GAMSDatabase& db, const std::string& name, const std::string& explanatoryText
-                   , const std::vector<GAMSDomain>& domains = std::vector<GAMSDomain>());
+                   , const std::vector<GAMSDomain>& domains = std::vector<GAMSDomain>(),
+                   GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
     GAMSParameter addParameter(GAMSDatabase& db, const std::string& name, const int dimension
                                , const std::string& explanatoryText = "");
