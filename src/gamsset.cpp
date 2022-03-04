@@ -25,8 +25,9 @@
 
 #include "gamsset.h"
 #include "gamsexception.h"
-#include <typeinfo>
 #include "gmdcc.h"
+#include "gamssymbolimpl.h"
+#include <typeinfo>
 
 namespace gams {
 using namespace std;
@@ -43,36 +44,43 @@ GAMSSet::GAMSSet(const GAMSSymbol& other)
     }
 }
 
-
 GAMSSet::GAMSSet(GAMSDatabase& database, void* symPtr)
     : GAMSSymbol(database, symPtr)
 {}
 
 
 GAMSSet::GAMSSet(GAMSDatabase& database, void* symPtr, int dim, string name, string text)
-    : GAMSSymbol(database, symPtr, dim, name, text, GAMSEnum::SymTypeSet, GAMSEnum::Unknown, GAMSEnum::E)
+    : GAMSSymbol(database, symPtr, dim, name, text, GAMSEnum::SymTypeSet, GAMSEnum::Unknown,
+                 GAMSEnum::E)
 {}
 
 
-GAMSSet::GAMSSet(GAMSDatabase& database, const string& name, const int dim, const string& text)
-    : GAMSSymbol(database, dim, name, text, GAMSEnum::SymTypeSet, GAMSEnum::Unknown, GAMSEnum::E)
+GAMSSet::GAMSSet(GAMSDatabase& database, const string& name, const int dim, const string& text,
+                 GAMSEnum::SetType setType)
+    : GAMSSymbol(database, dim, name, text, GAMSEnum::SymTypeSet, GAMSEnum::Unknown, GAMSEnum::E,
+                 setType)
 {}
 
-GAMSSet::GAMSSet(GAMSDatabase& database, const std::string& name, const std::string& text, const std::vector<GAMSDomain>& domains)
-    : GAMSSymbol(database, name, text, GAMSEnum::SymTypeSet, GAMSEnum::Unknown, GAMSEnum::E, domains)
+GAMSSet::GAMSSet(GAMSDatabase& database, const std::string& name, const std::string& text,
+                 const std::vector<GAMSDomain>& domains, GAMSEnum::SetType setType)
+    : GAMSSymbol(database, name, text, GAMSEnum::SymTypeSet, GAMSEnum::Unknown, GAMSEnum::E,
+                 domains, setType)
 {}
-
 
 GAMSSet::~GAMSSet()
 {}
 
+GAMSEnum::SetType GAMSSet::setType()
+{
+    if (!mImpl) throw GAMSException("GAMSSet: The set has not been initialized.");
+    return mImpl->mSetType;
+}
 
 GAMSSet& GAMSSet::operator=(const GAMSSet& other)
 {
     GAMSSymbol::operator =(other);
     return *this;
 }
-
 
 GAMSSymbolIter<GAMSSet> GAMSSet::begin()
 {

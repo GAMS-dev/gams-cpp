@@ -40,6 +40,12 @@ std::string GAMSEnum::text(GAMSEnum::EquType type)
     return res[type];
 }
 
+std::string GAMSEnum::text(GAMSEnum::SetType type)
+{
+    const char * res[] = {"Multi", "Singleton"};
+    return res[type];
+}
+
 std::string GAMSEnum::text(GAMSEnum::VarType type)
 {
     const char * res[] = {"Unknown","Binary","Integer","Positive","Negative","Free","SOS1","SOS2","SemiCont","SemiInt"};

@@ -1,3 +1,8 @@
+Version 0.16.0
+========================
+- added GAMSSet::SetType read property to distinguish multi and singleton sets
+- added optional argument SetType in GAMSDatabase::addSet()
+
 Version 0.15.1
 ========================
 - updated examples/transport10, which now uses `transport.xlsx` instead of `transport.xls`

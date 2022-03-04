@@ -281,14 +281,17 @@ protected:
 
     GAMSSymbol(const std::shared_ptr<GAMSSymbolImpl> impl);
 
-    GAMSSymbol(GAMSDatabase &database, int dim, std::string name, std::string text, GAMSEnum::SymbolType symType
-               , GAMSEnum::VarType varType, GAMSEnum::EquType equType);
+    GAMSSymbol(GAMSDatabase &database, int dim, std::string name, std::string text,
+               GAMSEnum::SymbolType symType, GAMSEnum::VarType varType, GAMSEnum::EquType equType,
+               GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
     GAMSSymbol(GAMSDatabase &database, std::string name, std::string text, GAMSEnum::SymbolType symType,
-               GAMSEnum::VarType varType, GAMSEnum::EquType equType, const std::vector<GAMSDomain>& domains);
+               GAMSEnum::VarType varType, GAMSEnum::EquType equType, const std::vector<GAMSDomain>& domains,
+               GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
-    GAMSSymbol(GAMSDatabase &database, void *symPtr, int dim, std::string name, std::string text, GAMSEnum::SymbolType symType,
-               GAMSEnum::VarType varType, GAMSEnum::EquType equType);
+    GAMSSymbol(GAMSDatabase &database, void *symPtr, int dim, std::string name, std::string text,
+               GAMSEnum::SymbolType symType, GAMSEnum::VarType varType, GAMSEnum::EquType equType,
+               GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
     GAMSSymbol(const GAMSDatabase &database, void *symPtr);
 

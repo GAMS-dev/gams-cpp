@@ -30,10 +30,9 @@
 #include "gamssymbolrecord.h"
 #include "gamssetrecord.h"
 #include "gamsdomain.h"
+#include "gmdcc.h"
 
 #include <iostream>
-
-#include "gmdcc.h"
 #include <sstream>
 
 using namespace std;
@@ -51,28 +50,27 @@ GAMSSymbol::GAMSSymbol(const GAMSSymbol &symbol)
 { }
 
 
-GAMSSymbol::GAMSSymbol(GAMSDatabase &database, void* symPtr, int dim, string name, string text, GAMSEnum::SymbolType symType
-                       , gams::GAMSEnum::VarType varType, gams::GAMSEnum::EquType equType)
-    : mImpl(make_shared<GAMSSymbolImpl>(database, symPtr, dim, name, text, symType, varType, equType))
+GAMSSymbol::GAMSSymbol(GAMSDatabase &database, void* symPtr, int dim, string name, string text,
+                       GAMSEnum::SymbolType symType, gams::GAMSEnum::VarType varType,
+                       gams::GAMSEnum::EquType equType, gams::GAMSEnum::SetType setType)
+    : mImpl(make_shared<GAMSSymbolImpl>(database, symPtr, dim, name, text, symType, varType, equType, setType))
 { }
-
 
 GAMSSymbol::GAMSSymbol(const gams::GAMSDatabase& database, void* symPtr)
     : mImpl(make_shared<GAMSSymbolImpl>(database, symPtr))
 { }
 
-
-GAMSSymbol::GAMSSymbol(GAMSDatabase& database, string name, string text, GAMSEnum::SymbolType symType, GAMSEnum::VarType varType
-                       , GAMSEnum::EquType equType, const std::vector<GAMSDomain>& domains)
-    : mImpl(make_shared<GAMSSymbolImpl>(database, name, text, symType, varType, equType, domains))
+GAMSSymbol::GAMSSymbol(GAMSDatabase& database, string name, string text, GAMSEnum::SymbolType symType,
+                       GAMSEnum::VarType varType, GAMSEnum::EquType equType,
+                       const std::vector<GAMSDomain>& domains, gams::GAMSEnum::SetType setType)
+    : mImpl(make_shared<GAMSSymbolImpl>(database, name, text, symType, varType, equType, domains, setType))
 { }
 
-
-GAMSSymbol::GAMSSymbol(gams::GAMSDatabase& database, int dim, string name, string text, GAMSEnum::SymbolType symType
-                       , GAMSEnum::VarType varType, GAMSEnum::EquType equType)
-    : mImpl(make_shared<GAMSSymbolImpl>(database, dim, name, text, symType, varType, equType))
+GAMSSymbol::GAMSSymbol(gams::GAMSDatabase& database, int dim, string name, string text,
+                       GAMSEnum::SymbolType symType, GAMSEnum::VarType varType,
+                       GAMSEnum::EquType equType, gams::GAMSEnum::SetType setType)
+    : mImpl(make_shared<GAMSSymbolImpl>(database, dim, name, text, symType, varType, equType, setType))
 { }
-
 
 GAMSSymbol::~GAMSSymbol()
 { }
@@ -107,7 +105,6 @@ GAMSSymbolIter<GAMSSymbol> GAMSSymbol::end()
 {
     return GAMSSymbolIter<GAMSSymbol>(*this, numberRecords());
 }
-
 
 gams::GAMSDatabase& GAMSSymbol::database() const
 {
@@ -176,8 +173,6 @@ GAMSSymbolRecord GAMSSymbol::firstRecord(const std::string& key1, const std::str
     return firstRecord(keys);
 }
 
-
-
 GAMSSymbolRecord GAMSSymbol::lastRecord()
 {
     if (!mImpl) throw GAMSException("GAMSSymbol: The symbol has not been initialized.");
@@ -207,7 +202,6 @@ GAMSSymbolRecord GAMSSymbol::lastRecord(const std::string& key1, const std::stri
     vector<string> keys = { key1, key2, key3 };
     return lastRecord(keys);
 }
-
 
 GAMSSymbolRecord GAMSSymbol::findRecord(const std::vector<std::string>& keys)
 {
@@ -352,6 +346,5 @@ std::vector<GAMSSymbolDomainViolation> GAMSSymbol::getSymbolDVs(bool skipCleanup
     if (!mImpl) throw GAMSException("GAMSSymbol: The symbol has not been initialized.");
     return mImpl->getSymbolDVs(*this, skipCleanup, maxViol);
 }
-
 
 } // namespace gams

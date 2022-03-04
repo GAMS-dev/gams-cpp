@@ -82,13 +82,13 @@ public:
     GAMSSymbolImpl(GAMSDatabase database, void* symPtr);
 
     GAMSSymbolImpl(GAMSDatabase database, int dim, const std::string& name, const std::string& text,
-                   GAMSEnum::SymbolType symType, GAMSEnum::VarType varType, GAMSEnum::EquType equType);
+                   GAMSEnum::SymbolType symType, GAMSEnum::VarType varType, GAMSEnum::EquType equType, GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
     GAMSSymbolImpl(GAMSDatabase database, std::string name, std::string text, GAMSEnum::SymbolType symType,
-                   GAMSEnum::VarType varType, GAMSEnum::EquType equType, const std::vector<GAMSDomain>& domains);
+                   GAMSEnum::VarType varType, GAMSEnum::EquType equType, const std::vector<GAMSDomain>& domains, GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
     GAMSSymbolImpl(GAMSDatabase database, void *symPtr, int dim, const std::string& name, const std::string& text,
-                   GAMSEnum::SymbolType symType, GAMSEnum::VarType varType, GAMSEnum::EquType equType);
+                   GAMSEnum::SymbolType symType, GAMSEnum::VarType varType, GAMSEnum::EquType equType, GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
     /// Destructor
     virtual ~GAMSSymbolImpl();
@@ -128,11 +128,13 @@ public:
     gmdHandle_t gmd() const;
     void* symPtr();
 
+    // TODO(RG): the naming suggests that the following should be private:
     GAMSDatabase mDatabase;
     std::string mName;
     int mDim;
     GAMSEnum::SymbolType mSymType;
     GAMSEnum::VarType mVarType;
+    GAMSEnum::SetType mSetType;
     GAMSEnum::EquType mEquType;
     std::string mExplanatoryText;
 
