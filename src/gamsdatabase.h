@@ -279,7 +279,7 @@ public:
     /// \returns Returns the GAMSSet.
     /// \see addEquation, addParameter, addVariable
     GAMSSet addSet(const std::string& name, const std::string& explanatoryText
-                   , GAMSDomain domain1, GAMSDomain domain2 = GAMSDomain(), GAMSDomain domain3 = GAMSDomain());
+                   , GAMSDomain domain1, GAMSDomain domain2 = GAMSDomain(), GAMSDomain domain3 = GAMSDomain(), GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
     /// Add parameter symbol to database.
     /// \param name Parameter name.
