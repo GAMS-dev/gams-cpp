@@ -255,6 +255,7 @@ public:
     /// \param name Set name.
     /// \param dimension Set dimension.
     /// \param explanatoryText Explanatory text of set.
+    /// \param setType set subtype
     /// \returns Returns the GAMSSet.
     /// \see addEquation, addParameter, addVariable
     GAMSSet addSet(const std::string& name, const int dimension, const std::string& explanatoryText = "",
@@ -264,6 +265,7 @@ public:
     /// \param name Set name.
     /// \param explanatoryText Explanatory text of set.
     /// \param domains Set domains.
+    /// \param setType set subtype
     /// \returns Returns the GAMSSet.
     /// \see addEquation, addParameter, addVariable
     GAMSSet addSet(const std::string& name, const std::string& explanatoryText
@@ -276,6 +278,7 @@ public:
     /// \param domain1 Set domain for first index position.
     /// \param domain2 Set domain for second index position.
     /// \param domain3 Set domain for third index position.
+    /// \param setType set subtype
     /// \returns Returns the GAMSSet.
     /// \see addEquation, addParameter, addVariable
     GAMSSet addSet(const std::string& name, const std::string& explanatoryText
