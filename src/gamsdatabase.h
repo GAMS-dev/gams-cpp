@@ -255,18 +255,22 @@ public:
     /// \param name Set name.
     /// \param dimension Set dimension.
     /// \param explanatoryText Explanatory text of set.
+    /// \param setType set subtype
     /// \returns Returns the GAMSSet.
     /// \see addEquation, addParameter, addVariable
-    GAMSSet addSet(const std::string& name, const int dimension, const std::string& explanatoryText = "");
+    GAMSSet addSet(const std::string& name, const int dimension, const std::string& explanatoryText = "",
+                   GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
     /// Add set symbol to database.
     /// \param name Set name.
     /// \param explanatoryText Explanatory text of set.
     /// \param domains Set domains.
+    /// \param setType set subtype
     /// \returns Returns the GAMSSet.
     /// \see addEquation, addParameter, addVariable
     GAMSSet addSet(const std::string& name, const std::string& explanatoryText
-                   , const std::vector<GAMSDomain>& domains = std::vector<GAMSDomain>());
+                   , const std::vector<GAMSDomain>& domains = std::vector<GAMSDomain>(),
+                   GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
     /// Add set symbol to database.
     /// \param name Set name.
@@ -274,10 +278,11 @@ public:
     /// \param domain1 Set domain for first index position.
     /// \param domain2 Set domain for second index position.
     /// \param domain3 Set domain for third index position.
+    /// \param setType set subtype
     /// \returns Returns the GAMSSet.
     /// \see addEquation, addParameter, addVariable
     GAMSSet addSet(const std::string& name, const std::string& explanatoryText
-                   , GAMSDomain domain1, GAMSDomain domain2 = GAMSDomain(), GAMSDomain domain3 = GAMSDomain());
+                   , GAMSDomain domain1, GAMSDomain domain2 = GAMSDomain(), GAMSDomain domain3 = GAMSDomain(), GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
     /// Add parameter symbol to database.
     /// \param name Parameter name.

@@ -241,17 +241,17 @@ GAMSEquation GAMSDatabaseImpl::addEquation(GAMSDatabase& db, const string& name,
     return GAMSEquation(db, name, explanatoryText, domains, equType);
 }
 
-GAMSSet GAMSDatabaseImpl::addSet(GAMSDatabase& db, const string& name, const int dimension, const string& explanatoryText)
+GAMSSet GAMSDatabaseImpl::addSet(GAMSDatabase& db, const string& name, const int dimension, const string& explanatoryText, GAMSEnum::SetType setType)
 {
-    return GAMSSet(db, name, dimension, explanatoryText);
+    return GAMSSet(db, name, dimension, explanatoryText, setType);
 }
 
 GAMSSet GAMSDatabaseImpl::addSet(GAMSDatabase& db, const string& name, const string& explanatoryText
-                                 , const std::vector<GAMSDomain>& domains)
+                                 , const std::vector<GAMSDomain>& domains, GAMSEnum::SetType setType)
 {
     if(domains.size() == 0)
         return GAMSSet(db, name, 1, explanatoryText);
-    return GAMSSet(db, name, explanatoryText, domains);
+    return GAMSSet(db, name, explanatoryText, domains, setType);
 }
 
 GAMSParameter GAMSDatabaseImpl::addParameter(GAMSDatabase& db, const string& name, const int dimension

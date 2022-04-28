@@ -68,6 +68,16 @@ public:
     /// Get a <c>GAMSEnum::EquType</c> as string.
     static std::string text(GAMSEnum::EquType type);
 
+    /// Set subtype
+    enum SetType
+    {
+        Multi,         ///< Multi Set - default
+        Singleton      ///< Singleton Set - Zero or one element
+    };
+
+    /// Get a <c>GAMSEnum::SetType</c> as string.
+    static std::string text(GAMSEnum::SetType type);
+
     /// Variable subtype
     enum VarType
     {
