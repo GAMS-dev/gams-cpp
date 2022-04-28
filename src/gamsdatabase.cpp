@@ -146,7 +146,7 @@ GAMSSet GAMSDatabase::addSet(const std::string& name, const std::string& explana
 }
 
 GAMSSet GAMSDatabase::addSet(const std::string& name, const std::string& explanatoryText
-                             , GAMSDomain domain1, GAMSDomain domain2, GAMSDomain domain3)
+                             , GAMSDomain domain1, GAMSDomain domain2, GAMSDomain domain3, GAMSEnum::SetType setType)
 {
     if (!mImpl) throw GAMSException("GAMSDatabase: The database has not been initialized.");
     if (mImpl->symbolLock()) throw GAMSException("Cannot add symbols to symbol-locked database");
@@ -161,7 +161,7 @@ GAMSSet GAMSDatabase::addSet(const std::string& name, const std::string& explana
         if(domain3.isValid())
             domains.push_back(domain3);
     }
-    return addSet(name, explanatoryText, domains);
+    return addSet(name, explanatoryText, domains, setType);
 }
 
 GAMSParameter GAMSDatabase::addParameter(const std::string& name, const int dimension, const std::string& explanatoryText)
