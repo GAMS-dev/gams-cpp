@@ -1,0 +1,66 @@
+test-leg:
+  stage: test
+  tags: [linux]
+  image:
+    name: registry.gams.com/devel/cppmex/leg/builder-gams-cpp:latest
+    entrypoint: [""]   # prevent startup.sh
+  needs: [install-gamsdist-leg,build-leg]
+  script:
+    - GAMS_PATH=$(pwd)/gamsdist
+    - echo $GAMS_LICENSE > $GAMS_PATH/gamslice.txt
+    - cd build
+    - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" gams
+    - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" /opt/cmake/bin/ctest --output-on-failure --output-junit leg-results.xml
+    - cat Testing/Temporary/LastTest.log
+  artifacts:
+    name: unittest-results-leg
+    paths: [build/Testing/Temporary/LastTest.log,build/leg-results.xml]
+    reports:
+      junit: build/leg-results.xml
+
+test-deg:
+  stage: test
+  tags: [macos]
+  needs: [install-gamsdist-deg,build-deg]
+  script:
+    - GAMS_PATH=$(pwd)/gamsdist
+    - echo $GAMS_LICENSE > $GAMS_PATH/gamslice.txt
+    - cd build
+    - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib gams
+    - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib ctest --output-on-failure --output-junit deg-results.xml
+    - cat Testing/Temporary/LastTest.log
+  artifacts:
+    name: unittest-results-deg
+    paths:
+      - build/deg-results.xml
+      - build/Testing/Temporary/LastTest.log
+    reports:
+      junit: build/deg-results.xml
+
+test-wei:
+  stage: test
+  tags: [windows]
+  image:
+    name: registry.gams.com/devel/machines/wei/builder-full:latest
+  needs: [install-gamsdist-wei,build-wei]
+  script:
+    - $GAMS_PATH = ($(pwd), '\gamsdist') -join ""
+    - Out-File -FilePath $GAMS_PATH\gamslice.txt -InputObject $GAMS_LICENSE -Encoding ASCII
+    - $env:Path = "$GAMS_PATH;$GAMS_PATH\gbin;" + $env:Path
+    - $env:GAMSDIR = "$GAMS_PATH;$GAMS_PATH\gbin"
+    - findthisgams -q
+    - cd build
+    - cp bin\Release\gamscpp.dll $GAMS_PATH
+    - cp bin\Release\gtest_main.dll $GAMS_PATH
+    - cp bin\Release\gtest.dll $GAMS_PATH
+    - gams
+    - ctest -V --output-on-failure --output-junit wei-results.xml > ctestlog.txt
+    - cat Testing/Temporary/LastTest.log
+  artifacts:
+    name: unittest-results-wei
+    paths:
+      - build/ctestlog.txt
+      - build/wei-results.xml
+      - build/Testing/Temporary/LastTest.log
+    reports:
+      junit: build/wei-results.xml
