@@ -1,0 +1,38 @@
+install-gamsdist-leg:
+  stage: install-gams
+  tags: [linux]
+  image:
+    name: registry.gams.com/devel/machines/leg/builder-full:latest
+    entrypoint: [""]
+  script:
+    - python3 ci/fetch_gams.py fetch_leg $CUSTOM_BRANCH $SSH_KEY_PORTING
+    - chmod 777 linux_x64_64_sfx.exe
+    - python3 ci/fetch_gams.py install
+  artifacts:
+    name: gamsdist-leg
+    expire_in: 1 hour
+    paths: [ gamsdist/* ]
+
+install-gamsdist-deg:
+  stage: install-gams
+  tags: [macos]
+  script:
+    - python3 ci/fetch_gams.py fetch_deg $CUSTOM_BRANCH $SSH_KEY_PORTING
+    - python3 ci/fetch_gams.py install
+  artifacts:
+    name: gamsdist-deg
+    expire_in: 1 hour
+    paths: [gamsdist/*]
+
+install-gamsdist-wei:
+  stage: install-gams
+  tags: [windows]
+  image:
+    name: registry.gams.com/devel/machines/wei/builder-full:latest
+  script:
+    - python ci/fetch_gams.py fetch_wei $CUSTOM_BRANCH $SSH_KEY_PORTING
+    - python ci/fetch_gams.py install
+  artifacts:
+    name: gamsdist-wei
+    expire_in: 1 hour
+    paths: [gamsdist/*]

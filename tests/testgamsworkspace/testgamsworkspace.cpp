@@ -957,7 +957,7 @@ INSTANTIATE_TEST_SUITE_P(testAddJobFromLibrary_Checkpoint,
                              std::make_tuple("testlib_call1", 1, "testlib", "call1", ""),
                              std::make_tuple("testlib_onmult1", 1, "testlib", "onmulti1", ""),
                              std::make_tuple("datalib_CheckListbox", 2, "datalib", "CheckListbox", "CheckListbox.gms"),
-                             std::make_tuple("datalib_Wiring", 2, "datalib", "Wiring", "Sample.mdb"),
+                             std::make_tuple("datalib_Wiring", 2, "datalib", "Wiring", "Sample.accdb"),
                              // std::make_tuple("emplib_goempgo", 3, "emplib", "goempgo", "empmod.inc"),
                              std::make_tuple("emplib_hark-monop", 3, "emplib", "hark-monop", "hark-data.inc"),
                              std::make_tuple("emplib_farmnbd", 3, "emplib", "farmnbd", ""),
@@ -1021,7 +1021,7 @@ INSTANTIATE_TEST_SUITE_P(testAddJobFromLibrary_CheckpointAndJobName,
                              std::make_tuple("testlib_call1", 1, "testlib", "call1", ""),
                              std::make_tuple("testlib_onmult1", 1, "testlib", "onmulti1", ""),
                              std::make_tuple("datalib_CheckListbox", 2, "datalib", "CheckListbox", "CheckListbox.gms"),
-                             std::make_tuple("datalib_Wiring", 2, "datalib", "Wiring", "Sample.mdb"),
+                             std::make_tuple("datalib_Wiring", 2, "datalib", "Wiring", "Sample.accdb"),
                              // std::make_tuple("emplib_goempgo", 3, "emplib", "goempgo", "empmod.inc"),
                              std::make_tuple("emplib_hark-monop", 3, "emplib", "hark-monop", "hark-data.inc"),
                              std::make_tuple("emplib_farmnbd", 3, "emplib", "farmnbd", ""),
@@ -1114,7 +1114,7 @@ TEST_P(ParameterizedTestAddOptions_OptFile, testAddOptions_OptFile) {
     std::string workdir = std::filesystem::current_path().string();
 
     GAMSPath finalPath = GAMSPath(workdir, "TestGAMSWorkspace");
-    if (finalPath.mkDir())
+    if (finalPath.exists() || finalPath.mkDir())
         workdir = finalPath;
 
     std::string filename="validoptionfile.pf";
@@ -1179,7 +1179,7 @@ INSTANTIATE_TEST_SUITE_P(testRetrievingModelFromLibrary,
                              std::make_tuple("testlib_call1", 1, "testlib", "call1", ""),
                              std::make_tuple("testlib_onmult1", 1, "testlib", "onmulti1", ""),
                              std::make_tuple("datalib_CheckListbox", 2, "datalib", "CheckListbox", "CheckListbox.gms"),
-                             std::make_tuple("datalib_Wiring", 2, "datalib", "Wiring", "Sample.mdb"),
+                             std::make_tuple("datalib_Wiring", 2, "datalib", "Wiring", "Sample.accdb"),
                              // std::make_tuple("emplib_goempgo", 3, "emplib", "goempgo", "empmod.inc"),
                              std::make_tuple("emplib_hark-monop", 3, "emplib", "hark-monop", "hark-data.inc"),
                              std::make_tuple("emplib_farmnbd", 3, "emplib", "farmnbd", ""),

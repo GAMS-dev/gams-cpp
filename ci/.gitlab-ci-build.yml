@@ -1,0 +1,58 @@
+build-leg:
+  stage: build
+  tags: [linux]
+  image:
+    name: registry.gams.com/devel/machines/leg/builder-full:latest
+    entrypoint: [""]   # prevent startup.sh
+  script:
+    - echo "GAMS_DISTRIB=$(pwd)/gamsdist" > gamsinclude.txt
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
+    - cmake --build . 2>&1 | tee build_log.txt
+    - python3 ../ci/report_for_log.py gcc build_log.txt ../warnings.xml
+  needs: [install-gamsdist-leg]
+  artifacts:
+    name: gams-cpp-leg
+    expire_in: 2 hours
+    paths: [gamsinclude.txt,build,build_log.txt]
+    reports:
+      junit: warnings.xml
+
+build-deg:
+  stage: build
+  tags: [macos]
+  script:
+    - echo "GAMS_DISTRIB=$(pwd)/gamsdist" > gamsinclude.txt
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
+    - cmake --build . 2>&1 | tee build_log.txt
+    - python3 ../ci/report_for_log.py clang build_log.txt ../warnings.xml
+  needs: [install-gamsdist-deg]
+  artifacts:
+    name: gams-cpp-deg
+    expire_in: 2 hours
+    paths: [gamsinclude.txt,build,build_log.txt]
+    reports:
+      junit: warnings.xml
+
+build-wei:
+  stage: build
+  tags: [windows]
+  image:
+    name: registry.gams.com/devel/machines/wei/builder-full:latest
+  script:
+    - ('GAMS_DISTRIB=', $(Get-Location).ToString().Replace('\','/'), '/gamsdist') -join "" > gamsinclude.txt
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
+    - cmake --build  . --config Release | Tee-Object -FilePath 'build_log.txt'
+    - python ../ci/report_for_log.py msvc build_log.txt ../warnings.xml
+  needs: [install-gamsdist-wei]
+  artifacts:
+    name: gams-cpp-wei
+    expire_in: 2 hours
+    paths: [gamsinclude.txt,build,build_log.txt]
+    reports:
+      junit: warnings.xml

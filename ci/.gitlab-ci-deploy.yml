@@ -1,0 +1,13 @@
+deploy:
+  when: on_success
+  stage: deploy
+  tags: [linux]
+  image:
+    name: registry.gams.com/devel/cppmex/leg/builder-gams-cpp:latest
+    entrypoint: [""]   # prevent startup.sh
+  needs: [test-leg,test-deg,test-wei]
+  rules:
+    - if: $CI_COMMIT_TAG =~ /v\d+\.\d+\.\d+.*/
+  script:
+    - chmod u+x ci/upload-release.sh
+    - TAG_NAME=$CI_COMMIT_TAG GITHUB_TOKEN=$GITHUB_TOKEN ./ci/upload-release.sh
