@@ -25,11 +25,21 @@ def determine_version_str():
     return f'{major}.{minor}.{gold}'
 
 
-def execute(command):
-    pwsh_prefix = 'powershell -NoProfile -ExecutionPolicy ByPass ' if platform.system() == 'Windows' else ''
-    cmd = pwsh_prefix + command
+def execute(command, wei_shell='pwsh'):
+    cmd = command
+    if platform.system() == 'Windows':
+        if wei_shell == 'pwsh':
+            cmd = 'powershell -NoProfile -ExecutionPolicy ByPass ' + command
+        elif wei_shell == 'bash':
+            cmd = 'C:/tools/msys64/usr/bin/bash -l -c "' + cmd + '"'
     print(cmd)
     os.system(cmd)
+
+
+def fetch_from_url_command(url):
+    return dict(Windows=f'Invoke-WebRequest "{url}" -OutFile "{url.split("/")[-1]}" -UseBasicParsing',
+                Darwin=f'curl -OL {url}',
+                Linux=f'curl -OL {url}')[platform.system()]
 
 
 def download_command(platf):
@@ -37,10 +47,9 @@ def download_command(platf):
     print(f'Fetching installers for GAMS version {gams_version} from web...')
     return \
         dict(
-            leg=f'curl -OL https://d37drm4t2jghv5.cloudfront.net/distributions/{gams_version}/linux/linux_x64_64_sfx.exe',
-            wei=f'Invoke-WebRequest "https://d37drm4t2jghv5.cloudfront.net/distributions/{gams_version}/windows/windows_x64_64.exe" -OutFile "windows_x64_64.exe" -UseBasicParsing',
-            deg=f'curl -OL https://d37drm4t2jghv5.cloudfront.net/distributions/{gams_version}/macosx/osx_x64_64_sfx.exe', )[
-            platf]
+            leg=fetch_from_url_command(f'https://d37drm4t2jghv5.cloudfront.net/distributions/{gams_version}/linux/linux_x64_64_sfx.exe'),
+            wei=fetch_from_url_command(f'https://d37drm4t2jghv5.cloudfront.net/distributions/{gams_version}/windows/windows_x64_64.exe'),
+            deg=fetch_from_url_command(f'https://d37drm4t2jghv5.cloudfront.net/distributions/{gams_version}/macosx/osx_x64_64_sfx.exe'))[platf]
 
 
 def install():
@@ -67,21 +76,28 @@ def fetch_branch_through_ssh(branch_name, platforms, masked_ssh_key=None):
     keyfile = None
     if masked_ssh_key:
         print(f'Using masked ssh key of len {len(masked_ssh_key)}...')
-        os.makedirs('/root/.ssh', exist_ok=True)
-        shutil.copyfile('ci/config', '/root/.ssh/config')
-        keyfile = '/root/.ssh/porting'
+        user_dir = dict(Linux='/root', Darwin='/Users/gitlab', Windows='C:/home/distrib')[platform.system()]
+        os.makedirs(f'{user_dir}/.ssh', exist_ok=True)
+        shutil.copyfile('ci/config', user_dir + '/.ssh/config')
+        keyfile = user_dir + '/.ssh/porting'
         with open(keyfile, 'w') as fp:
             fp.write(ssh_key_masking.unmask_key(masked_ssh_key))
         os.chmod(keyfile, 0o600)
 
+    wei_shell = 'bash'
+
     for platf in platforms:
+        var_prefix = '$env:' if platform.system() == 'Windows' and wei_shell == 'pwsh' else '$'
+
+        def civar(name): return var_prefix + name
+
         variant_name = ('finishednb_' if branch_name == 'master' else '_' if re.match('dist\\d+',
                                                                                       branch_name) else 'nb_') + platf
         install_filename = dict(leg='linux_x64_64_sfx', deg='osx_x64_64_sfx', wei='windows_x64_64')[platf]
-        installer_path = f'$PATH_PREFIX/{branch_name}/latest{variant_name}/{install_filename}.exe'
-        # AS: Dunno why I have to explicitly set port and user. Should be taken from config...
-        command = f'scp -v -oStrictHostKeyChecking=no -oPort=$SSH_PORT $SSH_USER@$SSH_SERVER:{installer_path} .'
-        execute(command)
+        installer_path = f'{civar("PATH_PREFIX")}/{branch_name}/latest{variant_name}/{install_filename}.exe'
+
+        command = f'scp -v -oStrictHostKeyChecking=no -oPort={civar("SSH_PORT")} {civar("SSH_USER")}@{civar("SSH_SERVER")}:{installer_path} .'
+        execute(command, wei_shell)
 
     if masked_ssh_key:
         os.remove(keyfile)
@@ -95,7 +111,7 @@ def fetch_installers_from_web(platforms):
 def main(args):
     if args[1].startswith('fetch'):
         platforms = ['wei', 'leg', 'deg']
-        if '_' in args[1]: # allow e.g. fetch_leg
+        if '_' in args[1]:  # allow e.g. fetch_leg
             platforms = [args[1].split('_')[1]]
         if args[2] == '0':
             fetch_installers_from_web(platforms)

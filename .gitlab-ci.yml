@@ -1,10 +1,15 @@
 stages:
+  - fetch  # fetching on wei is complicated. Hence do that from a leg container beforehand
   - install-gams # fetch from builds.gams.com or web, all platforms
   - build
   - test
   - deploy # only leg, to github as new release
 
-include: ['ci/.gitlab-ci-install-gams.yml',
+variables:
+  MACHINES_CONTAINER_REG: registry.gams.com/devel/machines
+
+include: ['ci/.gitlab-ci-fetch.yml',
+          'ci/.gitlab-ci-install-gams.yml',
           'ci/.gitlab-ci-build.yml',
           'ci/.gitlab-ci-test.yml',
           'ci/.gitlab-ci-deploy.yml']

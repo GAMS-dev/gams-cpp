@@ -1,0 +1,14 @@
+fetch-gamsdist-for-wei:
+  stage: fetch
+  when: always
+  tags: [linux]
+  dependencies: []
+  image:
+    name: $MACHINES_CONTAINER_REG/leg/builder-full:latest
+    entrypoint: [ "" ]
+  script:
+    - python3 ci/fetch_gams.py fetch_wei $CUSTOM_BRANCH $SSH_KEY_PORTING
+  artifacts:
+    name: wei-installer
+    expire_in: 15 minutes
+    paths: [windows_x64_64.exe]
