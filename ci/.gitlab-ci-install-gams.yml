@@ -1,8 +1,10 @@
 install-gamsdist-leg:
   stage: install-gams
+  when: always
   tags: [linux]
+  dependencies: []
   image:
-    name: registry.gams.com/devel/machines/leg/builder-full:latest
+    name: $MACHINES_CONTAINER_REG/leg/builder-full:latest
     entrypoint: [""]
   script:
     - python3 ci/fetch_gams.py fetch_leg $CUSTOM_BRANCH $SSH_KEY_PORTING
@@ -15,7 +17,9 @@ install-gamsdist-leg:
 
 install-gamsdist-deg:
   stage: install-gams
+  when: always
   tags: [macos]
+  dependencies: []
   script:
     - python3 ci/fetch_gams.py fetch_deg $CUSTOM_BRANCH $SSH_KEY_PORTING
     - python3 ci/fetch_gams.py install
@@ -26,11 +30,13 @@ install-gamsdist-deg:
 
 install-gamsdist-wei:
   stage: install-gams
+  when: always
   tags: [windows]
+  dependencies: [fetch-gamsdist-for-wei]
   image:
-    name: registry.gams.com/devel/machines/wei/builder-full:latest
+    name: $MACHINES_CONTAINER_REG/wei/builder-full:latest
   script:
-    - python ci/fetch_gams.py fetch_wei $CUSTOM_BRANCH $SSH_KEY_PORTING
+#    - python ci/fetch_gams.py fetch_wei $CUSTOM_BRANCH $SSH_KEY_PORTING
     - python ci/fetch_gams.py install
   artifacts:
     name: gamsdist-wei
