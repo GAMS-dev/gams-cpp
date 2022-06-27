@@ -1113,7 +1113,7 @@ TEST_P(ParameterizedTestAddOptions_OptFile, testAddOptions_OptFile) {
     // setup
     std::string workdir = std::filesystem::current_path().string();
 
-    GAMSPath finalPath = GAMSPath(workdir, "TestGAMSWorkspace");
+    GAMSPath finalPath = GAMSPath(workdir, "TestGAMSWorkspaceWorkingDir");
     if (finalPath.exists() || finalPath.mkDir())
         workdir = finalPath;
 
