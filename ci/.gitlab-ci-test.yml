@@ -3,7 +3,7 @@ test-leg:
   when: always
   tags: [linux]
   image:
-    name: registry.gams.com/devel/cppmex/leg/builder-gams-cpp:latest
+    name: registry.gams.com/devel/cppmex/linux/builder-gamscpp:latest
     entrypoint: [""]   # prevent startup.sh
   dependencies: [install-gamsdist-leg,build-leg]
   script:
