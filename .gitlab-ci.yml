@@ -1,4 +1,5 @@
 stages:
+  - images
   - fetch  # fetching on wei is complicated. Hence do that from a leg container beforehand
   - install-gams # fetch from builds.gams.com or web, all platforms
   - build
@@ -7,6 +8,25 @@ stages:
 
 variables:
   MACHINES_CONTAINER_REG: registry.gams.com/devel/machines
+
+build-image-leg:
+    stage: images
+    tags:
+        - linux
+    image:
+        name: docker:20.10
+    services:
+        - docker:20.10-dind
+    variables:
+        DOCKER_TLS_CERTDIR: "/certs"
+    before_script:
+        - mkdir -p $HOME/.docker
+        - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+    script:
+        - docker build -t linux/builder-gamscpp docker/leg
+        - docker tag linux/builder-gamscpp registry.gams.com/devel/cppmex/linux/builder-gamscpp:latest
+        - docker push registry.gams.com/devel/cppmex/linux/builder-gamscpp:latest
+    when: manual
 
 include: ['ci/.gitlab-ci-fetch.yml',
           'ci/.gitlab-ci-install-gams.yml',
