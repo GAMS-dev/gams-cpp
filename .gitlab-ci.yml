@@ -14,16 +14,16 @@ variables:
       value: $CUSTOM_BRANCH
       description: "Name of custom branch or 0 if published distribution with version as specified should be taken"
   PF_PATH_PREFIX:
-      value: $PATH_PREFIX
+      value: $BUILDS_WWW_PATH
       description: "URL path prefix for builds server"
   PF_SSH_PORT:
-      value: $SSH_PORT
+      value: $BUILDS_SSH_PORT
       description: "Port used for SSH connection to builds server"
   PF_SERVER:
-      value: $SSH_SERVER
+      value: $BUILDS_SSH_SERVER
       description: "URL of the build server"
   PF_USER:
-      value: $SSH_USER
+      value: $BUILDS_SSH_USER
       description: "Username used for SSH connection to builds server"
   PF_GAMS_LICENSE:
       value: $GAMS_LICENSE
