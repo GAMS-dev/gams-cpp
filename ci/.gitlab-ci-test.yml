@@ -8,7 +8,7 @@ test-leg:
   dependencies: [install-gamsdist-leg,build-leg]
   script:
     - GAMS_PATH=$(pwd)/gamsdist
-    - echo $GAMS_LICENSE > $GAMS_PATH/gamslice.txt
+    - echo $PF_GAMS_LICENSE > $GAMS_PATH/gamslice.txt
     - cd build
     - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" gams
     - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" /opt/cmake/bin/ctest --output-on-failure --output-junit leg-results.xml
@@ -26,7 +26,7 @@ test-deg:
   dependencies: [install-gamsdist-deg,build-deg]
   script:
     - GAMS_PATH=$(pwd)/gamsdist
-    - echo $GAMS_LICENSE > $GAMS_PATH/gamslice.txt
+    - echo $PF_GAMS_LICENSE > $GAMS_PATH/gamslice.txt
     - cd build
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib gams
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib ctest --output-on-failure --output-junit deg-results.xml
@@ -48,7 +48,7 @@ test-wei:
   dependencies: [install-gamsdist-wei,build-wei]
   script:
     - $GAMS_PATH = ($(pwd), '\gamsdist') -join ""
-    - Out-File -FilePath $GAMS_PATH\gamslice.txt -InputObject $GAMS_LICENSE -Encoding ASCII
+    - Out-File -FilePath $GAMS_PATH\gamslice.txt -InputObject $PF_GAMS_LICENSE -Encoding ASCII
     - $env:Path = "$GAMS_PATH;$GAMS_PATH\gbin;" + $env:Path
     - $env:GAMSDIR = "$GAMS_PATH;$GAMS_PATH\gbin"
     - findthisgams -q

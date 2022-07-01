@@ -94,9 +94,9 @@ def fetch_branch_through_ssh(branch_name, platforms, masked_ssh_key=None):
         variant_name = ('finishednb_' if branch_name == 'master' else '_' if re.match('dist\\d+',
                                                                                       branch_name) else 'nb_') + platf
         install_filename = dict(leg='linux_x64_64_sfx', deg='osx_x64_64_sfx', wei='windows_x64_64')[platf]
-        installer_path = f'{civar("PATH_PREFIX")}/{branch_name}/latest{variant_name}/{install_filename}.exe'
+        installer_path = f'{civar("PF_PATH_PREFIX")}/{branch_name}/latest{variant_name}/{install_filename}.exe'
 
-        command = f'scp -v -oStrictHostKeyChecking=no -oPort={civar("SSH_PORT")} {civar("SSH_USER")}@{civar("SSH_SERVER")}:{installer_path} .'
+        command = f'scp -v -oStrictHostKeyChecking=no -oPort={civar("PF_SSH_PORT")} {civar("PF_SSH_USER")}@{civar("PF_SSH_SERVER")}:{installer_path} .'
         execute(command, wei_shell)
 
     if masked_ssh_key:

@@ -7,7 +7,27 @@ stages:
   - deploy # only leg, to github as new release
 
 variables:
-  MACHINES_CONTAINER_REG: registry.gams.com/devel/machines
+  MACHINES_CONTAINER_REG:
+      value: registry.gams.com/devel/machines
+      description: "URL to the container registry of the machines repository"
+  PF_CUSTOM_BRANCH:
+      value: $CUSTOM_BRANCH
+      description: "Name of custom branch or 0 if published distribution with version as specified should be taken"
+  PF_PATH_PREFIX:
+      value: $PATH_PREFIX
+      description: "URL path prefix for builds server"
+  PF_SSH_PORT:
+      value: $SSH_PORT
+      description: "Port used for SSH connection to builds server"
+  PF_SERVER:
+      value: $SSH_SERVER
+      description: "URL of the build server"
+  PF_USER:
+      value: $SSH_USER
+      description: "Username used for SSH connection to builds server"
+  PF_GAMS_LICENSE:
+      value: $GAMS_LICENSE
+      description: "GAMS license string used for testing"
 
 build-image-leg:
     stage: images
