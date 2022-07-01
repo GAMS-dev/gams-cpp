@@ -7,7 +7,7 @@ fetch-gamsdist-for-wei:
     name: $MACHINES_CONTAINER_REG/leg/builder-full:latest
     entrypoint: [ "" ]
   script:
-    - python3 ci/fetch_gams.py fetch_wei $CUSTOM_BRANCH $SSH_KEY_PORTING
+    - python3 ci/fetch_gams.py fetch_wei $PF_CUSTOM_BRANCH $SSH_KEY_PORTING
   artifacts:
     name: wei-installer
     expire_in: 15 minutes

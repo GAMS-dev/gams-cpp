@@ -7,7 +7,7 @@ install-gamsdist-leg:
     name: $MACHINES_CONTAINER_REG/leg/builder-full:latest
     entrypoint: [""]
   script:
-    - python3 ci/fetch_gams.py fetch_leg $CUSTOM_BRANCH $SSH_KEY_PORTING
+    - python3 ci/fetch_gams.py fetch_leg $PF_CUSTOM_BRANCH $SSH_KEY_PORTING
     - chmod 777 linux_x64_64_sfx.exe
     - python3 ci/fetch_gams.py install
   artifacts:
@@ -21,7 +21,7 @@ install-gamsdist-deg:
   tags: [macos]
   dependencies: []
   script:
-    - python3 ci/fetch_gams.py fetch_deg $CUSTOM_BRANCH $SSH_KEY_PORTING
+    - python3 ci/fetch_gams.py fetch_deg $PF_CUSTOM_BRANCH $SSH_KEY_PORTING
     - python3 ci/fetch_gams.py install
   artifacts:
     name: gamsdist-deg
@@ -36,7 +36,7 @@ install-gamsdist-wei:
   image:
     name: $MACHINES_CONTAINER_REG/wei/builder-full:latest
   script:
-#    - python ci/fetch_gams.py fetch_wei $CUSTOM_BRANCH $SSH_KEY_PORTING
+#    - python ci/fetch_gams.py fetch_wei $PF_CUSTOM_BRANCH $SSH_KEY_PORTING
     - python ci/fetch_gams.py install
   artifacts:
     name: gamsdist-wei
