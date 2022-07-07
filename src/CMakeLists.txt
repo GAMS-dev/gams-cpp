@@ -81,6 +81,6 @@ add_library(gamscpp SHARED
         gamsworkspaceinfoimpl.cpp gamsworkspaceinfoimpl.h
         gamsworkspacepool.cpp gamsworkspacepool.h
         solveroptions.cpp solveroptions.h
-        ../CHANGELOG ../version ../jenkinsfile
+        ../CHANGELOG ../version
         ${SOURCE} ${HEADER}
 )

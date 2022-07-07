@@ -1,0 +1,87 @@
+Compression yes
+
+IdentityFile ~/.ssh/porting
+
+# for builds.gams.com and buildmeister, keep connection open for 5min and reuse
+# also they don't have password authentication, so can disable it here to avoid prompt if key not loaded
+
+Host builds.gams.com
+   PasswordAuthentication no
+   ControlMaster auto
+   ControlPath ~/.ssh/control-%h_%p_%r
+   ControlPersist 300
+
+Host internal.gams.com
+   PasswordAuthentication no
+   ControlMaster auto
+   ControlPath ~/.ssh/control-%h_%p_%r
+   ControlPersist 300
+
+# some shortcuts
+
+Host buildmeister
+   PasswordAuthentication no
+   HostName internal.gams.com
+   Port 17022
+   User distrib
+
+Host builds
+   HostName builds.gams.com
+   Port 16022
+   User distrib
+
+Host anton
+   HostName anton.gams.com
+   User distrib
+   SendEnv EDITOR
+
+Host puma
+   HostName puma.gams.com
+   Port 42022
+   User distrib
+   SendEnv EDITOR
+
+Host amsterdam
+   HostName 85.17.1.81
+   User Michael
+
+Host bigamsterdam
+   HostName 83.149.115.155
+   User Michael
+
+Host chintan
+   HostName prosperity.gams.com
+   Port 2296
+   User distrib
+   ServerAliveInterval 60
+
+Host pete
+   HostName prosperity.gams.com
+   Port 2297
+   User distrib
+
+Host jan
+   HostName prosperity.gams.com
+   Port 2298
+   User distrib
+
+Host sox
+   HostName vs09.kobv.de
+   User gamstest
+
+Host prosperity.gams.com
+   ServerAliveInterval 60
+
+Host kermit
+   HostName kermit.gams.com
+   User nb
+
+Host win11tester
+   HostName montecore.gams.com
+   Port 2237
+   User distrib
+
+Host clarus
+   HostName clarus.gams.com
+   User distrib
+
