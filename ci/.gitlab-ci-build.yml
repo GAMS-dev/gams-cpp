@@ -12,6 +12,7 @@ build-leg:
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build . 2>&1 | tee build_log.txt
     - python3 ../ci/report_for_log.py gcc build_log.txt ../warnings.xml
+  needs: [install-gamsdist-leg] # don't wait for deg and wei installs
   dependencies: [install-gamsdist-leg]
   artifacts:
     name: gams-cpp-leg
@@ -31,6 +32,7 @@ build-deg:
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build . 2>&1 | tee build_log.txt
     - python3 ../ci/report_for_log.py clang build_log.txt ../warnings.xml
+  needs: [install-gamsdist-deg] # don't wait for leg and wei installs
   dependencies: [install-gamsdist-deg]
   artifacts:
     name: gams-cpp-deg
@@ -52,6 +54,7 @@ build-wei:
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build  . --config Release | Tee-Object -FilePath 'build_log.txt'
     - python ../ci/report_for_log.py msvc build_log.txt ../warnings.xml
+  needs: [install-gamsdist-wei] # don't wait for leg and deg installs
   dependencies: [install-gamsdist-wei]
   artifacts:
     name: gams-cpp-wei
