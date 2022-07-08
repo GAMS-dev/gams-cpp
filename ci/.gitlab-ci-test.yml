@@ -5,7 +5,7 @@ test-leg:
   image:
     name: registry.gams.com/devel/cppmex/linux/builder-gamscpp:latest
     entrypoint: [""]   # prevent startup.sh
-  needs: [build-leg] # don't wait for wei and deg
+  needs: [install-gamsdist-leg,build-leg] # don't wait for wei and deg
   dependencies: [install-gamsdist-leg,build-leg]
   script:
     - GAMS_PATH=$(pwd)/gamsdist
@@ -24,7 +24,7 @@ test-deg:
   stage: test
   when: always
   tags: [macos]
-  needs: [build-deg] # don't wait for wei and leg
+  needs: [install-gamsdist-deg,build-deg] # don't wait for wei and leg
   dependencies: [install-gamsdist-deg,build-deg]
   script:
     - GAMS_PATH=$(pwd)/gamsdist
@@ -47,7 +47,7 @@ test-wei:
   tags: [windows]
   image:
     name: $MACHINES_CONTAINER_REG/wei/builder-full:latest
-  needs: [build-wei] # don't wait for deg and leg
+  needs: [install-gamsdist-wei,build-wei] # don't wait for deg and leg
   dependencies: [install-gamsdist-wei,build-wei]
   script:
     - $GAMS_PATH = ($(pwd), '\gamsdist') -join ""
