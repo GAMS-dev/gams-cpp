@@ -3,6 +3,7 @@ fetch-gamsdist-for-wei:
   when: always
   tags: [linux]
   dependencies: []
+  needs: []
   image:
     name: $MACHINES_CONTAINER_REG/leg/builder-full:latest
     entrypoint: [ "" ]

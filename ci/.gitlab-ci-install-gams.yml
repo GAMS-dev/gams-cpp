@@ -2,6 +2,7 @@ install-gamsdist-leg:
   stage: install-gams
   when: always
   tags: [linux]
+  needs: []
   dependencies: []
   image:
     name: $MACHINES_CONTAINER_REG/leg/builder-full:latest
@@ -19,6 +20,7 @@ install-gamsdist-deg:
   stage: install-gams
   when: always
   tags: [macos]
+  needs: []
   dependencies: []
   script:
     - python3 ci/fetch_gams.py fetch_deg $PF_CUSTOM_BRANCH $SSH_KEY_PORTING
@@ -32,6 +34,7 @@ install-gamsdist-wei:
   stage: install-gams
   when: always
   tags: [windows]
+  needs: [fetch-gamsdist-for-wei]
   dependencies: [fetch-gamsdist-for-wei]
   image:
     name: $MACHINES_CONTAINER_REG/wei/builder-full:latest
