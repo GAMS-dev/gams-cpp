@@ -6,7 +6,7 @@ build-leg:
     name: $MACHINES_CONTAINER_REG/leg/builder-full:latest
     entrypoint: [""]   # prevent startup.sh
   script:
-    - echo "GAMS_DISTRIB=$(pwd)/gamsdist" > gamsinclude.txt
+    - printf "GAMS_DISTRIB=$(pwd)/gamsdist\n" > gamsinclude.txt
     - mkdir build
     - cd build
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
@@ -25,7 +25,7 @@ build-deg:
   when: always
   tags: [macos]
   script:
-    - echo "GAMS_DISTRIB=$(pwd)/gamsdist" > gamsinclude.txt
+    - printf "GAMS_DISTRIB=$(pwd)/gamsdist\n" > gamsinclude.txt
     - mkdir build
     - cd build
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
@@ -47,6 +47,7 @@ build-wei:
     name: $MACHINES_CONTAINER_REG/wei/builder-full:latest
   script:
     - ('GAMS_DISTRIB=', $(Get-Location).ToString().Replace('\','/'), '/gamsdist') -join "" > gamsinclude.txt
+    - Add-Content gamsinclude.txt "`n"
     - mkdir build
     - cd build
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
