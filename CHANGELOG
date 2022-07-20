@@ -1,3 +1,7 @@
+Version 0.17.1
+========================
+- fixed symlinks to gams not being resolved on macOS causing failing tests
+
 Version 0.17.0
 ========================
 - Migrated Jenkins pipeline to GitLab pipeline
