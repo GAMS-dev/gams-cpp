@@ -121,8 +121,7 @@ string GAMSPlatform::findGamsOnApple(LogId logId)
     string path = findGamsOnUnix(logId);
     if (!path.empty())
         return path;
-
-    return std::filesystem::read_symlink("/Library/Frameworks/GAMS.framework/Versions/Current/Resources").string();
+    return "/Library/Frameworks/GAMS.framework/Versions/Current/Resources";
 }
 
 string GAMSPlatform::findGamsOnUnix(LogId logId)
