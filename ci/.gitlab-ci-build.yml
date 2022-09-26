@@ -1,6 +1,6 @@
 build-leg:
   stage: build
-  when: always
+  when: on_success
   tags: [linux]
   image:
     name: $MACHINES_CONTAINER_REG/leg/builder-full:latest
@@ -12,7 +12,7 @@ build-leg:
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build . 2>&1 | tee build_log.txt
     - python3 ../ci/report_for_log.py gcc build_log.txt ../warnings.xml
-  dependencies: [install-gamsdist-leg]
+  needs: [install-gamsdist-leg,fetch-ci-scripts]
   artifacts:
     name: gams-cpp-leg
     expire_in: 2 hours
@@ -22,7 +22,7 @@ build-leg:
 
 build-deg:
   stage: build
-  when: always
+  when: on_success
   tags: [macos]
   script:
     - printf "GAMS_DISTRIB=$(pwd)/gamsdist\n" > gamsinclude.txt
@@ -31,7 +31,7 @@ build-deg:
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build . 2>&1 | tee build_log.txt
     - python3 ../ci/report_for_log.py clang build_log.txt ../warnings.xml
-  dependencies: [install-gamsdist-deg]
+  needs: [install-gamsdist-deg,fetch-ci-scripts]
   artifacts:
     name: gams-cpp-deg
     expire_in: 2 hours
@@ -41,7 +41,7 @@ build-deg:
 
 build-wei:
   stage: build
-  when: always
+  when: on_success
   tags: [windows]
   image:
     name: $MACHINES_CONTAINER_REG/wei/builder-full:latest
@@ -53,7 +53,7 @@ build-wei:
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build  . --config Release | Tee-Object -FilePath 'build_log.txt'
     - python ../ci/report_for_log.py msvc build_log.txt ../warnings.xml
-  dependencies: [install-gamsdist-wei]
+  needs: [install-gamsdist-wei,fetch-ci-scripts]
   artifacts:
     name: gams-cpp-wei
     expire_in: 2 hours

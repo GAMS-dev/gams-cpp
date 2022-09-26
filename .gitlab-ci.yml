@@ -1,5 +1,6 @@
 stages:
   - images
+  - fetch-scripts
   - fetch  # fetching on wei is complicated. Hence do that from a leg container beforehand
   - install-gams # fetch from builds.gams.com or web, all platforms
   - build

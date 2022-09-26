@@ -1,8 +1,24 @@
-fetch-gamsdist-for-wei:
-  stage: fetch
+fetch-ci-scripts:
+  stage: fetch-scripts
   when: always
   tags: [linux]
-  dependencies: []
+  needs: []
+  image:
+    name: $MACHINES_CONTAINER_REG/leg/builder-full:latest
+    entrypoint: [ "" ]
+  script:
+    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@$GITLAB_CISCRIPTS_URL scripts-repo
+    - cp -R scripts-repo/ci .
+  artifacts:
+    name: ci-scripts
+    expire_in: 2 hours
+    paths: [ci/*]
+
+fetch-gamsdist-for-wei:
+  stage: fetch
+  when: on_success
+  tags: [linux]
+  needs: [fetch-ci-scripts]
   image:
     name: $MACHINES_CONTAINER_REG/leg/builder-full:latest
     entrypoint: [ "" ]

@@ -1,11 +1,11 @@
 test-leg:
   stage: test
-  when: always
+  when: on_success
   tags: [linux]
   image:
     name: registry.gams.com/devel/cppmex/linux/builder-gamscpp:latest
     entrypoint: [""]   # prevent startup.sh
-  dependencies: [install-gamsdist-leg,build-leg]
+  needs: [install-gamsdist-leg,build-leg]
   script:
     - GAMS_PATH=$(pwd)/gamsdist
     - echo $PF_GAMS_LICENSE > $GAMS_PATH/gamslice.txt
@@ -21,9 +21,9 @@ test-leg:
 
 test-deg:
   stage: test
-  when: always
+  when: on_success
   tags: [macos]
-  dependencies: [install-gamsdist-deg,build-deg]
+  needs: [install-gamsdist-deg,build-deg]
   script:
     - GAMS_PATH=$(pwd)/gamsdist
     - echo $PF_GAMS_LICENSE > $GAMS_PATH/gamslice.txt
@@ -41,11 +41,11 @@ test-deg:
 
 test-wei:
   stage: test
-  when: always
+  when: on_success
   tags: [windows]
   image:
     name: $MACHINES_CONTAINER_REG/wei/builder-full:latest
-  dependencies: [install-gamsdist-wei,build-wei]
+  needs: [install-gamsdist-wei,build-wei]
   script:
     - $GAMS_PATH = ($(pwd), '\gamsdist') -join ""
     - Out-File -FilePath $GAMS_PATH\gamslice.txt -InputObject $PF_GAMS_LICENSE -Encoding ASCII
