@@ -3,7 +3,7 @@ test-leg:
   when: on_success
   tags: [linux]
   image:
-    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-cmake:latest
+    name: $GAMS_CONTAINER_REGISTRY/machines/leg/builder-full:latest
     entrypoint: [""]   # prevent startup.sh
   needs: [install-gamsdist-leg,build-leg]
   script:
