@@ -3,7 +3,7 @@ build-leg:
   when: on_success
   tags: [linux]
   image:
-    name: $MACHINES_CONTAINER_REG/leg/builder-full:latest
+    name: $GAMS_CONTAINER_REGISTRY/machines/leg/builder-full:latest
     entrypoint: [""]   # prevent startup.sh
   script:
     - printf "GAMS_DISTRIB=$(pwd)/gamsdist\n" > gamsinclude.txt
@@ -12,7 +12,7 @@ build-leg:
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build . 2>&1 | tee build_log.txt
     - python3 ../ci/report_for_log.py gcc build_log.txt ../warnings.xml
-  needs: [install-gamsdist-leg,fetch-ci-scripts]
+  needs: [install-gamsdist-leg,fetch-prerequisites]
   artifacts:
     name: gams-cpp-leg
     expire_in: 2 hours
@@ -31,7 +31,7 @@ build-deg:
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build . 2>&1 | tee build_log.txt
     - python3 ../ci/report_for_log.py clang build_log.txt ../warnings.xml
-  needs: [install-gamsdist-deg,fetch-ci-scripts]
+  needs: [install-gamsdist-deg,fetch-prerequisites]
   artifacts:
     name: gams-cpp-deg
     expire_in: 2 hours
@@ -44,7 +44,7 @@ build-wei:
   when: on_success
   tags: [windows]
   image:
-    name: $MACHINES_CONTAINER_REG/wei/builder-full:latest
+    name: $GAMS_CONTAINER_REGISTRY/machines/wei/builder-full:latest
   script:
     - ('GAMS_DISTRIB=', $(Get-Location).ToString().Replace('\','/'), '/gamsdist') -join "" > gamsinclude.txt
     - Add-Content gamsinclude.txt "`n"
@@ -53,7 +53,7 @@ build-wei:
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build  . --config Release | Tee-Object -FilePath 'build_log.txt'
     - python ../ci/report_for_log.py msvc build_log.txt ../warnings.xml
-  needs: [install-gamsdist-wei,fetch-ci-scripts]
+  needs: [install-gamsdist-wei,fetch-prerequisites]
   artifacts:
     name: gams-cpp-wei
     expire_in: 2 hours

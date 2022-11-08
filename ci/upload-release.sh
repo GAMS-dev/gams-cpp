@@ -28,7 +28,6 @@ do
 done < CHANGELOG
 
 ## GitHub parameters
-#export GITHUB_TOKEN=${GITHUB_TOKEN}
 GITHUB_ORGA=GAMS-dev
 GITHUB_REPO=gams-cpp
 

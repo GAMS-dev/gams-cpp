@@ -3,7 +3,7 @@ test-leg:
   when: on_success
   tags: [linux]
   image:
-    name: registry.gams.com/devel/cppmex/linux/builder-gamscpp:latest
+    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-cmake:latest
     entrypoint: [""]   # prevent startup.sh
   needs: [install-gamsdist-leg,build-leg]
   script:
@@ -44,7 +44,7 @@ test-wei:
   when: on_success
   tags: [windows]
   image:
-    name: $MACHINES_CONTAINER_REG/wei/builder-full:latest
+    name: $GAMS_CONTAINER_REGISTRY/machines/wei/builder-full:latest
   needs: [install-gamsdist-wei,build-wei]
   script:
     - $GAMS_PATH = ($(pwd), '\gamsdist') -join ""
