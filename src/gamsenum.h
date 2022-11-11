@@ -196,20 +196,20 @@ public:
     /// GAMS Debug Level
     enum DebugLevel
     {
-        Off = 0,            /// No Debug
-        KeepFiles,          /// Keep temporary files
-        ShowLog,            /// Send GAMS log to stdout and keep temporary files
-        Verbose             /// Send highly technical info and GAMS log to stdout and keep temporary file
+        Off = 0,            ///< No Debug
+        KeepFiles,          ///< Keep temporary files
+        ShowLog,            ///< Send GAMS log to stdout and keep temporary files
+        Verbose             ///< Send highly technical info and GAMS log to stdout and keep temporary file
     };
 
     /// Symbol update type
     enum SymbolUpdateType
     {
-        Default = 0,        /// If record does not exist use 0 (Zero)
-        BaseCase = 1,       /// If record does not exist use values from instantiation
-        Accumulate = 2,     /// If record does not exist use value from previous solve
+        Default = 0,        ///< If record does not exist use 0 (Zero)
+        BaseCase = 1,       ///< If record does not exist use values from instantiation
+        Accumulate = 2,     ///< If record does not exist use value from previous solve
 
-        Inherit = 3         /// Inherit setting from solve statement
+        Inherit = 3         ///< Inherit setting from solve statement
         //                   // TODO(AF): this is not part of the C API (gmdUpdateType)!
     };
 
