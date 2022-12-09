@@ -50,6 +50,8 @@ add_library(gamscpp SHARED
         gamsexception.cpp gamsexception.h
         gamsexceptionexecution.cpp gamsexceptionexecution.h
         gamsjob.cpp gamsjob.h
+        gamsenginejob.cpp gamsenginejob.h
+        gamsengineconfiguration.cpp gamsengineconfiguration.h
         gamsjobimpl.cpp gamsjobimpl.h
         gamslib_global.h
         gamslog.cpp gamslog.h

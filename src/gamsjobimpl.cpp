@@ -24,7 +24,6 @@
  */
 
 #include "gamsjobimpl.h"
-#include "gmomcc.h"
 #include "gamscheckpoint.h"
 #include "gamslog.h"
 #include "gamsoptions.h"
@@ -42,8 +41,8 @@ using namespace std;
 namespace gams {
 
 GAMSJobImpl::GAMSJobImpl(GAMSWorkspace& workspace,
-                         const std::string& jobName,
-                         const std::string& fileName,
+                         const string& jobName,
+                         const string& fileName,
                          const GAMSCheckpoint* checkpoint)
     : mWs(workspace), mJobName(jobName), mFileName(fileName)
 {
@@ -74,62 +73,88 @@ GAMSJobImpl::~GAMSJobImpl() {
     delete mCheckpointStart; // this is intended to only free the wrapper, not the *Impl if used anywhere
 }
 
-void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostream* output, bool createOutDb,
-                      vector<GAMSDatabase> databases)
+string GAMSJobImpl::prepareRun(GAMSOptions* tmpOptions, const GAMSCheckpoint* checkpoint,
+                               GAMSCheckpoint* tmpCP, ostream* output, bool createOutDb,
+                               vector<GAMSDatabase> databases, bool relativePaths,
+                               unordered_set<string>* dbPaths)
 {
-    // TODO(JM) backward replacement of pointer logic with instance of gamsOptions
-    GAMSOptions tmpOpt = GAMSOptions(mWs, gamsOptions);
-    GAMSCheckpoint* tmpCP = nullptr;
+    // TODO (RG): check if tmpCP needs to be deleted
 
-    if (mCheckpointStart)
-        tmpOpt.setRestart(mCheckpointStart->fileName());
+    if (mCheckpointStart) {
+        if (relativePaths)
+            tmpOptions->setRestart(filesystem::relative(mCheckpointStart->fileName(), mWs.workingDirectory()));
+        else
+            tmpOptions->setRestart(mCheckpointStart->fileName());
+    }
 
     if (checkpoint) {
         if (mCheckpointStart != checkpoint) {
             tmpCP = new GAMSCheckpoint(mWs, "");
-            tmpOpt.setSave(tmpCP->fileName());
+            if (relativePaths)
+                tmpOptions->setSave(filesystem::relative(tmpCP->fileName(), mWs.workingDirectory()));
+            else tmpOptions->setSave(tmpCP->fileName());
         } else {
-            tmpOpt.setSave(checkpoint->fileName());
+            if (relativePaths)
+                tmpOptions->setSave(filesystem::relative(checkpoint->fileName(), mWs.workingDirectory()));
+            else tmpOptions->setSave(checkpoint->fileName());
         }
     }
 
     if (mWs.debug() >= GAMSEnum::DebugLevel::ShowLog) {
-        tmpOpt.setLogOption(3);
+        tmpOptions->setLogOption(3);
     } else {
         // can only happen if we are called from GAMSModelInstance
-        if (tmpOpt.logOption() != 2) {
+        if (tmpOptions->logOption() != 2) {
             if (output == nullptr)
-                tmpOpt.setLogOption(0);
-            else
-                tmpOpt.setLogOption(3);
+                tmpOptions->setLogOption(0);
+            else tmpOptions->setLogOption(3);
         }
     }
 
     if (!databases.empty()) {
         for (GAMSDatabase db: databases) {
+            if (dbPaths){
+                filesystem::path p = mWs.workingDirectory();
+                p /= db.name() + ".gdx";
+                dbPaths->insert(p);
+            }
+
             db.doExport("");
             if (db.inModelName() != "")
-                tmpOpt.setDefine(db.inModelName(), db.name());
+                tmpOptions->setDefine(db.inModelName(), db.name());
         }
     }
     GAMSPath jobFileInfo(GAMSPath(mWs.workingDirectory()) / mJobName);
 
-    if (createOutDb && tmpOpt.gdx() == "")
-        tmpOpt.setGdx(mWs.nextDatabaseName());
+    if (createOutDb && tmpOptions->gdx() == "")
+        tmpOptions->setGdx(mWs.nextDatabaseName());
 
-    if (tmpOpt.logFile() == "")
-        tmpOpt.setLogFile(jobFileInfo.suffix(".log").toStdString());
+    if (tmpOptions->logFile() == "")
+        tmpOptions->setLogFile(jobFileInfo.suffix(".log").toStdString());
 
-    if (!tmpOpt.output().empty())
-        tmpOpt.setOutput(mJobName + ".lst");
-    tmpOpt.setCurDir(mWs.workingDirectory());
-    tmpOpt.setInput(mFileName);
-    GAMSPath pfFileName = jobFileInfo.suffix(".pf");
-    try {
-        tmpOpt.writeOptionFile(pfFileName);
-    } catch (GAMSException& e) {
-        throw GAMSException(e.what() + (" for GAMSJob " + mJobName));
+    if (!tmpOptions->output().empty())
+        tmpOptions->setOutput(mJobName + ".lst");
+
+    if (relativePaths) {
+        tmpOptions->setInput(filesystem::relative(mFileName, mWs.workingDirectory()));
+    } else {
+        tmpOptions->setCurDir(mWs.workingDirectory());
+        tmpOptions->setInput(mFileName);
     }
+
+    filesystem::path pfFile = mWs.workingDirectory();
+    pfFile /= mJobName + ".pf";
+    tmpOptions->writeOptionFile(pfFile.string());
+
+    return pfFile.string();
+}
+
+void GAMSJobImpl::run(GAMSOptions* gamsOpt, const GAMSCheckpoint* checkpoint,
+                      ostream* output, bool createOutDb, vector<GAMSDatabase> databases)
+{
+    GAMSOptions tmpOpt(mWs, gamsOpt);
+    GAMSCheckpoint* tmpCP = nullptr;
+    string pfFileName = prepareRun(&tmpOpt, checkpoint, tmpCP, output, false);
 
     auto gamsExe = filesystem::path(mWs.systemDirectory());
     gamsExe.append(string("gams") + cExeSuffix);
@@ -179,8 +204,7 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
         delete tmpCP; tmpCP=nullptr;
     }
     if (mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) {
-        // TODO(RG): this is not good style, but apparently needed
-        try { pfFileName.remove(); } catch (...) { }
+        filesystem::remove(pfFileName);
     }
 }
 

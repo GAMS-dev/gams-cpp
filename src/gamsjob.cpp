@@ -26,7 +26,6 @@
 #include "gamsjobimpl.h"
 #include "gamsjob.h"
 #include "gamscheckpoint.h"
-#include "gamsplatform.h"
 
 using namespace std;
 

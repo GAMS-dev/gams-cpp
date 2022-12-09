@@ -30,7 +30,6 @@
 #include <string>
 #include <memory>
 #include <vector>
-#include "gamsenum.h"
 
 namespace gams {
 

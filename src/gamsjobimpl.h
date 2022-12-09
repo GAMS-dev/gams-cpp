@@ -29,7 +29,8 @@
 #include <string>
 #include <memory>
 #include <vector>
-#include "gamsenum.h"
+#include <unordered_set>
+#include "gamsenginejob.h"
 #include "gamsworkspace.h"
 #include "gamsdatabase.h"
 #include "gamsoptions.h"
@@ -74,8 +75,12 @@ public:
     bool operator!=(const GAMSJobImpl& other) const;
     bool operator==(const GAMSJobImpl& other) const;
 
-    void run(GAMSOptions* gamsOptions = nullptr, GAMSCheckpoint* checkpoint = nullptr, std::ostream* output = nullptr,
-             bool createOutDb = true, std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>());
+    std::string prepareRun(GAMSOptions* tmpOptions = nullptr, const GAMSCheckpoint* checkpoint = nullptr,
+                      GAMSCheckpoint* tmpCP = nullptr, std::ostream* output = nullptr,
+                      bool createOutDb = false, std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>(),
+                      bool relativePaths = false, std::unordered_set<std::string>* dbPaths = nullptr);
+    void run(GAMSOptions* gamsOpt = nullptr, const GAMSCheckpoint* checkpoint = nullptr, std::ostream* output = nullptr,
+             bool createOutDb = false, std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>());
 
     GAMSDatabase outDB();
 
@@ -91,6 +96,7 @@ private:
 
     GAMSDatabase mOutDb;
     std::string mFileName;
+    GAMSEngineJob* mEngineJob = nullptr;
     GAMSCheckpoint* mCheckpointStart = nullptr;
 };
 }
