@@ -82,7 +82,7 @@ string GAMSJobImpl::prepareRun(GAMSOptions* tmpOptions, const GAMSCheckpoint* ch
 
     if (mCheckpointStart) {
         if (relativePaths)
-            tmpOptions->setRestart(filesystem::relative(mCheckpointStart->fileName(), mWs.workingDirectory()));
+            tmpOptions->setRestart(filesystem::relative(mCheckpointStart->fileName(), mWs.workingDirectory()).string());
         else
             tmpOptions->setRestart(mCheckpointStart->fileName());
     }
@@ -91,11 +91,11 @@ string GAMSJobImpl::prepareRun(GAMSOptions* tmpOptions, const GAMSCheckpoint* ch
         if (mCheckpointStart != checkpoint) {
             tmpCP = new GAMSCheckpoint(mWs, "");
             if (relativePaths)
-                tmpOptions->setSave(filesystem::relative(tmpCP->fileName(), mWs.workingDirectory()));
+                tmpOptions->setSave(filesystem::relative(tmpCP->fileName(), mWs.workingDirectory()).string());
             else tmpOptions->setSave(tmpCP->fileName());
         } else {
             if (relativePaths)
-                tmpOptions->setSave(filesystem::relative(checkpoint->fileName(), mWs.workingDirectory()));
+                tmpOptions->setSave(filesystem::relative(checkpoint->fileName(), mWs.workingDirectory()).string());
             else tmpOptions->setSave(checkpoint->fileName());
         }
     }
@@ -136,7 +136,7 @@ string GAMSJobImpl::prepareRun(GAMSOptions* tmpOptions, const GAMSCheckpoint* ch
         tmpOptions->setOutput(mJobName + ".lst");
 
     if (relativePaths) {
-        tmpOptions->setInput(filesystem::relative(mFileName, mWs.workingDirectory()));
+        tmpOptions->setInput(filesystem::relative(mFileName, mWs.workingDirectory()).string());
     } else {
         tmpOptions->setCurDir(mWs.workingDirectory());
         tmpOptions->setInput(mFileName);
