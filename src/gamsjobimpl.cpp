@@ -29,6 +29,7 @@
 #include "gamsoptions.h"
 #include "gamsplatform.h"
 #include "gamspath.h"
+#include "gamsoptions.h"
 #include "gamsexceptionexecution.h"
 
 #include <sstream>
@@ -74,9 +75,8 @@ GAMSJobImpl::~GAMSJobImpl() {
 }
 
 string GAMSJobImpl::prepareRun(GAMSOptions* tmpOptions, const GAMSCheckpoint* checkpoint,
-                               GAMSCheckpoint* tmpCP, ostream* output, bool createOutDb,
-                               vector<GAMSDatabase> databases, bool relativePaths,
-                               unordered_set<string>* dbPaths)
+                               GAMSCheckpoint* tmpCP, ostream* output, bool createOutDb, bool relativePaths,
+                               set<string> dbPaths, vector<GAMSDatabase> databases)
 {
     // TODO (RG): check if tmpCP needs to be deleted
 
@@ -113,11 +113,9 @@ string GAMSJobImpl::prepareRun(GAMSOptions* tmpOptions, const GAMSCheckpoint* ch
 
     if (!databases.empty()) {
         for (GAMSDatabase db: databases) {
-            if (dbPaths){
-                filesystem::path p = mWs.workingDirectory();
-                p /= db.name() + ".gdx";
-                dbPaths->insert(p);
-            }
+            filesystem::path p = mWs.workingDirectory();
+            p /= db.name() + ".gdx";
+            dbPaths.insert(p);
 
             db.doExport("");
             if (db.inModelName() != "")
@@ -156,7 +154,7 @@ void GAMSJobImpl::run(GAMSOptions* gamsOpt, const GAMSCheckpoint* checkpoint,
     GAMSCheckpoint* tmpCP = nullptr;
     string pfFileName = prepareRun(&tmpOpt, checkpoint, tmpCP, output, false);
 
-    auto gamsExe = filesystem::path(mWs.systemDirectory());
+    filesystem::path gamsExe = filesystem::path(mWs.systemDirectory());
     gamsExe.append(string("gams") + cExeSuffix);
 
     string args = "dummy pf=";
@@ -206,6 +204,80 @@ void GAMSJobImpl::run(GAMSOptions* gamsOpt, const GAMSCheckpoint* checkpoint,
     if (mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) {
         filesystem::remove(pfFileName);
     }
+}
+
+void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions &gamsOptions,
+                            GAMSCheckpoint* checkpoint, set<string> extraModelFiles,
+                            map<string, string> engineOptions, ostream *output,
+                            bool createOutDB, bool removeResults, vector<GAMSDatabase> databases)
+{
+    GAMSOptions tmpOpt(mWs, &gamsOptions);
+    GAMSCheckpoint* tmpCp = nullptr;
+    set<string> dbPaths = set<string>();
+
+    string pfFileName = prepareRun(&tmpOpt, checkpoint, tmpCp, output,
+                                   createOutDB, true, dbPaths, databases);
+
+    // TODO(rogo): move down to where its needed
+    bool captureOutput = mWs.debug() >= GAMSEnum::ShowLog || output;
+
+    string mainFileName;
+    if (filesystem::exists(mFileName))
+        mainFileName = mFileName;
+    else
+        mainFileName = mFileName.append(".gms");
+
+    set<string> modelFiles = { mainFileName, pfFileName };
+    modelFiles.insert(dbPaths.begin(), dbPaths.end());
+
+    if (mCheckpointStart)
+        modelFiles.insert(mCheckpointStart->fileName());
+
+    if (!extraModelFiles.empty()) {
+        set<string> extraModelFilesCleaned = set<string>();
+        for (const string& f : extraModelFiles) {
+            filesystem::path p(f);
+            if (p.is_absolute())
+                extraModelFilesCleaned.insert(f);
+            else extraModelFilesCleaned.insert(filesystem::absolute(mWs.workingDirectory()) / f);
+        }
+        modelFiles.insert(extraModelFilesCleaned.begin(), extraModelFilesCleaned.end());
+    }
+
+    string dataZipName;
+    int dataZipCount = 1;
+
+    while (filesystem::exists(mWs.workingDirectory()
+                              .append(to_string(filesystem::path::preferred_separator))
+                              .append("_gams_data")
+                              .append(to_string(dataZipCount)))) {
+        dataZipCount++;
+    }
+    dataZipName = mWs.workingDirectory()
+                        .append(to_string(filesystem::path::preferred_separator))
+                        .append("_gams_data")
+                        .append(to_string(dataZipCount));
+
+    // TODO(rogo): zip something here!
+//    using (ZipArchive zip = ZipFile.Open(dataZipName, ZipArchiveMode.Update))
+//    {
+//        foreach (string f in modelFiles)
+//        {
+//            if (!File.Exists(f))
+//                throw new GAMSException("File " + f + " is missing.");
+//            if (Path.IsPathRooted(f))
+//                zip.CreateEntryFromFile(f, MakeRelativePath(fWorkspace.WorkingDirectory, f));
+//            else
+//                zip.CreateEntryFromFile(f, f);
+//        }
+//    }
+
+    map<string, string> requestParams = map<string,string>();
+    if (!engineOptions.empty())
+        requestParams.insert(engineOptions.begin(), engineOptions.end());
+
+    map<string, string> queryParams = map<string, string>(requestParams);
+
 }
 
 bool GAMSJobImpl::interrupt()

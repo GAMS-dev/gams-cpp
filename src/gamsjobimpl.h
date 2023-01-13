@@ -30,6 +30,7 @@
 #include <memory>
 #include <vector>
 #include <unordered_set>
+#include <set>
 #include "gamsenginejob.h"
 #include "gamsworkspace.h"
 #include "gamsdatabase.h"
@@ -76,11 +77,19 @@ public:
     bool operator==(const GAMSJobImpl& other) const;
 
     std::string prepareRun(GAMSOptions* tmpOptions = nullptr, const GAMSCheckpoint* checkpoint = nullptr,
-                      GAMSCheckpoint* tmpCP = nullptr, std::ostream* output = nullptr,
-                      bool createOutDb = false, std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>(),
-                      bool relativePaths = false, std::unordered_set<std::string>* dbPaths = nullptr);
+                           GAMSCheckpoint* tmpCP = nullptr, std::ostream* output = nullptr,
+                           bool createOutDb = false, bool relativePaths = false,
+                           std::set<std::string> dbPaths = std::set<std::string>(),
+                           std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>());
+
     void run(GAMSOptions* gamsOpt = nullptr, const GAMSCheckpoint* checkpoint = nullptr, std::ostream* output = nullptr,
              bool createOutDb = false, std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>());
+
+    void runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions& gamsOptions, GAMSCheckpoint* checkpoint,
+                   std::set<std::string> extraModelFiles = std::set<std::string>(),
+                   std::map<std::string, std::string> engineOptions = std::map<std::string, std::string>(),
+                   std::ostream* output = nullptr, bool createOutDB = true, bool removeResults = true,
+                   std::vector<gams::GAMSDatabase> databases = std::vector<GAMSDatabase>());
 
     GAMSDatabase outDB();
 

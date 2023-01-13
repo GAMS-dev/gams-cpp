@@ -9,6 +9,7 @@ class GAMSEngineConfiguration
 {
 public:
     GAMSEngineConfiguration();
+    GAMSEngineConfiguration(std::string host, std::string user, std::string pw, std::string space);
 
     std::string host() const;
     void setHost(std::string newHost);

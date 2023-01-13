@@ -5,10 +5,13 @@
 using namespace std;
 
 namespace gams {
-GAMSEngineConfiguration::GAMSEngineConfiguration()
-{
 
-}
+GAMSEngineConfiguration::GAMSEngineConfiguration()
+{ }
+
+GAMSEngineConfiguration::GAMSEngineConfiguration(string host, string user, string pw, string space) :
+    mHost(host), mUsername(user), mPassword(pw), mSpace(space)
+{ }
 
 std::string GAMSEngineConfiguration::host() const
 {
