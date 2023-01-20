@@ -137,9 +137,10 @@ public:
     /// \param removeResults Remove results from GAMS Engine after downloading them
     /// \param databases GAMSDatabases read by the GAMSJob
     void runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions& gamsOptions,
-                   gams::GAMSCheckpoint *checkpoint, std::set<std::string> extraModelFiles = std::set<std::string>(),
+                   gams::GAMSCheckpoint *checkpoint, std::ostream* output = nullptr,
+                   std::set<std::string> extraModelFiles = std::set<std::string>(),
                    std::map<std::string, std::string> engineOptions = std::map<std::string, std::string>(),
-                   std::ostream* output = nullptr, bool createOutDB = true, bool removeResults = true,
+                    bool createOutDB = true, bool removeResults = true,
                    std::vector<gams::GAMSDatabase> databases = std::vector<GAMSDatabase>());
 
     /// Get GAMSDatabase created by Run method

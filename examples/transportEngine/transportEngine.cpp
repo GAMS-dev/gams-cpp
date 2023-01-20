@@ -143,28 +143,31 @@ int main(int argc, char* argv[])
 
         // run with data from a string with GAMS syntax with explicit export to GDX file
         GAMSJob jobData = ws.addJobFromString(getDataText());
+        GAMSOptions defaultOptions = ws.addOptions();
 
-        jobData.runEngine(engineConf, nullptr, nullptr, nullptr, nullptr, cout, true, true, nullptr);
+        jobData.runEngine(engineConf, defaultOptions, nullptr, &cout);
         jobData.outDB().doExport(ws.workingDirectory().append("tdata.gdx"));
 
         map<string, double> expectedLevels = {  { "seattle.new-york", 0.0 },
                                                 { "seattle.chicago", 300.0 },
-                                                {"seattle.topeka", 0.0 },
+                                                { "seattle.topeka", 0.0 },
                                                 { "san-diego.new-york", 325.0 },
-                                                {"san-diego.chicago", 0.0 },
-                                                {"san-diego.topeka", 275.0 }
+                                                { "san-diego.chicago", 0.0 },
+                                                { "san-diego.topeka", 275.0 }
                                              };
 
-        // run a job using an instance of GAMSOptions that defines the data include file
-        GAMSJob jobModel = ws.addJobFromString(getModelText());
-        {
-            GAMSOptions opt = ws.addOptions();
-            opt.setDefine("gdxincname", "tdata.gdx");
-            opt.setAllModelTypes("xpress");
-        }
 
+        GAMSJob jobModel = ws.addJobFromString(getModelText());
+
+        GAMSOptions opt = ws.addOptions();
+        opt.setDefine("gdxincname", "tdata.gdx");
+        opt.setAllModelTypes("xpress");
         try {
-//        jobModel.RunEngine(engineConf, new HashSet<string> { "tdata.gdx" }, new Dictionary<string, string> { { "inex_string", "{\"type\": \"include\", \"files\": [\"*.gdx\"]}" } }, opt, null, Console.Out, true, true, null)
+            // run a job using an instance of GAMSOptions that defines the data include file
+            jobModel.runEngine(engineConf, opt, nullptr, &cout, set<string>() = { "tdata.gdx" },
+                                map<string, string>() = {
+                                    { "inex_string", "{\"type\": \"include\", \"files\": [\"*.gdx\"]}" }
+                                });
         } catch (exception &ex) {
             cout << ex.what() << endl;
         }
@@ -193,16 +196,14 @@ int main(int argc, char* argv[])
             GAMSJob jobA = ws.addJobFromString(getDataText());
             GAMSJob jobB = ws.addJobFromString(getModelText());
             try {
-            // TODO(rogo):
-    //        jobModel.RunEngine(engineConf, null, null, null, null, Console.Out, true, true, null)
+                jobModel.runEngine(engineConf, defaultOptions, nullptr, &cout);
             } catch (exception &ex) {
                 cout << ex.what() << endl;
             }
             opt.setDefine("gdxincname", jobA.outDB().name());
             opt.setAllModelTypes("xpress");
             try {
-            // TODO(rogo):
-    //        jobModel.RunEngine(engineConf, null, null, opt, cp, Console.Out, true, true, tEa.OutDB)
+                jobModel.runEngine(engineConf, opt, &cp, &cout);
             } catch (exception &ex) {
                 cout << ex.what() << endl;
             }
@@ -232,7 +233,7 @@ int main(int argc, char* argv[])
                         + "; solve transport min z use lp; ms=transport.modelstat; "
                           "ss=transport.solvestat;", cp);
                 try {
-                    tEbmult.runEngine(engineConf, cout);
+                    tEbmult.runEngine(engineConf, defaultOptions, nullptr, &cout);
                     cout << "Scenario bmult=" << to_string(m["bmult"]) << ":" << endl;
                     cout << "  Modelstatus: " << tEbmult.outDB().getParameter("ms").firstRecord().value() << endl;
                     cout << "  Solvestatus: " << tEbmult.outDB().getParameter("ss").firstRecord().value() << endl;

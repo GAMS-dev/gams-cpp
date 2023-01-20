@@ -1,5 +1,6 @@
 #include "gamsengineconfiguration.h"
 #include "gamsexception.h"
+#include <iostream>
 #include <regex>
 
 using namespace std;
@@ -11,7 +12,18 @@ GAMSEngineConfiguration::GAMSEngineConfiguration()
 
 GAMSEngineConfiguration::GAMSEngineConfiguration(string host, string user, string pw, string space) :
     mHost(host), mUsername(user), mPassword(pw), mSpace(space)
-{ }
+{
+    if (mHost.empty())
+        cerr << "host must not be null" << endl;
+    if (mUsername.empty())
+        cerr << "user must not be null" << endl;
+
+    // TODO(RG): those two also not null?
+    if (mPassword.empty())
+        cerr << "password must not be null" << endl;
+    if (mSpace.empty())
+        cerr << "space must not be null" << endl;
+}
 
 std::string GAMSEngineConfiguration::host() const
 {

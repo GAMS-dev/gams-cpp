@@ -207,9 +207,9 @@ void GAMSJobImpl::run(GAMSOptions* gamsOpt, const GAMSCheckpoint* checkpoint,
 }
 
 void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions &gamsOptions,
-                            GAMSCheckpoint* checkpoint, set<string> extraModelFiles,
-                            map<string, string> engineOptions, ostream *output,
-                            bool createOutDB, bool removeResults, vector<GAMSDatabase> databases)
+                            GAMSCheckpoint* checkpoint, ostream *output, set<string> extraModelFiles,
+                            map<string, string> engineOptions, bool createOutDB,
+                            bool removeResults, vector<GAMSDatabase> databases)
 {
     GAMSOptions tmpOpt(mWs, &gamsOptions);
     GAMSCheckpoint* tmpCp = nullptr;

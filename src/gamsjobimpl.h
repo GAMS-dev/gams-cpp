@@ -86,10 +86,9 @@ public:
              bool createOutDb = false, std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>());
 
     void runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions& gamsOptions,
-                   GAMSCheckpoint* checkpoint, std::set<std::string> extraModelFiles,
-                   std::map<std::string, std::string> engineOptions,
-                   std::ostream* output, bool createOutDB, bool removeResults,
-                   std::vector<gams::GAMSDatabase> databases);
+                   GAMSCheckpoint* checkpoint, std::ostream* output,
+                   std::set<std::string> extraModelFiles, std::map<std::string, std::string> engineOptions,
+                    bool createOutDB, bool removeResults, std::vector<gams::GAMSDatabase> databases);
 
     GAMSDatabase outDB();
 
