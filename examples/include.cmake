@@ -9,7 +9,8 @@ if ("$ENV{GAMS_BUILD}" STREQUAL "")
     else()
         set(BASEPATH "${GAMSPATH}/apifiles")
     endif()
-    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api"
+    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../src"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api"
                         "${BASEPATH}/C/api"
                         "${BASEPATH}/C++/api")
 else()
