@@ -41,6 +41,17 @@ namespace gams
 {
 class GAMSCheckpoint;
 
+struct inexFile
+{
+    std::string type;
+    std::vector<std::string> files;
+
+    inexFile(std::string inex) {
+        type = inex;
+        files = std::vector<std::string>();
+    }
+};
+
 class GAMSJobImpl
 {
 public:

@@ -274,12 +274,14 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
     }
     system(zipCmd.c_str());
 
-    unordered_map<string, string> requestParams = unordered_map<string,string>();
+    unordered_map<string, string> requestParams = unordered_map<string, string>();
     if (!engineOptions.empty())
         requestParams.insert(engineOptions.begin(), engineOptions.end());
 
     unordered_map<string, string> queryParams = unordered_map<string, string>(requestParams);
     queryParams = engineOptions;
+
+    cpr::Multipart fileParams{};
 
     queryParams["namespace"] = engineConfiguration.space();
 
@@ -292,12 +294,48 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
         if (!filesystem::exists(queryParams["inex_file"])) {
             throw GAMSException("The 'inex_file' '" + queryParams["inex_file"] + "' does not exist.");
         }
+        fileParams.parts.emplace_back(cpr::Part("file", cpr::File(queryParams["inex_file"]), "application/json"));
+        queryParams.erase("inex_file");
+    } else {
+        inexFile excludeFiles("exclude");
+        for (const std::string &f : modelFiles) {
+            fileParams.parts.emplace_back(cpr::Part("inex_file", cpr::File(f), "application/json") );
+// TODO(RG): do we need this?
+//            excludeFiles.files.emplace_back(filesystem::relative(mWs.workingDirectory(), f));
+        }
+        // TODO(RG): fileParams.insert(JSON.serializedObject(excludeFiles));
+        //             see line 845
     }
 
+    if (requestParams.count("model")) {
+        fileParams.parts.emplace_back(cpr::Part("data", cpr::File(dataZipName), filesystem::path(dataZipName).stem()));
+    } else {
+        queryParams["run"] = tmpOpt.input();
+        queryParams["model"] = GAMSPath(filesystem::path(tmpOpt.input()).parent_path(),
+                                        filesystem::path(tmpOpt.input()).stem());
+        fileParams.parts.emplace_back(cpr::Part("model-data", cpr::File(dataZipName), filesystem::path(dataZipName).stem()));
+    }
 
-    cpr::Response r = cpr::Get(cpr::Url{"https://api.github.com/repos/whoshuu/cpr/contributors"},
-                               cpr::Authentication{"user", "pass", cpr::AuthMode::BASIC},
-                               cpr::Parameters{{"anon", "true"}, {"key", "value"}});
+    queryParams["arguments"] = " pf=" + mJobName + ".pf";
+
+    string encodedParams = ""; // TODO(RG): UrlEncode(queryParams) here!
+    cpr::AsyncResponse asyncR = cpr::PostAsync(cpr::Url{engineConfiguration.host() + "/jobs/?" + encodedParams},
+                                     cpr::Authentication{engineConfiguration.username(),
+                                                         engineConfiguration.password(),
+                                                         cpr::AuthMode::BASIC},
+                                     cpr::Parameters{{"anon", "true"}, {"key", "value"}});
+
+    asyncR.wait();
+    cpr::Response r = asyncR.get(); // wait for first answer
+    if (!cpr::status::is_success(r.status_code)) {
+        throw GAMSException("Creating job on GAMS Engine failed with status code: " + to_string(r.status_code) + "."
+                            " Message: " + r.text);
+    }
+
+    int exitCode = 0;
+    while (true) {
+        // TODO(ROGO): continue here
+    }
 }
 
 bool GAMSJobImpl::interrupt()

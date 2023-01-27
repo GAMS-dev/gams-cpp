@@ -165,7 +165,7 @@ int main(int argc, char* argv[])
         try {
             // run a job using an instance of GAMSOptions that defines the data include file
             jobModel.runEngine(engineConf, opt, nullptr, &cout, set<string>() = { "tdata.gdx" },
-                                map<string, string>() = {
+                                unordered_map<string, string>() = {
                                     { "inex_string", "{\"type\": \"include\", \"files\": [\"*.gdx\"]}" }
                                 });
         } catch (exception &ex) {
