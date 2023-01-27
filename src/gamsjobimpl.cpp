@@ -36,6 +36,7 @@
 #include <fstream>
 #include <iostream>
 #include <array>
+#include <cpr/cpr.h>
 
 using namespace std;
 
@@ -208,7 +209,7 @@ void GAMSJobImpl::run(GAMSOptions* gamsOpt, const GAMSCheckpoint* checkpoint,
 
 void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions &gamsOptions,
                             GAMSCheckpoint* checkpoint, ostream *output, set<string> extraModelFiles,
-                            map<string, string> engineOptions, bool createOutDB,
+                            unordered_map<string, string> engineOptions, bool createOutDB,
                             bool removeResults, vector<GAMSDatabase> databases)
 {
     GAMSOptions tmpOpt(mWs, &gamsOptions);
@@ -258,26 +259,45 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
                         .append("_gams_data")
                         .append(to_string(dataZipCount));
 
-    // TODO(rogo): zip something here!
-//    using (ZipArchive zip = ZipFile.Open(dataZipName, ZipArchiveMode.Update))
-//    {
-//        foreach (string f in modelFiles)
-//        {
-//            if (!File.Exists(f))
-//                throw new GAMSException("File " + f + " is missing.");
-//            if (Path.IsPathRooted(f))
-//                zip.CreateEntryFromFile(f, MakeRelativePath(fWorkspace.WorkingDirectory, f));
-//            else
-//                zip.CreateEntryFromFile(f, f);
-//        }
-//    }
+    // TODO(rogo): add platform switch
+    string gmsZip = "gmszip"; // +.exe on windows i assume, what about macos?
 
-    map<string, string> requestParams = map<string,string>();
+    GAMSPath zipPath(mWs.systemDirectory(), gmsZip);
+    string zipCmd = zipPath.append(" " + dataZipName);
+    for (const GAMSPath &f : modelFiles) {
+        if (!f.exists())
+            throw GAMSException("File " + f.string() + " is missing.");
+
+        if (f.is_absolute())
+            zipCmd.append(" " + filesystem::relative(mWs.workingDirectory(), f).string());
+        else zipCmd.append(" " + f.string());
+    }
+    system(zipCmd.c_str());
+
+    unordered_map<string, string> requestParams = unordered_map<string,string>();
     if (!engineOptions.empty())
         requestParams.insert(engineOptions.begin(), engineOptions.end());
 
-    map<string, string> queryParams = map<string, string>(requestParams);
+    unordered_map<string, string> queryParams = unordered_map<string, string>(requestParams);
+    queryParams = engineOptions;
 
+    queryParams["namespace"] = engineConfiguration.space();
+
+    if (requestParams.count("engineOptions") ||
+            requestParams.count("model_data"))
+        throw GAMSException("'engineOptions' must not include keys 'data' or 'model_data'. "
+                            "Please use 'extraModelFiles' to provide additional files to send to GAMS Engine.");
+
+    if (requestParams.count("inex_file")) {
+        if (!filesystem::exists(queryParams["inex_file"])) {
+            throw GAMSException("The 'inex_file' '" + queryParams["inex_file"] + "' does not exist.");
+        }
+    }
+
+
+    cpr::Response r = cpr::Get(cpr::Url{"https://api.github.com/repos/whoshuu/cpr/contributors"},
+                               cpr::Authentication{"user", "pass", cpr::AuthMode::BASIC},
+                               cpr::Parameters{{"anon", "true"}, {"key", "value"}});
 }
 
 bool GAMSJobImpl::interrupt()

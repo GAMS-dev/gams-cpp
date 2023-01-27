@@ -85,4 +85,4 @@ add_library(gamscpp SHARED
         solveroptions.cpp solveroptions.h
         ../CHANGELOG ../version
         ${SOURCE} ${HEADER}
-)
+    )

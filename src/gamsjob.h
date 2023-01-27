@@ -31,6 +31,7 @@
 #include <memory>
 #include <vector>
 #include <set>
+#include <unordered_map>
 #include "gamsengineconfiguration.h"
 
 namespace gams {
@@ -139,7 +140,7 @@ public:
     void runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions& gamsOptions,
                    gams::GAMSCheckpoint *checkpoint, std::ostream* output = nullptr,
                    std::set<std::string> extraModelFiles = std::set<std::string>(),
-                   std::map<std::string, std::string> engineOptions = std::map<std::string, std::string>(),
+                   std::unordered_map<std::string, std::string> engineOptions = std::unordered_map<std::string, std::string>(),
                     bool createOutDB = true, bool removeResults = true,
                    std::vector<gams::GAMSDatabase> databases = std::vector<GAMSDatabase>());
 

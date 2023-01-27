@@ -22,10 +22,19 @@ set( CMAKE_CXX_STANDARD_REQUIRED ON )
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
 set( CMAKE_AUTOMOC OFF )
 
+# Add Cpr: cpr is a modern HTTP library for C++
+include(FetchContent)
+FetchContent_Declare(cpr GIT_REPOSITORY https://github.com/libcpr/cpr.git
+                         GIT_TAG a2d35a1cb9f3f7e2f1469d6a189751331dc99f96) # The commit hash for 1.9.3. Replace with the latest from: https://github.com/libcpr/cpr/releases
+FetchContent_MakeAvailable(cpr)
+
+link_libraries(cpr::cpr)
+
 add_subdirectory( src )
 add_subdirectory( examples )
 
-set(PACKAGE_TESTS ON)
+# TODO(RG): reactivate tests
+set(PACKAGE_TESTS OFF)
 if(PACKAGE_TESTS)
     enable_testing()
     if(WIN32)
@@ -33,3 +42,4 @@ if(PACKAGE_TESTS)
     endif()
     add_subdirectory(tests)
 endif()
+

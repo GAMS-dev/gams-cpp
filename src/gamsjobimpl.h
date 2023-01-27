@@ -29,8 +29,9 @@
 #include <string>
 #include <memory>
 #include <vector>
-#include <unordered_set>
 #include <set>
+#include <unordered_set>
+#include <unordered_map>
 #include "gamsenginejob.h"
 #include "gamsworkspace.h"
 #include "gamsdatabase.h"
@@ -87,7 +88,7 @@ public:
 
     void runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions& gamsOptions,
                    GAMSCheckpoint* checkpoint, std::ostream* output,
-                   std::set<std::string> extraModelFiles, std::map<std::string, std::string> engineOptions,
+                   std::set<std::string> extraModelFiles, std::unordered_map<std::string, std::string> engineOptions,
                     bool createOutDB, bool removeResults, std::vector<gams::GAMSDatabase> databases);
 
     GAMSDatabase outDB();
