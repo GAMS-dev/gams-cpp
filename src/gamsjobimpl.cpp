@@ -207,6 +207,38 @@ void GAMSJobImpl::run(GAMSOptions* gamsOpt, const GAMSCheckpoint* checkpoint,
     }
 }
 
+// TODO(RG): move zip and unzip to a more fitting class?
+void GAMSJobImpl::zip(string zipName, set<string> files)
+{
+    // TODO(rogo): add platform switch
+    string gmsZip = "gmszip"; // +.exe on windows i assume, what about macos?
+
+    GAMSPath zipPath(mWs.systemDirectory(), gmsZip);
+    string zipCmd = zipPath.append(" " + zipName);
+    for (const GAMSPath &f : files) {
+        if (!f.exists())
+            throw GAMSException("File " + f.string() + " is missing.");
+
+        if (f.is_absolute())
+            zipCmd.append(" " + filesystem::relative(mWs.workingDirectory(), f).string());
+        else zipCmd.append(" " + f.string());
+    }
+    system(zipCmd.c_str());
+}
+
+void GAMSJobImpl::unzip(string zipName, string destination)
+{
+    // TODO(rogo): add platform switch
+    string gmsUnzip = "gmsunzip"; // +.exe on windows i assume, what about macos?
+
+    GAMSPath zipPath(mWs.systemDirectory(), gmsUnzip);
+    string unzipCmd = zipPath.append(" " + zipName + " -o"); // -o: overwrite existing without asking
+    if (!destination.empty())
+        unzipCmd.append(" -d " + destination);
+
+    system(unzipCmd.c_str());
+}
+
 void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions &gamsOptions,
                             GAMSCheckpoint* checkpoint, ostream *output, set<string> extraModelFiles,
                             unordered_map<string, string> engineOptions, bool createOutDB,
@@ -218,9 +250,6 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
 
     string pfFileName = prepareRun(&tmpOpt, checkpoint, tmpCp, output,
                                    createOutDB, true, dbPaths, databases);
-
-    // TODO(rogo): move down to where its needed
-    bool captureOutput = mWs.debug() >= GAMSEnum::ShowLog || output;
 
     string mainFileName;
     if (filesystem::exists(mFileName))
@@ -259,20 +288,7 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
                         .append("_gams_data")
                         .append(to_string(dataZipCount));
 
-    // TODO(rogo): add platform switch
-    string gmsZip = "gmszip"; // +.exe on windows i assume, what about macos?
-
-    GAMSPath zipPath(mWs.systemDirectory(), gmsZip);
-    string zipCmd = zipPath.append(" " + dataZipName);
-    for (const GAMSPath &f : modelFiles) {
-        if (!f.exists())
-            throw GAMSException("File " + f.string() + " is missing.");
-
-        if (f.is_absolute())
-            zipCmd.append(" " + filesystem::relative(mWs.workingDirectory(), f).string());
-        else zipCmd.append(" " + f.string());
-    }
-    system(zipCmd.c_str());
+    zip(dataZipName, modelFiles);
 
     unordered_map<string, string> requestParams = unordered_map<string, string>();
     if (!engineOptions.empty())
@@ -319,23 +335,124 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
     queryParams["arguments"] = " pf=" + mJobName + ".pf";
 
     string encodedParams = ""; // TODO(RG): UrlEncode(queryParams) here!
-    cpr::AsyncResponse asyncR = cpr::PostAsync(cpr::Url{engineConfiguration.host() + "/jobs/?" + encodedParams},
+    cpr::AsyncResponse response = cpr::PostAsync(cpr::Url{engineConfiguration.host() + "/jobs/?" + encodedParams},
                                      cpr::Authentication{engineConfiguration.username(),
                                                          engineConfiguration.password(),
                                                          cpr::AuthMode::BASIC},
                                      cpr::Parameters{{"anon", "true"}, {"key", "value"}});
 
-    asyncR.wait();
-    cpr::Response r = asyncR.get(); // wait for first answer
+    response.wait();
+    cpr::Response r = response.get(); // wait for first answer
     if (!cpr::status::is_success(r.status_code)) {
         throw GAMSException("Creating job on GAMS Engine failed with status code: " + to_string(r.status_code) + "."
                             " Message: " + r.text);
     }
 
+    mEngineJob = new GAMSEngineJob(r.text, engineConfiguration);
+
     int exitCode = 0;
     while (true) {
-        // TODO(ROGO): continue here
+        response = cpr::DeleteAsync(engineConfiguration.host() + "/jobs/?" + mEngineJob->token() + "/unread-logs");
+
+        cpr::Response result = response.get();
+        if (result.status_code == 403) { // job still in queue
+            this_thread::sleep_for(1000ms);
+            continue;
+        }
+        if (!cpr::status::is_success(result.status_code)) {
+            throw GAMSException("Getting logs failed with status code: " + to_string(r.status_code) + "."
+                                " Message: " + r.text);
+        }
+        if (mWs.debug() >= GAMSEnum::ShowLog || output) {
+            string stdOutData = response.get().text;
+            if (mWs.debug() >= GAMSEnum::DebugLevel::ShowLog) {
+                if (!stdOutData.empty())
+                    cout << stdOutData << endl;
+            } else if (output) {
+                if (!stdOutData.empty())
+                    *output << stdOutData << endl; // TODO(RG): check if this does what it's supposed to
+            }
+        }
+
+        // TODO(RG):
+//        if (responseData.queue_finished) {
+//            exitCode = (int)responseData.gams_return_code;
+//            break;
+//        }
+        this_thread::sleep_for(1000ms);
     }
+
+    cpr::Response result = cpr::GetAsync(engineConfiguration.host() + "/jobs/" + mEngineJob->token() + "/result").get();
+    if (!cpr::status::is_success(response.get().status_code)) {
+        throw GAMSException("Downloading job result failed with status code: " + to_string(r.status_code) + "."
+                            " Message: " + r.text);
+    }
+
+    string resultZipName;
+    int resultZipCount = 1;
+    while (filesystem::exists(mWs.workingDirectory()
+                              .append(to_string(filesystem::path::preferred_separator))
+                              .append("_gams_result").append(to_string(resultZipCount))
+                              .append(".zip"))) {
+        resultZipCount++;
+    }
+    resultZipName = mWs.workingDirectory().append(to_string(filesystem::path::preferred_separator))
+                                          .append("_gams_result").append(to_string(resultZipCount)).append(".zip");
+
+// TODO(RG): handle stream, see line 919-924
+//    var resultStream = result.Content.ReadAsStreamAsync().Result;
+//    var resultZip = File.Create(resultZipName);
+//    resultStream.Seek(0, SeekOrigin.Begin);
+//    resultStream.CopyTo(resultZip);
+//    resultZip.Close();
+//    resultStream.Close();
+
+    unzip(resultZipName, mWs.workingDirectory());
+
+    if (removeResults) {
+        result = cpr::DeleteAsync(engineConfiguration.host() + "/jobs/" +
+                                  mEngineJob->token() + "/result").get();
+        if (!cpr::status::is_success(response.get().status_code)) {
+            throw GAMSException("Removing job result failed with status code: " + to_string(r.status_code) + "."
+                                " Message: " + r.text);
+        }
+    }
+    if (createOutDB) {
+        filesystem::path gdxPath = tmpOpt.gdx();
+        if (!gdxPath.is_absolute())
+            gdxPath = filesystem::absolute(gdxPath);
+        if (filesystem::exists(gdxPath)) {
+            // TODO(RG): addDatabaseFromGDXForcedName in Csharp takes two arguments, set a default here?
+            mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath, gdxPath.filename().stem(), "");
+        }
+    }
+
+    if (exitCode != 0) {
+        if (mWs.debug() < GAMSEnum::KeepFiles && mWs.usingTmpWorkingDir())
+            throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +
+                                         "), set GAMSWorkspace.Debug to KeepFiles or higher "
+                                         "or define the GAMSWorkspace.workingDirectory to "
+                                         "receive a listing file with more details", exitCode);
+        else
+            throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +
+                                         "), check " +  + " for more details", exitCode);
+    }
+    mEngineJob = nullptr;
+
+    if (tmpCp) {
+        filesystem::remove(checkpoint->fileName());
+        filesystem::rename(tmpCp->fileName(), checkpoint->fileName());
+    }
+
+// TODO(RG): dispose is not implemented in c++ api
+//    tmpOpt.dispose();
+    if (mWs.debug() < GAMSEnum::KeepFiles) {
+        filesystem::remove(pfFileName);
+        filesystem::remove(dataZipName);
+        filesystem::remove(resultZipName);
+    }
+
+    // TODO(RG): we might want to use GAMSPath or std::fs for files instead of string
 }
 
 bool GAMSJobImpl::interrupt()

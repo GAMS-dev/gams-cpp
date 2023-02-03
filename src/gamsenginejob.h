@@ -41,6 +41,9 @@ public:
     ///
     GAMSEngineJob(std::string token, GAMSEngineConfiguration config);
 
+public:
+    std::string token();
+
 private:
     std::string mToken;
     GAMSEngineConfiguration mConfig;

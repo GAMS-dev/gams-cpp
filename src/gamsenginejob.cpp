@@ -34,4 +34,9 @@ GAMSEngineJob::GAMSEngineJob(std::string token, GAMSEngineConfiguration config)
     mConfig = config;
 }
 
+string GAMSEngineJob::token()
+{
+    return mToken;
+}
+
 }

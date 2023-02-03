@@ -32,6 +32,7 @@
 #include <set>
 #include <unordered_set>
 #include <unordered_map>
+#include <string>
 #include "gamsenginejob.h"
 #include "gamsworkspace.h"
 #include "gamsdatabase.h"
@@ -110,6 +111,9 @@ public:
 public:
     GAMSWorkspace mWs;
     std::string mJobName;
+
+    void zip(std::string zipName, std::set<std::string> files);
+    void unzip(std::string zipName, std::string destination = nullptr);
 
 private:
     int runProcess(const std::string what, const std::string args, std::string &output);
