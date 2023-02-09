@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(${GAMS_DISTRIB_CPP_API} PUBLIC_LIBRARIES)
+link_libraries(cpr::cpr)
 
 add_executable(${PROJECT_NAME}
     "../../src/gamsengineconfiguration.cpp"

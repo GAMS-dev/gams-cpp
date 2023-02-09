@@ -25,7 +25,7 @@ set( CMAKE_AUTOMOC OFF )
 # Add Cpr: cpr is a modern HTTP library for C++
 include(FetchContent)
 FetchContent_Declare(cpr GIT_REPOSITORY https://github.com/libcpr/cpr.git
-                         GIT_TAG a2d35a1cb9f3f7e2f1469d6a189751331dc99f96) # The commit hash for 1.9.3. Replace with the latest from: https://github.com/libcpr/cpr/releases
+                         GIT_TAG 0817715923c9705e68994eb52ef9df3f6845beba) # The commit hash for 1.10.0. Replace with the latest from: https://github.com/libcpr/cpr/releases
 FetchContent_MakeAvailable(cpr)
 
 link_libraries(cpr::cpr)

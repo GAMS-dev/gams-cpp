@@ -352,7 +352,7 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
 
     int exitCode = 0;
     while (true) {
-        response = cpr::DeleteAsync(engineConfiguration.host() + "/jobs/?" + mEngineJob->token() + "/unread-logs");
+        response = cpr::DeleteAsync(cpr::Url{ engineConfiguration.host() + "/jobs/?" + mEngineJob->token() + "/unread-logs" });
 
         cpr::Response result = response.get();
         if (result.status_code == 403) { // job still in queue
@@ -382,7 +382,7 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
         this_thread::sleep_for(1000ms);
     }
 
-    cpr::Response result = cpr::GetAsync(engineConfiguration.host() + "/jobs/" + mEngineJob->token() + "/result").get();
+    cpr::AsyncResponse result = cpr::GetAsync(cpr::Url{ engineConfiguration.host() + "/jobs/" + mEngineJob->token() + "/result" });
     if (!cpr::status::is_success(response.get().status_code)) {
         throw GAMSException("Downloading job result failed with status code: " + to_string(r.status_code) + "."
                             " Message: " + r.text);
@@ -410,8 +410,8 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
     unzip(resultZipName, mWs.workingDirectory());
 
     if (removeResults) {
-        result = cpr::DeleteAsync(engineConfiguration.host() + "/jobs/" +
-                                  mEngineJob->token() + "/result").get();
+        result = cpr::DeleteAsync(cpr::Url{ engineConfiguration.host() + "/jobs/" +
+                                            mEngineJob->token() + "/result" });
         if (!cpr::status::is_success(response.get().status_code)) {
             throw GAMSException("Removing job result failed with status code: " + to_string(r.status_code) + "."
                                 " Message: " + r.text);
