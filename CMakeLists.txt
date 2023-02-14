@@ -21,12 +21,11 @@ set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
 set( CMAKE_AUTOMOC OFF )
-set( CPR_ENABLE_SSL OFF )
+set( CPR_ENABLE_SSL OFF ) # TODO(RG): add openSSL to build system
 
 # Add Cpr: cpr is a modern HTTP library for C++
 include(FetchContent)
-FetchContent_Declare(cpr GIT_REPOSITORY https://github.com/libcpr/cpr.git
-                         GIT_TAG 0817715923c9705e68994eb52ef9df3f6845beba) # The commit hash for 1.10.0. Replace with the latest from: https://github.com/libcpr/cpr/releases
+FetchContent_Declare(cpr GIT_REPOSITORY https://github.com/libcpr/cpr.git GIT_TAG master)
 FetchContent_MakeAvailable(cpr)
 
 link_libraries(cpr::cpr)

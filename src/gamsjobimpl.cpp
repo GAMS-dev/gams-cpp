@@ -213,15 +213,14 @@ void GAMSJobImpl::zip(string zipName, set<string> files)
     // TODO(rogo): add platform switch
     string gmsZip = "gmszip"; // +.exe on windows i assume, what about macos?
 
-    GAMSPath zipPath(mWs.systemDirectory(), gmsZip);
-    string zipCmd = zipPath.append(" " + zipName);
+    filesystem::path zipPath(mWs.systemDirectory());
+    string zipCmd = zipPath.append(gmsZip + " " + zipName);
     for (const GAMSPath &f : files) {
+        cout << f << endl;
         if (!f.exists())
             throw GAMSException("File " + f.string() + " is missing.");
 
-        if (f.is_absolute())
-            zipCmd.append(" " + filesystem::relative(mWs.workingDirectory(), f).string());
-        else zipCmd.append(" " + f.string());
+        zipCmd.append(" " + f.string());
     }
     system(zipCmd.c_str());
 }
@@ -278,15 +277,14 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
     int dataZipCount = 1;
 
     while (filesystem::exists(mWs.workingDirectory()
-                              .append(to_string(filesystem::path::preferred_separator))
-                              .append("_gams_data")
+                              .append("/_gams_data")
                               .append(to_string(dataZipCount)))) {
         dataZipCount++;
     }
     dataZipName = mWs.workingDirectory()
-                        .append(to_string(filesystem::path::preferred_separator))
-                        .append("_gams_data")
-                        .append(to_string(dataZipCount));
+                        .append("/_gams_data")
+                        .append(to_string(dataZipCount))
+                        .append(".zip");
 
     zip(dataZipName, modelFiles);
 
@@ -295,14 +293,12 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
         requestParams.insert(engineOptions.begin(), engineOptions.end());
 
     unordered_map<string, string> queryParams = unordered_map<string, string>(requestParams);
-    queryParams = engineOptions;
 
     cpr::Multipart fileParams{};
 
     queryParams["namespace"] = engineConfiguration.space();
 
-    if (requestParams.count("engineOptions") ||
-            requestParams.count("model_data"))
+    if (requestParams.count("engineOptions") || requestParams.count("model_data"))
         throw GAMSException("'engineOptions' must not include keys 'data' or 'model_data'. "
                             "Please use 'extraModelFiles' to provide additional files to send to GAMS Engine.");
 
@@ -316,8 +312,7 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
         inexFile excludeFiles("exclude");
         for (const std::string &f : modelFiles) {
             fileParams.parts.emplace_back(cpr::Part("inex_file", cpr::File(f), "application/json") );
-// TODO(RG): do we need this?
-//            excludeFiles.files.emplace_back(filesystem::relative(mWs.workingDirectory(), f));
+            excludeFiles.files.emplace_back(filesystem::relative(mWs.workingDirectory(), f));
         }
         // TODO(RG): fileParams.insert(JSON.serializedObject(excludeFiles));
         //             see line 845
@@ -334,12 +329,15 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
 
     queryParams["arguments"] = " pf=" + mJobName + ".pf";
 
-    string encodedParams = ""; // TODO(RG): UrlEncode(queryParams) here!
-    cpr::AsyncResponse response = cpr::PostAsync(cpr::Url{engineConfiguration.host() + "/jobs/?" + encodedParams},
+    cpr::Parameters encodedParams;
+    for(auto k : queryParams)
+        encodedParams.Add(cpr::Parameter(k.first, k.second));
+
+    cpr::AsyncResponse response = cpr::PostAsync(cpr::Url{engineConfiguration.host() + "/jobs/"},
                                      cpr::Authentication{engineConfiguration.username(),
                                                          engineConfiguration.password(),
                                                          cpr::AuthMode::BASIC},
-                                     cpr::Parameters{{"anon", "true"}, {"key", "value"}});
+                                     encodedParams);
 
     response.wait();
     cpr::Response r = response.get(); // wait for first answer
@@ -391,13 +389,11 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
     string resultZipName;
     int resultZipCount = 1;
     while (filesystem::exists(mWs.workingDirectory()
-                              .append(to_string(filesystem::path::preferred_separator))
-                              .append("_gams_result").append(to_string(resultZipCount))
+                              .append("/_gams_result").append(to_string(resultZipCount))
                               .append(".zip"))) {
         resultZipCount++;
     }
-    resultZipName = mWs.workingDirectory().append(to_string(filesystem::path::preferred_separator))
-                                          .append("_gams_result").append(to_string(resultZipCount)).append(".zip");
+    resultZipName = mWs.workingDirectory().append("/_gams_result").append(to_string(resultZipCount)).append(".zip");
 
 // TODO(RG): handle stream, see line 919-924
 //    var resultStream = result.Content.ReadAsStreamAsync().Result;
