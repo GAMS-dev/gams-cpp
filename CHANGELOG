@@ -1,6 +1,6 @@
 Version 0.18.0 *
 ========================
-- t.b.d.
+- fixed crash in findGamsOnUnix when LD_LIBRARY_PATH is empty
 
 Version 0.17.1
 ========================

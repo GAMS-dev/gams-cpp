@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 
+#include <cstring>
 #ifdef _WIN32
 #include <windows.h>
 #include <direct.h>
@@ -147,12 +148,16 @@ string GAMSPlatform::findGamsOnUnix(LogId logId)
         return gamsDir;
 
     s.clear();
-    ss.str(getenv(cLibEnv));
-    while (getline(ss, s, cEnvSep)) {
-        GAMSPath g(s + "/gams");
-        if (g.exists() && filesystem::is_regular_file(g)) {
-            gamsDirLD = s;
-            break;
+
+    const char* ldPathContents = getenv(cLibEnv);
+    if (ldPathContents) { // not empty
+        ss.str(ldPathContents);
+        while (getline(ss, s, cEnvSep)) {
+            GAMSPath g(s + "/gams");
+            if (g.exists() && filesystem::is_regular_file(g)) {
+                gamsDirLD = s;
+                break;
+            }
         }
     }
     if (gamsDir.empty())
