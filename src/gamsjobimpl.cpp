@@ -213,14 +213,14 @@ void GAMSJobImpl::zip(string zipName, set<string> files)
     // TODO(rogo): add platform switch
     string gmsZip = "gmszip"; // +.exe on windows i assume, what about macos?
 
+    cout << "zipping..." << endl; // TODO(rogo): delete this
     filesystem::path zipPath(mWs.systemDirectory());
     string zipCmd = zipPath.append(gmsZip + " " + zipName);
     for (const GAMSPath &f : files) {
-        cout << f << endl;
         if (!f.exists())
             throw GAMSException("File " + f.string() + " is missing.");
 
-        zipCmd.append(" " + f.string());
+        zipCmd.append(" -j " + f.string()); // -j: dont record directory names
     }
     system(zipCmd.c_str());
 }
@@ -302,67 +302,88 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
         throw GAMSException("'engineOptions' must not include keys 'data' or 'model_data'. "
                             "Please use 'extraModelFiles' to provide additional files to send to GAMS Engine.");
 
-    if (requestParams.count("inex_file")) {
-        if (!filesystem::exists(queryParams["inex_file"])) {
-            throw GAMSException("The 'inex_file' '" + queryParams["inex_file"] + "' does not exist.");
-        }
-        fileParams.parts.emplace_back(cpr::Part("file", cpr::File(queryParams["inex_file"]), "application/json"));
-        queryParams.erase("inex_file");
-    } else {
-        inexFile excludeFiles("exclude");
-        for (const std::string &f : modelFiles) {
-            fileParams.parts.emplace_back(cpr::Part("inex_file", cpr::File(f), "application/json") );
-            excludeFiles.files.emplace_back(filesystem::relative(mWs.workingDirectory(), f));
-        }
-        // TODO(RG): fileParams.insert(JSON.serializedObject(excludeFiles));
-        //             see line 845
-    }
+// TODO(RG): re-add the following code
+//    if (requestParams.count("inex_file")) {
+//        if (!filesystem::exists(queryParams["inex_file"])) {
+//            throw GAMSException("The 'inex_file' '" + queryParams["inex_file"] + "' does not exist.");
+//        }
+//        fileParams.parts.emplace_back(cpr::Part("file", cpr::File(queryParams["inex_file"]), "application/json"));
+//        queryParams.erase("inex_file");
+//    } else if (!requestParams.count("inex_string")) {
+//        inexFile excludeFiles("exclude");
+//        for (const std::string &f : modelFiles) {
+//            fileParams.parts.emplace_back(cpr::Part("inex_file", cpr::File(f), "application/json") );
+//            excludeFiles.files.emplace_back(filesystem::relative(f, mWs.workingDirectory()));
+//        }
+//        // TODO(RG): fileParams.insert(JSON.serializedObject(excludeFiles));
+//        //             see GAMSJob.cs line 845
+//    }
 
+    cout << "datazip: " << dataZipName << endl; // TODO(rogo): delete this
     if (requestParams.count("model")) {
-        fileParams.parts.emplace_back(cpr::Part("data", cpr::File(dataZipName), filesystem::path(dataZipName).stem()));
+// TODO(rogo): original line:
+//        fileParams.parts.emplace_back(cpr::Part("data", cpr::File(dataZipName), filesystem::path(dataZipName).stem()));
+        cout << "test this:" << endl; // TODO(rogo): delete this
+        fileParams.parts.emplace_back(cpr::Part(dataZipName, cpr::File(dataZipName)));
     } else {
         queryParams["run"] = tmpOpt.input();
         queryParams["model"] = GAMSPath(filesystem::path(tmpOpt.input()).parent_path(),
                                         filesystem::path(tmpOpt.input()).stem());
-        fileParams.parts.emplace_back(cpr::Part("model-data", cpr::File(dataZipName), filesystem::path(dataZipName).stem()));
+//        fileParams.parts.emplace_back(cpr::Part("model-data", cpr::File(dataZipName)));
+        fileParams.parts.emplace_back(cpr::Part("model_data", cpr::File(dataZipName), filesystem::path(dataZipName).stem()));
     }
 
-    queryParams["arguments"] = " pf=" + mJobName + ".pf";
+    queryParams["arguments"] = "pf=" + mJobName + ".pf";
 
     cpr::Parameters encodedParams;
-    for(auto k : queryParams)
-        encodedParams.Add(cpr::Parameter(k.first, k.second));
-
-    cpr::AsyncResponse response = cpr::PostAsync(cpr::Url{engineConfiguration.host() + "/jobs/"},
-                                     cpr::Authentication{engineConfiguration.username(),
-                                                         engineConfiguration.password(),
-                                                         cpr::AuthMode::BASIC},
-                                     encodedParams);
-
-    response.wait();
-    cpr::Response r = response.get(); // wait for first answer
-    if (!cpr::status::is_success(r.status_code)) {
-        throw GAMSException("Creating job on GAMS Engine failed with status code: " + to_string(r.status_code) + "."
-                            " Message: " + r.text);
+    cout << "encoded params: " << endl; // TODO(rogo): delete this
+    for (const auto &p : queryParams){
+        encodedParams.Add(cpr::Parameter(p.first, p.second));
+        cout << p.first << "=" << p.second << endl; // TODO(rogo): delete this
     }
 
-    mEngineJob = new GAMSEngineJob(r.text, engineConfiguration);
+    cout << "FileParams:" << endl;
+    for (const auto &p : fileParams.parts) {
+        cout << p.name << "=" << p.value << endl; // TODO(rogo): delete this
+
+        for (const auto &f : p.files) {
+            cout << "    " << f.filepath << endl; // TODO(rogo): delete this
+        }
+
+        cout << "data: " << p.data << endl; // TODO(rogo): delete this
+    }
+
+    cpr::Response response = cpr::Post(cpr::Url{engineConfiguration.host() + "/jobs"},
+                                       cpr::Authentication{engineConfiguration.username(),
+                                                         engineConfiguration.password(),
+                                                         cpr::AuthMode::BASIC},
+                                        fileParams, encodedParams);
+
+    cout << "url: " << response.url << endl; // TODO(rogo): delete this
+    cout << "error: " << response.error.message << endl; // TODO(rogo): delete this
+    cout << "text: " << response.text << endl; // TODO(rogo): delete this
+    if (!cpr::status::is_success(response.status_code)) {
+        throw GAMSException("Creating job on GAMS Engine failed with status code: "
+                            + to_string(response.status_code) + "." " Message: " + response.text);
+    }
+
+    mEngineJob = new GAMSEngineJob(response.text, engineConfiguration);
 
     int exitCode = 0;
     while (true) {
-        response = cpr::DeleteAsync(cpr::Url{ engineConfiguration.host() + "/jobs/?" + mEngineJob->token() + "/unread-logs" });
+        response = cpr::Delete(cpr::Url{ engineConfiguration.host() + "/jobs/?" + mEngineJob->token() + "/unread-logs" });
 
-        cpr::Response result = response.get();
-        if (result.status_code == 403) { // job still in queue
+        cout << response.text << endl; // TODO(RG): delete this
+        if (response.status_code == 403) { // job still in queue
             this_thread::sleep_for(1000ms);
             continue;
         }
-        if (!cpr::status::is_success(result.status_code)) {
-            throw GAMSException("Getting logs failed with status code: " + to_string(r.status_code) + "."
-                                " Message: " + r.text);
+        if (!cpr::status::is_success(response.status_code)) {
+            throw GAMSException("Getting logs failed with status code: " + to_string(response.status_code) + "."
+                                " Message: " + response.text);
         }
         if (mWs.debug() >= GAMSEnum::ShowLog || output) {
-            string stdOutData = response.get().text;
+            string stdOutData = response.text;
             if (mWs.debug() >= GAMSEnum::DebugLevel::ShowLog) {
                 if (!stdOutData.empty())
                     cout << stdOutData << endl;
@@ -380,10 +401,10 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
         this_thread::sleep_for(1000ms);
     }
 
-    cpr::AsyncResponse result = cpr::GetAsync(cpr::Url{ engineConfiguration.host() + "/jobs/" + mEngineJob->token() + "/result" });
-    if (!cpr::status::is_success(response.get().status_code)) {
-        throw GAMSException("Downloading job result failed with status code: " + to_string(r.status_code) + "."
-                            " Message: " + r.text);
+    response = cpr::Get(cpr::Url{ engineConfiguration.host() + "/jobs/" + mEngineJob->token() + "/result" });
+    if (!cpr::status::is_success(response.status_code)) {
+        throw GAMSException("Downloading job result failed with status code: " + to_string(response.status_code) + "."
+                            " Message: " + response.text);
     }
 
     string resultZipName;
@@ -406,11 +427,11 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
     unzip(resultZipName, mWs.workingDirectory());
 
     if (removeResults) {
-        result = cpr::DeleteAsync(cpr::Url{ engineConfiguration.host() + "/jobs/" +
+        response = cpr::Delete(cpr::Url{ engineConfiguration.host() + "/jobs/" +
                                             mEngineJob->token() + "/result" });
-        if (!cpr::status::is_success(response.get().status_code)) {
-            throw GAMSException("Removing job result failed with status code: " + to_string(r.status_code) + "."
-                                " Message: " + r.text);
+        if (!cpr::status::is_success(response.status_code)) {
+            throw GAMSException("Removing job result failed with status code: " + to_string(response.status_code) + "."
+                                " Message: " + response.text);
         }
     }
     if (createOutDB) {
