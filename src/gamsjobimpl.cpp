@@ -37,6 +37,7 @@
 #include <iostream>
 #include <array>
 #include <cpr/cpr.h>
+#include <nlohmann/json.hpp>
 
 using namespace std;
 
@@ -213,7 +214,7 @@ void GAMSJobImpl::zip(string zipName, set<string> files)
     // TODO(rogo): add platform switch
     string gmsZip = "gmszip"; // +.exe on windows i assume, what about macos?
 
-    cout << "zipping..." << endl; // TODO(rogo): delete this
+    cout << "zipping: " << zipName << endl; // TODO(rogo): delete this
     filesystem::path zipPath(mWs.systemDirectory());
     string zipCmd = zipPath.append(gmsZip + " " + zipName);
     for (const GAMSPath &f : files) {
@@ -231,7 +232,8 @@ void GAMSJobImpl::unzip(string zipName, string destination)
     string gmsUnzip = "gmsunzip"; // +.exe on windows i assume, what about macos?
 
     GAMSPath zipPath(mWs.systemDirectory(), gmsUnzip);
-    string unzipCmd = zipPath.append(" " + zipName + " -o"); // -o: overwrite existing without asking
+    filesystem::path zipPath(mWs.systemDirectory());
+    string unzipCmd = zipPath.append(gmsUnzip + " " + zipName + " -o"); // -o: overwrite existing without asking
     if (!destination.empty())
         unzipCmd.append(" -d " + destination);
 
@@ -367,11 +369,16 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
                             + to_string(response.status_code) + "." " Message: " + response.text);
     }
 
-    mEngineJob = new GAMSEngineJob(response.text, engineConfiguration);
+    auto json = nlohmann::json::parse(response.text);
+    mEngineJob = new GAMSEngineJob(json.at("token").get<string>(), engineConfiguration);
 
     int exitCode = 0;
     while (true) {
         response = cpr::Delete(cpr::Url{ engineConfiguration.host() + "/jobs/?" + mEngineJob->token() + "/unread-logs" });
+        response = cpr::Delete(cpr::Url{ engineConfiguration.host() + "/jobs/" + mEngineJob->token() + "/unread-logs" },
+                               cpr::Authentication{engineConfiguration.username(),
+                                                 engineConfiguration.password(),
+                                                 cpr::AuthMode::BASIC});
 
         cout << response.text << endl; // TODO(RG): delete this
         if (response.status_code == 403) { // job still in queue
@@ -393,11 +400,15 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
             }
         }
 
-        // TODO(RG):
-//        if (responseData.queue_finished) {
-//            exitCode = (int)responseData.gams_return_code;
-//            break;
-//        }
+        if (cpr::status::is_success(response.status_code)) {
+            json = nlohmann::json::parse(response.text);
+            if (json.contains("gams_return_code")) {
+                exitCode = json.at("gams_return_code").get<int>();
+            } else {
+                cerr << "error key msising" << endl;
+            }
+            break;
+        }
         this_thread::sleep_for(1000ms);
     }
 
@@ -416,19 +427,30 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
     }
     resultZipName = mWs.workingDirectory().append("/_gams_result").append(to_string(resultZipCount)).append(".zip");
 
-// TODO(RG): handle stream, see line 919-924
-//    var resultStream = result.Content.ReadAsStreamAsync().Result;
-//    var resultZip = File.Create(resultZipName);
-//    resultStream.Seek(0, SeekOrigin.Begin);
-//    resultStream.CopyTo(resultZip);
-//    resultZip.Close();
-//    resultStream.Close();
+    std::ofstream of(resultZipName, std::ios::binary);
+    cout << "trying to downlaod result" << endl; // TODO(rogo): delete this
+    response = cpr::Download(of, cpr::Url{ engineConfiguration.host() + "/jobs/" + mEngineJob->token() + "/result" },
+                             cpr::Authentication{engineConfiguration.username(),
+                                           engineConfiguration.password(),
+                                           cpr::AuthMode::BASIC});
+    cout << "status: " << response.status_code << endl; // TODO(rogo): delete this
 
+    if (!cpr::status::is_success(response.status_code)) {
+        throw GAMSException("Downloading job result failed with status code: " + to_string(response.status_code) + "."
+                            " Message: " + response.text);
+    }
+
+    string destination = mWs.workingDirectory();
     unzip(resultZipName, mWs.workingDirectory());
 
     if (removeResults) {
-        response = cpr::Delete(cpr::Url{ engineConfiguration.host() + "/jobs/" +
-                                            mEngineJob->token() + "/result" });
+        cout << "removing results..." << endl; // TODO(rogo): delete this
+        response = cpr::Delete(cpr::Url{engineConfiguration.host() + "/jobs/" + mEngineJob->token() + "/result" },
+                               cpr::Authentication{engineConfiguration.username(),
+                                                 engineConfiguration.password(),
+                                                 cpr::AuthMode::BASIC});
+
+        cout << "result: " << response.status_code << endl; // TODO(rogo): delete this
         if (!cpr::status::is_success(response.status_code)) {
             throw GAMSException("Removing job result failed with status code: " + to_string(response.status_code) + "."
                                 " Message: " + response.text);

@@ -12,6 +12,7 @@ link_libraries(cpr::cpr)
 
 add_executable(${PROJECT_NAME}
     "../../src/gamsengineconfiguration.cpp"
+    "../../src/gamsenginejob.cpp"
     "../../src/gamscheckpoint.cpp"
     "../../src/gamsjob.cpp"
     "../../src/gamsjobimpl.cpp"
