@@ -8,9 +8,7 @@ GAMSCPP_MINOR_VERSION=$(grep ^GAMSCPP_MINOR_VERSION version | cut -f2 -d"=")
 GAMSCPP_PATCH_LEVEL=$(grep ^GAMSCPP_PATCH_LEVEL version | cut -f2 -d"=")
 
 export GAMSCPP_VERSION=$GAMSCPP_MAJOR_VERSION.$GAMSCPP_MINOR_VERSION.$GAMSCPP_PATCH_LEVEL
-GAMS_DISTRIB_MAJOR_VERSION=$(grep ^GAMS_DISTRIB_MAJOR version | cut -f2 -d"=")
-GAMS_DISTRIB_MINOR_VERSION=$(grep ^GAMS_DISTRIB_MINOR version | cut -f2 -d"=")
-export GAMS_DISTRIB_VERSION=$GAMS_DISTRIB_MAJOR_VERSION.$GAMS_DISTRIB_MINOR_VERSION
+export GAMS_DISTRIB_MAJOR_VERSION=$(grep ^GAMS_DISTRIB_MAJOR version | cut -f2 -d"=")
 
 CHANGELOG=""
 foundFirst="false"
@@ -44,4 +42,4 @@ fi
 github-release release --user $GITHUB_ORGA --repo $GITHUB_REPO --tag ${TAG_NAME} --pre-release \
 --description "${CHANGELOG}
 
-This new version of the GAMS C++ API is part of the latest GAMS ${GAMS_DISTRIB_VERSION} release. To download GAMS, please visit https://www.gams.com/latest/. To learn more about the GAMS C++ API, please visit https://www.gams.com/latest/docs/API_CPP_OVERVIEW.html"
+This version of the GAMS C++ API requires GAMS ${GAMS_DISTRIB_MAJOR_VERSION} or any newer GAMS version that gets released before there is a new release of the GAMS C++ API. To download GAMS, please visit https://www.gams.com/latest/. To learn more about the GAMS C++ API, please visit https://www.gams.com/latest/docs/API_CPP_OVERVIEW.html"
