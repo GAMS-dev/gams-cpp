@@ -211,8 +211,8 @@ void GAMSJobImpl::run(GAMSOptions* gamsOpt, const GAMSCheckpoint* checkpoint,
 // TODO(RG): move zip and unzip to a more fitting class?
 void GAMSJobImpl::zip(string zipName, set<string> files)
 {
-    // TODO(rogo): add platform switch
-    string gmsZip = "gmszip"; // +.exe on windows i assume, what about macos?
+    string gmsZip = "gmszip";
+    gmsZip.append(cExeSuffix);
 
     cout << "zipping: " << zipName << endl; // TODO(rogo): delete this
     filesystem::path zipPath(mWs.systemDirectory());
@@ -228,8 +228,8 @@ void GAMSJobImpl::zip(string zipName, set<string> files)
 
 void GAMSJobImpl::unzip(string zipName, string destination)
 {
-    // TODO(rogo): add platform switch
-    string gmsUnzip = "gmsunzip"; // +.exe on windows i assume, what about macos?
+    string gmsUnzip = "gmsunzip";
+    gmsUnzip.append(cExeSuffix);
 
     filesystem::path zipPath(mWs.systemDirectory());
     string unzipCmd = zipPath.append(gmsUnzip + " " + zipName + " -o"); // -o: overwrite existing without asking
