@@ -3,7 +3,7 @@ test-leg:
   when: on_success
   tags: [linux]
   image:
-    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-cmake:latest
+    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-qt6:latest
     entrypoint: [""]   # prevent startup.sh
   needs: [install-gamsdist-leg,build-leg]
   script:
@@ -11,7 +11,7 @@ test-leg:
     - echo $PF_GAMS_LICENSE > $GAMS_PATH/gamslice.txt
     - cd build
     - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" gams
-    - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" /opt/cmake/bin/ctest --output-on-failure --output-junit leg-results.xml
+    - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" ctest --output-on-failure --output-junit leg-results.xml
     - cat Testing/Temporary/LastTest.log
   artifacts:
     name: unittest-results-leg
@@ -33,6 +33,26 @@ test-deg:
     - cat Testing/Temporary/LastTest.log
   artifacts:
     name: unittest-results-deg
+    paths:
+      - build/deg-results.xml
+      - build/Testing/Temporary/LastTest.log
+    reports:
+      junit: build/deg-results.xml
+
+test-dac:
+  stage: test
+  when: on_success
+  tags: [macos-arm64]
+  needs: [install-gamsdist-dac,build-dac]
+  script:
+    - GAMS_PATH=$(pwd)/gamsdist
+    - echo $PF_GAMS_LICENSE > $GAMS_PATH/gamslice.txt
+    - cd build
+    - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib gams
+    - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib ctest --output-on-failure --output-junit deg-results.xml
+    - cat Testing/Temporary/LastTest.log
+  artifacts:
+    name: unittest-results-dac
     paths:
       - build/deg-results.xml
       - build/Testing/Temporary/LastTest.log
