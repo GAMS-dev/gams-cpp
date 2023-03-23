@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
         GAMSOptions defaultOptions = ws.addOptions();
 
         jobData.runEngine(engineConf, defaultOptions, nullptr, &cout);
-        jobData.outDB().doExport(ws.workingDirectory().append("tdata.gdx"));
+        jobData.outDB().doExport(filesystem::absolute(ws.workingDirectory()) / "tdata.gdx");
 
         map<string, double> expectedLevels = {  { "seattle.new-york", 0.0 },
                                                 { "seattle.chicago", 300.0 },

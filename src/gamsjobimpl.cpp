@@ -304,46 +304,41 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
                             "Please use 'extraModelFiles' to provide additional files to send to GAMS Engine.");
 
 // TODO(RG): re-add the following code
-//    if (requestParams.count("inex_file")) {
-//        if (!filesystem::exists(queryParams["inex_file"])) {
-//            throw GAMSException("The 'inex_file' '" + queryParams["inex_file"] + "' does not exist.");
-//        }
-//        fileParams.parts.emplace_back(cpr::Part("file", cpr::File(queryParams["inex_file"]), "application/json"));
-//        queryParams.erase("inex_file");
-//    } else if (!requestParams.count("inex_string")) {
-//        inexFile excludeFiles("exclude");
-//        for (const std::string &f : modelFiles) {
-//            fileParams.parts.emplace_back(cpr::Part("inex_file", cpr::File(f), "application/json") );
-//            excludeFiles.files.emplace_back(filesystem::relative(f, mWs.workingDirectory()));
-//        }
-//        // TODO(RG): fileParams.insert(JSON.serializedObject(excludeFiles));
-//        //             see GAMSJob.cs line 845
-//    }
+    if (requestParams.count("inex_file")) {
 
-    cout << "datazip: " << dataZipName << endl; // TODO(rogo): delete this
+        if (!filesystem::exists(queryParams["inex_file"]))
+            throw GAMSException("The 'inex_file' '" + queryParams["inex_file"] + "' does not exist.");
+
+        fileParams.parts.emplace_back(cpr::Part("file", cpr::File(queryParams["inex_file"]), "application/json"));
+        queryParams.erase("inex_file");
+
+    } else if (!requestParams.count("inex_string")) {
+
+        inexFile excludeFiles("exclude");
+        for (const std::string &f : modelFiles) {
+            filesystem::path p = filesystem::relative(f, mWs.workingDirectory());
+            excludeFiles.files.emplace_back(filesystem::relative(f, mWs.workingDirectory()));
+        }
+        fileParams.parts.emplace_back(cpr::Part("inex_string", excludeFiles.toString(), "application/json") );
+    }
+
     if (requestParams.count("model")) {
-// TODO(rogo): original line:
-//        fileParams.parts.emplace_back(cpr::Part("data", cpr::File(dataZipName), filesystem::path(dataZipName).stem()));
-        cout << "test this:" << endl; // TODO(rogo): delete this
         fileParams.parts.emplace_back(cpr::Part(dataZipName, cpr::File(dataZipName)));
     } else {
         queryParams["run"] = tmpOpt.input();
         queryParams["model"] = GAMSPath(filesystem::path(tmpOpt.input()).parent_path(),
                                         filesystem::path(tmpOpt.input()).stem());
-//        fileParams.parts.emplace_back(cpr::Part("model-data", cpr::File(dataZipName)));
         fileParams.parts.emplace_back(cpr::Part("model_data", cpr::File(dataZipName), filesystem::path(dataZipName).stem()));
     }
 
     queryParams["arguments"] = "pf=" + mJobName + ".pf";
 
     cpr::Parameters encodedParams;
-    cout << "encoded params: " << endl; // TODO(rogo): delete this
     for (const auto &p : queryParams){
         encodedParams.Add(cpr::Parameter(p.first, p.second));
         cout << p.first << "=" << p.second << endl; // TODO(rogo): delete this
     }
 
-    cout << "posting job..." << endl;
     cpr::Response response = cpr::Post(cpr::Url{engineConfiguration.host() + "/jobs"},
                                        cpr::Authentication{engineConfiguration.username(),
                                                          engineConfiguration.password(),
@@ -351,7 +346,6 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
                                         fileParams, encodedParams);
 
     cout << "url: " << response.url << endl; // TODO(rogo): delete this
-    cout << "status: " << response.status_code << endl;
     if (!cpr::status::is_success(response.status_code)) {
         throw GAMSException("Creating job on GAMS Engine failed with status code: "
                             + to_string(response.status_code) + "." " Message: " + response.text);
@@ -432,7 +426,7 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
     if (createOutDB) {
         filesystem::path gdxPath = tmpOpt.gdx();
         if (!gdxPath.is_absolute())
-            gdxPath = filesystem::absolute(gdxPath);
+            gdxPath = filesystem::path(mWs.workingDirectory()).append(tmpOpt.gdx());
         if (filesystem::exists(gdxPath)) {
             // TODO(RG): addDatabaseFromGDXForcedName in Csharp takes two arguments, set a default here?
             mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath, gdxPath.filename().stem(), "");
