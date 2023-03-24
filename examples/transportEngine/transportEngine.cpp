@@ -165,7 +165,8 @@ int main(int argc, char* argv[])
         try {
             // run a job using an instance of GAMSOptions that defines the data include file
             jobModel.runEngine(engineConf, opt, nullptr, &cout, set<string>() = { "tdata.gdx" },
-                                unordered_map<string, string>() = {
+            jobModel.runEngine(engineConf, opt, nullptr, &cout, vector<GAMSDatabase>(),
+                               set<string>() = { "tdata.gdx" }, unordered_map<string, string>() = {
                                     { "inex_string", "{\"type\": \"include\", \"files\": [\"*.gdx\"]}" }
                                 });
         } catch (exception &ex) {
@@ -197,14 +198,14 @@ int main(int argc, char* argv[])
             GAMSJob jobB = ws.addJobFromString(getModelText());
             try {
                 jobModel.runEngine(engineConf, defaultOptions, nullptr, &cout);
-            } catch (exception &ex) {
+                jobA.runEngine(engineConf, defaultOptions, nullptr, &cout);
                 cout << ex.what() << endl;
             }
             opt.setDefine("gdxincname", jobA.outDB().name());
             opt.setAllModelTypes("xpress");
             try {
                 jobModel.runEngine(engineConf, opt, &cp, &cout);
-            } catch (exception &ex) {
+                jobB.runEngine(engineConf, opt, &cp, &cout, vector<GAMSDatabase>{jobA.outDB()});
                 cout << ex.what() << endl;
             }
 

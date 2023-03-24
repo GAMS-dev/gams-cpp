@@ -78,7 +78,7 @@ GAMSJobImpl::~GAMSJobImpl() {
 
 string GAMSJobImpl::prepareRun(GAMSOptions* tmpOptions, const GAMSCheckpoint* checkpoint,
                                GAMSCheckpoint* tmpCP, ostream* output, bool createOutDb, bool relativePaths,
-                               set<string> dbPaths, vector<GAMSDatabase> databases)
+                               set<string> *dbPaths, vector<GAMSDatabase> databases)
 {
     // TODO (RG): check if tmpCP needs to be deleted
 
@@ -117,9 +117,10 @@ string GAMSJobImpl::prepareRun(GAMSOptions* tmpOptions, const GAMSCheckpoint* ch
         for (GAMSDatabase db: databases) {
             filesystem::path p = mWs.workingDirectory();
             p /= db.name() + ".gdx";
-            dbPaths.insert(p);
+            if (dbPaths) dbPaths->insert(p);
 
             db.doExport("");
+            db.doExport();
             if (db.inModelName() != "")
                 tmpOptions->setDefine(db.inModelName(), db.name());
         }
@@ -223,33 +224,39 @@ void GAMSJobImpl::zip(string zipName, set<string> files)
 
         zipCmd.append(" -j " + f.string()); // -j: dont record directory names
     }
-    system(zipCmd.c_str());
+
+    int errorCode = system(zipCmd.c_str());
+    if (errorCode)
+        cerr << "Error while zipping " << zipName << ". ErrorCode: " << errorCode << endl;
 }
 
 void GAMSJobImpl::unzip(string zipName, string destination)
 {
+    cout << "unzipping" << zipName << " to " << destination << endl; // TODO(rogo): delete this
     string gmsUnzip = "gmsunzip";
     gmsUnzip.append(cExeSuffix);
 
     filesystem::path zipPath(mWs.systemDirectory());
-    string unzipCmd = zipPath.append(gmsUnzip + " " + zipName + " -o"); // -o: overwrite existing without asking
+    string unzipCmd = zipPath.append(gmsUnzip + " -o " + zipName); // -o: overwrite existing without asking
     if (!destination.empty())
         unzipCmd.append(" -d " + destination);
 
-    system(unzipCmd.c_str());
+    int errorCode = system(unzipCmd.c_str());
+    if (errorCode)
+        cerr << "Error while unzipping " << zipName << " to " << destination << ". ErrorCode: " << errorCode << endl;
 }
 
 void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions &gamsOptions,
-                            GAMSCheckpoint* checkpoint, ostream *output, set<string> extraModelFiles,
-                            unordered_map<string, string> engineOptions, bool createOutDB,
-                            bool removeResults, vector<GAMSDatabase> databases)
+                            GAMSCheckpoint* checkpoint, ostream *output, vector<GAMSDatabase> databases,
+                            set<string> extraModelFiles, unordered_map<string, string> engineOptions,
+                            bool createOutDB, bool removeResults)
 {
     GAMSOptions tmpOpt(mWs, &gamsOptions);
     GAMSCheckpoint* tmpCp = nullptr;
     set<string> dbPaths = set<string>();
 
     string pfFileName = prepareRun(&tmpOpt, checkpoint, tmpCp, output,
-                                   createOutDB, true, dbPaths, databases);
+                                   createOutDB, true, &dbPaths, databases);
 
     string mainFileName;
     if (filesystem::exists(mFileName))
@@ -277,15 +284,12 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
     string dataZipName;
     int dataZipCount = 1;
 
-    while (filesystem::exists(mWs.workingDirectory()
-                              .append("/_gams_data")
-                              .append(to_string(dataZipCount)))) {
-        dataZipCount++;
-    }
-    dataZipName = mWs.workingDirectory()
-                        .append("/_gams_data")
-                        .append(to_string(dataZipCount))
-                        .append(".zip");
+    while (filesystem::exists(mWs.workingDirectory().append("/_gams_data")
+                                                    .append(to_string(dataZipCount)))) {
+                                                            dataZipCount++;
+                                                    }
+    dataZipName = mWs.workingDirectory().append("/_gams_data")
+                                        .append(to_string(dataZipCount)).append(".zip");
 
     zip(dataZipName, modelFiles);
 
@@ -303,9 +307,7 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
         throw GAMSException("'engineOptions' must not include keys 'data' or 'model_data'. "
                             "Please use 'extraModelFiles' to provide additional files to send to GAMS Engine.");
 
-// TODO(RG): re-add the following code
     if (requestParams.count("inex_file")) {
-
         if (!filesystem::exists(queryParams["inex_file"]))
             throw GAMSException("The 'inex_file' '" + queryParams["inex_file"] + "' does not exist.");
 

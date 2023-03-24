@@ -139,10 +139,10 @@ public:
     /// \param databases GAMSDatabases read by the GAMSJob
     void runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions& gamsOptions,
                    gams::GAMSCheckpoint *checkpoint, std::ostream* output = nullptr,
+                   std::vector<gams::GAMSDatabase> databases = std::vector<GAMSDatabase>(),
                    std::set<std::string> extraModelFiles = std::set<std::string>(),
                    std::unordered_map<std::string, std::string> engineOptions = std::unordered_map<std::string, std::string>(),
-                    bool createOutDB = true, bool removeResults = true,
-                   std::vector<gams::GAMSDatabase> databases = std::vector<GAMSDatabase>());
+                    bool createOutDB = true, bool removeResults = true);
 
     /// Get GAMSDatabase created by Run method
     GAMSDatabase outDB();

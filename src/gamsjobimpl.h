@@ -38,6 +38,8 @@
 #include "gamsdatabase.h"
 #include "gamsoptions.h"
 
+#include <iostream>
+
 namespace gams
 {
 class GAMSCheckpoint;
@@ -47,9 +49,29 @@ struct inexFile
     std::string type;
     std::vector<std::string> files;
 
-    inexFile(std::string inex) {
-        type = inex;
+    inexFile(std::string inexType) {
+        type = inexType;
         files = std::vector<std::string>();
+    }
+
+    std::string toString() {
+        std::string res = "{ ";
+        res.append("\"type\": \"" + type + "\",");
+        res.append("\"files\": [");
+
+        bool first = true;
+        for (const std::string &file : files) {
+            if (first) first = false;
+            else res.append(", ");
+            res.append("\"" + file + "\"");
+        }
+        res.append("]");
+        res.append("}");
+
+        std::cout << "inex:" << std::endl;
+        std::cout << res << std::endl;
+
+        return res;
     }
 };
 
@@ -92,16 +114,17 @@ public:
     std::string prepareRun(GAMSOptions* tmpOptions = nullptr, const GAMSCheckpoint* checkpoint = nullptr,
                            GAMSCheckpoint* tmpCP = nullptr, std::ostream* output = nullptr,
                            bool createOutDb = false, bool relativePaths = false,
-                           std::set<std::string> dbPaths = std::set<std::string>(),
+                           std::set<std::string> *dbPaths = nullptr,
                            std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>());
 
     void run(GAMSOptions* gamsOpt = nullptr, const GAMSCheckpoint* checkpoint = nullptr, std::ostream* output = nullptr,
              bool createOutDb = false, std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>());
 
-    void runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions& gamsOptions,
-                   GAMSCheckpoint* checkpoint, std::ostream* output,
-                   std::set<std::string> extraModelFiles, std::unordered_map<std::string, std::string> engineOptions,
-                    bool createOutDB, bool removeResults, std::vector<gams::GAMSDatabase> databases);
+    void runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions &gamsOptions,
+                   GAMSCheckpoint *checkpoint, std::ostream *output,
+                   std::vector<GAMSDatabase> databases, std::set<std::string> extraModelFiles,
+                   std::unordered_map<std::string, std::string> engineOptions,
+                   bool createOutDB,  bool removeResults);
 
     GAMSDatabase outDB();
 
