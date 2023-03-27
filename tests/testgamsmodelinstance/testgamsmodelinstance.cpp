@@ -279,7 +279,7 @@ TEST_P(ParameterizedTestGAMSModelInstance, testSolve) {
 
     GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
     GAMSOptions opt = ws.addOptions();
-    opt.setAllModelTypes("cplexd");
+    opt.setAllModelTypes("cplex");
 
     mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));
     bmult.addRecord().setValue( modifier );
@@ -322,7 +322,7 @@ TEST_P(ParameterizedTestGAMSModelInstance, testGetModelSolveStatus) {
     GAMSModelInstance mi = cp.addModelInstance();
     GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
     GAMSOptions opt = ws.addOptions();
-    opt.setAllModelTypes("cplexd");
+    opt.setAllModelTypes("cplex");
 
     mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));
     bmult.addRecord().setValue( modifier );
@@ -363,7 +363,7 @@ TEST_P(ParameterizedTestGAMSModelInstance, testInstantiate) {
     GAMSModelInstance mi = cp.addModelInstance();
     GAMSParameter bmult = mi.syncDb().addParameter("bmult", 0, "demand multiplier");
     GAMSOptions opt = ws.addOptions();
-    opt.setAllModelTypes("cplexd");
+    opt.setAllModelTypes("cplex");
     // when, then
     try {
        mi.instantiate("transport use lp min z", opt, GAMSModifier(bmult));

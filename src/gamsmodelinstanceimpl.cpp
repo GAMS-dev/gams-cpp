@@ -211,7 +211,7 @@ void GAMSModelInstanceImpl::instantiate(const std::string& modelDefinition, cons
 
     std::string model = "option limrow = 0, limcol = 0; \n";
     if (GAMSVersion::gamsMajor() < 34)
-        model += "option solver = convertd; \n";
+        model += "option solver = convret; \n";
 
     if (havePar) {
         model += "Set s__(*) /'s0'/;\n";
