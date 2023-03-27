@@ -117,10 +117,6 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
     GAMSPath joat64File = mSystemDir / lib;
 
     DEB << joat64File.string();
-    if (!joat64File.exists()) {
-        ERR << "Expected GAMS system to be 64 bit but found 32 bit instead. System directory: " << mSystemDir.c_str() << endl;
-        throw GAMSException("Expected GAMS system to be 64 bit but found 32 bit instead. System directory: " + mSystemDir.toStdString());
-    }
 
     if (mSystemDir != mWorkingDir) {
         vector<string> libstems = {"gdxdc", "gmdcc", "joatdc", "optdc"};
