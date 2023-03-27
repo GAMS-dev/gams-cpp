@@ -211,7 +211,7 @@ void GAMSModelInstanceImpl::instantiate(const std::string& modelDefinition, cons
 
     std::string model = "option limrow = 0, limcol = 0; \n";
     if (GAMSVersion::gamsMajor() < 34)
-        model += "option solver = convert; \n";
+        throw GAMSException("GAMS version >= 34 required.");
 
     if (havePar) {
         model += "Set s__(*) /'s0'/;\n";
@@ -239,10 +239,7 @@ void GAMSModelInstanceImpl::instantiate(const std::string& modelDefinition, cons
     }
     std::size_t pos = modelDefinition.find(" ");
     std::string modelName = modelDefinition.substr(0, pos);
-    if (GAMSVersion::gamsMajor() < 34)
-        model += modelName + ".solvelink=2; " + modelName + ".integer1=234; \n";
-    else
-        model += modelName + ".justScrDir=1; \n";
+    model += modelName + ".justScrDir=1; \n";
 
     model += "solve " + modelDefinition;
     if (havePar) {
@@ -267,9 +264,6 @@ void GAMSModelInstanceImpl::instantiate(const std::string& modelDefinition, cons
 
     if (gevInitEnvironmentLegacy(mGEV, (mScrDir / tmpOpt.solverCntr()).c_str()) != 0)
         throw GAMSException("Could not initialize model instance");
-
-    if (GAMSVersion::gamsMajor() < 34)
-        gevSetIntOpt(mGEV, "Integer1", tmpOpt.integer1());
 
     char buf[GMS_SSSIZE];
     gmoRegisterEnvironment(mGMO, mGEV, buf);
