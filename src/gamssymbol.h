@@ -116,7 +116,6 @@ public:
 
     /// Delete GAMSSymbol record.
     /// \param keys List of keys
-    /// \returns Returns <c>true</c> on success; otherwise <c>false</c>.
     void deleteRecord(const std::vector<std::string>& keys);
 
     // TODO(JM) missing overloads for ::deleteRecord
