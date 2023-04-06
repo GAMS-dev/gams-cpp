@@ -1,4 +1,4 @@
-Version 0.18.0 *
+Version 0.18.0
 ========================
 - fixed crash in findGamsOnUnix when LD_LIBRARY_PATH is empty
 
