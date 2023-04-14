@@ -110,7 +110,7 @@ void GAMSJob::run(GAMSOptions& gamsOptions, GAMSCheckpoint gamsCheckpoint, std::
     mImpl->run(&gamsOptions, (gamsCheckpoint.isValid() ? &gamsCheckpoint : nullptr), &output, createOutDB, databases);
 }
 
-void GAMSJob::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions& gamsOptions,
+void GAMSJob::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions* gamsOptions,
                         GAMSCheckpoint* checkpoint, std::ostream* output,
                         std::vector<gams::GAMSDatabase> databases, std::set<std::string> extraModelFiles, std::unordered_map<std::string, std::string> engineOptions,
                         bool createOutDB, bool removeResults)

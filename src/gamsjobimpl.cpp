@@ -76,9 +76,9 @@ GAMSJobImpl::~GAMSJobImpl() {
     delete mCheckpointStart; // this is intended to only free the wrapper, not the *Impl if used anywhere
 }
 
-string GAMSJobImpl::prepareRun(GAMSOptions* tmpOptions, const GAMSCheckpoint* checkpoint,
-                               GAMSCheckpoint* tmpCP, ostream* output, bool createOutDb, bool relativePaths,
-                               set<string> *dbPaths, vector<GAMSDatabase> databases)
+string GAMSJobImpl::prepareRun(GAMSCheckpoint*& tmpCP, GAMSOptions* tmpOptions,
+                               const GAMSCheckpoint* checkpoint, ostream* output, bool createOutDb,
+                               bool relativePaths, set<string> *dbPaths, vector<GAMSDatabase> databases)
 {
     // TODO (RG): check if tmpCP needs to be deleted
 
@@ -119,7 +119,6 @@ string GAMSJobImpl::prepareRun(GAMSOptions* tmpOptions, const GAMSCheckpoint* ch
             p /= db.name() + ".gdx";
             if (dbPaths) dbPaths->insert(p);
 
-            db.doExport("");
             db.doExport();
             if (db.inModelName() != "")
                 tmpOptions->setDefine(db.inModelName(), db.name());
@@ -155,7 +154,7 @@ void GAMSJobImpl::run(GAMSOptions* gamsOpt, const GAMSCheckpoint* checkpoint,
 {
     GAMSOptions tmpOpt(mWs, gamsOpt);
     GAMSCheckpoint* tmpCP = nullptr;
-    string pfFileName = prepareRun(&tmpOpt, checkpoint, tmpCP, output, false);
+    string pfFileName = prepareRun(tmpCP, &tmpOpt, checkpoint, output, false);
 
     filesystem::path gamsExe = filesystem::path(mWs.systemDirectory());
     gamsExe.append(string("gams") + cExeSuffix);
@@ -232,7 +231,7 @@ void GAMSJobImpl::zip(string zipName, set<string> files)
 
 void GAMSJobImpl::unzip(string zipName, string destination)
 {
-    cout << "unzipping" << zipName << " to " << destination << endl; // TODO(rogo): delete this
+    cout << "unzipping " << zipName << " to " << destination << endl; // TODO(rogo): delete this
     string gmsUnzip = "gmsunzip";
     gmsUnzip.append(cExeSuffix);
 
@@ -246,7 +245,7 @@ void GAMSJobImpl::unzip(string zipName, string destination)
         cerr << "Error while unzipping " << zipName << " to " << destination << ". ErrorCode: " << errorCode << endl;
 }
 
-void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions &gamsOptions,
+void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions* gamsOptions,
                             GAMSCheckpoint* checkpoint, ostream *output, vector<GAMSDatabase> databases,
                             set<string> extraModelFiles, unordered_map<string, string> engineOptions,
                             bool createOutDB, bool removeResults)
@@ -255,7 +254,7 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
     GAMSCheckpoint* tmpCp = nullptr;
     set<string> dbPaths = set<string>();
 
-    string pfFileName = prepareRun(&tmpOpt, checkpoint, tmpCp, output,
+    string pfFileName = prepareRun(tmpCp, &tmpOpt, checkpoint, output,
                                    createOutDB, true, &dbPaths, databases);
 
     string mainFileName;

@@ -111,16 +111,16 @@ public:
     bool operator!=(const GAMSJobImpl& other) const;
     bool operator==(const GAMSJobImpl& other) const;
 
-    std::string prepareRun(GAMSOptions* tmpOptions = nullptr, const GAMSCheckpoint* checkpoint = nullptr,
-                           GAMSCheckpoint* tmpCP = nullptr, std::ostream* output = nullptr,
-                           bool createOutDb = false, bool relativePaths = false,
+    std::string prepareRun(GAMSCheckpoint*& tmpCP, GAMSOptions* tmpOptions = nullptr,
+                           const GAMSCheckpoint* checkpoint = nullptr, std::ostream* output = nullptr,
+                           bool createOutDb = true, bool relativePaths = false,
                            std::set<std::string> *dbPaths = nullptr,
                            std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>());
 
     void run(GAMSOptions* gamsOpt = nullptr, const GAMSCheckpoint* checkpoint = nullptr, std::ostream* output = nullptr,
-             bool createOutDb = false, std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>());
+             bool createOutDb = true, std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>());
 
-    void runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions &gamsOptions,
+    void runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions* gamsOptions,
                    GAMSCheckpoint *checkpoint, std::ostream *output,
                    std::vector<GAMSDatabase> databases, std::set<std::string> extraModelFiles,
                    std::unordered_map<std::string, std::string> engineOptions,

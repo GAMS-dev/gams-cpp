@@ -146,6 +146,7 @@ int main(int argc, char* argv[])
         GAMSOptions defaultOptions = ws.addOptions();
 
         jobData.runEngine(engineConf, defaultOptions, nullptr, &cout);
+        jobData.runEngine(engineConf, &defaultOptions, nullptr, &cout);
         jobData.outDB().doExport(filesystem::absolute(ws.workingDirectory()) / "tdata.gdx");
 
         map<string, double> expectedLevels = {  { "seattle.new-york", 0.0 },
@@ -165,7 +166,7 @@ int main(int argc, char* argv[])
         try {
             // run a job using an instance of GAMSOptions that defines the data include file
             jobModel.runEngine(engineConf, opt, nullptr, &cout, set<string>() = { "tdata.gdx" },
-            jobModel.runEngine(engineConf, opt, nullptr, &cout, vector<GAMSDatabase>(),
+            jobModel.runEngine(engineConf, &opt, nullptr, &cout, vector<GAMSDatabase>(),
                                set<string>() = { "tdata.gdx" }, unordered_map<string, string>() = {
                                     { "inex_string", "{\"type\": \"include\", \"files\": [\"*.gdx\"]}" }
                                 });

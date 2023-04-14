@@ -137,7 +137,7 @@ public:
     /// \param createOutDB Flag to define if OutDB should be created
     /// \param removeResults Remove results from GAMS Engine after downloading them
     /// \param databases GAMSDatabases read by the GAMSJob
-    void runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions& gamsOptions,
+    void runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions* gamsOptions,
                    gams::GAMSCheckpoint *checkpoint, std::ostream* output = nullptr,
                    std::vector<gams::GAMSDatabase> databases = std::vector<GAMSDatabase>(),
                    std::set<std::string> extraModelFiles = std::set<std::string>(),
