@@ -97,7 +97,7 @@ string GAMSJobImpl::prepareRun(GAMSCheckpoint*& tmpCP, GAMSOptions* tmpOptions,
             else tmpOptions->setSave(tmpCP->fileName());
         } else {
             if (relativePaths)
-                tmpOptions->setSave(filesystem::relative(checkpoint->fileName(), mWs.workingDirectory()).string());
+                tmpOptions->setSave(filesystem::relative(checkpoint->fileName(), mWs.workingDirectory()));
             else tmpOptions->setSave(checkpoint->fileName());
         }
     }
@@ -250,7 +250,7 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
                             set<string> extraModelFiles, unordered_map<string, string> engineOptions,
                             bool createOutDB, bool removeResults)
 {
-    GAMSOptions tmpOpt(mWs, &gamsOptions);
+    GAMSOptions tmpOpt(mWs, gamsOptions);
     GAMSCheckpoint* tmpCp = nullptr;
     set<string> dbPaths = set<string>();
 
@@ -335,10 +335,8 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
     queryParams["arguments"] = "pf=" + mJobName + ".pf";
 
     cpr::Parameters encodedParams;
-    for (const auto &p : queryParams){
+    for (const auto &p : queryParams)
         encodedParams.Add(cpr::Parameter(p.first, p.second));
-        cout << p.first << "=" << p.second << endl; // TODO(rogo): delete this
-    }
 
     cpr::Response response = cpr::Post(cpr::Url{engineConfiguration.host() + "/jobs"},
                                        cpr::Authentication{engineConfiguration.username(),
@@ -346,7 +344,6 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
                                                          cpr::AuthMode::BASIC},
                                         fileParams, encodedParams);
 
-    cout << "url: " << response.url << endl; // TODO(rogo): delete this
     if (!cpr::status::is_success(response.status_code)) {
         throw GAMSException("Creating job on GAMS Engine failed with status code: "
                             + to_string(response.status_code) + "." " Message: " + response.text);
@@ -363,7 +360,7 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
                                                  cpr::AuthMode::BASIC});
 
         if (response.status_code == 403) { // job still in queue
-            cout << "job still in queue. waiting..." << endl;
+            cout << "job in queue. waiting..." << endl;
             this_thread::sleep_for(1000ms);
             continue;
         }
@@ -378,7 +375,7 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
                     cout << stdOutData << endl;
             } else if (output) {
                 if (!stdOutData.empty())
-                    *output << stdOutData << endl; // TODO(RG): check if this does what it's supposed to
+                    *output << stdOutData << endl;
             }
         }
 

@@ -236,6 +236,7 @@ int main(int argc, char* argv[])
                           "ss=transport.solvestat;", cp);
                 try {
                     tEbmult.runEngine(engineConf, defaultOptions, nullptr, &cout);
+                    tEbmult.runEngine(engineConf, &defaultOptions, nullptr, &cout);
                     cout << "Scenario bmult=" << to_string(m["bmult"]) << ":" << endl;
                     cout << "  Modelstatus: " << tEbmult.outDB().getParameter("ms").firstRecord().value() << endl;
                     cout << "  Solvestatus: " << tEbmult.outDB().getParameter("ss").firstRecord().value() << endl;

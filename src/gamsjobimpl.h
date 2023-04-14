@@ -68,9 +68,6 @@ struct inexFile
         res.append("]");
         res.append("}");
 
-        std::cout << "inex:" << std::endl;
-        std::cout << res << std::endl;
-
         return res;
     }
 };
