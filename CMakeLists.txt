@@ -21,6 +21,7 @@ set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
 set( CMAKE_AUTOMOC OFF )
+set( CPR_USE_SYSTEM_CURL ON )
 
 # Add Cpr: cpr is a modern HTTP library for C++ (MIT License)
 include(FetchContent)
