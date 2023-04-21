@@ -136,7 +136,23 @@ int main(int argc, char* argv[])
 
     filesystem::remove(ws.workingDirectory().append("/test.txt"));
 
-    // set up configuration for GAMS Engine
+    if (getenv("ENGINE_URL") == NULL) {
+        cerr << "No ENGINE_URL set" << endl;
+        return -1;
+    }
+    if (getenv("ENGINE_USER") == NULL) {
+        cerr << "No ENGINE_USER set" << endl;
+        return -1;
+    }
+    if (getenv("ENGINE_PASSWORD") == NULL) {
+        cerr << "No ENGINE_PASSWORD set" << endl;
+        return -1;
+    }
+    if (getenv("ENGINE_NAMESPACE") == NULL) {
+        cerr << "No ENGINE_NAMESPACE set" << endl;
+        return -1;
+    }
+
     GAMSEngineConfiguration engineConf(getenv("ENGINE_URL"), getenv("ENGINE_USER"),
                                        getenv("ENGINE_PASSWORD"), getenv("ENGINE_NAMESPACE"));
 
@@ -294,7 +310,7 @@ int main(int argc, char* argv[])
     cout << "Run 6" << endl;
 
     thread optThread(&GAMSJob::runEngine, &jc, engineConf, &opt, nullptr, logFile,
-                     vector<GAMSDatabase>(), set<string> {optFile1Path, optFile2Path, "caddat.gdx"},
+                     vector<GAMSDatabase>(), set<string> {optFile1Path, optFile2Path, "claddat.gdx"},
                      unordered_map<string, string>(), true, true);
 
     while (true) {
