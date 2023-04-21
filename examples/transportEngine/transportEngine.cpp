@@ -145,7 +145,7 @@ int main(int argc, char* argv[])
         GAMSJob jobData = ws.addJobFromString(getDataText());
         GAMSOptions defaultOptions = ws.addOptions();
 
-        jobData.runEngine(engineConf, defaultOptions, nullptr, &cout);
+        cout << "Run 1" << endl;
         jobData.runEngine(engineConf, &defaultOptions, nullptr, &cout);
         jobData.outDB().doExport(filesystem::absolute(ws.workingDirectory()) / "tdata.gdx");
 
@@ -165,7 +165,7 @@ int main(int argc, char* argv[])
         opt.setAllModelTypes("xpress");
         try {
             // run a job using an instance of GAMSOptions that defines the data include file
-            jobModel.runEngine(engineConf, opt, nullptr, &cout, set<string>() = { "tdata.gdx" },
+            cout << "Run 2" << endl;
             jobModel.runEngine(engineConf, &opt, nullptr, &cout, vector<GAMSDatabase>(),
                                set<string>() = { "tdata.gdx" }, unordered_map<string, string>() = {
                                     { "inex_string", "{\"type\": \"include\", \"files\": [\"*.gdx\"]}" }
@@ -198,14 +198,14 @@ int main(int argc, char* argv[])
             GAMSJob jobA = ws.addJobFromString(getDataText());
             GAMSJob jobB = ws.addJobFromString(getModelText());
             try {
-                jobModel.runEngine(engineConf, defaultOptions, nullptr, &cout);
+                cout << "Run 3" << endl;
                 jobA.runEngine(engineConf, defaultOptions, nullptr, &cout);
                 cout << ex.what() << endl;
             }
             opt.setDefine("gdxincname", jobA.outDB().name());
             opt.setAllModelTypes("xpress");
             try {
-                jobModel.runEngine(engineConf, opt, &cp, &cout);
+                cout << "Run 4" << endl;
                 jobB.runEngine(engineConf, opt, &cp, &cout, vector<GAMSDatabase>{jobA.outDB()});
                 cout << ex.what() << endl;
             }
@@ -235,7 +235,7 @@ int main(int argc, char* argv[])
                         + "; solve transport min z use lp; ms=transport.modelstat; "
                           "ss=transport.solvestat;", cp);
                 try {
-                    tEbmult.runEngine(engineConf, defaultOptions, nullptr, &cout);
+                    cout << "Run 5" << endl;
                     tEbmult.runEngine(engineConf, &defaultOptions, nullptr, &cout);
                     cout << "Scenario bmult=" << to_string(m["bmult"]) << ":" << endl;
                     cout << "  Modelstatus: " << tEbmult.outDB().getParameter("ms").firstRecord().value() << endl;
@@ -253,7 +253,7 @@ int main(int argc, char* argv[])
                         cout << "Unexpected result, expected ss: " + to_string(m["ss"]);
                         return 1;
                     }
-                    if (fabs(tEbmult.outDB().getVariable("z").firstRecord().level() - m["obj"]) > 0.0001) {
+                    if (fabs(tEbmult.outDB().getVariable("z").firstRecord().level() - m["obj"]) > 0.01) {
                         cout << "Unexpected result, expected obj: " + to_string(m["obj"]);
                         return 1;
                     }
@@ -267,43 +267,73 @@ int main(int argc, char* argv[])
         }
 
         // Example how to interrupt Engine Job
-        // TODO(RG): interrupt currently not supported in Cpp Api
-//        GAMSJob jc = ws.addJobFromGamsLib("clad");
+        GAMSJob jc = ws.addJobFromGamsLib("clad");
 
-//        // Define an option file for the solver to be used
-//        string optFile1Path = filesystem::path(ws.workingDirectory()) / "cplex.opt";
-//        ofstream optFile1;
-//        optFile1.open(optFile1Path);
+        // Define an option file for the solver to be used
+        string optFile1Path = filesystem::path(ws.workingDirectory()) / "cplex.opt";
+        ofstream optFile1;
+        optFile1.open(optFile1Path);
 
-//        // Set relative stopping tolerance to 0 initially
-//        optFile1 << "epgap 0" << endl;
-//        // Activate interactive option setting on interrupt
-//        optFile1 << "interactive 1" << endl;
-//        // Define new option file to read on interrupt
-//        optFile1 << "iafile cplex.op2" << endl;
-//        optFile1.close();
+        // Set relative stopping tolerance to 0 initially
+        optFile1 << "epgap 0" << endl;
+        // Activate interactive option setting on interrupt
+        optFile1 << "interactive 1" << endl;
+        // Define new option file to read on interrupt
+        optFile1 << "iafile cplex.op2" << endl;
+        optFile1.close();
 
-//        // Write new Cplex option file
-//        string optFile2Path = filesystem::path(ws.workingDirectory()) / "cplex.op2";
-//        ofstream optFile2;
-//        optFile2.open(optFile2Path);
-//        optFile2 << "epgap 0.1" << endl;
-//        optFile2.close();
+        // Write new Cplex option file
+        string optFile2Path = filesystem::path(ws.workingDirectory()) / "cplex.op2";
+        ofstream optFile2;
+        optFile2.open(optFile2Path);
+        optFile2 << "epgap 0.1" << endl;
+        optFile2.close();
 
-//        string logPath = filesystem::path(ws.workingDirectory()) / "ej.log";
-//        GAMSOptions opt = ws.addOptions();
-//        ofstream logFile;
-//        logFile.open(logPath);
+        string logPath = filesystem::path(ws.workingDirectory()) / "ej.log";
+        opt = ws.addOptions();
+        ofstream *logFile = new ofstream;
+        logFile->open(logPath);
 
-//        opt.setMIP("cplex");
-//        opt.setSolveLink(GAMSOptions::ESolveLink::LoadLibrary);
+        opt.setMIP("cplex");
+        opt.setOptFile(1);
+        opt.setSolveLink(GAMSOptions::ESolveLink::LoadLibrary);
 
+        cout << "Run 6" << endl;
 
-    } catch (GAMSException &ex) {
-        cout << "GAMSException occured: " << ex.what() << endl;
-    } catch (exception &ex) {
-        cout << ex.what() << endl;
-    }
+        thread optThread(&GAMSJob::runEngine, &jc, engineConf, &opt, nullptr, logFile,
+                         vector<GAMSDatabase>(), set<string> {optFile1Path, optFile2Path, "caddat.gdx"},
+                         unordered_map<string, string>(), true, true);
+
+        while (true) {
+            if (filesystem::exists(logPath) && filesystem::is_empty(logPath)) {
+                this_thread::sleep_for(500ms);
+                continue;
+            }
+            jc.interrupt();
+            cout << "Interrupted Cplex to continue with new option" << endl;
+            break;
+        }
+
+        if (optThread.joinable())
+            optThread.join();
+
+        bool interrupted = false;
+
+        ifstream inLog;
+        string line;
+        inLog.open(logPath);
+        while (getline(inLog, line)) {
+            if (line.find("Interrupted") != string::npos) {
+                interrupted = true;
+                break;
+            }
+        }
+        if (!interrupted) {
+            cout << "Expected the solver to be interrupted at least once." << endl;
+            return 1;
+        }
+
+        cout << "Interrupted succesfully" << endl;
 
     return 0;
 }

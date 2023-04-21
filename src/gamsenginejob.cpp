@@ -39,4 +39,9 @@ string GAMSEngineJob::token()
     return mToken;
 }
 
+GAMSEngineConfiguration GAMSEngineJob::config()
+{
+    return mConfig;
+}
+
 }

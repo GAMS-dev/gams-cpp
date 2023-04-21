@@ -461,6 +461,21 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
 
 bool GAMSJobImpl::interrupt()
 {
+    // running on Engine
+    if (mEngineJob) {
+        cpr::Response response = cpr::Delete(cpr::Url{mEngineJob->config().host() + "/jobs/" +
+                                                      mEngineJob->token() + "?hard_kill=false"},
+                                                      cpr::Authentication(mEngineJob->config().username(),
+                                                                          mEngineJob->config().password(),
+                                                                          cpr::AuthMode::BASIC));
+        if (!cpr::status::is_success(response.status_code))
+             throw GAMSException("Interrupting Engine job failed with status code: " +
+                                to_string(response.status_code) + ". Message: " + response.text);
+
+        return true;
+    }
+
+
     /*qint64*/ int pid = 0 /*mProc.processId()*/; // TODO(RG): we need std process handling here
     if(pid == 0)
         return false;

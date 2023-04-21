@@ -126,7 +126,6 @@ public:
     void run(GAMSOptions& gamsOptions, GAMSCheckpoint gamsCheckpoint, std::ostream& output,
              bool createOutDB, std::vector<gams::GAMSDatabase> databases);
 
-
     /// Run GAMSJob on GAMS Engine
     /// \param engineConfiguration GAMSEngineConfiguration object
     /// \param extraModelFiles Set of additional file paths (apart from main file) required to run the model (e.g. include files)

@@ -43,6 +43,7 @@ public:
 
 public:
     std::string token();
+    GAMSEngineConfiguration config();
 
 private:
     std::string mToken;
