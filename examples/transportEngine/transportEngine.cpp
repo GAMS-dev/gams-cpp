@@ -129,52 +129,81 @@ int main(int argc, char* argv[])
 {
     cout << "---------- Transport Engine --------------" << endl;
 
-    try {
-        GAMSWorkspaceInfo wsInfo;
-        if (argc > 1)
-            wsInfo.setSystemDirectory(argv[1]);
-        GAMSWorkspace ws(wsInfo);
+    GAMSWorkspaceInfo wsInfo;
+    if (argc > 1)
+        wsInfo.setSystemDirectory(argv[1]);
+    GAMSWorkspace ws(wsInfo);
 
-        filesystem::remove(ws.workingDirectory().append("/test.txt"));
+    filesystem::remove(ws.workingDirectory().append("/test.txt"));
 
-        // set up configuration for GAMS Engine
-        GAMSEngineConfiguration engineConf(getenv("ENGINE_URL"), getenv("ENGINE_USER"),
-                                           getenv("ENGINE_PASSWORD"), getenv("ENGINE_NAMESPACE"));
+    // set up configuration for GAMS Engine
+    GAMSEngineConfiguration engineConf(getenv("ENGINE_URL"), getenv("ENGINE_USER"),
+                                       getenv("ENGINE_PASSWORD"), getenv("ENGINE_NAMESPACE"));
 
-        // run with data from a string with GAMS syntax with explicit export to GDX file
-        GAMSJob jobData = ws.addJobFromString(getDataText());
-        GAMSOptions defaultOptions = ws.addOptions();
+    // run with data from a string with GAMS syntax with explicit export to GDX file
+    GAMSJob jobData = ws.addJobFromString(getDataText());
+    GAMSOptions defaultOptions = ws.addOptions();
 
-        cout << "Run 1" << endl;
-        jobData.runEngine(engineConf, &defaultOptions, nullptr, &cout);
-        jobData.outDB().doExport(filesystem::absolute(ws.workingDirectory()) / "tdata.gdx");
+    cout << "Run 1" << endl;
+    jobData.runEngine(engineConf, &defaultOptions, nullptr, &cout);
+    jobData.outDB().doExport(filesystem::absolute(ws.workingDirectory()) / "tdata.gdx");
 
-        map<string, double> expectedLevels = {  { "seattle.new-york", 0.0 },
-                                                { "seattle.chicago", 300.0 },
-                                                { "seattle.topeka", 0.0 },
-                                                { "san-diego.new-york", 325.0 },
-                                                { "san-diego.chicago", 0.0 },
-                                                { "san-diego.topeka", 275.0 }
-                                             };
+    map<string, double> expectedLevels = {  { "seattle.new-york", 0.0 },
+                                            { "seattle.chicago", 300.0 },
+                                            { "seattle.topeka", 0.0 },
+                                            { "san-diego.new-york", 325.0 },
+                                            { "san-diego.chicago", 0.0 },
+                                            { "san-diego.topeka", 275.0 }
+                                         };
 
 
-        GAMSJob jobModel = ws.addJobFromString(getModelText());
+    GAMSJob jobModel = ws.addJobFromString(getModelText());
 
-        GAMSOptions opt = ws.addOptions();
-        opt.setDefine("gdxincname", "tdata.gdx");
-        opt.setAllModelTypes("xpress");
-        try {
-            // run a job using an instance of GAMSOptions that defines the data include file
-            cout << "Run 2" << endl;
-            jobModel.runEngine(engineConf, &opt, nullptr, &cout, vector<GAMSDatabase>(),
-                               set<string>() = { "tdata.gdx" }, unordered_map<string, string>() = {
-                                    { "inex_string", "{\"type\": \"include\", \"files\": [\"*.gdx\"]}" }
-                                });
-        } catch (exception &ex) {
-            cout << ex.what() << endl;
+    GAMSOptions opt = ws.addOptions();
+    opt.setDefine("gdxincname", "tdata.gdx");
+    opt.setAllModelTypes("xpress");
+
+    // run a job using an instance of GAMSOptions that defines the data include file
+        cout << "Run 2" << endl;
+        jobModel.runEngine(engineConf, &opt, nullptr, &cout, vector<GAMSDatabase>(),
+                           set<string>() = { "tdata.gdx" }, unordered_map<string, string>() = {
+                                { "inex_string", "{\"type\": \"include\", \"files\": [\"*.gdx\"]}" }
+                            });
+
+    for (GAMSVariableRecord rec : jobModel.outDB().getVariable("x")) {
+        cout << "x(" << rec.key(0) << "," + rec.key(1) << "): level=" << rec.level()
+             << "marginal=" << rec.marginal() << endl;
+
+        if (expectedLevels.at(rec.key(0).append(".").append(rec.key(1))) != rec.level()) {
+            cout << "Unexpected result, expected level: "
+                 << expectedLevels.at(rec.key(0).append(".").append(rec.key(1)))
+                 << endl;
+            return 1;
         }
+    }
 
-        for (GAMSVariableRecord rec : jobModel.outDB().getVariable("x")) {
+    if (filesystem::exists(filesystem::path(ws.workingDirectory()).append("test.txt"))) {
+        cout << "Test.txt should not have sent back - inex_string failed" << endl;
+        return 1;
+    }
+
+    // same but with implicit database communication
+    GAMSCheckpoint cp = ws.addCheckpoint();
+    {
+        GAMSOptions opt = ws.addOptions();
+        GAMSJob jobA = ws.addJobFromString(getDataText());
+        GAMSJob jobB = ws.addJobFromString(getModelText());
+
+        cout << "Run 3" << endl;
+        jobA.runEngine(engineConf, &defaultOptions, nullptr, &cout);
+
+        opt.setDefine("gdxincname", jobA.outDB().name());
+        opt.setAllModelTypes("xpress");
+
+        cout << "Run 4" << endl;
+        jobB.runEngine(engineConf, &opt, &cp, &cout, vector<GAMSDatabase>{jobA.outDB()});
+
+        for (GAMSVariableRecord rec : jobB.outDB().getVariable("x")) {
             cout << "x(" << rec.key(0) << "," + rec.key(1) << "): level=" << rec.level()
                  << "marginal=" << rec.marginal() << endl;
 
@@ -185,155 +214,119 @@ int main(int argc, char* argv[])
                 return 1;
             }
         }
+        vector<map<string, double>> bmultExpected = vector<map<string, double>>();
+        bmultExpected.push_back(map<string, double>() = {
+                        { "bmult", 0.9 }, { "ms", 1 }, { "ss", 1 }, { "obj", 138.31 } }
+                );
+        bmultExpected.push_back(map<string, double>() = {
+                        { "bmult", 1.2 }, { "ms", 4 }, { "ss", 1 }, { "obj", 184.41 } }
+                );
 
-        if (filesystem::exists(filesystem::path(ws.workingDirectory().append("/test.txt")))) {
-            cout << "Test.txt should not have sent back - inex_string failed" << endl;
-            return 1;
-        }
 
-        // same but with implicit database communication
-        GAMSCheckpoint cp = ws.addCheckpoint();
-        {
-            GAMSOptions opt = ws.addOptions();
-            GAMSJob jobA = ws.addJobFromString(getDataText());
-            GAMSJob jobB = ws.addJobFromString(getModelText());
+        for (map<string, double> m : bmultExpected) {
+            GAMSJob tEbmult = ws.addJobFromString("bmult=" + to_string(m["bmult"])
+                    + "; solve transport min z use lp; ms=transport.modelstat; "
+                      "ss=transport.solvestat;", cp);
             try {
-                cout << "Run 3" << endl;
-                jobA.runEngine(engineConf, defaultOptions, nullptr, &cout);
-                cout << ex.what() << endl;
-            }
-            opt.setDefine("gdxincname", jobA.outDB().name());
-            opt.setAllModelTypes("xpress");
-            try {
-                cout << "Run 4" << endl;
-                jobB.runEngine(engineConf, opt, &cp, &cout, vector<GAMSDatabase>{jobA.outDB()});
-                cout << ex.what() << endl;
-            }
-
-            for (GAMSVariableRecord rec : jobB.outDB().getVariable("x")) {
-                cout << "x(" << rec.key(0) << "," + rec.key(1) << "): level=" << rec.level()
-                     << "marginal=" << rec.marginal() << endl;
-
-                if (expectedLevels.at(rec.key(0).append(".").append(rec.key(1))) != rec.level()) {
-                    cout << "Unexpected result, expected level: "
-                         << expectedLevels.at(rec.key(0).append(".").append(rec.key(1)))
-                         << endl;
+                cout << "Run 5" << endl;
+                tEbmult.runEngine(engineConf, &defaultOptions, nullptr, &cout);
+                cout << "Scenario bmult=" << to_string(m["bmult"]) << ":" << endl;
+                cout << "  Modelstatus: " << tEbmult.outDB().getParameter("ms").firstRecord().value() << endl;
+                cout << "  Solvestatus: " << tEbmult.outDB().getParameter("ss").firstRecord().value() << endl;
+                cout << "  Obj        : " << tEbmult.outDB().getVariable("z").firstRecord().level() << endl;
+                if (tEbmult.outDB().getParameter("bmult").firstRecord().value() != m["bmult"]) {
+                    cout << "Unexpected input, expected bmult: " + to_string(m["bmult"]) << endl;
                     return 1;
                 }
-            }
-            vector<map<string, double>> bmultExpected = vector<map<string, double>>();
-            bmultExpected.push_back(map<string, double>() = {
-                            { "bmult", 0.9 }, { "ms", 1 }, { "ss", 1 }, { "obj", 138.31 } }
-                    );
-            bmultExpected.push_back(map<string, double>() = {
-                            { "bmult", 1.2 }, { "ms", 4 }, { "ss", 1 }, { "obj", 184.41 } }
-                    );
-
-
-            for (map<string, double> m : bmultExpected) {
-                GAMSJob tEbmult = ws.addJobFromString("bmult=" + to_string(m["bmult"])
-                        + "; solve transport min z use lp; ms=transport.modelstat; "
-                          "ss=transport.solvestat;", cp);
-                try {
-                    cout << "Run 5" << endl;
-                    tEbmult.runEngine(engineConf, &defaultOptions, nullptr, &cout);
-                    cout << "Scenario bmult=" << to_string(m["bmult"]) << ":" << endl;
-                    cout << "  Modelstatus: " << tEbmult.outDB().getParameter("ms").firstRecord().value() << endl;
-                    cout << "  Solvestatus: " << tEbmult.outDB().getParameter("ss").firstRecord().value() << endl;
-                    cout << "  Obj        : " << tEbmult.outDB().getVariable("z").firstRecord().level() << endl;
-                    if (tEbmult.outDB().getParameter("bmult").firstRecord().value() != m["bmult"]) {
-                        cout << "Unexpected input, expected bmult: " + to_string(m["bmult"]) << endl;
-                        return 1;
-                    }
-                    if (tEbmult.outDB().getParameter("ms").firstRecord().value() != m["ms"]) {
-                        cout << "Unexpected result, expected ms: " + to_string(m["ms"]);
-                        return 1;
-                    }
-                    if (tEbmult.outDB().getParameter("ss").firstRecord().value() != m["ss"]) {
-                        cout << "Unexpected result, expected ss: " + to_string(m["ss"]);
-                        return 1;
-                    }
-                    if (fabs(tEbmult.outDB().getVariable("z").firstRecord().level() - m["obj"]) > 0.01) {
-                        cout << "Unexpected result, expected obj: " + to_string(m["obj"]);
-                        return 1;
-                    }
-
-                }
-                catch (exception ex) {
-                    cout << "Exception caught:" << ex.what() << endl;
+                if (tEbmult.outDB().getParameter("ms").firstRecord().value() != m["ms"]) {
+                    cout << "Unexpected result, expected ms: " + to_string(m["ms"]);
                     return 1;
                 }
+                if (tEbmult.outDB().getParameter("ss").firstRecord().value() != m["ss"]) {
+                    cout << "Unexpected result, expected ss: " + to_string(m["ss"]);
+                    return 1;
+                }
+                if (fabs(tEbmult.outDB().getVariable("z").firstRecord().level() - m["obj"]) > 0.01) {
+                    cout << "Unexpected result, expected obj: " + to_string(m["obj"]);
+                    return 1;
+                }
+
+            }
+            catch (exception ex) {
+                cout << "Exception caught:" << ex.what() << endl;
+                return 1;
             }
         }
+    }
 
-        // Example how to interrupt Engine Job
-        GAMSJob jc = ws.addJobFromGamsLib("clad");
+    // Example how to interrupt Engine Job
+    GAMSJob jc = ws.addJobFromGamsLib("clad");
 
-        // Define an option file for the solver to be used
-        string optFile1Path = filesystem::path(ws.workingDirectory()) / "cplex.opt";
-        ofstream optFile1;
-        optFile1.open(optFile1Path);
+    // Define an option file for the solver to be used
+    string optFile1Path = filesystem::path(ws.workingDirectory()) / "cplex.opt";
+    ofstream optFile1;
+    optFile1.open(optFile1Path);
 
-        // Set relative stopping tolerance to 0 initially
-        optFile1 << "epgap 0" << endl;
-        // Activate interactive option setting on interrupt
-        optFile1 << "interactive 1" << endl;
-        // Define new option file to read on interrupt
-        optFile1 << "iafile cplex.op2" << endl;
-        optFile1.close();
+    // Set relative stopping tolerance to 0 initially
+    optFile1 << "epgap 0" << endl;
+    // Activate interactive option setting on interrupt
+    optFile1 << "interactive 1" << endl;
+    // Define new option file to read on interrupt
+    optFile1 << "iafile cplex.op2" << endl;
+    optFile1.close();
 
-        // Write new Cplex option file
-        string optFile2Path = filesystem::path(ws.workingDirectory()) / "cplex.op2";
-        ofstream optFile2;
-        optFile2.open(optFile2Path);
-        optFile2 << "epgap 0.1" << endl;
-        optFile2.close();
+    // Write new Cplex option file
+    string optFile2Path = filesystem::path(ws.workingDirectory()) / "cplex.op2";
+    ofstream optFile2;
+    optFile2.open(optFile2Path);
+    optFile2 << "epgap 0.1" << endl;
+    optFile2.close();
 
-        string logPath = filesystem::path(ws.workingDirectory()) / "ej.log";
-        opt = ws.addOptions();
-        ofstream *logFile = new ofstream;
-        logFile->open(logPath);
+    string logPath = filesystem::path(ws.workingDirectory()) / "ej.log";
+    opt = ws.addOptions();
+    ofstream *logFile = new ofstream;
+    logFile->open(logPath);
 
-        opt.setMIP("cplex");
-        opt.setOptFile(1);
-        opt.setSolveLink(GAMSOptions::ESolveLink::LoadLibrary);
+    opt.setMIP("cplex");
+    opt.setOptFile(1);
+    opt.setSolveLink(GAMSOptions::ESolveLink::LoadLibrary);
 
-        cout << "Run 6" << endl;
+    cout << "Run 6" << endl;
 
-        thread optThread(&GAMSJob::runEngine, &jc, engineConf, &opt, nullptr, logFile,
-                         vector<GAMSDatabase>(), set<string> {optFile1Path, optFile2Path, "caddat.gdx"},
-                         unordered_map<string, string>(), true, true);
+    thread optThread(&GAMSJob::runEngine, &jc, engineConf, &opt, nullptr, logFile,
+                     vector<GAMSDatabase>(), set<string> {optFile1Path, optFile2Path, "caddat.gdx"},
+                     unordered_map<string, string>(), true, true);
 
-        while (true) {
-            if (filesystem::exists(logPath) && filesystem::is_empty(logPath)) {
-                this_thread::sleep_for(500ms);
-                continue;
-            }
-            jc.interrupt();
-            cout << "Interrupted Cplex to continue with new option" << endl;
+    while (true) {
+        if (filesystem::exists(logPath) && filesystem::is_empty(logPath)) {
+            this_thread::sleep_for(500ms);
+            continue;
+        }
+        jc.interrupt();
+        cout << "Interrupted Cplex to continue with new option" << endl;
+        break;
+    }
+
+    if (optThread.joinable())
+        optThread.join();
+
+    bool interrupted = false;
+
+    ifstream inLog;
+    string line;
+    inLog.open(logPath);
+    while (getline(inLog, line)) {
+        if (line.find("Interrupted") != string::npos) {
+            interrupted = true;
             break;
         }
+    }
+    if (!interrupted) {
+        cout << "Expected the solver to be interrupted at least once." << endl;
+        return 1;
+    }
 
-        if (optThread.joinable())
-            optThread.join();
-
-        bool interrupted = false;
-
-        ifstream inLog;
-        string line;
-        inLog.open(logPath);
-        while (getline(inLog, line)) {
-            if (line.find("Interrupted") != string::npos) {
-                interrupted = true;
-                break;
-            }
-        }
-        if (!interrupted) {
-            cout << "Expected the solver to be interrupted at least once." << endl;
-            return 1;
-        }
-
-        cout << "Interrupted succesfully" << endl;
+    cout << "Interrupted succesfully" << endl;
 
     return 0;
 }
