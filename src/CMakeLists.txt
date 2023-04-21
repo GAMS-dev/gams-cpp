@@ -86,3 +86,6 @@ add_library(gamscpp SHARED
         ../CHANGELOG ../version
         ${SOURCE} ${HEADER}
     )
+
+target_link_libraries(gamscpp cpr::cpr)
+target_link_libraries(gamscpp nlohmann_json::nlohmann_json)

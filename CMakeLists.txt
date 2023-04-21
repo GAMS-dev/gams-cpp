@@ -27,18 +27,17 @@ set( CMAKE_AUTOMOC OFF )
 include(FetchContent)
 FetchContent_Declare(cpr GIT_REPOSITORY https://github.com/libcpr/cpr.git GIT_TAG master)
 FetchContent_MakeAvailable(cpr)
-link_libraries(cpr::cpr)
+#link_libraries(cpr::cpr)
 
 # add nlohmann:json to handle json format (MIT License)
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
 FetchContent_MakeAvailable(json)
-link_libraries(nlohmann_json::nlohmann_json)
+#link_libraries(nlohmann_json::nlohmann_json)
 
 add_subdirectory( src )
 add_subdirectory( examples )
 
-# TODO(RG): reactivate tests
-set(PACKAGE_TESTS OFF)
+set(PACKAGE_TESTS ON)
 if(PACKAGE_TESTS)
     enable_testing()
     if(WIN32)

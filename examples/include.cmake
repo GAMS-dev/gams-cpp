@@ -39,3 +39,4 @@ if(UNIX) # Apple or Linux
     endif()
 endif()
 
+link_libraries(cpr::cpr nlohmann_json::nlohmann_json)
