@@ -25,7 +25,7 @@ set( CPR_USE_SYSTEM_CURL ON )
 
 # Add Cpr: cpr is a modern HTTP library for C++ (MIT License)
 include(FetchContent)
-FetchContent_Declare(cpr GIT_REPOSITORY https://github.com/libcpr/cpr.git GIT_TAG master)
+FetchContent_Declare(cpr URL https://github.com/libcpr/cpr/archive/refs/tags/1.10.2.tar.gz)
 FetchContent_MakeAvailable(cpr)
 
 # add nlohmann:json to handle json format (MIT License)
