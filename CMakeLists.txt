@@ -15,8 +15,6 @@ project( GAMS-cpp )
 
 cmake_minimum_required(VERSION 3.11)
 
-include(version.cmake)
-
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
@@ -30,6 +28,8 @@ FetchContent_MakeAvailable(cpr)
 # add nlohmann:json to handle json format (MIT License)
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
 FetchContent_MakeAvailable(json)
+
+include(version.cmake)
 
 add_subdirectory( src )
 add_subdirectory( examples )
