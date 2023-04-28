@@ -38,7 +38,7 @@ GAMSCheckpointImpl::GAMSCheckpointImpl(const GAMSWorkspace& workspace, const str
     DEB << "---- Entering GAMSCheckpointImpl constructor ----";
     if (mName.empty()){
         filesystem::path fullPath(mWs.registerCheckpoint());
-        mName = fullPath.filename();
+        mName = fullPath.filename().string();
     } else mName = checkpointName;
 
     GAMSPath cpFilePath(mName);
