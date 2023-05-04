@@ -27,6 +27,7 @@
 #include "gamslog.h"
 #include "gamspath.h"
 #include "gamsexception.h"
+#include <iostream>
 
 namespace gams {
 
@@ -36,10 +37,13 @@ GAMSCheckpointImpl::GAMSCheckpointImpl(const GAMSWorkspace& workspace, const str
    : mWs(workspace)
 {
     DEB << "---- Entering GAMSCheckpointImpl constructor ----";
+    cout << "ROGO: mName: " << mName << endl;
     if (mName.empty()){
         filesystem::path fullPath(mWs.registerCheckpoint());
         mName = fullPath.filename().string();
     } else mName = checkpointName;
+
+    cout << "ROGO: new mName: " << mName << endl;
 
     GAMSPath cpFilePath(mName);
     if (!cpFilePath.is_absolute())
