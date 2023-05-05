@@ -108,12 +108,6 @@ public:
     bool operator!=(const GAMSJobImpl& other) const;
     bool operator==(const GAMSJobImpl& other) const;
 
-    std::string prepareRun(GAMSCheckpoint*& tmpCP, GAMSOptions* tmpOptions = nullptr,
-                           const GAMSCheckpoint* checkpoint = nullptr, std::ostream* output = nullptr,
-                           bool createOutDb = true, bool relativePaths = false,
-                           std::set<std::string> *dbPaths = nullptr,
-                           std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>());
-
     void run(GAMSOptions* gamsOpt = nullptr, const GAMSCheckpoint* checkpoint = nullptr, std::ostream* output = nullptr,
              bool createOutDb = true, std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>());
 
@@ -137,6 +131,12 @@ public:
 
 private:
     int runProcess(const std::string what, const std::string args, std::string &output);
+
+    std::string prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint*& tmpCP,
+                           const GAMSCheckpoint* checkpoint = nullptr, std::ostream* output = nullptr,
+                           bool createOutDb = true, bool relativePaths = false,
+                           std::set<std::string> *dbPaths = nullptr,
+                           std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>());
 
     GAMSDatabase mOutDb;
     std::string mFileName;
