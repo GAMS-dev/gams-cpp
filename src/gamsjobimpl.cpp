@@ -153,7 +153,6 @@ void GAMSJobImpl::run(GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
                       ostream* output, bool createOutDb, vector<GAMSDatabase> databases)
 {
     GAMSOptions tmpOpt(mWs, gamsOpt);
-    cout << "Run: " << &tmpOpt << gamsOpt->gdx() << endl;
     GAMSCheckpoint* tmpCP = nullptr;
     string pfFileName = prepareRun(tmpOpt, tmpCP, checkpoint, output, createOutDb, false);
 
@@ -168,20 +167,13 @@ void GAMSJobImpl::run(GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
     int exitCode = runProcess(gamsExe.string(), args, result);
 
     if (createOutDb) {
-        cout << "ROGO: createOutDb" << endl;
         GAMSPath gdxPath(tmpOpt.gdx());
-        cout << "ROGO: gdxPath (original): " << gdxPath << endl;
-        cout << "ROGO: gdxPath is absolut?: " << gdxPath.is_absolute() << endl;
         if (!gdxPath.is_absolute())
             gdxPath = GAMSPath(mWs.workingDirectory()) / gdxPath;
 
         gdxPath.setSuffix(".gdx");
-        cout << "ROGO: gdxPath (post set suffix): " << gdxPath << endl;
-        cout << "ROGO: gdxPath exists?: " << gdxPath.exists() << endl;
         if (gdxPath.exists())
             mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.toStdString(), gdxPath.suffix("").filename().string(), "");
-
-        cout << "ROGO: mOutDb.name(): " << mOutDb.name() << endl;
     }
 
     if (output && mWs.debug() >= GAMSEnum::DebugLevel::ShowLog)
@@ -222,7 +214,7 @@ void GAMSJobImpl::zip(string zipName, set<string> files)
     string gmsZip = "gmszip";
     gmsZip.append(cExeSuffix);
 
-    cout << "zipping: " << zipName << endl; // TODO(rogo): delete this
+    cout << "zipping: " << zipName << endl;
     filesystem::path zipPath(mWs.systemDirectory());
     string zipCmd = zipPath.append(gmsZip + " " + zipName);
     for (const GAMSPath &f : files) {
