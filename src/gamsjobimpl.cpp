@@ -89,6 +89,8 @@ string GAMSJobImpl::prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint*& tmpCP,
             tmpOptions.setRestart(mCheckpointStart->fileName());
     }
 
+    cout << "PrepareRun: " << &tmpOptions << tmpOptions.gdx() << endl;
+
     if (checkpoint) {
         if (mCheckpointStart != checkpoint) {
             tmpCP = new GAMSCheckpoint(mWs, "");
@@ -117,6 +119,7 @@ string GAMSJobImpl::prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint*& tmpCP,
         for (GAMSDatabase db: databases) {
             filesystem::path p = mWs.workingDirectory();
             p /= db.name() + ".gdx";
+            cout << "setting new db name" << p.string() << endl; // TODO(rogo): delete this
             if (dbPaths) dbPaths->insert(p);
 
             db.doExport();
@@ -126,8 +129,10 @@ string GAMSJobImpl::prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint*& tmpCP,
     }
     GAMSPath jobFileInfo(GAMSPath(mWs.workingDirectory()) / mJobName);
 
-    if (createOutDb && tmpOptions.gdx() == "")
+    if (createOutDb && tmpOptions.gdx() == "") {
+        cout << "tmpOptions name empty" << endl; // rogo
         tmpOptions.setGdx(mWs.nextDatabaseName());
+    }
 
     if (tmpOptions.logFile() == "")
         tmpOptions.setLogFile(jobFileInfo.suffix(".log").toStdString());
@@ -153,6 +158,7 @@ void GAMSJobImpl::run(GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
                       ostream* output, bool createOutDb, vector<GAMSDatabase> databases)
 {
     GAMSOptions tmpOpt(mWs, gamsOpt);
+    cout << "Run: " << &tmpOpt << gamsOpt->gdx() << endl;
     GAMSCheckpoint* tmpCP = nullptr;
     string pfFileName = prepareRun(tmpOpt, tmpCP, checkpoint, output, false);
 
