@@ -12,7 +12,6 @@ if(WIN32)
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         add_definitions(-DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS)
     endif()
-
 elseif(UNIX) # Apple or Linux
     link_libraries(dl)
     if (NOT APPLE)
@@ -32,6 +31,15 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include_directories(${CMAKE_BINARY_DIR}/inc)
+
+# add Cpr: cpr is a modern HTTP library for C++ (MIT License)
+include(FetchContent)
+FetchContent_Declare(cpr URL https://github.com/libcpr/cpr/archive/refs/tags/1.10.4.tar.gz)
+FetchContent_MakeAvailable(cpr)
+
+# add nlohmann:json to handle json format (MIT License)
+FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
+FetchContent_MakeAvailable(json)
 
 add_library(gamscpp SHARED
         gams.h
@@ -87,5 +95,5 @@ add_library(gamscpp SHARED
         ${SOURCE} ${HEADER}
     )
 
-target_link_libraries(gamscpp cpr::cpr)
-target_link_libraries(gamscpp nlohmann_json::nlohmann_json)
+target_link_libraries(gamscpp PRIVATE cpr::cpr)
+target_link_libraries(gamscpp PRIVATE nlohmann_json::nlohmann_json)

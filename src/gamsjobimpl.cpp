@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 
+#include <cpr/cpr.h>
 #include "gamsjobimpl.h"
 #include "gamscheckpoint.h"
 #include "gamslog.h"
@@ -36,7 +37,6 @@
 #include <fstream>
 #include <iostream>
 #include <array>
-#include <cpr/cpr.h>
 #include <nlohmann/json.hpp>
 
 using namespace std;
@@ -97,7 +97,7 @@ string GAMSJobImpl::prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint*& tmpCP,
             else tmpOptions.setSave(tmpCP->fileName());
         } else {
             if (relativePaths)
-                tmpOptions.setSave(filesystem::relative(checkpoint->fileName(), mWs.workingDirectory()));
+                tmpOptions.setSave(filesystem::relative(checkpoint->fileName(), mWs.workingDirectory()).string());
             else tmpOptions.setSave(checkpoint->fileName());
         }
     }
@@ -117,7 +117,7 @@ string GAMSJobImpl::prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint*& tmpCP,
         for (GAMSDatabase db: databases) {
             filesystem::path p = mWs.workingDirectory();
             p /= db.name() + ".gdx";
-            if (dbPaths) dbPaths->insert(p);
+            if (dbPaths) dbPaths->insert(p.string());
 
             db.doExport();
             if (db.inModelName() != "")
@@ -216,8 +216,8 @@ void GAMSJobImpl::zip(string zipName, set<string> files)
 
     cout << "zipping: " << zipName << endl;
     filesystem::path zipPath(mWs.systemDirectory());
-    string zipCmd = zipPath.append(gmsZip + " " + zipName);
-    for (const GAMSPath &f : files) {
+    string zipCmd = zipPath.append(gmsZip + " " + zipName).string();
+    for (const GAMSPath f : files) {
         if (!f.exists())
             throw GAMSException("File " + f.string() + " is missing.");
 
@@ -236,7 +236,7 @@ void GAMSJobImpl::unzip(string zipName, string destination)
     gmsUnzip.append(cExeSuffix);
 
     filesystem::path zipPath(mWs.systemDirectory());
-    string unzipCmd = zipPath.append(gmsUnzip + " -o " + zipName); // -o: overwrite existing without asking
+    string unzipCmd = zipPath.append(gmsUnzip + " -o " + zipName).string(); // -o: overwrite existing without asking
     if (!destination.empty())
         unzipCmd.append(" -d " + destination);
 
@@ -275,7 +275,7 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
             filesystem::path p(f);
             if (p.is_absolute())
                 extraModelFilesCleaned.insert(f);
-            else extraModelFilesCleaned.insert(filesystem::absolute(mWs.workingDirectory()) / f);
+            else extraModelFilesCleaned.insert(filesystem::absolute(mWs.workingDirectory()).append(f).string());
         }
         modelFiles.insert(extraModelFilesCleaned.begin(), extraModelFilesCleaned.end());
     }
@@ -318,7 +318,7 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
         inexFile excludeFiles("exclude");
         for (const std::string &f : modelFiles) {
             filesystem::path p = filesystem::relative(f, mWs.workingDirectory());
-            excludeFiles.files.emplace_back(filesystem::relative(f, mWs.workingDirectory()));
+            excludeFiles.files.emplace_back(filesystem::relative(f, mWs.workingDirectory()).string());
         }
         fileParams.parts.emplace_back(cpr::Part("inex_string", excludeFiles.toString(), "application/json") );
     }
@@ -327,9 +327,10 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
         fileParams.parts.emplace_back(cpr::Part(dataZipName, cpr::File(dataZipName)));
     } else {
         queryParams["run"] = tmpOpt.input();
-        queryParams["model"] = GAMSPath(filesystem::path(tmpOpt.input()).parent_path(),
-                                        filesystem::path(tmpOpt.input()).stem());
-        fileParams.parts.emplace_back(cpr::Part("model_data", cpr::File(dataZipName), filesystem::path(dataZipName).stem()));
+        queryParams["model"] = filesystem::path(filesystem::path(tmpOpt.input()).parent_path()
+                                                    / filesystem::path(tmpOpt.input()).stem()
+                                                ).string();
+        fileParams.parts.emplace_back(cpr::Part("model_data", cpr::File(dataZipName), filesystem::path(dataZipName).stem().string()));
     }
 
     queryParams["arguments"] = "pf=" + mJobName + ".pf";
@@ -427,7 +428,7 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
             gdxPath = filesystem::path(mWs.workingDirectory()).append(tmpOpt.gdx());
         if (filesystem::exists(gdxPath)) {
             // TODO(RG): addDatabaseFromGDXForcedName in Csharp takes two arguments, set a default here?
-            mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath, gdxPath.filename().stem(), "");
+            mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.string(), gdxPath.filename().stem().string(), "");
         }
     }
 
@@ -456,7 +457,7 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
         filesystem::remove(resultZipName);
     }
 
-    // TODO(RG): we might want to use GAMSPath or std::fs for files instead of string
+//    // TODO(RG): we might want to use GAMSPath or std::fs for files instead of string
 }
 
 bool GAMSJobImpl::interrupt()
@@ -474,7 +475,6 @@ bool GAMSJobImpl::interrupt()
 
         return true;
     }
-
 
     /*qint64*/ int pid = 0 /*mProc.processId()*/; // TODO(RG): we need std process handling here
     if(pid == 0)

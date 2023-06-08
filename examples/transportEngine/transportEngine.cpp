@@ -162,7 +162,7 @@ int main(int argc, char* argv[])
 
     cout << "Run 1" << endl;
     jobData.runEngine(engineConf, &defaultOptions, nullptr, &cout);
-    jobData.outDB().doExport(filesystem::absolute(ws.workingDirectory()) / "tdata.gdx");
+    jobData.outDB().doExport(filesystem::absolute(ws.workingDirectory().append("/tdata.gdx")).string());
 
     map<string, double> expectedLevels = {  { "seattle.new-york", 0.0 },
                                             { "seattle.chicago", 300.0 },
@@ -279,7 +279,7 @@ int main(int argc, char* argv[])
     GAMSJob jc = ws.addJobFromGamsLib("clad");
 
     // Define an option file for the solver to be used
-    string optFile1Path = filesystem::path(ws.workingDirectory()) / "cplex.opt";
+    string optFile1Path = filesystem::path(ws.workingDirectory().append("/cplex.opt")).string();
     ofstream optFile1;
     optFile1.open(optFile1Path);
 
@@ -292,13 +292,13 @@ int main(int argc, char* argv[])
     optFile1.close();
 
     // Write new Cplex option file
-    string optFile2Path = filesystem::path(ws.workingDirectory()) / "cplex.op2";
+    string optFile2Path = filesystem::path(ws.workingDirectory().append("/cplex.op2")).string();
     ofstream optFile2;
     optFile2.open(optFile2Path);
     optFile2 << "epgap 0.1" << endl;
     optFile2.close();
 
-    string logPath = filesystem::path(ws.workingDirectory()) / "ej.log";
+    string logPath = filesystem::path(ws.workingDirectory().append("/ej.log")).string();
     opt = ws.addOptions();
     ofstream *logFile = new ofstream;
     logFile->open(logPath);

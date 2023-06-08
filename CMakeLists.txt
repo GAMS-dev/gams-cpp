@@ -20,15 +20,6 @@ set( CMAKE_CXX_STANDARD_REQUIRED ON )
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
 set( CMAKE_AUTOMOC OFF )
 
-# Add Cpr: cpr is a modern HTTP library for C++ (MIT License)
-include(FetchContent)
-FetchContent_Declare(cpr URL https://github.com/libcpr/cpr/archive/refs/tags/1.10.2.tar.gz)
-FetchContent_MakeAvailable(cpr)
-
-# add nlohmann:json to handle json format (MIT License)
-FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
-FetchContent_MakeAvailable(json)
-
 include(version.cmake)
 
 add_subdirectory( src )
