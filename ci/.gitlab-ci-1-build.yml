@@ -64,7 +64,7 @@ build-wei:
   tags: [windows]
   needs: [install-gamsdist-wei,fetch-prerequisites]
   image:
-    name: $GAMS_CONTAINER_REGISTRY/machines/wei/builder-full:latest
+    name: $GAMS_CONTAINER_REGISTRY/qt-machines/wei/builder-qt6:latest
   script:
     - ('GAMS_DISTRIB=', $(Get-Location).ToString().Replace('\','/'), '/gamsdist') -join "" > gamsinclude.txt
     - Add-Content gamsinclude.txt "`n"

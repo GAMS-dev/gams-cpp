@@ -64,7 +64,7 @@ test-wei:
   when: on_success
   tags: [windows]
   image:
-    name: $GAMS_CONTAINER_REGISTRY/machines/wei/builder-full:latest
+    name: $GAMS_CONTAINER_REGISTRY/qt-machines/wei/builder-qt6:latest
   needs: [install-gamsdist-wei,build-wei]
   script:
     - $GAMS_PATH = ($(pwd), '\gamsdist') -join ""
