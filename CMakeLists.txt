@@ -16,9 +16,10 @@ set( CMAKE_CXX_STANDARD_REQUIRED ON )
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
 
 if (APPLE)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version" FORCE)
-    set(CMAKE_C_COMPILER "/usr/bin/gcc")
-    set(CMAKE_CXX_COMPILER "/usr/bin/g++")
+#    set(CMAKE_C_COMPILER "/usr/bin/gcc")
+#    set(CMAKE_CXX_COMPILER "/usr/bin/g++")
+#    set(CMAKE_C_COMPILER "/usr/bin/clang")
+#    set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
 endif()
 
 cmake_minimum_required(VERSION 3.11)
