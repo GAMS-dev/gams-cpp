@@ -2,31 +2,28 @@ set(GSYS_ENV $ENV{GSYS})
 set(MACOS_LEGACY_ENV $ENV{MACOS_LEGACY})
 if ("${GSYS_ENV}" STREQUAL "deg")
     if ("${MACOS_LEGACY_ENV}" STREQUAL "")
-        message("ROGO DEBUG MACOS NEW")
         set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version" FORCE)
     else()
         # use gcc for macos targets:
-        message("ROGO DEBUG MACOS LEGACY")
         set(CMAKE_OSX_DEPLOYMENT_TARGET "10.14" CACHE STRING "Minimum OS X deployment version" FORCE)
         set(CMAKE_C_COMPILER "$ENV{SYSLIBDIR}/../bin/gcc" CACHE STRING "C Compiler" FORCE)
         set(CMAKE_CXX_COMPILER "$ENV{SYSLIBDIR}/../bin/g++" CACHE STRING "C++ Compiler " FORCE)
     endif()
 endif()
 
-project( GAMS-cpp )
-
-cmake_minimum_required(VERSION 3.11)
-
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
-set( CMAKE_AUTOMOC OFF )
 
-if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if (APPLE)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version" FORCE)
-else()
-    message("CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
+    set(CMAKE_C_COMPILER "/usr/bin/gcc")
+    set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 endif()
+
+cmake_minimum_required(VERSION 3.11)
+
+project( GAMS-cpp )
 
 message("ROGO DEBUG INFO:")
 message("CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
