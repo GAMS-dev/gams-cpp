@@ -26,10 +26,6 @@ cmake_minimum_required(VERSION 3.11)
 
 project( GAMS-cpp )
 
-message("ROGO DEBUG INFO:")
-message("CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
-message("CMAKE_CXX_COMPILER_VERSION: ${CMAKE_CXX_COMPILER_VERSION}")
-
 # Add Cpr: cpr is a modern HTTP library for C++ (MIT License)
 include(FetchContent)
 FetchContent_Declare(cpr URL https://github.com/libcpr/cpr/archive/refs/tags/1.10.2.tar.gz)

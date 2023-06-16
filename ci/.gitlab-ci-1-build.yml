@@ -26,6 +26,7 @@ build-deg:
   tags: [macos]
   needs: [install-gamsdist-dac,fetch-prerequisites]
   script:
+    - set
     - printf "GAMS_DISTRIB=$(pwd)/gamsdist\n" > gamsinclude.txt
     - mkdir build
     - cd build
