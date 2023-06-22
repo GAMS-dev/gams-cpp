@@ -77,7 +77,7 @@ test-wei:
     - cp bin\Release\gtest_main.dll $GAMS_PATH
     - cp bin\Release\gtest.dll $GAMS_PATH
     - gams
-    - ctest -V --output-on-failure --output-junit wei-results.xml > ctestlog.txt
+    - ctest -VV --output-on-failure --output-junit wei-results.xml > ctestlog.txt
     - cat Testing/Temporary/LastTest.log
   artifacts:
     name: unittest-results-wei
