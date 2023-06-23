@@ -11,14 +11,13 @@ if ("${GSYS_ENV}" STREQUAL "deg")
     endif()
 endif()
 
-project( GAMS-cpp )
-
-cmake_minimum_required(VERSION 3.11)
-
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
-set( CMAKE_AUTOMOC OFF )
+
+cmake_minimum_required(VERSION 3.15)
+
+project( GAMS-cpp )
 
 # Add Cpr: cpr is a modern HTTP library for C++ (MIT License)
 include(FetchContent)
