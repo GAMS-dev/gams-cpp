@@ -1,13 +1,8 @@
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-message("ROGO: basepath: ${BASEPATH}")
-message("ROGO: gamspath: ${GAMSPATH}")
-
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-if ("$ENV{GAMS_BUILD}" STREQUAL "")
 
-    message("ROGO: not gams build")
+if ("$ENV{GAMS_BUILD}" STREQUAL "")
 
     # stand alone subproject
     if ("${GAMSPATH}" STREQUAL "")
@@ -25,10 +20,11 @@ else()
 
     # jenkins switch:
     if("$ENV{GAMS_CORE_PATH}" STREQUAL "")
-        message("ROGO: jenkins switch")
+        message("ROGO: jenkins switch: ${CMAKE_CURRENT_SOURCE_DIR}")
 
         set(BASEPATH "${GAMSPATH}/apiexamples")
-        include_directories("${BASEPATH}/C++/api")
+        include_directories("${BASEPATH}/C++/api"
+                            "${CMAKE_CURRENT_SOURCE_DIR}/../../src")
     else()
         message("ROGO: GBS?")
         set(BASEPATH "${GAMSPATH}/apifiles")
