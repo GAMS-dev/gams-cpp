@@ -231,7 +231,7 @@ void GAMSJobImpl::zip(string zipName, set<string> files)
 
 void GAMSJobImpl::unzip(string zipName, string destination)
 {
-    cout << "unzipping " << zipName << " to " << destination << endl; // TODO(rogo): delete this
+    cout << "unzipping " << zipName << " to " << destination << endl;
     string gmsUnzip = "gmsunzip";
     gmsUnzip.append(cExeSuffix);
 
