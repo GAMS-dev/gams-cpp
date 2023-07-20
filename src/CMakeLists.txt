@@ -95,5 +95,5 @@ add_library(gamscpp SHARED
         ${SOURCE} ${HEADER}
     )
 
-target_link_libraries(gamscpp PRIVATE cpr::cpr)
-target_link_libraries(gamscpp PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(gamscpp cpr::cpr)
+target_link_libraries(gamscpp nlohmann_json::nlohmann_json)
