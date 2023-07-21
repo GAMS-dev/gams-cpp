@@ -53,8 +53,7 @@ endif()
 if("$ENV{GAMS_BUILD}" STREQUAL "")
     include_directories(${GAMS_DISTRIB_C_API})
 
-    set(SOURCE ${SOURCE} ${GAMS_DISTRIB_C_API}/gclgms.c
-                         ${GAMS_DISTRIB_C_API}/gmdcc.c
+    set(SOURCE ${SOURCE} ${GAMS_DISTRIB_C_API}/gmdcc.c
                          ${GAMS_DISTRIB_C_API}/gcmt.c
                          ${GAMS_DISTRIB_C_API}/cfgmcc.c
                          ${GAMS_DISTRIB_C_API}/gevmcc.c
@@ -94,8 +93,7 @@ else()
                         ${BTREE_JOAT_ENV}
                         ${BTREE_OPT_ENV})
 
-    set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/gclib/gclgms.c
-                         ${GPRODUCTS_ENV}/gclib/gcmt.c
+    set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/gclib/gcmt.c
                          ${BTREE_GMD_ENV}/gmdcc.c
                          ${BTREE_JOAT_ENV}/cfgmcc.c
                          ${BTREE_JOAT_ENV}/gevmcc.c
