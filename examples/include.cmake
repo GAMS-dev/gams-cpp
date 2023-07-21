@@ -12,6 +12,13 @@ if ("$ENV{GAMS_BUILD}" STREQUAL "")
     else()
         message("ROGO: B")
         set(BASEPATH "${GAMSPATH}/apifiles")
+# ROGO: check in which case we actually need this:
+#        if(WIN32)
+#            set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
+#            link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
+#        else()
+#            link_directories("${BASEPATH}/C++/lib")
+#        endif()
     endif()
 
     include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../src"
@@ -35,12 +42,6 @@ else()
                         "${BASEPATH}/C++/api")
 endif()
 
-if(WIN32)
-    set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
-    link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
-else()
-    link_directories("${BASEPATH}/C++/lib")
-endif()
 
 if(UNIX) # Apple or Linux
     link_libraries(dl)
