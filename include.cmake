@@ -54,7 +54,6 @@ if("$ENV{GAMS_BUILD}" STREQUAL "")
     include_directories(${GAMS_DISTRIB_C_API})
 
     set(SOURCE ${SOURCE} ${GAMS_DISTRIB_C_API}/gmdcc.c
-                         ${GAMS_DISTRIB_C_API}/gcmt.c
                          ${GAMS_DISTRIB_C_API}/cfgmcc.c
                          ${GAMS_DISTRIB_C_API}/gevmcc.c
                          ${GAMS_DISTRIB_C_API}/gmomcc.c
