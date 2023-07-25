@@ -2,12 +2,12 @@ build-leg:
   stage: build
   when: on_success
   tags: [linux]
-  needs: [install-gamsdist-leg,fetch-prerequisites]
+  needs: [fetch-prerequisites,install-gamsdist-leg]
   image:
     name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-qt6:latest
     entrypoint: [""]   # prevent startup.sh
   script:
-    - printf "GAMS_DISTRIB=$(pwd)/gamsdist\n" > gamsinclude.txt
+    - printf "GAMS_DISTRIB=/cache/gams-installs/`python3 ci/fetch_gams.py version`\n" > gamsinclude.txt
     - mkdir build
     - cd build
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
@@ -24,9 +24,9 @@ build-deg:
   stage: build
   when: on_success
   tags: [macos]
-  needs: [install-gamsdist-dac,fetch-prerequisites]
+  needs: [fetch-prerequisites,install-gamsdist-deg]
   script:
-    - printf "GAMS_DISTRIB=$(pwd)/gamsdist\n" > gamsinclude.txt
+    - printf "GAMS_DISTRIB=$HOME/cache/gams-installs/`python3 ci/fetch_gams.py version`\n" > gamsinclude.txt
     - mkdir build
     - cd build
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
@@ -43,9 +43,9 @@ build-dac:
   stage: build
   when: on_success
   tags: [macos-arm64]
-  needs: [install-gamsdist-deg,fetch-prerequisites]
+  needs: [fetch-prerequisites,install-gamsdist-dac]
   script:
-    - printf "GAMS_DISTRIB=$(pwd)/gamsdist\n" > gamsinclude.txt
+    - printf "GAMS_DISTRIB=$HOME/cache/gams-installs/`python3 ci/fetch_gams.py version`\n" > gamsinclude.txt
     - mkdir build
     - cd build
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
@@ -62,11 +62,13 @@ build-wei:
   stage: build
   when: on_success
   tags: [windows]
-  needs: [install-gamsdist-wei,fetch-prerequisites]
+  needs: [fetch-prerequisites,install-gamsdist-wei]
   image:
     name: $GAMS_CONTAINER_REGISTRY/machines/wei/builder-full:latest
   script:
-    - ('GAMS_DISTRIB=', $(Get-Location).ToString().Replace('\','/'), '/gamsdist') -join "" > gamsinclude.txt
+    - $gmsdirname = Get-Content mygmsdir.tmp -Raw
+    - Invoke-Expression "& 'C:\\Cache\\gams-installs\\$gmsdirname\\gams.exe'"
+    - echo "GAMS_DISTRIB=C:/Cache/gams-installs/$gmsdirname" > gamsinclude.txt
     - Add-Content gamsinclude.txt "`n"
     - mkdir build
     - cd build
