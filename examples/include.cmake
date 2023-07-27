@@ -5,12 +5,9 @@ add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
 if ("$ENV{GAMS_BUILD}" STREQUAL "")
     # stand alone subproject
-    message("ROGO: standalone")
     if ("${GAMSPATH}" STREQUAL "")
-        message("ROGO: A")
         set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
     else()
-        message("ROGO: B")
         set(BASEPATH "${GAMSPATH}/apifiles")
 # ROGO: check in which case we actually need this:
 #        if(WIN32)
@@ -27,14 +24,11 @@ if ("$ENV{GAMS_BUILD}" STREQUAL "")
                         "${BASEPATH}/C++/api")
 else()
     # jenkins switch:
-    message("ROGO: jenkins switch")
     if("$ENV{GAMS_CORE_PATH}" STREQUAL "")
-        message("ROGO: AA")
         set(BASEPATH "${GAMSPATH}/apiexamples")
         include_directories("${BASEPATH}/C++/api"
                             "${CMAKE_CURRENT_SOURCE_DIR}/../../src")
     else()
-        message("ROGO: BB")
         set(BASEPATH "${GAMSPATH}/apifiles")
     endif()
     include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api"

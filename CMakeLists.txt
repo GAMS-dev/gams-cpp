@@ -19,8 +19,17 @@ cmake_minimum_required(VERSION 3.15)
 
 project( GAMS-cpp )
 
-# Add Cpr: cpr is a modern HTTP library for C++ (MIT License)
+if (NOT "$ENV{GAMS_BUILD}" STREQUAL "")
+    if (UNIX)
+        set(OPENSSL_ROOT_DIR "/home/nb/master/btree/openssl/leg/build")
+        set(OPENSSL_INCLUDE_DIR "/home/nb/master/btree/openssl/leg/include")
+        set(OPENSSL_CRYPTO_LIBRARY "/home/nb/master/btree/openssl/leg/lib/libcrypto.so")
+    endif()
+endif()
+
 include(FetchContent)
+
+# Add Cpr: cpr is a modern HTTP library for C++ (MIT License)
 FetchContent_Declare(cpr URL https://github.com/libcpr/cpr/archive/refs/tags/1.10.2.tar.gz)
 FetchContent_MakeAvailable(cpr)
 
@@ -41,4 +50,3 @@ if(PACKAGE_TESTS)
     endif()
     add_subdirectory(tests)
 endif()
-
