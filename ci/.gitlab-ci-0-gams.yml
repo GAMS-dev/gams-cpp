@@ -56,7 +56,7 @@ install-gamsdist-wei:
     name: $GAMS_CONTAINER_REGISTRY/machines/wei/builder-full:latest
   script:
     - python ci/fetch_gams.py install $PF_CUSTOM_BRANCH $SSH_KEY_PORTING
-    - python ci/fetch_gams.py version
+    - python ci/fetch_gams.py version $PF_CUSTOM_BRANCH
     - $gmsdirname = Get-Content mygmsdir.tmp -Raw
     - Invoke-Expression "& 'C:\\Cache\\gams-installs\\$gmsdirname\\gams.exe'"
   artifacts:
