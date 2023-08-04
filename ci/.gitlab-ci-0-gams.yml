@@ -11,11 +11,12 @@ fetch-prerequisites:
     - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@$GITLAB_CISCRIPTS_URL scripts-repo
     - cp -R scripts-repo/ci .
     # fetch GAMS for Windows
-    - python3 ci/fetch_gams.py fetch_wei $PF_CUSTOM_BRANCH $SSH_KEY_PORTING
+    - python3 ci/fetch_gams.py fetch_wei $PF_CUSTOM_BRANCH $SSH_KEY_PORTING force
+    - python3 ci/fetch_gams.py fetch_wei $PF_CUSTOM_BRANCH $SSH_KEY_PORTING buildInfo
   artifacts:
     name: fetch-prerequisites
     expire_in: 15 minutes
-    paths: [windows_x64_64.exe,ci/*]
+    paths: [windows_x64_64.exe,buildInfo.txt,ci/*]
 
 install-gamsdist-leg:
   stage: install-gams
@@ -26,13 +27,8 @@ install-gamsdist-leg:
     name: $GAMS_CONTAINER_REGISTRY/machines/leg/builder-full:latest
     entrypoint: [""]
   script:
-    - python3 ci/fetch_gams.py fetch_leg $PF_CUSTOM_BRANCH $SSH_KEY_PORTING
-    - chmod 777 linux_x64_64_sfx.exe
-    - python3 ci/fetch_gams.py install
-  artifacts:
-    name: gamsdist-leg
-    expire_in: 1 hour
-    paths: [ gamsdist/* ]
+    - python3 ci/fetch_gams.py fetch_and_install_leg $PF_CUSTOM_BRANCH $SSH_KEY_PORTING
+    - /cache/gams-installs/`python3 ci/fetch_gams.py version`/gams
 
 install-gamsdist-deg:
   stage: install-gams
@@ -40,24 +36,16 @@ install-gamsdist-deg:
   tags: [macos]
   needs: [fetch-prerequisites]
   script:
-    - python3 ci/fetch_gams.py fetch_deg $PF_CUSTOM_BRANCH $SSH_KEY_PORTING
-    - python3 ci/fetch_gams.py install
-  artifacts:
-    name: gamsdist-deg
-    expire_in: 1 hour
-    paths: [gamsdist/*]
+    - python3 ci/fetch_gams.py fetch_and_install_deg $PF_CUSTOM_BRANCH $SSH_KEY_PORTING
+    - $HOME/cache/gams-installs/`python3 ci/fetch_gams.py version`/gams
 
 install-gamsdist-dac:
   stage: install-gams
   tags: [macos-arm64]
   dependencies: [fetch-prerequisites]
   script:
-    - python3 ci/fetch_gams.py fetch_dac $PF_CUSTOM_BRANCH $SSH_KEY_PORTING
-    - GAMS_LICENSE=$GAMS_LICENSE python3 ci/fetch_gams.py install
-  artifacts:
-    name: gamsdist-dac
-    expire_in: 1 hour
-    paths: [gamsdist/*]
+    - python3 ci/fetch_gams.py fetch_and_install_dac $PF_CUSTOM_BRANCH $SSH_KEY_PORTING
+    - $HOME/cache/gams-installs/`python3 ci/fetch_gams.py version`/gams
 
 install-gamsdist-wei:
   stage: install-gams
@@ -67,8 +55,11 @@ install-gamsdist-wei:
   image:
     name: $GAMS_CONTAINER_REGISTRY/machines/wei/builder-full:latest
   script:
-    - python ci/fetch_gams.py install
+    - python ci/fetch_gams.py install $PF_CUSTOM_BRANCH $SSH_KEY_PORTING
+    - python ci/fetch_gams.py version $PF_CUSTOM_BRANCH
+    - $gmsdirname = Get-Content mygmsdir.tmp -Raw
+    - Invoke-Expression "& 'C:\\Cache\\gams-installs\\$gmsdirname\\gams.exe'"
   artifacts:
-    name: gamsdist-wei
-    expire_in: 1 hour
-    paths: [gamsdist/*]
+    name: wei-gmsdirpath
+    expire_in: 15 minutes
+    paths: [mygmsdir.tmp]

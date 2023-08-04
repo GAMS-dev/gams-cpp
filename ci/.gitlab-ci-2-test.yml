@@ -5,9 +5,9 @@ test-leg:
   image:
     name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-qt6:latest
     entrypoint: [""]   # prevent startup.sh
-  needs: [install-gamsdist-leg,build-leg]
+  needs: [fetch-prerequisites,build-leg]
   script:
-    - GAMS_PATH=$(pwd)/gamsdist
+    - GAMS_PATH=/cache/gams-installs/`python3 ci/fetch_gams.py version`
     - echo $PF_GAMS_LICENSE > $GAMS_PATH/gamslice.txt
     - cd build
     - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" gams
@@ -23,9 +23,9 @@ test-deg:
   stage: test
   when: on_success
   tags: [macos]
-  needs: [install-gamsdist-deg,build-deg]
+  needs: [fetch-prerequisites,build-deg]
   script:
-    - GAMS_PATH=$(pwd)/gamsdist
+    - GAMS_PATH=$HOME/cache/gams-installs/`python3 ci/fetch_gams.py version`
     - echo $PF_GAMS_LICENSE > $GAMS_PATH/gamslice.txt
     - cd build
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib gams
@@ -43,9 +43,9 @@ test-dac:
   stage: test
   when: on_success
   tags: [macos-arm64]
-  needs: [install-gamsdist-dac,build-dac]
+  needs: [fetch-prerequisites,build-dac]
   script:
-    - GAMS_PATH=$(pwd)/gamsdist
+    - GAMS_PATH=$HOME/cache/gams-installs/`python3 ci/fetch_gams.py version`
     - echo $PF_GAMS_LICENSE > $GAMS_PATH/gamslice.txt
     - cd build
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib gams
@@ -67,7 +67,8 @@ test-wei:
     name: $GAMS_CONTAINER_REGISTRY/qt-machines/wei/builder-qt6:latest
   needs: [install-gamsdist-wei,build-wei]
   script:
-    - $GAMS_PATH = ($(pwd), '\gamsdist') -join ""
+    - $gmsdirname = Get-Content mygmsdir.tmp -Raw
+    - $GAMS_PATH = "C:\Cache\gams-installs\$gmsdirname"
     - Out-File -FilePath $GAMS_PATH\gamslice.txt -InputObject $PF_GAMS_LICENSE -Encoding ASCII
     - $env:Path = "$GAMS_PATH;$GAMS_PATH\gbin;" + $env:Path
     - $env:GAMSDIR = "$GAMS_PATH;$GAMS_PATH\gbin"
