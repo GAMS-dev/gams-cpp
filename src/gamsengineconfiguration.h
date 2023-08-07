@@ -26,11 +26,12 @@
 #ifndef GAMSENGINECONFIGURATION_H
 #define GAMSENGINECONFIGURATION_H
 
+#include "gamslib_global.h" // LIBSPEC
 #include <string>
 
 namespace gams {
 
-class GAMSEngineConfiguration
+class LIBSPEC GAMSEngineConfiguration
 {
 public:
     GAMSEngineConfiguration(const std::string &host, const std::string &user, const std::string &pw, const std::string &space);
