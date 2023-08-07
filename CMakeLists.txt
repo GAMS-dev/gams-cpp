@@ -20,12 +20,23 @@ cmake_minimum_required(VERSION 3.15)
 project( GAMS-cpp )
 
 if (NOT "$ENV{GAMS_BUILD}" STREQUAL "")
-    if (UNIX)
+    if ("${GSYS_ENV}" STREQUAL "leg")
         set(OPENSSL_ROOT_DIR "$ENV{BTREE}/openssl/leg/build")
         set(OPENSSL_INCLUDE_DIR "$ENV{BTREE}/openssl/leg/include")
         set(OPENSSL_CRYPTO_LIBRARY "$ENV{BTREE}/openssl/leg/lib/libcrypto.so")
         # work around for caching issue in OpenSSL checks
         set(CPR_PATCH_COMMAND sed -i -e /cmake_minimum_required/s/3.15/3.17/ CMakeLists.txt)
+    endif()
+    if (NOT "${MACOS_LEGACY_ENV}" STREQUAL "")
+        # switch to OpenSSL, because macOS 12 headers do not compile with GCC
+        # (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93082)
+        set(CPR_FORCE_OPENSSL_BACKEND ON)
+        set(CMAKE_USE_SECTRANSP OFF)
+        # overwrite wrong detection of __builtin_available by curl
+        set(HAVE_BUILTIN_AVAILABLE 0)
+        # allow warnings in libcpr: remove -Werror, or just the whole line
+        # (cpr-src/cpr/util.cpp:20: error: "__STDC_WANT_LIB_EXT1__" redefined [-Werror])
+        set(CPR_PATCH_COMMAND sed -i -e /Werror/d CMakeLists.txt)
     endif()
 endif()
 
