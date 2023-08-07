@@ -21,16 +21,18 @@ project( GAMS-cpp )
 
 if (NOT "$ENV{GAMS_BUILD}" STREQUAL "")
     if (UNIX)
-        set(OPENSSL_ROOT_DIR "/home/nb/master/btree/openssl/leg/build")
-        set(OPENSSL_INCLUDE_DIR "/home/nb/master/btree/openssl/leg/include")
-        set(OPENSSL_CRYPTO_LIBRARY "/home/nb/master/btree/openssl/leg/lib/libcrypto.so")
+        set(OPENSSL_ROOT_DIR "$ENV{BTREE}/openssl/leg/build")
+        set(OPENSSL_INCLUDE_DIR "$ENV{BTREE}/openssl/leg/include")
+        set(OPENSSL_CRYPTO_LIBRARY "$ENV{BTREE}/openssl/leg/lib/libcrypto.so")
+        # work around for caching issue in OpenSSL checks
+        set(CPR_PATCH_COMMAND sed -i -e /cmake_minimum_required/s/3.15/3.17/ CMakeLists.txt)
     endif()
 endif()
 
 include(FetchContent)
 
 # Add Cpr: cpr is a modern HTTP library for C++ (MIT License)
-FetchContent_Declare(cpr URL https://github.com/libcpr/cpr/archive/refs/tags/1.10.2.tar.gz)
+FetchContent_Declare(cpr URL https://github.com/libcpr/cpr/archive/refs/tags/1.10.2.tar.gz PATCH_COMMAND ${CPR_PATCH_COMMAND})
 FetchContent_MakeAvailable(cpr)
 
 # add nlohmann:json to handle json format (MIT License)

@@ -34,6 +34,9 @@ else()
     include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api"
                         "${BASEPATH}/../gclib"
                         "${BASEPATH}/C++/api")
+    if(UNIX)
+        add_link_options("-Wl,-rpath,$ENV{BTREE}/gmszlib/leg")
+    endif()
 endif()
 
 

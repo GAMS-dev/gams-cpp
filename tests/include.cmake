@@ -17,6 +17,9 @@ else()
     endif()
     include_directories("${BASEPATH}/../gclib"
                         "${gtest_SOURCE_DIR}/include")
+    if(UNIX)
+        add_link_options("-Wl,-rpath,$ENV{BTREE}/gmszlib/leg")
+    endif()
 endif()
 
 if(WIN32)
