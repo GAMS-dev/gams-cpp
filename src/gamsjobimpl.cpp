@@ -402,6 +402,7 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
                              cpr::Authentication{engineConfiguration.username(),
                                            engineConfiguration.password(),
                                            cpr::AuthMode::BASIC});
+    of.close();
 
     if (!cpr::status::is_success(response.status_code)) {
         throw GAMSException("Downloading job result failed with status code: " + to_string(response.status_code) + "."
