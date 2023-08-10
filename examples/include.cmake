@@ -9,13 +9,16 @@ if ("$ENV{GAMS_BUILD}" STREQUAL "")
         set(BASEPATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
     else()
         set(BASEPATH "${GAMSPATH}/apifiles")
-# ROGO: check in which case we actually need this:
-#        if(WIN32)
-#            set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
-#            link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
-#        else()
-#            link_directories("${BASEPATH}/C++/lib")
-#        endif()
+    endif()
+
+    # check if run from distrib
+    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src")
+        if(WIN32)
+            set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
+            link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
+        else()
+            link_directories("${BASEPATH}/C++/lib")
+        endif()
     endif()
 
     include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../src"
