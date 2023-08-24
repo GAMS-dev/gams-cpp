@@ -76,9 +76,9 @@ GAMSJobImpl::~GAMSJobImpl() {
     delete mCheckpointStart; // this is intended to only free the wrapper, not the *Impl if used anywhere
 }
 
-string GAMSJobImpl::prepareRun(const GAMSOptions& tmpOptions, GAMSCheckpoint*& tmpCP,
+string GAMSJobImpl::prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint*& tmpCP,
                                const GAMSCheckpoint* checkpoint, ostream* output, bool createOutDb,
-                               bool relativePaths, const set<string> *dbPaths, const vector<GAMSDatabase> &databases)
+                               bool relativePaths, set<string> *dbPaths, const vector<GAMSDatabase> &databases)
 {
     // TODO (RG): check if tmpCP needs to be deleted
 
@@ -149,12 +149,12 @@ string GAMSJobImpl::prepareRun(const GAMSOptions& tmpOptions, GAMSCheckpoint*& t
     return pfFile.string();
 }
 
-void GAMSJobImpl::run(const GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
-                      ostream* output, bool createOutDb, const vector<GAMSDatabase> &databases)
+void GAMSJobImpl::run(GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
+                      ostream* output, bool createOutDb, vector<GAMSDatabase> databases)
 {
     GAMSOptions tmpOpt(mWs, gamsOpt);
     GAMSCheckpoint* tmpCP = nullptr;
-    string pfFileName = prepareRun(tmpOpt, tmpCP, checkpoint, output, createOutDb, false);
+    string pfFileName = prepareRun(tmpOpt, tmpCP, checkpoint, output, createOutDb, false, {}, databases);
 
     filesystem::path gamsExe = filesystem::path(mWs.systemDirectory());
     gamsExe.append(string("gams") + cExeSuffix);
@@ -208,8 +208,7 @@ void GAMSJobImpl::run(const GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoi
     }
 }
 
-// TODO(RG): move zip and unzip to a more fitting class?
-void GAMSJobImpl::zip(string zipName, set<string> files)
+void GAMSJobImpl::zip(const string &zipName, const set<string> &files)
 {
     string gmsZip = "gmszip";
     gmsZip.append(cExeSuffix);
@@ -229,7 +228,7 @@ void GAMSJobImpl::zip(string zipName, set<string> files)
         cerr << "Error while zipping " << zipName << ". ErrorCode: " << errorCode << endl;
 }
 
-void GAMSJobImpl::unzip(string zipName, string destination)
+void GAMSJobImpl::unzip(const string &zipName, const string &destination)
 {
     cout << "unzipping " << zipName << " to " << destination << endl;
     string gmsUnzip = "gmsunzip";
@@ -474,7 +473,7 @@ bool GAMSJobImpl::interrupt()
     return GAMSPlatform::interrupt(pid);
 }
 
-int GAMSJobImpl::runProcess(const string what, const string args, string& output)
+int GAMSJobImpl::runProcess(const string &what, const string &args, string& output)
 {
     ostringstream ssp;
     string result;

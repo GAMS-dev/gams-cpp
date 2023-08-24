@@ -37,7 +37,7 @@ public:
     GAMSEngineConfiguration(const std::string &host, const std::string &user, const std::string &pw, const std::string &space);
 
     std::string host() const;
-    void setHost(std::string newHost);
+    void setHost(const std::string &newHost);
 
     std::string username() const;
     void setUsername(const std::string &newUsername);

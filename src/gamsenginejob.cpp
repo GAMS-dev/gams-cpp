@@ -28,7 +28,7 @@ using namespace std;
 
 namespace gams {
 
-GAMSEngineJob::GAMSEngineJob(std::string token, GAMSEngineConfiguration config)
+GAMSEngineJob::GAMSEngineJob(const std::string &token, const GAMSEngineConfiguration &config)
     : mToken(token), mConfig(config)
 { }
 

@@ -73,16 +73,14 @@ void GAMSEngineConfiguration::setHost(const std::string &newHost)
     if (matchesIp.empty() && matchesHostname.empty())
         throw GAMSException("Invalid GAMS Engine host. Make sure you provide a valid URL.");
 
-    // TODO(RG): test this!
+    mHost = newHost;
     if (newHost.find_last_of('/') == newHost.size())
-        newHost = newHost.substr(0, newHost.size()-1);
+        mHost = newHost.substr(0, newHost.size()-1);
 
     // ends with postfix
     string postfix = "/api";
     if (newHost.compare(newHost.length() - postfix.length(), postfix.length(), postfix) != 0)
-        newHost.append(postfix);
-
-    mHost = newHost;
+        mHost.append(postfix);
 }
 
 std::string GAMSEngineConfiguration::username() const
