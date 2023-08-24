@@ -53,7 +53,7 @@ std::string GAMSEngineConfiguration::host() const
     return mHost;
 }
 
-void GAMSEngineConfiguration::setHost(std::string newHost)
+void GAMSEngineConfiguration::setHost(const std::string &newHost)
 {
     if (! (newHost.rfind("http", 0) == 0 || newHost.rfind("https", 0) == 0))
         throw GAMSException("Invalid GAMS Engine host. Only HTTP and HTTPS protocols supported.");

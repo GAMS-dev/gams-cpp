@@ -39,9 +39,8 @@ public:
     /// \param token Job token
     /// \param config GAMSEngineConfiguration instance used to submit job
     ///
-    GAMSEngineJob(std::string token, GAMSEngineConfiguration config);
+    GAMSEngineJob(const std::string &token, const GAMSEngineConfiguration &config);
 
-public:
     std::string token();
     GAMSEngineConfiguration config();
 

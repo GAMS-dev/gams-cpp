@@ -47,12 +47,9 @@ class GAMSCheckpoint;
 struct inexFile
 {
     std::string type;
-    std::vector<std::string> files;
+    std::vector<std::string> files {};
 
-    inexFile(std::string inexType) {
-        type = inexType;
-        files = std::vector<std::string>();
-    }
+    inexFile(std::string inexType) : type{inexType} {}
 
     std::string toString() {
         std::string res = "{ ";
@@ -111,10 +108,10 @@ public:
     void run(GAMSOptions* gamsOpt = nullptr, const GAMSCheckpoint* checkpoint = nullptr, std::ostream* output = nullptr,
              bool createOutDb = true, std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>());
 
-    void runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions* gamsOptions,
+    void runEngine(const GAMSEngineConfiguration &engineConfiguration, GAMSOptions* gamsOptions,
                    GAMSCheckpoint *checkpoint, std::ostream *output,
-                   std::vector<GAMSDatabase> databases, std::set<std::string> extraModelFiles,
-                   std::unordered_map<std::string, std::string> engineOptions,
+                   const std::vector<GAMSDatabase> &databases, const std::set<std::string> &extraModelFiles,
+                   const std::unordered_map<std::string, std::string> &engineOptions,
                    bool createOutDB,  bool removeResults);
 
     GAMSDatabase outDB();
@@ -126,17 +123,17 @@ public:
     GAMSWorkspace mWs;
     std::string mJobName;
 
-    void zip(std::string zipName, std::set<std::string> files);
-    void unzip(std::string zipName, std::string destination = nullptr);
+    void zip(const std::string &zipName, const std::set<std::string> &files);
+    void unzip(const std::string &zipName, const std::string &destination = nullptr);
 
 private:
-    int runProcess(const std::string what, const std::string args, std::string &output);
+    int runProcess(const std::string &what, const std::string &args, std::string &output);
 
-    std::string prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint*& tmpCP,
+    std::string prepareRun(const GAMSOptions& tmpOptions, GAMSCheckpoint*& tmpCP,
                            const GAMSCheckpoint* checkpoint = nullptr, std::ostream* output = nullptr,
                            bool createOutDb = true, bool relativePaths = false,
-                           std::set<std::string> *dbPaths = nullptr,
-                           std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>());
+                           const std::set<std::string> *dbPaths = nullptr,
+                           const std::vector<GAMSDatabase> &databases = {});
 
     GAMSDatabase mOutDb;
     std::string mFileName;

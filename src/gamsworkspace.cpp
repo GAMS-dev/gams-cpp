@@ -63,7 +63,7 @@ string GAMSWorkspace::nextDatabaseName() const
     return mImpl->nextDatabaseName();
 }
 
-string GAMSWorkspace::registerCheckpoint(std::string checkpointName) const
+string GAMSWorkspace::registerCheckpoint(const std::string &checkpointName) const
 {
     return mImpl->registerCheckpoint(checkpointName);
 }

@@ -110,9 +110,9 @@ void GAMSJob::run(GAMSOptions& gamsOptions, GAMSCheckpoint gamsCheckpoint, std::
     mImpl->run(&gamsOptions, (gamsCheckpoint.isValid() ? &gamsCheckpoint : nullptr), &output, createOutDB, databases);
 }
 
-void GAMSJob::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions* gamsOptions,
+void GAMSJob::runEngine(const GAMSEngineConfiguration &engineConfiguration, GAMSOptions* gamsOptions,
                         GAMSCheckpoint* checkpoint, std::ostream* output,
-                        std::vector<gams::GAMSDatabase> databases, std::set<std::string> extraModelFiles, std::unordered_map<std::string, std::string> engineOptions,
+                        const std::vector<gams::GAMSDatabase> &databases, const std::set<std::string> &extraModelFiles, const std::unordered_map<std::string, std::string> &engineOptions,
                         bool createOutDB, bool removeResults)
 {
     if (!mImpl) throw GAMSException("GAMSJob: This job has not been initialized.");

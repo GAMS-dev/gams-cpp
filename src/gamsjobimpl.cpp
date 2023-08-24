@@ -76,9 +76,9 @@ GAMSJobImpl::~GAMSJobImpl() {
     delete mCheckpointStart; // this is intended to only free the wrapper, not the *Impl if used anywhere
 }
 
-string GAMSJobImpl::prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint*& tmpCP,
+string GAMSJobImpl::prepareRun(const GAMSOptions& tmpOptions, GAMSCheckpoint*& tmpCP,
                                const GAMSCheckpoint* checkpoint, ostream* output, bool createOutDb,
-                               bool relativePaths, set<string> *dbPaths, vector<GAMSDatabase> databases)
+                               bool relativePaths, const set<string> *dbPaths, const vector<GAMSDatabase> &databases)
 {
     // TODO (RG): check if tmpCP needs to be deleted
 
@@ -149,8 +149,8 @@ string GAMSJobImpl::prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint*& tmpCP,
     return pfFile.string();
 }
 
-void GAMSJobImpl::run(GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
-                      ostream* output, bool createOutDb, vector<GAMSDatabase> databases)
+void GAMSJobImpl::run(const GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
+                      ostream* output, bool createOutDb, const vector<GAMSDatabase> &databases)
 {
     GAMSOptions tmpOpt(mWs, gamsOpt);
     GAMSCheckpoint* tmpCP = nullptr;
@@ -245,35 +245,30 @@ void GAMSJobImpl::unzip(string zipName, string destination)
         cerr << "Error while unzipping " << zipName << " to " << destination << ". ErrorCode: " << errorCode << endl;
 }
 
-void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions* gamsOptions,
-                            GAMSCheckpoint* checkpoint, ostream *output, vector<GAMSDatabase> databases,
-                            set<string> extraModelFiles, unordered_map<string, string> engineOptions,
+void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, GAMSOptions* gamsOptions,
+                            GAMSCheckpoint* checkpoint, ostream *output, const vector<GAMSDatabase> &databases,
+                            const set<string> &extraModelFiles, const unordered_map<string, string> &engineOptions,
                             bool createOutDB, bool removeResults)
 {
     GAMSOptions tmpOpt(mWs, gamsOptions);
     GAMSCheckpoint* tmpCp = nullptr;
-    set<string> dbPaths = set<string>();
+    set<string> dbPaths{};
 
     string pfFileName = prepareRun(tmpOpt, tmpCp, checkpoint, output,
                                    createOutDB, true, &dbPaths, databases);
 
-    string mainFileName;
-    if (filesystem::exists(mFileName))
-        mainFileName = mFileName;
-    else
-        mainFileName = mFileName.append(".gms");
+    string mainFileName {filesystem::exists(mFileName) ? mFileName : mFileName.append(".gms")};
 
-    set<string> modelFiles = { mainFileName, pfFileName };
+    set<string> modelFiles { mainFileName, pfFileName };
     modelFiles.insert(dbPaths.begin(), dbPaths.end());
 
     if (mCheckpointStart)
         modelFiles.insert(mCheckpointStart->fileName());
 
     if (!extraModelFiles.empty()) {
-        set<string> extraModelFilesCleaned = set<string>();
+        set<string> extraModelFilesCleaned{};
         for (const string& f : extraModelFiles) {
-            filesystem::path p(f);
-            if (p.is_absolute())
+            if (filesystem::path{f}.is_absolute())
                 extraModelFilesCleaned.insert(f);
             else extraModelFilesCleaned.insert(filesystem::absolute(mWs.workingDirectory()).append(f).string());
         }
@@ -284,19 +279,17 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
     int dataZipCount = 1;
 
     while (filesystem::exists(mWs.workingDirectory().append("/_gams_data")
-                                                    .append(to_string(dataZipCount)))) {
-                                                            dataZipCount++;
-                                                    }
+                                                    .append(to_string(dataZipCount++))));
     dataZipName = mWs.workingDirectory().append("/_gams_data")
                                         .append(to_string(dataZipCount)).append(".zip");
 
     zip(dataZipName, modelFiles);
 
-    unordered_map<string, string> requestParams = unordered_map<string, string>();
+    unordered_map<string, string> requestParams{};
     if (!engineOptions.empty())
         requestParams.insert(engineOptions.begin(), engineOptions.end());
 
-    unordered_map<string, string> queryParams = unordered_map<string, string>(requestParams);
+    unordered_map<string, string> queryParams{requestParams};
 
     cpr::Multipart fileParams{};
 
@@ -317,7 +310,6 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
 
         inexFile excludeFiles("exclude");
         for (const std::string &f : modelFiles) {
-            filesystem::path p = filesystem::relative(f, mWs.workingDirectory());
             excludeFiles.files.emplace_back(filesystem::relative(f, mWs.workingDirectory()).string());
         }
         fileParams.parts.emplace_back(cpr::Part("inex_string", excludeFiles.toString(), "application/json") );
@@ -374,9 +366,8 @@ void GAMSJobImpl::runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOpt
             if (mWs.debug() >= GAMSEnum::DebugLevel::ShowLog) {
                 if (!stdOutData.empty())
                     cout << stdOutData << endl;
-            } else if (output) {
-                if (!stdOutData.empty())
-                    *output << stdOutData << endl;
+            } else if (output && !stdOutData.empty()) {
+                *output << stdOutData << endl;
             }
         }
 

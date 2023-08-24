@@ -451,7 +451,7 @@ private:
     /// Registers a GAMSCheckpoint at the workspace
     /// \param checkpointName Checkpoint name to add (empty: generate default name)
     /// \returns Checkpoint name if all worked well, else an empty string
-    std::string registerCheckpoint(std::string checkpointName = "") const;
+    std::string registerCheckpoint(const std::string &checkpointName = "") const;
 
     /// Registers a ModelInstance to workspace
     /// \param databaseName Database name to add

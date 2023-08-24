@@ -123,8 +123,8 @@ public:
     /// \param output Stream to capture GAMS log.
     /// \param createOutDB Flag that activates writing to outDB.
     /// \param databases GAMSDatabases read by the GAMSJob.
-    void run(GAMSOptions& gamsOptions, GAMSCheckpoint gamsCheckpoint, std::ostream& output,
-             bool createOutDB, std::vector<gams::GAMSDatabase> databases);
+    void run(GAMSOptions& gamsOptions, const GAMSCheckpoint &gamsCheckpoint, std::ostream& output,
+             bool createOutDB, const std::vector<gams::GAMSDatabase> &databases);
 
     /// Run GAMSJob on GAMS Engine
     /// \param engineConfiguration GAMSEngineConfiguration object
@@ -136,11 +136,11 @@ public:
     /// \param createOutDB Flag to define if OutDB should be created
     /// \param removeResults Remove results from GAMS Engine after downloading them
     /// \param databases GAMSDatabases read by the GAMSJob
-    void runEngine(GAMSEngineConfiguration engineConfiguration, GAMSOptions* gamsOptions,
+    void runEngine(const GAMSEngineConfiguration &engineConfiguration, GAMSOptions* gamsOptions,
                    gams::GAMSCheckpoint *checkpoint, std::ostream* output = nullptr,
-                   std::vector<gams::GAMSDatabase> databases = std::vector<GAMSDatabase>(),
-                   std::set<std::string> extraModelFiles = std::set<std::string>(),
-                   std::unordered_map<std::string, std::string> engineOptions = std::unordered_map<std::string, std::string>(),
+                   const std::vector<gams::GAMSDatabase> &databases = {},
+                   const std::set<std::string> &extraModelFiles = {},
+                   const std::unordered_map<std::string, std::string> &engineOptions = {},
                     bool createOutDB = true, bool removeResults = true);
 
     /// Get GAMSDatabase created by Run method

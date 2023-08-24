@@ -34,13 +34,9 @@ namespace gams {
 using namespace std;
 
 GAMSCheckpointImpl::GAMSCheckpointImpl(const GAMSWorkspace& workspace, const string& checkpointName)
-   : mWs(workspace)
+   : mWs(workspace), mName { checkpointName.empty() ? filesystem::path{workspace.registerCheckpoint()}.filename().string() : checkpointName }
 {
     DEB << "---- Entering GAMSCheckpointImpl constructor ----";
-    if (checkpointName.empty()){
-        filesystem::path fullPath(mWs.registerCheckpoint());
-        mName = fullPath.filename().string();
-    } else mName = checkpointName;
 
     GAMSPath cpFilePath(mName);
     if (!cpFilePath.is_absolute())
