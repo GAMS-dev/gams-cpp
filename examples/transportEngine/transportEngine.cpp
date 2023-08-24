@@ -136,21 +136,12 @@ int main(int argc, char* argv[])
 
     filesystem::remove(ws.workingDirectory().append("/test.txt"));
 
-    if (getenv("ENGINE_URL") == NULL) {
-        cerr << "No ENGINE_URL set" << endl;
-        return -1;
-    }
-    if (getenv("ENGINE_USER") == NULL) {
-        cerr << "No ENGINE_USER set" << endl;
-        return -1;
-    }
-    if (getenv("ENGINE_PASSWORD") == NULL) {
-        cerr << "No ENGINE_PASSWORD set" << endl;
-        return -1;
-    }
-    if (getenv("ENGINE_NAMESPACE") == NULL) {
-        cerr << "No ENGINE_NAMESPACE set" << endl;
-        return -1;
+    string envPrefix("ENGINE_");
+    for (const string &id : {"URL", "USER", "PASSWORD", "NAMESPACE"}) {
+        if(!getenv((envPrefix + id).c_str())) {
+            cerr << "No ENGINE_" << id << " set" << endl;
+            return -1;
+        }
     }
 
     GAMSEngineConfiguration engineConf(getenv("ENGINE_URL"), getenv("ENGINE_USER"),
@@ -180,15 +171,15 @@ int main(int argc, char* argv[])
     opt.setAllModelTypes("xpress");
 
     // run a job using an instance of GAMSOptions that defines the data include file
-        cout << "Run 2" << endl;
-        jobModel.runEngine(engineConf, &opt, nullptr, &cout, vector<GAMSDatabase>(),
-                           set<string>() = { "tdata.gdx" }, unordered_map<string, string>() = {
+    cout << "Run 2" << endl;
+    jobModel.runEngine(engineConf, &opt, nullptr, &cout, {}, { "tdata.gdx" },
+                            {
                                 { "inex_string", "{\"type\": \"include\", \"files\": [\"*.gdx\"]}" }
                             });
 
     for (GAMSVariableRecord rec : jobModel.outDB().getVariable("x")) {
         cout << "x(" << rec.key(0) << "," + rec.key(1) << "): level=" << rec.level()
-             << "marginal=" << rec.marginal() << endl;
+             << "marginal=" << rec.marginal() << "\n";
 
         if (expectedLevels.at(rec.key(0).append(".").append(rec.key(1))) != rec.level()) {
             cout << "Unexpected result, expected level: "
@@ -221,7 +212,7 @@ int main(int argc, char* argv[])
 
         for (GAMSVariableRecord rec : jobB.outDB().getVariable("x")) {
             cout << "x(" << rec.key(0) << "," + rec.key(1) << "): level=" << rec.level()
-                 << "marginal=" << rec.marginal() << endl;
+                 << "marginal=" << rec.marginal() << "\n";
 
             if (expectedLevels.at(rec.key(0).append(".").append(rec.key(1))) != rec.level()) {
                 cout << "Unexpected result, expected level: "
@@ -230,14 +221,10 @@ int main(int argc, char* argv[])
                 return 1;
             }
         }
-        vector<map<string, double>> bmultExpected = vector<map<string, double>>();
-        bmultExpected.push_back(map<string, double>() = {
-                        { "bmult", 0.9 }, { "ms", 1 }, { "ss", 1 }, { "obj", 138.31 } }
-                );
-        bmultExpected.push_back(map<string, double>() = {
-                        { "bmult", 1.2 }, { "ms", 4 }, { "ss", 1 }, { "obj", 184.41 } }
-                );
-
+        vector<map<string, double>> bmultExpected {
+            {{ "bmult", 0.9 }, { "ms", 1 }, { "ss", 1 }, { "obj", 138.31 } },
+            {{ "bmult", 1.2 }, { "ms", 4 }, { "ss", 1 }, { "obj", 184.41 } }
+        };
 
         for (map<string, double> m : bmultExpected) {
             GAMSJob tEbmult = ws.addJobFromString("bmult=" + to_string(m["bmult"])
@@ -280,28 +267,27 @@ int main(int argc, char* argv[])
 
     // Define an option file for the solver to be used
     string optFile1Path = filesystem::path(ws.workingDirectory().append("/cplex.opt")).string();
-    ofstream optFile1;
-    optFile1.open(optFile1Path);
+    {
+        ofstream optFile1(optFile1Path);
 
-    // Set relative stopping tolerance to 0 initially
-    optFile1 << "epgap 0" << endl;
-    // Activate interactive option setting on interrupt
-    optFile1 << "interactive 1" << endl;
-    // Define new option file to read on interrupt
-    optFile1 << "iafile cplex.op2" << endl;
-    optFile1.close();
+        // Set relative stopping tolerance to 0 initially
+        optFile1 << "epgap 0" << endl;
+        // Activate interactive option setting on interrupt
+        optFile1 << "interactive 1" << endl;
+        // Define new option file to read on interrupt
+        optFile1 << "iafile cplex.op2" << endl;
+    }
 
     // Write new Cplex option file
     string optFile2Path = filesystem::path(ws.workingDirectory().append("/cplex.op2")).string();
-    ofstream optFile2;
-    optFile2.open(optFile2Path);
-    optFile2 << "epgap 0.1" << endl;
-    optFile2.close();
+    {
+        ofstream optFile2(filesystem::path(ws.workingDirectory().append("/cplex.op2")));
+        optFile2.open(optFile2Path);
+        optFile2 << "epgap 0.1" << endl;
+        optFile2.close();
+    }
 
-    string logPath = filesystem::path(ws.workingDirectory().append("/ej.log")).string();
     opt = ws.addOptions();
-    ofstream *logFile = new ofstream;
-    logFile->open(logPath);
 
     opt.setMIP("cplex");
     opt.setOptFile(1);
@@ -309,32 +295,36 @@ int main(int argc, char* argv[])
 
     cout << "Run 6" << endl;
 
-    thread optThread(&GAMSJob::runEngine, &jc, engineConf, &opt, nullptr, logFile,
-                     vector<GAMSDatabase>(), set<string> {optFile1Path, optFile2Path, "claddat.gdx"},
-                     unordered_map<string, string>(), true, true);
+    string logPath = filesystem::path(ws.workingDirectory().append("/ej.log")).string();
+    {
+        ofstream logFile(logPath);
+        thread optThread(&GAMSJob::runEngine, &jc, engineConf, &opt, nullptr, &logFile,
+                         vector<GAMSDatabase>(), set<string> {optFile1Path, optFile2Path, "claddat.gdx"},
+                         unordered_map<string, string>(), true, true);
 
-    while (true) {
-        if (filesystem::exists(logPath) && filesystem::is_empty(logPath)) {
-            this_thread::sleep_for(500ms);
-            continue;
+        while (true) {
+            if (filesystem::exists(logPath) && filesystem::is_empty(logPath)) {
+                this_thread::sleep_for(500ms);
+                continue;
+            }
+            jc.interrupt();
+            cout << "Interrupted Cplex to continue with new option" << endl;
+            break;
         }
-        jc.interrupt();
-        cout << "Interrupted Cplex to continue with new option" << endl;
-        break;
+
+        if (optThread.joinable())
+            optThread.join();
     }
 
-    if (optThread.joinable())
-        optThread.join();
-
     bool interrupted = false;
-
-    ifstream inLog;
-    string line;
-    inLog.open(logPath);
-    while (getline(inLog, line)) {
-        if (line.find("Interrupted") != string::npos) {
-            interrupted = true;
-            break;
+    {
+        string line;
+        ifstream inLog(logPath);
+        while (getline(inLog, line)) {
+            if (line.find("Interrupted") != string::npos) {
+                interrupted = true;
+                break;
+            }
         }
     }
     if (!interrupted) {
