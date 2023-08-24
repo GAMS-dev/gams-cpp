@@ -210,7 +210,7 @@ int main(int argc, char* argv[])
         cout << "Run 4" << endl;
         jobB.runEngine(engineConf, &opt, &cp, &cout, vector<GAMSDatabase>{jobA.outDB()});
 
-        for (GAMSVariableRecord rec : jobB.outDB().getVariable("x")) {
+        for (GAMSVariableRecord &rec : jobB.outDB().getVariable("x")) {
             cout << "x(" << rec.key(0) << "," + rec.key(1) << "): level=" << rec.level()
                  << "marginal=" << rec.marginal() << "\n";
 
@@ -226,7 +226,7 @@ int main(int argc, char* argv[])
             {{ "bmult", 1.2 }, { "ms", 4 }, { "ss", 1 }, { "obj", 184.41 } }
         };
 
-        for (map<string, double> m : bmultExpected) {
+        for (map<string, double> &m : bmultExpected) {
             GAMSJob tEbmult = ws.addJobFromString("bmult=" + to_string(m["bmult"])
                     + "; solve transport min z use lp; ms=transport.modelstat; "
                       "ss=transport.solvestat;", cp);
@@ -302,32 +302,25 @@ int main(int argc, char* argv[])
                          vector<GAMSDatabase>(), set<string> {optFile1Path, optFile2Path, "claddat.gdx"},
                          unordered_map<string, string>(), true, true);
 
-        while (true) {
-            if (filesystem::exists(logPath) && filesystem::is_empty(logPath)) {
-                this_thread::sleep_for(500ms);
-                continue;
-            }
-            jc.interrupt();
-            cout << "Interrupted Cplex to continue with new option" << endl;
-            break;
-        }
+        while (filesystem::exists(logPath) && filesystem::is_empty(logPath))
+            this_thread::sleep_for(500ms);
+
+        jc.interrupt();
+        cout << "Interrupted Cplex to continue with new option" << endl;
 
         if (optThread.joinable())
             optThread.join();
     }
 
-    bool interrupted = false;
     {
         string line;
         ifstream inLog(logPath);
         while (getline(inLog, line)) {
             if (line.find("Interrupted") != string::npos) {
-                interrupted = true;
-                break;
+                cout << "Interrupted succesfully" << endl;
+                return 0;
             }
         }
-    }
-    if (!interrupted) {
         cout << "Expected the solver to be interrupted at least once." << endl;
         return 1;
     }
