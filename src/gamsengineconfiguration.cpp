@@ -115,7 +115,7 @@ void GAMSEngineConfiguration::setJwt(const std::string &newJwt)
 
 std::string GAMSEngineConfiguration::space() const
 {
-    // RG: isnt this a little unusual? (copied from another api)
+    // TODO(RG): isnt this a little unusual? (copied from another api)
     if (mSpace.empty())
         throw GAMSException("No GAMS Engine namespace set.");
     return mSpace;

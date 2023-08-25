@@ -40,6 +40,7 @@
 #include <nlohmann/json.hpp>
 
 using namespace std;
+using namespace std::string_literals;
 
 namespace gams {
 
@@ -73,6 +74,7 @@ GAMSDatabase GAMSJobImpl::outDB()
 }
 
 GAMSJobImpl::~GAMSJobImpl() {
+    delete mEngineJob;
     delete mCheckpointStart; // this is intended to only free the wrapper, not the *Impl if used anywhere
 }
 
@@ -210,13 +212,12 @@ void GAMSJobImpl::run(GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
 
 void GAMSJobImpl::zip(const string &zipName, const set<string> &files)
 {
-    string gmsZip = "gmszip";
-    gmsZip.append(cExeSuffix);
+    string gmsZip = "gmszip"s + cExeSuffix;
 
     cout << "zipping: " << zipName << endl;
     filesystem::path zipPath(mWs.systemDirectory());
     string zipCmd = zipPath.append(gmsZip + " " + zipName).string();
-    for (const GAMSPath f : files) {
+    for (const GAMSPath &f : files) {
         if (!f.exists())
             throw GAMSException("File " + f.string() + " is missing.");
 
@@ -231,8 +232,7 @@ void GAMSJobImpl::zip(const string &zipName, const set<string> &files)
 void GAMSJobImpl::unzip(const string &zipName, const string &destination)
 {
     cout << "unzipping " << zipName << " to " << destination << endl;
-    string gmsUnzip = "gmsunzip";
-    gmsUnzip.append(cExeSuffix);
+    string gmsUnzip = "gmsunzip"s + cExeSuffix;
 
     filesystem::path zipPath(mWs.systemDirectory());
     string unzipCmd = zipPath.append(gmsUnzip + " -o " + zipName).string(); // -o: overwrite existing without asking
@@ -269,7 +269,7 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
         for (const string& f : extraModelFiles) {
             if (filesystem::path{f}.is_absolute())
                 extraModelFilesCleaned.insert(f);
-            else extraModelFilesCleaned.insert(filesystem::absolute(mWs.workingDirectory()).append(f).string());
+            else extraModelFilesCleaned.insert((filesystem::absolute(mWs.workingDirectory()) / f).string());
         }
         modelFiles.insert(extraModelFilesCleaned.begin(), extraModelFilesCleaned.end());
     }
@@ -341,7 +341,14 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
                             + to_string(response.status_code) + "." " Message: " + response.text);
     }
 
-    auto json = nlohmann::json::parse(response.text);
+    nlohmann::basic_json<> json;
+    try {
+        json = nlohmann::json::parse(response.text);
+    } catch (nlohmann::json::parse_error &ex) {
+        std::cerr << "Error parsing json: " << ex.byte << "\n" << ex.what() << endl;
+        return;
+    }
+
     mEngineJob = new GAMSEngineJob(json.at("token").get<string>(), engineConfiguration);
 
     int exitCode = 0;
@@ -370,7 +377,12 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
             }
         }
 
-        json = nlohmann::json::parse(response.text);
+        try {
+            json = nlohmann::json::parse(response.text);
+        } catch (nlohmann::json::parse_error &ex) {
+            std::cerr << "Error parsing json: " << ex.byte << "\n" << ex.what() << endl;
+            return;
+        }
         if (json.at("queue_finished").get<bool>()) {
             exitCode = json.at("gams_return_code").get<int>();
             break;
@@ -380,12 +392,12 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
 
     string resultZipName;
     int resultZipCount = 1;
-    while (filesystem::exists(mWs.workingDirectory()
-                              .append("/_gams_result").append(to_string(resultZipCount))
-                              .append(".zip"))) {
+    while (filesystem::exists(mWs.workingDirectory().append("/_gams_result")
+                                 .append(to_string(resultZipCount)).append(".zip")))
         resultZipCount++;
-    }
-    resultZipName = mWs.workingDirectory().append("/_gams_result").append(to_string(resultZipCount)).append(".zip");
+
+    resultZipName = mWs.workingDirectory().append("/_gams_result")
+                                          .append(to_string(resultZipCount)).append(".zip");
 
     std::ofstream of(resultZipName, std::ios::binary);
     response = cpr::Download(of, cpr::Url{ engineConfiguration.host() + "/jobs/" + mEngineJob->token() + "/result" },
@@ -433,6 +445,7 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
             throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +
                                          "), check " +  + " for more details", exitCode);
     }
+    delete mEngineJob;
     mEngineJob = nullptr;
 
     if (tmpCp) {

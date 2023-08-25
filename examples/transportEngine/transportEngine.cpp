@@ -36,85 +36,88 @@
 
 using namespace gams;
 using namespace std;
+using namespace std::string_literals;
 
 static string getDataText()
 {
-    string data =
-                "Sets\n"
-                "       i   canning plants   / seattle, san-diego /\n"
-                "       j   markets          / new-york, chicago, topeka / ;\n"
-                "\n"
-                "Parameters\n"
-                "\n"
-                "       a(i)  capacity of plant i in cases\n"
-                "         /    seattle     350\n"
-                "              san-diego   600  /\n"
-                "\n"
-                "       b(j)  demand at market j in cases\n"
-                "         /    new-york    325\n"
-                "              chicago     300\n"
-                "              topeka      275  / ;\n"
-                "\n"
-                "Table d(i,j)  distance in thousands of miles\n"
-                "                    new-york       chicago      topeka\n"
-                "      seattle          2.5           1.7          1.8\n"
-                "      san-diego        2.5           1.8          1.4  ;\n"
+    string data {
+            R"(
+Sets
+        i   canning plants   / seattle, san-diego /
+        j   markets          / new-york, chicago, topeka / ;
 
-                "Scalar f      freight in dollars per case per thousand miles  / 90 /\n"
-                "         bmult  demand multiplier                               /  1 /;";
-            return data;
-        }
+Parameters
+
+        a(i)  capacity of plant i in cases
+         /    seattle     350
+              san-diego   600  /
+
+        b(j)  demand at market j in cases
+         /    new-york    325
+              chicago     300
+              topeka      275  / ;
+
+Table d(i,j)  distance in thousands of miles
+                      new-york       chicago      topeka
+        seattle          2.5           1.7          1.8
+        san-diego        2.5           1.8          1.4  ;
+
+Scalar f      freight in dollars per case per thousand miles  / 90 /
+       bmult  demand multiplier                               /  1 /;
+            )"s
+    };
+    return data;
+}
 
 static string getModelText()
-        {
-            string model =
-                "  Sets\n"
-                "       i   canning plants\n"
-                "       j   markets\n"
-                "\n"
-                "  Parameters\n"
-                "       a(i)   capacity of plant i in cases\n"
-                "       b(j)   demand at market j in cases\n"
-                "       d(i,j) distance in thousands of miles\n"
-                "  Scalar f      freight in dollars per case per thousand miles\n"
-                "         bmult  demand multiplier;\n"
-                "\n"
-                "$if not set gdxincname $abort 'no include file name for data file provided'\n"
-                "$gdxLoad %gdxincname% i j a b d f bmult\n"
-                "\n"
-                "$echo test > test.txt\n"
-                "\n"
-                "  Parameter c(i,j)  transport cost in thousands of dollars per case ;\n"
-                "\n"
-                "            c(i,j) = f * d(i,j) / 1000 ;\n"
-                "\n"
-                "  Variables\n"
-                "       x(i,j)  shipment quantities in cases\n"
-                "       z       total transportation costs in thousands of dollars ;\n"
-                "\n"
-                "  Positive Variable x ;\n"
-                "\n"
-                "  Equations\n"
-                "       cost        define objective function\n"
-                "       supply(i)   observe supply limit at plant i\n"
-                "       demand(j)   satisfy demand at market j ;\n"
-                "\n"
-                "  cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;\n"
-                "\n"
-                "  supply(i) ..   sum(j, x(i,j))  =l=  a(i) ;\n"
-                "\n"
-                "  demand(j) ..   sum(i, x(i,j))  =g=  bmult*b(j) ;\n"
-                "\n"
-                "  Model transport /all/ ;\n"
-                "\n"
-                "  Solve transport using lp minimizing z ;\n"
-                "\n"
-                "  Scalar ms 'model status', ss 'solve status';\n"
-                "\n"
-                "  Display x.l, x.m ;\n";
+{
+    string model {
+            R"(
+Sets
+    i   canning plants
+    j   markets;
 
-            return model;
-        }
+Parameters
+    a(i)   capacity of plant i in cases
+    b(j)   demand at market j in cases
+    d(i,j) distance in thousands of miles
+Scalar f      freight in dollars per case per thousand miles
+       bmult  demand multiplier;
+
+$if not set gdxincname $abort 'no include file name for data file provided'
+$gdxLoad %gdxincname% i j a b d f bmult
+
+$echo test > test.txt
+
+Parameter c(i,j)  transport cost in thousands of dollars per case ;
+          c(i,j) = f * d(i,j) / 1000 ;
+
+Variables
+     x(i,j)  shipment quantities in cases
+     z       total transportation costs in thousands of dollars ;
+
+Positive Variable x ;
+
+Equations
+     cost        define objective function
+     supply(i)   observe supply limit at plant i
+     demand(j)   satisfy demand at market j ;
+
+cost ..        z  =e=  sum((i,j), c(i,j)*x(i,j)) ;
+supply(i) ..   sum(j, x(i,j))  =l=  a(i) ;
+demand(j) ..   sum(i, x(i,j))  =g=  bmult*b(j) ;
+
+Model transport /all/ ;
+
+Solve transport using lp minimizing z ;
+
+Scalar ms 'model status', ss 'solve status';
+
+Display x.l, x.m ;
+            )"s
+    };
+    return model;
+}
 
 /// \file transportEngine.cpp
 /// \brief This is an example how to run a GAMSJob on GAMS Engine using the run_engine method.
