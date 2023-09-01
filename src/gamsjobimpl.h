@@ -130,7 +130,7 @@ public:
 private:
     int runProcess(const std::string &what, const std::string &args, std::string &output);
 
-    std::string prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint*& tmpCP,
+    std::string prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint& tmpCP,
                            const GAMSCheckpoint* checkpoint = nullptr, std::ostream* output = nullptr,
                            bool createOutDb = true, bool relativePaths = false,
                            std::set<std::string> *dbPaths = nullptr,

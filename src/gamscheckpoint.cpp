@@ -23,11 +23,10 @@
  * SOFTWARE.
  */
 
-#include "gamslog.h"
 #include "gamscheckpoint.h"
 #include "gamscheckpointimpl.h"
 #include "gamsmodelinstance.h"
-#include "gamsmodelinstanceimpl.h"
+#include "gamsexception.h"
 
 namespace gams {
 

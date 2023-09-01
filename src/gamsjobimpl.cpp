@@ -78,7 +78,7 @@ GAMSJobImpl::~GAMSJobImpl() {
     delete mCheckpointStart; // this is intended to only free the wrapper, not the *Impl if used anywhere
 }
 
-string GAMSJobImpl::prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint*& tmpCP,
+string GAMSJobImpl::prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint& tmpCP,
                                const GAMSCheckpoint* checkpoint, ostream* output, bool createOutDb,
                                bool relativePaths, set<string> *dbPaths, const vector<GAMSDatabase> &databases)
 {
@@ -93,10 +93,10 @@ string GAMSJobImpl::prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint*& tmpCP,
 
     if (checkpoint) {
         if (mCheckpointStart != checkpoint) {
-            tmpCP = new GAMSCheckpoint(mWs, "");
+            tmpCP = GAMSCheckpoint(mWs, "");
             if (relativePaths)
-                tmpOptions.setSave(filesystem::relative(tmpCP->fileName(), mWs.workingDirectory()).string());
-            else tmpOptions.setSave(tmpCP->fileName());
+                tmpOptions.setSave(filesystem::relative(tmpCP.fileName(), mWs.workingDirectory()).string());
+            else tmpOptions.setSave(tmpCP.fileName());
         } else {
             if (relativePaths)
                 tmpOptions.setSave(filesystem::relative(checkpoint->fileName(), mWs.workingDirectory()).string());
@@ -155,7 +155,7 @@ void GAMSJobImpl::run(GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
                       ostream* output, bool createOutDb, vector<GAMSDatabase> databases)
 {
     GAMSOptions tmpOpt(mWs, gamsOpt);
-    GAMSCheckpoint* tmpCP = nullptr;
+    GAMSCheckpoint tmpCP;
     string pfFileName = prepareRun(tmpOpt, tmpCP, checkpoint, output, createOutDb, false, {}, databases);
 
     filesystem::path gamsExe = filesystem::path(mWs.systemDirectory());
@@ -196,14 +196,13 @@ void GAMSJobImpl::run(GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
                                          (GAMSPath(mWs.workingDirectory()) / tmpOpt.output()).toStdString() +
                                          " for more details", exitCode);
     }
-    if (tmpCP) {
+    if (tmpCP.isValid()) {
         GAMSPath implFile(checkpoint->fileName());
         if (implFile.exists())
             implFile.remove();
 
-        implFile = tmpCP->fileName();
+        implFile = tmpCP.fileName();
         implFile.rename(checkpoint->fileName());
-        delete tmpCP; tmpCP=nullptr;
     }
     if (mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) {
         filesystem::remove(pfFileName);
@@ -250,7 +249,7 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
                             bool createOutDB, bool removeResults)
 {
     GAMSOptions tmpOpt(mWs, gamsOptions);
-    GAMSCheckpoint* tmpCp = nullptr;
+    GAMSCheckpoint tmpCp;
     set<string> dbPaths{};
 
     string pfFileName = prepareRun(tmpOpt, tmpCp, checkpoint, output,
@@ -448,9 +447,9 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
     delete mEngineJob;
     mEngineJob = nullptr;
 
-    if (tmpCp) {
+    if (tmpCp.isValid()) {
         filesystem::remove(checkpoint->fileName());
-        filesystem::rename(tmpCp->fileName(), checkpoint->fileName());
+        filesystem::rename(tmpCp.fileName(), checkpoint->fileName());
     }
 
 // TODO(RG): dispose is not implemented in c++ api
