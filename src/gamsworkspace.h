@@ -438,7 +438,7 @@ private:
     friend class GAMSDatabaseImpl;
     friend class GAMSCheckpointImpl;
 
-    GAMSDatabase addDatabaseFromGDXForcedName(std::string gdxFileName, std::string databaseName, std::string inModelName);
+    GAMSDatabase addDatabaseFromGDXForcedName(std::string gdxFileName, std::string databaseName, std::string inModelName = "");
 
     bool usingTmpWorkingDir() const;
 

@@ -180,7 +180,7 @@ int main(int argc, char* argv[])
                                 { "inex_string", "{\"type\": \"include\", \"files\": [\"*.gdx\"]}" }
                             });
 
-    for (GAMSVariableRecord rec : jobModel.outDB().getVariable("x")) {
+    for (GAMSVariableRecord &rec : jobModel.outDB().getVariable("x")) {
         cout << "x(" << rec.key(0) << "," + rec.key(1) << "): level=" << rec.level()
              << "marginal=" << rec.marginal() << "\n";
 

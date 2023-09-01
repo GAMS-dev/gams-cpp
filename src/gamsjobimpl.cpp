@@ -429,8 +429,7 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
         if (!gdxPath.is_absolute())
             gdxPath = filesystem::path(mWs.workingDirectory()).append(tmpOpt.gdx());
         if (filesystem::exists(gdxPath)) {
-            // TODO(RG): addDatabaseFromGDXForcedName in Csharp takes two arguments, set a default here?
-            mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.string(), gdxPath.filename().stem().string(), "");
+            mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.string(), gdxPath.filename().stem().string());
         }
     }
 
