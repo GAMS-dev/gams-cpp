@@ -43,7 +43,7 @@ using namespace std;
 
 namespace gams {
 
-GAMSDatabase GAMSWorkspace::addDatabaseFromGDXForcedName(string gdxFileName, string databaseName, string inModelName)
+GAMSDatabase GAMSWorkspace::addDatabaseFromGDXForcedName(string gdxFileName, string databaseName, string inModelName = "")
 {
     return mImpl->addDatabaseFromGDXForcedName(*this, gdxFileName, databaseName, inModelName);
 }
