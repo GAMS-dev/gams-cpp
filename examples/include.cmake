@@ -21,21 +21,18 @@ if ("$ENV{GAMS_BUILD}" STREQUAL "")
         endif()
     endif()
 
-    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../src"
-                        "${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api"
-                        "${BASEPATH}/C/api"
-                        "${BASEPATH}/C++/api")
+    include_directories("${BASEPATH}/C/api")
 else()
     set(BASEPATH "${GAMSPATH}/apiexamples")
-    include_directories("${BASEPATH}/C++/api"
-                        "${CMAKE_CURRENT_SOURCE_DIR}/../../src"
-                        "${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api"
-                        "${BASEPATH}/../gclib")
+    include_directories("${BASEPATH}/../gclib")
     if(UNIX)
         add_link_options("-Wl,-rpath,$ENV{BTREE}/gmszlib/leg")
     endif()
 endif()
 
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../src"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api"
+                    "${BASEPATH}/C++/api")
 
 if(UNIX) # Apple or Linux
     link_libraries(dl)
