@@ -34,6 +34,10 @@
 #include <exception>
 #include <gamspath.h>
 
+#ifdef _WIN32
+#include <stdlib.h>
+#endif
+
 using namespace gams;
 using namespace std;
 using namespace std::string_literals;
@@ -139,16 +143,30 @@ int main(int argc, char* argv[])
 
     filesystem::remove(ws.workingDirectory().append("/test.txt"));
 
+    string envValues[4] = {};
+
     string envPrefix("ENGINE_");
+    int index = 0;
     for (const string &id : {"URL", "USER", "PASSWORD", "NAMESPACE"}) {
-        if(!getenv((envPrefix + id).c_str())) {
+
+#ifdef _WIN32
+        char *pValue;
+        size_t len;
+        errno_t err = _dupenv_s( &pValue, &len, (envPrefix + id).c_str() );
+        envValues[index++] = string(pValue);
+#else
+        const char* value = getenv((envPrefix + id).c_str());
+        if(!value) {
             cerr << "No ENGINE_" << id << " set" << endl;
             return -1;
+        } else {
+            envValues[index++] = value;
         }
+#endif
     }
 
-    GAMSEngineConfiguration engineConf(getenv("ENGINE_URL"), getenv("ENGINE_USER"),
-                                       getenv("ENGINE_PASSWORD"), getenv("ENGINE_NAMESPACE"));
+    GAMSEngineConfiguration engineConf(envValues[0], envValues[1],
+                                       envValues[2], envValues[3]);
 
     // run with data from a string with GAMS syntax with explicit export to GDX file
     GAMSJob jobData = ws.addJobFromString(getDataText());
