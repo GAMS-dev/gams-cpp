@@ -150,10 +150,17 @@ int main(int argc, char* argv[])
     for (const string &id : {"URL", "USER", "PASSWORD", "NAMESPACE"}) {
 
 #ifdef _WIN32
-        char *pValue;
+        char *buffer;
         size_t len;
-        errno_t err = _dupenv_s( &pValue, &len, (envPrefix + id).c_str() );
-        envValues[index++] = string(pValue);
+        errno_t err = _dupenv_s( &buffer, &len, (envPrefix + id).c_str() );
+        if (err == 0 && buffer) {
+            envValues[index++] = string(buffer);
+            free(buffer);
+        } else {
+            free(buffer);
+            cerr << "No ENGINE_" << id << " set" << endl;
+            return -1;
+        }
 #else
         const char* value = getenv((envPrefix + id).c_str());
         if(!value) {
