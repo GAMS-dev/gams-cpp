@@ -214,9 +214,9 @@ void GAMSJobImpl::zip(const string &zipName, const set<string> &files)
     string gmsZip = "gmszip"s + cExeSuffix + " -j"; // -j: dont record directory names
 
     cout << "zipping: " << zipName << endl;
-    filesystem::path zipPath(mWs.systemDirectory());
+    filesystem::path zipPath("\"" + mWs.systemDirectory() + "\"");
     string zipCmd = zipPath.append(gmsZip + " \"" + zipName + "\"").string();
-    for (const GAMSPath &f : files) {
+    for (const GAMSPath f : files) {
         if (!f.exists())
             throw GAMSException("File " + f.string() + " is missing.");
 
@@ -233,7 +233,7 @@ void GAMSJobImpl::unzip(const string &zipName, const string &destination)
     cout << "unzipping " << zipName << " to " << destination << endl;
     string gmsUnzip = "gmsunzip"s + cExeSuffix;
 
-    filesystem::path zipPath(mWs.systemDirectory());
+    filesystem::path zipPath("\"" + mWs.systemDirectory() + "\"");
     string unzipCmd = zipPath.append(gmsUnzip + " -o \"" + zipName + "\"").string(); // -o: overwrite existing without asking
     if (!destination.empty())
         unzipCmd.append(" -d \"" + destination + "\"");
