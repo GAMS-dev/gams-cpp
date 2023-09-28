@@ -367,7 +367,14 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
                                 " Message: " + response.text);
         }
         if (mWs.debug() >= GAMSEnum::ShowLog || output) {
-            string stdOutData = response.text;
+            try {
+                json = nlohmann::json::parse(response.text);
+            } catch (nlohmann::json::parse_error &ex) {
+                std::cerr << "Error parsing json: " << ex.byte << "\n" << ex.what() << endl;
+                return;
+            }
+            string stdOutData = json.at("message").get<string>();
+
             if (mWs.debug() >= GAMSEnum::DebugLevel::ShowLog) {
                 if (!stdOutData.empty())
                     cout << stdOutData << endl;
