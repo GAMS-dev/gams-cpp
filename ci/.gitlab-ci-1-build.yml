@@ -64,7 +64,7 @@ build-wei:
   tags: [windows]
   needs: [fetch-prerequisites,install-gamsdist-wei]
   image:
-    name: $GAMS_CONTAINER_REGISTRY/machines/wei/builder-full:latest
+    name: $GAMS_CONTAINER_REGISTRY/qt-machines/wei/builder-qt6:latest
   script:
     - $gmsdirname = Get-Content mygmsdir.tmp -Raw
     - Invoke-Expression "& 'C:\\Cache\\gams-installs\\$gmsdirname\\gams.exe'"

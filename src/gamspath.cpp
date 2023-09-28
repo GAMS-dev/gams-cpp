@@ -25,7 +25,6 @@
 
 #include "gamspath.h"
 #include "gamsexception.h"
-#include "gamslog.h"
 #include <fstream>
 #include <algorithm>
 #include <iostream>

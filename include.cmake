@@ -59,14 +59,13 @@ if("$ENV{GAMS_BUILD}" STREQUAL "")
                          ${GAMS_DISTRIB_C_API}/gmomcc.c
                          ${GAMS_DISTRIB_C_API}/optcc.c)
 
+    configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.cpp COPYONLY)
+    configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.h ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.h COPYONLY)
+    configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptions.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptions.cpp COPYONLY)
+    configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptions.h ${CMAKE_BINARY_DIR}/inc/gamsoptions.h COPYONLY)
 
-     configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.cpp COPYONLY)
-     configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.h ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.h COPYONLY)
-     configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptions.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptions.cpp COPYONLY)
-     configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptions.h ${CMAKE_BINARY_DIR}/inc/gamsoptions.h COPYONLY)
-
-     set(SOURCE ${SOURCE} ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptions.cpp )
-     set(HEADER ${HEADER} ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.h ${CMAKE_BINARY_DIR}/inc/gamsoptions.h)
+    set(SOURCE ${SOURCE} ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptions.cpp )
+    set(HEADER ${HEADER} ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.h ${CMAKE_BINARY_DIR}/inc/gamsoptions.h)
 else()
     set(GSYS_ENV $ENV{GSYS})
     set(MACOS_LEGACY_ENV $ENV{MACOS_LEGACY})

@@ -43,11 +43,10 @@ extern LIBSPEC const char *cLibSuffix;
 /// Encapsulates all platform specific calls of the API.
 struct LIBSPEC GAMSPlatform
 {
-    // TODO(RG): double check if this is accurate:
     /// find GAMS system directory from related environment.
     ///  - on windows : first search "PATH" if not found then search windows registry "gams.location",
-    ///  - on Mac : first search "PATH" if not found then "DYLD_LIBRARAY_PATH",
-    ///  - on other platforms : first search "PATH" if not found then "LD_LIBRARAY_PATH".
+    ///  - on Unix : first search "PATH" if not found then "LD_LIBRARAY_PATH".
+    ///  - on Mac : first use Unix search strategy if not found then "DYLD_LIBRARAY_PATH",
     /// After two attempts of search and GAMS directory is still not found, returns null String.
     /// \returns  GAMS directory if found, null otherwise.
     static std::string findGams(LogId logId = 0);

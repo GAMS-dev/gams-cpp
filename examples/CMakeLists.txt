@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.17)
 
 project(examples)
 
@@ -25,6 +25,7 @@ add_subdirectory(transport13)
 add_subdirectory(transport14)
 add_subdirectory(domainchecking)
 add_subdirectory(warehouse)
+add_subdirectory(transportEngine)
 # add_subdirectory(xp_associative)
 # add_subdirectory(xp_associative_vec)
 # add_subdirectory(xp_dataWrite)

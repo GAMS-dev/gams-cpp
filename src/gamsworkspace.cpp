@@ -63,6 +63,11 @@ string GAMSWorkspace::nextDatabaseName() const
     return mImpl->nextDatabaseName();
 }
 
+string GAMSWorkspace::registerCheckpoint(const std::string &checkpointName) const
+{
+    return mImpl->registerCheckpoint(checkpointName);
+}
+
 GAMSEnum::DebugLevel GAMSWorkspace::debug()
 {
     return mImpl->debug();

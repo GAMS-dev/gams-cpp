@@ -23,18 +23,21 @@
  * SOFTWARE.
  */
 #include "gamscheckpointimpl.h"
+#include "gamscheckpoint.h"
 #include "gamslog.h"
 #include "gamspath.h"
 #include "gamsexception.h"
+#include <iostream>
 
 namespace gams {
 
 using namespace std;
 
 GAMSCheckpointImpl::GAMSCheckpointImpl(const GAMSWorkspace& workspace, const string& checkpointName)
-   : mWs(workspace), mName(checkpointName)
+   : mWs(workspace), mName { checkpointName.empty() ? filesystem::path{workspace.registerCheckpoint()}.filename().string() : checkpointName }
 {
     DEB << "---- Entering GAMSCheckpointImpl constructor ----";
+
     GAMSPath cpFilePath(mName);
     if (!cpFilePath.is_absolute())
       cpFilePath = GAMSPath(mWs.workingDirectory()) / mName;

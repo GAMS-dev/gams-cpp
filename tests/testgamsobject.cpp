@@ -29,8 +29,6 @@
 #include "gamsparameter.h"
 #include "gamsparameterrecord.h"
 #include "gamsset.h"
-#include "gamssymbol.h"
-#include "gamssymboliter.h"
 #include "gamsvariable.h"
 #include "testgamsobject.h"
 #include "gamsoptions.h"

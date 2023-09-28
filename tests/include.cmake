@@ -8,15 +8,13 @@ if ("$ENV{GAMS_BUILD}" STREQUAL "")
                         "${BASEPATH}/C/api"
                         "${gtest_SOURCE_DIR}/include")
 else()
-    # jenkins switch:
-    if("$ENV{GAMS_CORE_PATH}" STREQUAL "")
-        set(BASEPATH "${GAMSPATH}/apiexamples")
-        include_directories("${BASEPATH}/C++/api")
-    else()
-        set(BASEPATH "${GAMSPATH}/apifiles")
-    endif()
-    include_directories("${BASEPATH}/../gclib"
+    set(BASEPATH "${GAMSPATH}/apiexamples")
+    include_directories("${BASEPATH}/C++/api"
+                        "${BASEPATH}/../gclib"
                         "${gtest_SOURCE_DIR}/include")
+    if(UNIX)
+        add_link_options("-Wl,-rpath,$ENV{BTREE}/gmszlib/leg")
+    endif()
 endif()
 
 if(WIN32)

@@ -8,6 +8,7 @@ test-leg:
   needs: [fetch-prerequisites,build-leg]
   script:
     - GAMS_PATH=/cache/gams-installs/`python3 ci/fetch_gams.py version`
+    - echo $PF_GAMS_LICENSE > $GAMS_PATH/gamslice.txt
     - cd build
     - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" gams
     - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" ctest --output-on-failure --output-junit leg-results.xml
@@ -24,6 +25,7 @@ test-deg:
   needs: [fetch-prerequisites,build-deg]
   script:
     - GAMS_PATH=$HOME/cache/gams-installs/`python3 ci/fetch_gams.py version`
+    - echo $PF_GAMS_LICENSE > $GAMS_PATH/gamslice.txt
     - cd build
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib gams
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib ctest --output-on-failure --output-junit deg-results.xml
@@ -41,6 +43,7 @@ test-dac:
   needs: [fetch-prerequisites,build-dac]
   script:
     - GAMS_PATH=$HOME/cache/gams-installs/`python3 ci/fetch_gams.py version`
+    - echo $PF_GAMS_LICENSE > $GAMS_PATH/gamslice.txt
     - cd build
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib gams
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib ctest --output-on-failure --output-junit deg-results.xml
@@ -61,18 +64,19 @@ test-wei:
   script:
     - $gmsdirname = Get-Content mygmsdir.tmp -Raw
     - $GAMS_PATH = "C:\Cache\gams-installs\$gmsdirname"
-    - $env:Path = "$GAMS_PATH;$GAMS_PATH\gbin;bin\Release;" + $env:Path
+    - Out-File -FilePath $GAMS_PATH\gamslice.txt -InputObject $PF_GAMS_LICENSE -Encoding ASCII
+    - $env:Path = "$GAMS_PATH;$GAMS_PATH\gbin;" + $env:Path
     - $env:GAMSDIR = "$GAMS_PATH;$GAMS_PATH\gbin"
     - findthisgams -q
     - cd build
     - cp bin\Release\gamscpp.dll $GAMS_PATH
     - cp bin\Release\gtest_main.dll $GAMS_PATH
     - cp bin\Release\gtest.dll $GAMS_PATH
+    - cp _deps\cpr-build\cpr\Release\cpr.dll $GAMS_PATH
+    - cp _deps\curl-build\lib\Release\libcurl.dll $GAMS_PATH
+    - cp _deps\zlib-build\Release\zlib.dll $GAMS_PATH
     - gams
-    - ctest -V --output-on-failure --output-junit wei-results.xml
-    - rm $GAMS_PATH\gamscpp.dll
-    - rm $GAMS_PATH\gtest_main.dll
-    - rm $GAMS_PATH\gtest.dll
+    - ctest -V --output-on-failure --output-junit wei-results.xml > ctestlog.txt
   artifacts:
     name: unittest-results-wei
     paths:

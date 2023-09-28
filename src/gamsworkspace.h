@@ -438,7 +438,7 @@ private:
     friend class GAMSDatabaseImpl;
     friend class GAMSCheckpointImpl;
 
-    GAMSDatabase addDatabaseFromGDXForcedName(std::string gdxFileName, std::string databaseName, std::string inModelName);
+    GAMSDatabase addDatabaseFromGDXForcedName(std::string gdxFileName, std::string databaseName, std::string inModelName = "");
 
     bool usingTmpWorkingDir() const;
 
@@ -447,6 +447,11 @@ private:
     /// \returns True if everything worked, else false
     std::string registerDatabase(const std::string databaseName = "") const;
     std::string nextDatabaseName() const;
+
+    /// Registers a GAMSCheckpoint at the workspace
+    /// \param checkpointName Checkpoint name to add (empty: generate default name)
+    /// \returns Checkpoint name if all worked well, else an empty string
+    std::string registerCheckpoint(const std::string &checkpointName = "") const;
 
     /// Registers a ModelInstance to workspace
     /// \param databaseName Database name to add
