@@ -1,6 +1,8 @@
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(USE-GCC "Use gcc on macOS")
+
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
 if ("$ENV{GAMS_BUILD}" STREQUAL "")
@@ -16,6 +18,12 @@ if ("$ENV{GAMS_BUILD}" STREQUAL "")
         if(WIN32)
             set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
             link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
+        elseif(APPLE)
+            if(USE-GCC STREQUAL "ON")
+                link_directories("${BASEPATH}/C++/lib")
+            else()
+                link_directories("${BASEPATH}/C++/lib/clang")
+            endif()
         else()
             link_directories("${BASEPATH}/C++/lib")
         endif()
