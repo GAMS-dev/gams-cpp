@@ -1373,7 +1373,6 @@ class ParameterizedTestGetSpecValues
 INSTANTIATE_TEST_SUITE_P(testGetSpecValues,
                         ParameterizedTestGetSpecValues,
                         ::testing::Values (
-                             // TODO(RG): these values need either be made static or we need some other way of accessing them here
                              //         description, int,  double
                              std::make_tuple("UNDF", 0, 1.0E300),
                              std::make_tuple("NA",   1, std::numeric_limits<double>::quiet_NaN()),

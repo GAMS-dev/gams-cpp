@@ -33,7 +33,6 @@
 #include "gamsworkspace.h"
 #include "gamsvariablerecord.h"
 #include "gamslib_global.h"
-#include "gamsexception.h"
 #include "gamsdomain.h"
 
 namespace gams {

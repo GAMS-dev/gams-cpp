@@ -120,7 +120,7 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
 
     if (mSystemDir != mWorkingDir) {
         vector<string> libstems = {"gdxdc", "gmdcc", "joatdc", "optdc"};
-        for (string lib: libstems) {
+        for (const string &lib: libstems) {
             ostringstream libstream;
             libstream << cLibPrefix << lib << "64" << cLibSuffix;
             string libTmpl = libstream.str();
@@ -153,7 +153,7 @@ GAMSWorkspaceImpl::~GAMSWorkspaceImpl()
 {
     DEB << "---- Entering GAMSWorkspaceImpl destructor ----";
     GAMSWorkspacePool::unregisterWorkspacePath(mWorkingDir.toStdString());
-    if ((mDebug < GAMSEnum::DebugLevel::KeepFiles) && mUsingTmpWorkingDir) { // TODO(RG): what is expected of the debuglevel here?
+    if ((mDebug < GAMSEnum::DebugLevel::KeepFiles) && mUsingTmpWorkingDir) {
         if (!mWorkingDir.rmDirRecurse()) {
             MSG << "Error on cleaning workspace.";
         }

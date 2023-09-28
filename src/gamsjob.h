@@ -30,7 +30,9 @@
 #include <string>
 #include <memory>
 #include <vector>
-#include "gamsenum.h"
+#include <set>
+#include <unordered_map>
+#include "gamsengineconfiguration.h"
 
 namespace gams {
 
@@ -121,8 +123,25 @@ public:
     /// \param output Stream to capture GAMS log.
     /// \param createOutDB Flag that activates writing to outDB.
     /// \param databases GAMSDatabases read by the GAMSJob.
-    void run(GAMSOptions& gamsOptions, GAMSCheckpoint gamsCheckpoint, std::ostream& output, bool createOutDB
-             , std::vector<gams::GAMSDatabase> databases);
+    void run(GAMSOptions& gamsOptions, const GAMSCheckpoint &gamsCheckpoint, std::ostream& output,
+             bool createOutDB, const std::vector<gams::GAMSDatabase> &databases);
+
+    /// Run GAMSJob on GAMS Engine
+    /// \param engineConfiguration GAMSEngineConfiguration object
+    /// \param extraModelFiles Set of additional file paths (apart from main file) required to run the model (e.g. include files)
+    /// \param engineOptions Dictionary of GAMS Engine options to control job execution
+    /// \param gamsOptions GAMS options to control job
+    /// \param checkpoint GAMSCheckpoint to be created by GAMSJob
+    /// \param output Stream to capture GAMS log
+    /// \param createOutDB Flag to define if OutDB should be created
+    /// \param removeResults Remove results from GAMS Engine after downloading them
+    /// \param databases GAMSDatabases read by the GAMSJob
+    void runEngine(const GAMSEngineConfiguration &engineConfiguration, GAMSOptions* gamsOptions,
+                   gams::GAMSCheckpoint *checkpoint, std::ostream* output = nullptr,
+                   const std::vector<gams::GAMSDatabase> &databases = {},
+                   const std::set<std::string> &extraModelFiles = {},
+                   const std::unordered_map<std::string, std::string> &engineOptions = {},
+                    bool createOutDB = true, bool removeResults = true);
 
     /// Get GAMSDatabase created by Run method
     GAMSDatabase outDB();

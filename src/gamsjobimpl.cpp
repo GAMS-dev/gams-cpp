@@ -23,27 +23,30 @@
  * SOFTWARE.
  */
 
+#include <cpr/cpr.h>
 #include "gamsjobimpl.h"
-#include "gmomcc.h"
 #include "gamscheckpoint.h"
 #include "gamslog.h"
 #include "gamsoptions.h"
 #include "gamsplatform.h"
 #include "gamspath.h"
+#include "gamsoptions.h"
 #include "gamsexceptionexecution.h"
 
 #include <sstream>
 #include <fstream>
 #include <iostream>
 #include <array>
+#include <nlohmann/json.hpp>
 
 using namespace std;
+using namespace std::string_literals;
 
 namespace gams {
 
 GAMSJobImpl::GAMSJobImpl(GAMSWorkspace& workspace,
-                         const std::string& jobName,
-                         const std::string& fileName,
+                         const string& jobName,
+                         const string& fileName,
                          const GAMSCheckpoint* checkpoint)
     : mWs(workspace), mJobName(jobName), mFileName(fileName)
 {
@@ -71,67 +74,91 @@ GAMSDatabase GAMSJobImpl::outDB()
 }
 
 GAMSJobImpl::~GAMSJobImpl() {
+    delete mEngineJob;
     delete mCheckpointStart; // this is intended to only free the wrapper, not the *Impl if used anywhere
 }
 
-void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostream* output, bool createOutDb,
-                      vector<GAMSDatabase> databases)
+string GAMSJobImpl::prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint& tmpCP,
+                               const GAMSCheckpoint* checkpoint, ostream* output, bool createOutDb,
+                               bool relativePaths, set<string> *dbPaths, const vector<GAMSDatabase> &databases)
 {
-    // TODO(JM) backward replacement of pointer logic with instance of gamsOptions
-    GAMSOptions tmpOpt = GAMSOptions(mWs, gamsOptions);
-    GAMSCheckpoint* tmpCP = nullptr;
+    // TODO (RG): check if tmpCP needs to be deleted
 
-    if (mCheckpointStart)
-        tmpOpt.setRestart(mCheckpointStart->fileName());
+    if (mCheckpointStart) {
+        if (relativePaths)
+            tmpOptions.setRestart(filesystem::relative(mCheckpointStart->fileName(), mWs.workingDirectory()).string());
+        else
+            tmpOptions.setRestart(mCheckpointStart->fileName());
+    }
 
     if (checkpoint) {
         if (mCheckpointStart != checkpoint) {
-            tmpCP = new GAMSCheckpoint(mWs, "");
-            tmpOpt.setSave(tmpCP->fileName());
+            tmpCP = GAMSCheckpoint(mWs, "");
+            if (relativePaths)
+                tmpOptions.setSave(filesystem::relative(tmpCP.fileName(), mWs.workingDirectory()).string());
+            else tmpOptions.setSave(tmpCP.fileName());
         } else {
-            tmpOpt.setSave(checkpoint->fileName());
+            if (relativePaths)
+                tmpOptions.setSave(filesystem::relative(checkpoint->fileName(), mWs.workingDirectory()).string());
+            else tmpOptions.setSave(checkpoint->fileName());
         }
     }
 
     if (mWs.debug() >= GAMSEnum::DebugLevel::ShowLog) {
-        tmpOpt.setLogOption(3);
+        tmpOptions.setLogOption(3);
     } else {
         // can only happen if we are called from GAMSModelInstance
-        if (tmpOpt.logOption() != 2) {
+        if (tmpOptions.logOption() != 2) {
             if (output == nullptr)
-                tmpOpt.setLogOption(0);
-            else
-                tmpOpt.setLogOption(3);
+                tmpOptions.setLogOption(0);
+            else tmpOptions.setLogOption(3);
         }
     }
 
     if (!databases.empty()) {
         for (GAMSDatabase db: databases) {
-            db.doExport("");
+            filesystem::path p = mWs.workingDirectory();
+            p /= db.name() + ".gdx";
+            if (dbPaths) dbPaths->insert(p.string());
+
+            db.doExport();
             if (db.inModelName() != "")
-                tmpOpt.setDefine(db.inModelName(), db.name());
+                tmpOptions.setDefine(db.inModelName(), db.name());
         }
     }
     GAMSPath jobFileInfo(GAMSPath(mWs.workingDirectory()) / mJobName);
 
-    if (createOutDb && tmpOpt.gdx() == "")
-        tmpOpt.setGdx(mWs.nextDatabaseName());
+    if (createOutDb && tmpOptions.gdx() == "")
+        tmpOptions.setGdx(mWs.nextDatabaseName());
 
-    if (tmpOpt.logFile() == "")
-        tmpOpt.setLogFile(jobFileInfo.suffix(".log").toStdString());
+    if (tmpOptions.logFile() == "")
+        tmpOptions.setLogFile(jobFileInfo.suffix(".log").toStdString());
 
-    if (!tmpOpt.output().empty())
-        tmpOpt.setOutput(mJobName + ".lst");
-    tmpOpt.setCurDir(mWs.workingDirectory());
-    tmpOpt.setInput(mFileName);
-    GAMSPath pfFileName = jobFileInfo.suffix(".pf");
-    try {
-        tmpOpt.writeOptionFile(pfFileName);
-    } catch (GAMSException& e) {
-        throw GAMSException(e.what() + (" for GAMSJob " + mJobName));
+    if (!tmpOptions.output().empty())
+        tmpOptions.setOutput(mJobName + ".lst");
+
+    if (relativePaths) {
+        tmpOptions.setInput(filesystem::relative(mFileName, mWs.workingDirectory()).string());
+    } else {
+        tmpOptions.setCurDir(mWs.workingDirectory());
+        tmpOptions.setInput(mFileName);
     }
 
-    auto gamsExe = filesystem::path(mWs.systemDirectory());
+    filesystem::path pfFile = mWs.workingDirectory();
+    pfFile /= mJobName + ".pf";
+    tmpOptions.writeOptionFile(pfFile.string());
+
+    return pfFile.string();
+}
+
+void GAMSJobImpl::run(GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
+                      ostream* output, bool createOutDb, vector<GAMSDatabase> databases)
+{
+    GAMSOptions tmpOpt(mWs, gamsOpt);
+    GAMSCheckpoint tmpCP;
+    string pfFileName = prepareRun(tmpOpt, tmpCP, checkpoint, output, createOutDb, false, {}, databases);
+
+    filesystem::path gamsExe = filesystem::path(mWs.systemDirectory());
     gamsExe.append(string("gams") + cExeSuffix);
 
     string args = "dummy pf=";
@@ -169,30 +196,302 @@ void GAMSJobImpl::run(GAMSOptions* gamsOptions, GAMSCheckpoint* checkpoint, ostr
                                          (GAMSPath(mWs.workingDirectory()) / tmpOpt.output()).toStdString() +
                                          " for more details", exitCode);
     }
-    if (tmpCP) {
+    if (tmpCP.isValid()) {
         GAMSPath implFile(checkpoint->fileName());
         if (implFile.exists())
             implFile.remove();
 
-        implFile = tmpCP->fileName();
+        implFile = tmpCP.fileName();
         implFile.rename(checkpoint->fileName());
-        delete tmpCP; tmpCP=nullptr;
     }
     if (mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) {
-        // TODO(RG): this is not good style, but apparently needed
-        try { pfFileName.remove(); } catch (...) { }
+        filesystem::remove(pfFileName);
     }
+}
+
+void GAMSJobImpl::zip(const string &zipName, const set<string> &files)
+{
+    string gmsZip = "gmszip"s + cExeSuffix + " -j"; // -j: dont record directory names
+
+    cout << "zipping: " << zipName << endl;
+    filesystem::path zipPath("\"" + mWs.systemDirectory() + "\"");
+    string zipCmd = zipPath.append(gmsZip + " \"" + zipName + "\"").string();
+    for (const GAMSPath f : files) {
+        if (!f.exists())
+            throw GAMSException("File " + f.string() + " is missing.");
+
+        zipCmd.append(" \"" + f.string() + "\"");
+    }
+
+    int errorCode = system(zipCmd.c_str());
+    if (errorCode)
+        cerr << "Error while zipping " << zipName << ". ErrorCode: " << errorCode << endl;
+}
+
+void GAMSJobImpl::unzip(const string &zipName, const string &destination)
+{
+    cout << "unzipping " << zipName << " to " << destination << endl;
+    string gmsUnzip = "gmsunzip"s + cExeSuffix;
+
+    filesystem::path zipPath("\"" + mWs.systemDirectory() + "\"");
+    string unzipCmd = zipPath.append(gmsUnzip + " -o \"" + zipName + "\"").string(); // -o: overwrite existing without asking
+    if (!destination.empty())
+        unzipCmd.append(" -d \"" + destination + "\"");
+
+    int errorCode = system(unzipCmd.c_str());
+    if (errorCode)
+        cerr << "Error while unzipping " << zipName << " to " << destination << ". ErrorCode: " << errorCode << endl;
+}
+
+void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, GAMSOptions* gamsOptions,
+                            GAMSCheckpoint* checkpoint, ostream *output, const vector<GAMSDatabase> &databases,
+                            const set<string> &extraModelFiles, const unordered_map<string, string> &engineOptions,
+                            bool createOutDB, bool removeResults)
+{
+    GAMSOptions tmpOpt(mWs, gamsOptions);
+    GAMSCheckpoint tmpCp;
+    set<string> dbPaths{};
+
+    string pfFileName = prepareRun(tmpOpt, tmpCp, checkpoint, output,
+                                   createOutDB, true, &dbPaths, databases);
+
+    string mainFileName {filesystem::exists(mFileName) ? mFileName : mFileName.append(".gms")};
+
+    set<string> modelFiles { mainFileName, pfFileName };
+    modelFiles.insert(dbPaths.begin(), dbPaths.end());
+
+    if (mCheckpointStart)
+        modelFiles.insert(mCheckpointStart->fileName());
+
+    if (!extraModelFiles.empty()) {
+        set<string> extraModelFilesCleaned{};
+        for (const string& f : extraModelFiles) {
+            if (filesystem::path{f}.is_absolute())
+                extraModelFilesCleaned.insert(f);
+            else extraModelFilesCleaned.insert((filesystem::absolute(mWs.workingDirectory()) / f).string());
+        }
+        modelFiles.insert(extraModelFilesCleaned.begin(), extraModelFilesCleaned.end());
+    }
+
+    string dataZipName;
+    int dataZipCount = 1;
+
+    while (filesystem::exists(mWs.workingDirectory().append("/_gams_data")
+                                                    .append(to_string(dataZipCount++))));
+    dataZipName = mWs.workingDirectory().append("/_gams_data")
+                                        .append(to_string(dataZipCount)).append(".zip");
+
+    zip(dataZipName, modelFiles);
+
+    unordered_map<string, string> requestParams{};
+    if (!engineOptions.empty())
+        requestParams.insert(engineOptions.begin(), engineOptions.end());
+
+    unordered_map<string, string> queryParams{requestParams};
+
+    cpr::Multipart fileParams{};
+
+    queryParams["namespace"] = engineConfiguration.space();
+
+    if (requestParams.count("engineOptions") || requestParams.count("model_data"))
+        throw GAMSException("'engineOptions' must not include keys 'data' or 'model_data'. "
+                            "Please use 'extraModelFiles' to provide additional files to send to GAMS Engine.");
+
+    if (requestParams.count("inex_file")) {
+        if (!filesystem::exists(queryParams["inex_file"]))
+            throw GAMSException("The 'inex_file' '" + queryParams["inex_file"] + "' does not exist.");
+
+        fileParams.parts.emplace_back(cpr::Part("file", cpr::File(queryParams["inex_file"]), "application/json"));
+        queryParams.erase("inex_file");
+
+    } else if (!requestParams.count("inex_string")) {
+
+        inexFile excludeFiles("exclude");
+        for (const std::string &f : modelFiles) {
+            excludeFiles.files.emplace_back(filesystem::relative(f, mWs.workingDirectory()).string());
+        }
+        fileParams.parts.emplace_back(cpr::Part("inex_string", excludeFiles.toString(), "application/json") );
+    }
+
+    if (requestParams.count("model")) {
+        fileParams.parts.emplace_back(cpr::Part(dataZipName, cpr::File(dataZipName)));
+    } else {
+        queryParams["run"] = tmpOpt.input();
+        queryParams["model"] = filesystem::path(filesystem::path(tmpOpt.input()).parent_path()
+                                                    / filesystem::path(tmpOpt.input()).stem()
+                                                ).string();
+        fileParams.parts.emplace_back(cpr::Part("model_data", cpr::File(dataZipName), filesystem::path(dataZipName).stem().string()));
+    }
+
+    queryParams["arguments"] = "pf=" + mJobName + ".pf";
+
+    cpr::Parameters encodedParams;
+    for (const auto &p : queryParams)
+        encodedParams.Add(cpr::Parameter(p.first, p.second));
+
+    cpr::Response response = cpr::Post(cpr::Url{engineConfiguration.host() + "/jobs"},
+                                       cpr::Authentication{engineConfiguration.username(),
+                                                         engineConfiguration.password(),
+                                                         cpr::AuthMode::BASIC},
+                                        fileParams, encodedParams);
+
+    if (!cpr::status::is_success(response.status_code)) {
+        throw GAMSException("Creating job on GAMS Engine failed with status code: "
+                            + to_string(response.status_code) + "." " Message: " + response.text);
+    }
+
+    nlohmann::basic_json<> json;
+    try {
+        json = nlohmann::json::parse(response.text);
+    } catch (nlohmann::json::parse_error &ex) {
+        std::cerr << "Error parsing json: " << ex.byte << "\n" << ex.what() << endl;
+        return;
+    }
+
+    mEngineJob = new GAMSEngineJob(json.at("token").get<string>(), engineConfiguration);
+
+    int exitCode = 0;
+    while (true) {
+        response = cpr::Delete(cpr::Url{ engineConfiguration.host() + "/jobs/" + mEngineJob->token() + "/unread-logs" },
+                               cpr::Authentication{engineConfiguration.username(),
+                                                 engineConfiguration.password(),
+                                                 cpr::AuthMode::BASIC});
+
+        if (response.status_code == 403) { // job still in queue
+            cout << "job in queue. waiting..." << endl;
+            this_thread::sleep_for(1000ms);
+            continue;
+        }
+        if (!cpr::status::is_success(response.status_code)) {
+            throw GAMSException("Getting logs failed with status code: " + to_string(response.status_code) + "."
+                                " Message: " + response.text);
+        }
+        if (mWs.debug() >= GAMSEnum::ShowLog || output) {
+            try {
+                json = nlohmann::json::parse(response.text);
+            } catch (nlohmann::json::parse_error &ex) {
+                std::cerr << "Error parsing json: " << ex.byte << "\n" << ex.what() << endl;
+                return;
+            }
+            string stdOutData = json.at("message").get<string>();
+
+            if (mWs.debug() >= GAMSEnum::DebugLevel::ShowLog) {
+                if (!stdOutData.empty())
+                    cout << stdOutData << endl;
+            } else if (output && !stdOutData.empty()) {
+                *output << stdOutData << endl;
+            }
+        }
+
+        try {
+            json = nlohmann::json::parse(response.text);
+        } catch (nlohmann::json::parse_error &ex) {
+            std::cerr << "Error parsing json: " << ex.byte << "\n" << ex.what() << endl;
+            return;
+        }
+        if (json.at("queue_finished").get<bool>()) {
+            exitCode = json.at("gams_return_code").get<int>();
+            break;
+        }
+        this_thread::sleep_for(1000ms);
+    }
+
+    string resultZipName;
+    int resultZipCount = 1;
+    while (filesystem::exists(mWs.workingDirectory().append("/_gams_result")
+                                 .append(to_string(resultZipCount)).append(".zip")))
+        resultZipCount++;
+
+    resultZipName = mWs.workingDirectory().append("/_gams_result")
+                                          .append(to_string(resultZipCount)).append(".zip");
+
+    std::ofstream of(resultZipName, std::ios::binary);
+    response = cpr::Download(of, cpr::Url{ engineConfiguration.host() + "/jobs/" + mEngineJob->token() + "/result" },
+                             cpr::Authentication{engineConfiguration.username(),
+                                           engineConfiguration.password(),
+                                           cpr::AuthMode::BASIC});
+    of.close();
+
+    if (!cpr::status::is_success(response.status_code)) {
+        throw GAMSException("Downloading job result failed with status code: " + to_string(response.status_code) + "."
+                            " Message: " + response.text);
+    }
+
+    string destination = mWs.workingDirectory();
+    unzip(resultZipName, mWs.workingDirectory());
+
+    if (removeResults) {
+        response = cpr::Delete(cpr::Url{engineConfiguration.host() + "/jobs/" + mEngineJob->token() + "/result" },
+                               cpr::Authentication{engineConfiguration.username(),
+                                                 engineConfiguration.password(),
+                                                 cpr::AuthMode::BASIC});
+
+        if (!cpr::status::is_success(response.status_code)) {
+            throw GAMSException("Removing job result failed with status code: " + to_string(response.status_code) + "."
+                                " Message: " + response.text);
+        }
+    }
+    if (createOutDB) {
+        filesystem::path gdxPath = tmpOpt.gdx();
+        if (!gdxPath.is_absolute())
+            gdxPath = filesystem::path(mWs.workingDirectory()).append(tmpOpt.gdx());
+        if (filesystem::exists(gdxPath)) {
+            mOutDb = mWs.addDatabaseFromGDXForcedName(gdxPath.string(), gdxPath.filename().stem().string());
+        }
+    }
+
+    if (exitCode != 0) {
+        if (mWs.debug() < GAMSEnum::KeepFiles && mWs.usingTmpWorkingDir())
+            throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +
+                                         "), set GAMSWorkspace.Debug to KeepFiles or higher "
+                                         "or define the GAMSWorkspace.workingDirectory to "
+                                         "receive a listing file with more details", exitCode);
+        else
+            throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +
+                                         "), check " +  + " for more details", exitCode);
+    }
+    delete mEngineJob;
+    mEngineJob = nullptr;
+
+    if (tmpCp.isValid()) {
+        filesystem::remove(checkpoint->fileName());
+        filesystem::rename(tmpCp.fileName(), checkpoint->fileName());
+    }
+
+// TODO(RG): dispose is not implemented in c++ api
+//    tmpOpt.dispose();
+    if (mWs.debug() < GAMSEnum::KeepFiles) {
+        filesystem::remove(pfFileName);
+        filesystem::remove(dataZipName);
+        filesystem::remove(resultZipName);
+    }
+
+//    // TODO(RG): we might want to use GAMSPath or std::fs for files instead of string
 }
 
 bool GAMSJobImpl::interrupt()
 {
+    // running on Engine
+    if (mEngineJob) {
+        cpr::Response response = cpr::Delete(cpr::Url{mEngineJob->config().host() + "/jobs/" +
+                                                      mEngineJob->token() + "?hard_kill=false"},
+                                                      cpr::Authentication(mEngineJob->config().username(),
+                                                                          mEngineJob->config().password(),
+                                                                          cpr::AuthMode::BASIC));
+        if (!cpr::status::is_success(response.status_code))
+             throw GAMSException("Interrupting Engine job failed with status code: " +
+                                to_string(response.status_code) + ". Message: " + response.text);
+
+        return true;
+    }
+
     /*qint64*/ int pid = 0 /*mProc.processId()*/; // TODO(RG): we need std process handling here
     if(pid == 0)
         return false;
     return GAMSPlatform::interrupt(pid);
 }
 
-int GAMSJobImpl::runProcess(const string what, const string args, string& output)
+int GAMSJobImpl::runProcess(const string &what, const string &args, string& output)
 {
     ostringstream ssp;
     string result;

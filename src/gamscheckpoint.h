@@ -27,7 +27,6 @@
 #define GAMSCHECKPOINT_H
 
 #include "gamslib_global.h"
-#include "gamsenum.h"
 #include <string>
 #include <memory>
 

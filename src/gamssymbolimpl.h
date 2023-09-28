@@ -128,7 +128,6 @@ public:
     gmdHandle_t gmd() const;
     void* symPtr();
 
-    // TODO(RG): the naming suggests that the following should be private:
     GAMSDatabase mDatabase;
     std::string mName;
     int mDim;

@@ -31,6 +31,7 @@
 #include "gamsparameter.h"
 #include "gamsvariable.h"
 #include "gamsequation.h"
+#include "gamsexception.h"
 #include "gamspath.h"
 #include "gamsdatabasedomainviolation.h"
 

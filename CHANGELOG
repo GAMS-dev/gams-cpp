@@ -1,3 +1,10 @@
+Version 0.19.0
+========================
+- added GAMSJob::runEngine to run jobs on GAMS Engine, rather than locally
+    - added classes GAMSEngineConfiguration and GAMSEngineJob
+- added transportEngine example to show usage of new Engine feature
+- adjusted GAMSJob::run function signature for better c++ style
+
 Version 0.18.0
 ========================
 - fixed crash in findGamsOnUnix when LD_LIBRARY_PATH is empty

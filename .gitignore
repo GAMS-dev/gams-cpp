@@ -1,5 +1,4 @@
-*.pro.user
-*.txt.user
+*.user
 build*
 *.o
 **/.qmake.stash
@@ -9,4 +8,6 @@ Makefile
 gamsinclude.txt
 **/.DS_Store
 .idea
+.vs
 cmake-build-debug
+*.autosave

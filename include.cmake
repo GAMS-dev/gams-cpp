@@ -53,22 +53,19 @@ endif()
 if("$ENV{GAMS_BUILD}" STREQUAL "")
     include_directories(${GAMS_DISTRIB_C_API})
 
-    set(SOURCE ${SOURCE} ${GAMS_DISTRIB_C_API}/gclgms.c
-                         ${GAMS_DISTRIB_C_API}/gmdcc.c
-                         ${GAMS_DISTRIB_C_API}/gcmt.c
+    set(SOURCE ${SOURCE} ${GAMS_DISTRIB_C_API}/gmdcc.c
                          ${GAMS_DISTRIB_C_API}/cfgmcc.c
                          ${GAMS_DISTRIB_C_API}/gevmcc.c
                          ${GAMS_DISTRIB_C_API}/gmomcc.c
                          ${GAMS_DISTRIB_C_API}/optcc.c)
 
+    configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.cpp COPYONLY)
+    configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.h ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.h COPYONLY)
+    configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptions.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptions.cpp COPYONLY)
+    configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptions.h ${CMAKE_BINARY_DIR}/inc/gamsoptions.h COPYONLY)
 
-     configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.cpp COPYONLY)
-     configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptionsimpl.h ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.h COPYONLY)
-     configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptions.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptions.cpp COPYONLY)
-     configure_file(${GAMS_DISTRIB_CPP_API}/gamsoptions.h ${CMAKE_BINARY_DIR}/inc/gamsoptions.h COPYONLY)
-
-     set(SOURCE ${SOURCE} ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptions.cpp )
-     set(HEADER ${HEADER} ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.h ${CMAKE_BINARY_DIR}/inc/gamsoptions.h)
+    set(SOURCE ${SOURCE} ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.cpp ${CMAKE_BINARY_DIR}/inc/gamsoptions.cpp )
+    set(HEADER ${HEADER} ${CMAKE_BINARY_DIR}/inc/gamsoptionsimpl.h ${CMAKE_BINARY_DIR}/inc/gamsoptions.h)
 else()
     set(GSYS_ENV $ENV{GSYS})
     set(MACOS_LEGACY_ENV $ENV{MACOS_LEGACY})
@@ -94,8 +91,7 @@ else()
                         ${BTREE_JOAT_ENV}
                         ${BTREE_OPT_ENV})
 
-    set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/gclib/gclgms.c
-                         ${GPRODUCTS_ENV}/gclib/gcmt.c
+    set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/gclib/gcmt.c
                          ${BTREE_GMD_ENV}/gmdcc.c
                          ${BTREE_JOAT_ENV}/cfgmcc.c
                          ${BTREE_JOAT_ENV}/gevmcc.c

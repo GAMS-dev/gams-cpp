@@ -34,7 +34,7 @@ template <class T>
 
 /// Iterates through the records of a specific GAMSSymbol.
 /// \remark This class can be used with all GAMSSymbol types.
-class LIBSPEC GAMSSymbolIter // TODO(RG): what about this LIBSPEC?
+class LIBSPEC GAMSSymbolIter
 {
 public:
 

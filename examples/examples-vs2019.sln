@@ -37,6 +37,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Warehouse-vs2019", "Warehou
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TransportGDX-vs2019", "transportGDX\TransportGDX-vs2019.vcxproj", "{B4B7BB66-3456-4A7F-966F-8C25E0AEEC13}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TransportEngine-vs2019", "transportEngine\TransportEngine-vs2019.vcxproj", "{D6942445-1503-451C-A282-225A25EA4E9D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Release|x64 = Release|x64

@@ -29,14 +29,45 @@
 #include <string>
 #include <memory>
 #include <vector>
-#include "gamsenum.h"
+#include <set>
+#include <unordered_set>
+#include <unordered_map>
+#include <string>
+#include "gamsenginejob.h"
 #include "gamsworkspace.h"
 #include "gamsdatabase.h"
 #include "gamsoptions.h"
 
+#include <iostream>
+
 namespace gams
 {
 class GAMSCheckpoint;
+
+struct inexFile
+{
+    std::string type;
+    std::vector<std::string> files {};
+
+    inexFile(std::string inexType) : type{inexType} {}
+
+    std::string toString() {
+        std::string res = "{ ";
+        res.append("\"type\": \"" + type + "\",");
+        res.append("\"files\": [");
+
+        bool first = true;
+        for (const std::string &file : files) {
+            if (first) first = false;
+            else res.append(", ");
+            res.append("\"" + file + "\"");
+        }
+        res.append("]");
+        res.append("}");
+
+        return res;
+    }
+};
 
 class GAMSJobImpl
 {
@@ -74,8 +105,15 @@ public:
     bool operator!=(const GAMSJobImpl& other) const;
     bool operator==(const GAMSJobImpl& other) const;
 
-    void run(GAMSOptions* gamsOptions = nullptr, GAMSCheckpoint* checkpoint = nullptr, std::ostream* output = nullptr,
-             bool createOutDb = true, std::vector<GAMSDatabase> databases = std::vector<GAMSDatabase>());
+    void run(GAMSOptions* gamsOpt = nullptr, const GAMSCheckpoint* checkpoint = nullptr,
+             std::ostream* output = nullptr, bool createOutDb = true,
+             std::vector<GAMSDatabase> databases = {} );
+
+    void runEngine(const GAMSEngineConfiguration &engineConfiguration, GAMSOptions* gamsOptions,
+                   GAMSCheckpoint *checkpoint, std::ostream *output,
+                   const std::vector<GAMSDatabase> &databases, const std::set<std::string> &extraModelFiles,
+                   const std::unordered_map<std::string, std::string> &engineOptions,
+                   bool createOutDB,  bool removeResults);
 
     GAMSDatabase outDB();
 
@@ -86,11 +124,21 @@ public:
     GAMSWorkspace mWs;
     std::string mJobName;
 
+    void zip(const std::string &zipName, const std::set<std::string> &files);
+    void unzip(const std::string &zipName, const std::string &destination = nullptr);
+
 private:
-    int runProcess(const std::string what, const std::string args, std::string &output);
+    int runProcess(const std::string &what, const std::string &args, std::string &output);
+
+    std::string prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint& tmpCP,
+                           const GAMSCheckpoint* checkpoint = nullptr, std::ostream* output = nullptr,
+                           bool createOutDb = true, bool relativePaths = false,
+                           std::set<std::string> *dbPaths = nullptr,
+                           const std::vector<GAMSDatabase> &databases = {});
 
     GAMSDatabase mOutDb;
     std::string mFileName;
+    GAMSEngineJob* mEngineJob = nullptr;
     GAMSCheckpoint* mCheckpointStart = nullptr;
 };
 }
