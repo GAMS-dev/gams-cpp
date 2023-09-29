@@ -211,18 +211,21 @@ void GAMSJobImpl::run(GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
 
 void GAMSJobImpl::zip(const string &zipName, const set<string> &files)
 {
-    string gmsZip = "gmszip"s + cExeSuffix + " -j"; // -j: dont record directory names
-
     cout << "zipping: " << zipName << endl;
-    filesystem::path zipPath("\"" + mWs.systemDirectory() + "\"");
-    string zipCmd = zipPath.append(gmsZip + " \"" + zipName + "\"").string();
-    for (const GAMSPath f : files) {
+    string pathToZip("\"" + mWs.systemDirectory());
+    string gmsZip = "/gmszip"s + cExeSuffix;
+
+    // -j: dont record directory names
+    string zipCmd = pathToZip.append(gmsZip + " -j " + zipName);
+    for (const GAMSPath &f : files) {
         if (!f.exists())
             throw GAMSException("File " + f.string() + " is missing.");
 
-        zipCmd.append(" \"" + f.string() + "\"");
+        zipCmd.append(" " + f.string());
     }
+    zipCmd.append("\"");
 
+    cout << "ROGOzip: " << zipCmd << endl;
     int errorCode = system(zipCmd.c_str());
     if (errorCode)
         cerr << "Error while zipping " << zipName << ". ErrorCode: " << errorCode << endl;
@@ -231,13 +234,16 @@ void GAMSJobImpl::zip(const string &zipName, const set<string> &files)
 void GAMSJobImpl::unzip(const string &zipName, const string &destination)
 {
     cout << "unzipping " << zipName << " to " << destination << endl;
-    string gmsUnzip = "gmsunzip"s + cExeSuffix;
+    string pathToZip("\"" + mWs.systemDirectory());
+    string gmsUnzip = "/gmsunzip"s + cExeSuffix;
 
-    filesystem::path zipPath("\"" + mWs.systemDirectory() + "\"");
-    string unzipCmd = zipPath.append(gmsUnzip + " -o \"" + zipName + "\"").string(); // -o: overwrite existing without asking
+     // -o: overwrite existing without asking
+    string unzipCmd = pathToZip.append(gmsUnzip + " -o " + zipName);
     if (!destination.empty())
-        unzipCmd.append(" -d \"" + destination + "\"");
+        unzipCmd.append(" -d " + destination);
+    unzipCmd.append("\"");
 
+    cout << "ROGOunzip: " << unzipCmd << endl;
     int errorCode = system(unzipCmd.c_str());
     if (errorCode)
         cerr << "Error while unzipping " << zipName << " to " << destination << ". ErrorCode: " << errorCode << endl;
