@@ -7,8 +7,7 @@ test-leg:
     entrypoint: [""]   # prevent startup.sh
   needs: [fetch-prerequisites,build-leg]
   script:
-    - GAMS_PATH=/cache/gams-installs/`python3 ci/fetch_gams.py version`
-    - echo $PF_GAMS_LICENSE > $GAMS_PATH/gamslice.txt
+    - GAMS_PATH=/cache/gams-installs/`python3 ci/fetch_gams.py version $PF_CUSTOM_BRANCH $SSH_KEY_PORTING`
     - cd build
     - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" gams
     - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" ctest --output-on-failure --output-junit leg-results.xml
@@ -24,8 +23,7 @@ test-deg:
   tags: [macos]
   needs: [fetch-prerequisites,build-deg]
   script:
-    - GAMS_PATH=$HOME/cache/gams-installs/`python3 ci/fetch_gams.py version`
-    - echo $PF_GAMS_LICENSE > $GAMS_PATH/gamslice.txt
+    - GAMS_PATH=$HOME/cache/gams-installs/`python3 ci/fetch_gams.py version $PF_CUSTOM_BRANCH $SSH_KEY_PORTING`
     - cd build
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib gams
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib ctest --output-on-failure --output-junit deg-results.xml
@@ -42,8 +40,7 @@ test-dac:
   tags: [macos-arm64]
   needs: [fetch-prerequisites,build-dac]
   script:
-    - GAMS_PATH=$HOME/cache/gams-installs/`python3 ci/fetch_gams.py version`
-    - echo $PF_GAMS_LICENSE > $GAMS_PATH/gamslice.txt
+    - GAMS_PATH=$HOME/cache/gams-installs/`python3 ci/fetch_gams.py version $PF_CUSTOM_BRANCH $SSH_KEY_PORTING`
     - cd build
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib gams
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib ctest --output-on-failure --output-junit deg-results.xml
@@ -64,7 +61,6 @@ test-wei:
   script:
     - $gmsdirname = Get-Content mygmsdir.tmp -Raw
     - $GAMS_PATH = "C:\Cache\gams-installs\$gmsdirname"
-    - Out-File -FilePath $GAMS_PATH\gamslice.txt -InputObject $PF_GAMS_LICENSE -Encoding ASCII
     - $env:Path = "$GAMS_PATH;$GAMS_PATH\gbin;" + $env:Path
     - $env:GAMSDIR = "$GAMS_PATH;$GAMS_PATH\gbin"
     - findthisgams -q
