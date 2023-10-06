@@ -61,18 +61,12 @@ test-wei:
   script:
     - $gmsdirname = Get-Content mygmsdir.tmp -Raw
     - $GAMS_PATH = "C:\Cache\gams-installs\$gmsdirname"
-    - $env:Path = "$GAMS_PATH;$GAMS_PATH\gbin;" + $env:Path
+    - Out-File -FilePath $GAMS_PATH\gamslice.txt -InputObject $PF_GAMS_LICENSE -Encoding ASCII
+    - $env:Path = "$GAMS_PATH;$GAMS_PATH\gbin;$CI_PROJECT_DIR\build\bin\Release\;$CI_PROJECT_DIR\build\_deps\cpr-build\cpr\Release;$CI_PROJECT_DIR\build\_deps\curl-build\lib\Release;$CI_PROJECT_DIR\build\_deps\zlib-build\Release;" + $env:Path
     - $env:GAMSDIR = "$GAMS_PATH;$GAMS_PATH\gbin"
     - findthisgams -q
     - cd build
-    - cp bin\Release\gamscpp.dll $GAMS_PATH
-    - cp bin\Release\gtest_main.dll $GAMS_PATH
-    - cp bin\Release\gtest.dll $GAMS_PATH
-    - cp _deps\cpr-build\cpr\Release\cpr.dll $GAMS_PATH
-    - cp _deps\curl-build\lib\Release\libcurl.dll $GAMS_PATH
-    - cp _deps\zlib-build\Release\zlib.dll $GAMS_PATH
-    - gams
-    - ctest -V --output-on-failure --output-junit wei-results.xml > ctestlog.txt
+    - ctest -V --output-on-failure --output-junit wei-results.xml
   artifacts:
     name: unittest-results-wei
     paths:
