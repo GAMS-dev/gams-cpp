@@ -212,41 +212,38 @@ void GAMSJobImpl::run(GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
 void GAMSJobImpl::zip(const string &zipName, const set<string> &files)
 {
     cout << "zipping: " << zipName << endl;
-    string pathToZip("\"" + mWs.systemDirectory());
-    string gmsZip = "/gmszip"s + cExeSuffix;
 
-    // -j: dont record directory names
-    string zipCmd = pathToZip.append(gmsZip + " -j " + zipName);
+    string gmsZip = "gmszip"s + cExeSuffix;
+    string zipArgs = "-j"; // -j: dont record directory names
+
     for (const GAMSPath &f : files) {
-        if (!f.exists())
-            throw GAMSException("File " + f.string() + " is missing.");
-
-        zipCmd.append(" " + f.string());
+        if (!f.exists()) throw GAMSException("File " + f.string() + " is missing.");
+        zipArgs.append(" " + f.string());
     }
-    zipCmd.append("\"");
 
-    cout << "ROGOzip: " << zipCmd << endl;
-    int errorCode = system(zipCmd.c_str());
-    if (errorCode)
+    string output;
+    int errorCode = GAMSPlatform::runProcess(mWs.systemDirectory(), gmsZip, zipArgs, output);
+    if (errorCode){
         cerr << "Error while zipping " << zipName << ". ErrorCode: " << errorCode << endl;
+        cout << output << endl;
+    }
 }
 
 void GAMSJobImpl::unzip(const string &zipName, const string &destination)
 {
     cout << "unzipping " << zipName << " to " << destination << endl;
-    string pathToZip("\"" + mWs.systemDirectory());
-    string gmsUnzip = "/gmsunzip"s + cExeSuffix;
+    string gmsUnzip = "gmsunzip"s + cExeSuffix;
+    string unzipArgs = "-o"; // -o: overwrite existing without asking
 
-     // -o: overwrite existing without asking
-    string unzipCmd = pathToZip.append(gmsUnzip + " -o " + zipName);
     if (!destination.empty())
-        unzipCmd.append(" -d " + destination);
-    unzipCmd.append("\"");
+        unzipArgs.append(" -d " + destination);
 
-    cout << "ROGOunzip: " << unzipCmd << endl;
-    int errorCode = system(unzipCmd.c_str());
-    if (errorCode)
+    string output;
+    int errorCode = GAMSPlatform::runProcess(mWs.systemDirectory(), gmsUnzip, unzipArgs, output);
+    if (errorCode) {
         cerr << "Error while unzipping " << zipName << " to " << destination << ". ErrorCode: " << errorCode << endl;
+        cout << output << endl;
+    }
 }
 
 void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, GAMSOptions* gamsOptions,
