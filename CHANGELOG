@@ -1,3 +1,7 @@
+Version 0.19.2
+======================
+- fixed issue with zip when gams system dir contained spaces
+
 Version 0.19.1
 =======================
 - reverted problematic change to cmake configuration
