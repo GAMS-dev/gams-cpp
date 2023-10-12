@@ -1,3 +1,11 @@
+Version 0.19.2
+======================
+- fixed issue with zip when gams system dir contained spaces
+
+Version 0.19.1
+=======================
+- reverted problematic change to cmake configuration
+
 Version 0.19.0
 ========================
 - added GAMSJob::runEngine to run jobs on GAMS Engine, rather than locally
