@@ -61,7 +61,6 @@ test-wei:
   script:
     - $gmsdirname = Get-Content mygmsdir.tmp -Raw
     - $GAMS_PATH = "C:\Cache\gams-installs\$gmsdirname"
-    - Out-File -FilePath $GAMS_PATH\gamslice.txt -InputObject $PF_GAMS_LICENSE -Encoding ASCII
     - $env:Path = "$GAMS_PATH;$GAMS_PATH\gbin;$CI_PROJECT_DIR\build\bin\Release\;$CI_PROJECT_DIR\build\_deps\cpr-build\cpr\Release;$CI_PROJECT_DIR\build\_deps\curl-build\lib\Release;$CI_PROJECT_DIR\build\_deps\zlib-build\Release;" + $env:Path
     - $env:GAMSDIR = "$GAMS_PATH;$GAMS_PATH\gbin"
     - findthisgams -q
