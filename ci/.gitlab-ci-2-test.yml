@@ -3,7 +3,7 @@ test-leg:
   when: on_success
   tags: [linux]
   image:
-    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-qt6:latest
+    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-qt6.5:latest
     entrypoint: [""]   # prevent startup.sh
   needs: [fetch-prerequisites,build-leg]
   script:
