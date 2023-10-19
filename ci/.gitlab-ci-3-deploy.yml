@@ -1,5 +1,4 @@
 deploy:
-  when: on_success
   stage: deploy
   tags: [linux]
   image:
