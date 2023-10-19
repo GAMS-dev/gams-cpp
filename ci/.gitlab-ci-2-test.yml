@@ -1,13 +1,12 @@
 test-leg:
   stage: test
-  when: on_success
   tags: [linux]
   image:
     name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-qt6.5:latest
     entrypoint: [""]   # prevent startup.sh
-  needs: [fetch-prerequisites,build-leg]
+  needs: [fetch-ci-scripts,build-leg,install-gamsdist-leg]
   script:
-    - GAMS_PATH=/cache/gams-installs/`python3 ci/fetch_gams.py version $PF_CUSTOM_BRANCH $SSH_KEY_PORTING`
+    - GAMS_PATH=/cache/gams-installs/`cat gams_folder_leg.txt`
     - cd build
     - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" gams
     - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" ctest --output-on-failure --output-junit leg-results.xml
@@ -19,41 +18,36 @@ test-leg:
 
 test-deg:
   stage: test
-  when: on_success
   tags: [macos]
-  needs: [fetch-prerequisites,build-deg]
+  needs: [fetch-ci-scripts,build-deg,install-gamsdist-deg]
   script:
-    - GAMS_PATH=$HOME/cache/gams-installs/`python3 ci/fetch_gams.py version $PF_CUSTOM_BRANCH $SSH_KEY_PORTING`
+    - GAMS_PATH=$HOME/cache/gams-installs/`cat gams_folder_deg.txt`
     - cd build
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib gams
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib ctest --output-on-failure --output-junit deg-results.xml
   artifacts:
     name: unittest-results-deg
-    paths:
-      - build/deg-results.xml
+    paths: [build/deg-results.xml]
     reports:
       junit: build/deg-results.xml
 
 test-dac:
   stage: test
-  when: on_success
   tags: [macos-arm64]
-  needs: [fetch-prerequisites,build-dac]
+  needs: [fetch-ci-scripts,build-dac,install-gamsdist-dac]
   script:
-    - GAMS_PATH=$HOME/cache/gams-installs/`python3 ci/fetch_gams.py version $PF_CUSTOM_BRANCH $SSH_KEY_PORTING`
+    - GAMS_PATH=$HOME/cache/gams-installs/`cat gams_folder_dac.txt`
     - cd build
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib gams
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib ctest --output-on-failure --output-junit deg-results.xml
   artifacts:
     name: unittest-results-dac
-    paths:
-      - build/deg-results.xml
+    paths: [build/deg-results.xml]
     reports:
       junit: build/deg-results.xml
 
 test-wei:
   stage: test
-  when: on_success
   tags: [windows]
   image:
     name: $GAMS_CONTAINER_REGISTRY/machines/wei/builder-full:latest
@@ -68,7 +62,6 @@ test-wei:
     - ctest -V --output-on-failure --output-junit wei-results.xml
   artifacts:
     name: unittest-results-wei
-    paths:
-      - build/wei-results.xml
+    paths: [build/wei-results.xml]
     reports:
       junit: build/wei-results.xml
