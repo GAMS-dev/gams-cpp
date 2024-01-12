@@ -43,11 +43,11 @@ endif()
 include(FetchContent)
 
 # Add Cpr: cpr is a modern HTTP library for C++ (MIT License)
-FetchContent_Declare(cpr URL https://github.com/libcpr/cpr/archive/refs/tags/1.10.2.tar.gz PATCH_COMMAND ${CPR_PATCH_COMMAND})
+FetchContent_Declare(cpr URL https://github.com/libcpr/cpr/archive/refs/tags/1.10.5.tar.gz PATCH_COMMAND ${CPR_PATCH_COMMAND})
 FetchContent_MakeAvailable(cpr)
 
 # add nlohmann:json to handle json format (MIT License)
-FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
+FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
 FetchContent_MakeAvailable(json)
 
 include(version.cmake)

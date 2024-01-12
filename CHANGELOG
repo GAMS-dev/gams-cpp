@@ -1,6 +1,7 @@
 Version 0.19.3
 ======================
 - added CMake option `USE-GCC` for example subproject to change library selection to prefer GCC over Clang
+- updated external libraries
 
 Version 0.19.2
 ======================
