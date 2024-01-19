@@ -332,11 +332,12 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
     for (const auto &p : queryParams)
         encodedParams.Add(cpr::Parameter(p.first, p.second));
 
+    cpr::SslOptions sslOpts = cpr::Ssl(cpr::ssl::TLSv1_2{});
     cpr::Response response = cpr::Post(cpr::Url{engineConfiguration.host() + "/jobs"},
                                        cpr::Authentication{engineConfiguration.username(),
                                                          engineConfiguration.password(),
                                                          cpr::AuthMode::BASIC},
-                                        fileParams, encodedParams);
+                                        fileParams, encodedParams, sslOpts);
 
     if (!cpr::status::is_success(response.status_code)) {
         throw GAMSException("Creating job on GAMS Engine failed with status code: "
