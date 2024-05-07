@@ -2,7 +2,7 @@ test-leg:
   stage: test
   tags: [puma]
   image:
-    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-qt6.5:latest
+    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-qt6.7:latest
     entrypoint: [""]   # prevent startup.sh
   needs: [fetch-ci-scripts,build-leg,install-gamsdist-leg]
   script:
