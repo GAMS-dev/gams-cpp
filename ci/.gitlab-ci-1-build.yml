@@ -1,6 +1,6 @@
 build-leg:
   stage: build
-  tags: [linux]
+  tags: [puma]
   needs: [fetch-ci-scripts,install-gamsdist-leg]
   image:
     name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-qt6.5:latest
