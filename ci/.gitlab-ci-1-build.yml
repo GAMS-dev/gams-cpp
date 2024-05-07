@@ -1,9 +1,9 @@
 build-leg:
   stage: build
-  tags: [linux]
+  tags: [puma]
   needs: [fetch-ci-scripts,install-gamsdist-leg]
   image:
-    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-qt6.6:latest
+    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-qt6.7:latest
     entrypoint: [""]   # prevent startup.sh
   script:
     - printf "GAMS_DISTRIB=/cache/gams-installs/`cat gams_folder_leg.txt`\n" > gamsinclude.txt
@@ -60,7 +60,7 @@ build-wei:
   tags: [windows]
   needs: [fetch-ci-scripts,install-gamsdist-wei]
   image:
-    name: $GAMS_CONTAINER_REGISTRY/qt-machines/wei/builder-qt6.6:latest
+    name: $GAMS_CONTAINER_REGISTRY/qt-machines/wei/builder-qt6.7:latest
   script:
     - $gmsdirname = Get-Content mygmsdir.tmp -Raw
     - Invoke-Expression "& 'C:\\Cache\\gams-installs\\$gmsdirname\\gams.exe'"
