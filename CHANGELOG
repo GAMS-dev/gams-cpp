@@ -1,3 +1,7 @@
+Version 0.20.0
+======================
+- changed the behavior of `DebugLevel.ShowLog` to use `logOption=4` instead of `3` internally when executing GAMS
+
 Version 0.19.4
 ======================
 - updated external libraries

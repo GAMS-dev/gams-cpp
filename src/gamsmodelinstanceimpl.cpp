@@ -249,7 +249,7 @@ void GAMSModelInstanceImpl::instantiate(const std::string& modelDefinition, cons
     GAMSJob myJob = mCheckpoint.workspace().addJobFromString(model, mCheckpoint, "");
     tmpOpt.setScrDir(mScrDir);
     if (mCheckpoint.workspace().debug() >= GAMSEnum::DebugLevel::ShowLog) {
-        tmpOpt.setLogOption(3);
+        tmpOpt.setLogOption(4);
         mLogAvailable = false;
     } else {
         tmpOpt.setLogOption(2);

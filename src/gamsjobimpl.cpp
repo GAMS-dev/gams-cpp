@@ -105,14 +105,13 @@ string GAMSJobImpl::prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint& tmpCP,
     }
 
     if (mWs.debug() >= GAMSEnum::DebugLevel::ShowLog) {
-        tmpOptions.setLogOption(3);
-    } else {
+        tmpOptions.setLogOption(4);
+    } else if (tmpOptions.logOption() != 2) {
         // can only happen if we are called from GAMSModelInstance
-        if (tmpOptions.logOption() != 2) {
-            if (output == nullptr)
-                tmpOptions.setLogOption(0);
-            else tmpOptions.setLogOption(3);
-        }
+        if (output == nullptr)
+            tmpOptions.setLogOption(0);
+        else
+            tmpOptions.setLogOption(4);
     }
 
     if (!databases.empty()) {
