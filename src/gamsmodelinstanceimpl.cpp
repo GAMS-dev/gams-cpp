@@ -38,12 +38,14 @@
 #include "gamsversion.h"
 
 #include <cassert>
+#include <filesystem>
 #include <iostream>
 #include <memory>
 #include <stdlib.h>
 #include <fstream>
 
 using namespace std;
+namespace fs = std::filesystem;
 
 namespace gams {
 
@@ -182,7 +184,9 @@ void GAMSModelInstanceImpl::interrupt()
     gevTerminateRaise(mGEV);
 }
 
-void GAMSModelInstanceImpl::instantiate(const std::string& modelDefinition, const GAMSOptions* options, const std::vector<GAMSModifier>& modifiers)
+void GAMSModelInstanceImpl::instantiate(const std::string& modelDefinition,
+                                        const GAMSOptions* options,
+                                        const std::vector<GAMSModifier>& modifiers)
 {
     if (mInstantiated) {
         throw GAMSException("ModelInstance " + mModelInstanceName + " already instatiated");
@@ -274,8 +278,7 @@ void GAMSModelInstanceImpl::instantiate(const std::string& modelDefinition, cons
     gmoGetModelTypeTxt(mGMO, gmoModelType(mGMO), buf);
     mSelectedSolver = tmpOpt.getSolver(buf);
     GAMSPath optFile(gmoNameOptFile(mGMO, buf));
-    // TODO(jm) parentPath-Methode
-    gmoNameOptFileSet(mGMO, (optFile.up() / mSelectedSolver / optFile.suffix()).c_str());
+    gmoNameOptFileSet(mGMO, (optFile.up() / (mSelectedSolver + optFile.suffix())).c_str());
 
     checkForGMDError(gmdInitFromDict(gmd(), mGMO), __FILE__, __LINE__);
 
@@ -336,7 +339,8 @@ void GAMSModelInstanceImpl::solve(GAMSEnum::SymbolUpdateType updateType, ostream
             tmpOptFile = miOpt.optFile();
 
         gmoOptFileSet(mGMO, tmpOptFile);
-        GAMSPath optFile(GAMSPath(mCheckpoint.workspace().workingDirectory()) / (tmpSolver + "." + mCheckpoint.workspace().optFileExtension(tmpOptFile)));
+        fs::path p = saveNameOptFile;
+        GAMSPath optFile(GAMSPath(p.remove_filename()) / (tmpSolver + "." + mCheckpoint.workspace().optFileExtension(tmpOptFile)));
         gmoNameOptFileSet(mGMO, optFile.c_str());
 
         checkForGMDError(gmdCallSolver(gmd(), tmpSolver.c_str()), __FILE__, __LINE__);
@@ -361,7 +365,6 @@ void GAMSModelInstanceImpl::solve(GAMSEnum::SymbolUpdateType updateType, ostream
     }
     if (output == &cout)
         gevRestoreLogStat(mGEV, &lshandle);
-
 
     if (output != nullptr && output != &cout)
     {

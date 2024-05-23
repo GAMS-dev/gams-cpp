@@ -23,6 +23,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
 #include "testgamsobject.h"
 #include "gamscheckpoint.h"
@@ -32,6 +35,7 @@
 #include "gamsvariable.h"
 
 using namespace gams;
+using namespace std;
 
 class TestGAMSModelInstance: public TestGAMSObject
 {
@@ -241,6 +245,39 @@ TEST_F(TestGAMSModelInstance, testGetLogID) {
      GAMSModelInstance mi4 = cp4.addModelInstance();
      ASSERT_TRUE(mi4.logID() == anotherWs.logID());
      ASSERT_TRUE(mi4.logID() != mi3.logID());
+}
+
+TEST_F(TestGAMSModelInstance, testModelInstanceOptDir) {
+    GAMSWorkspaceInfo wsInfo(".", testSystemDir);
+    GAMSWorkspace ws(wsInfo);
+    GAMSCheckpoint cp = ws.addCheckpoint();
+    GAMSJob job = ws.addJobFromGamsLib("trnsport");
+    job.run(cp);
+
+    GAMSModelInstance mi = cp.addModelInstance();
+    GAMSOptions opt = ws.addOptions();
+    opt.setAllModelTypes("cbc");
+    opt.setOptDir(".");
+    mi.instantiate("transport use lp min z", opt, std::vector<gams::GAMSModifier>());
+    GAMSModelInstanceOpt mio("", 1);
+    std::stringstream noFileStream;
+    mi.solve(GAMSEnum::SymbolUpdateType::BaseCase, noFileStream, mio);
+
+    bool optFileNotFound = (noFileStream.str().find("*** Error Cannot open parameter file") != string::npos);
+
+    ASSERT_TRUE(optFileNotFound) << "Expected optfile not to be found";
+    ASSERT_TRUE(mi.modelStatus() == GAMSEnum::ModelStat::OptimalGlobal) << "Expected ModelStat.OptimalGlobal";
+    ASSERT_TRUE(mi.solveStatus() == GAMSEnum::SolveStat::Normal) << "Expected SolveStat.Normal";
+
+    std::ofstream output("cbc.opt");
+    output.close();
+    std::stringstream fileStream;
+    mi.solve(GAMSEnum::SymbolUpdateType::BaseCase, fileStream, mio);
+
+    bool optFileFound = (fileStream.str().find("*** Error Cannot open parameter file") == string::npos);
+    ASSERT_TRUE(optFileFound) << "Expected optfile to be found";
+    ASSERT_TRUE(mi.modelStatus() == GAMSEnum::ModelStat::OptimalGlobal) << "Expected ModelStat.OptimalGlobal";
+    ASSERT_TRUE(mi.solveStatus() == GAMSEnum::SolveStat::Normal) << "Expected SolveStat.Normal";
 }
 
 class ParameterizedTestGAMSModelInstance

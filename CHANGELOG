@@ -1,6 +1,7 @@
 Version 0.20.0
 ======================
 - changed the behavior of `DebugLevel.ShowLog` to use `logOption=4` instead of `3` internally when executing GAMS
+- fixed `GAMS.GAMSOptions.OptDir` property used with `GAMS.GAMSModelInstance.Instantiate` having no effect in `GAMS.GAMSModelInstance.Solve`
 
 Version 0.19.4
 ======================
