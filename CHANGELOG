@@ -1,5 +1,7 @@
 Version 0.20.0
 ======================
+- added new value `KeepFilesOnError` to `GAMS.DebugLevel` which keeps temporary files only in case of an error when executing GAMS during `GAMS.GAMSJob.Run` or `GAMS.GAMSJob.RunEngine`. Its internal numerical value is `1` and all values for `DebugLevel.KeepFiles` or greater have been increased by 1.- added optional argument of type `GAMS.GAMSWorkspace` to `GAMS.GAMSExceptionExecution` constructor. This needs to be set for `DebugLevel.KeepFilesOnError` to have an effect.
+- changed the default of `GAMS.GAMSWorkspace` from `DebugLevel.Off` to `DebugLevel.KeepFilesOnError` with the effect that temporary files do not get deleted anymore in case of an error as described above.
 - changed the behavior of `DebugLevel.ShowLog` to use `logOption=4` instead of `3` internally when executing GAMS
 - fixed `GAMS.GAMSOptions.OptDir` property used with `GAMS.GAMSModelInstance.Instantiate` having no effect in `GAMS.GAMSModelInstance.Solve`
 
