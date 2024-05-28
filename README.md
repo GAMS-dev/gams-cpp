@@ -7,7 +7,7 @@ gams-cpp uses [GoogleTest](https://github.com/google/googletest) which is licens
 # How to build #
 
 ## 0. Minimum Requirements ##
-- GAMS 36
+- GAMS 47
 - CMake 3.8
 - any C++17 compiler with std::filesystem support (e.g. GCC 8, MSVC2017 15.7, Apple Clang 11)
 
@@ -31,12 +31,19 @@ The path of the 'gamsinclude.txt' file may have to be updated to the correct GAM
 
 On Windows the file contains:
 ```
-GAMS_DISTRIB=C:/GAMS/36
+GAMS_DISTRIB=C:/GAMS/47
 ```
 On Unix it will look like:
 ```
-GAMS_DISTRIB=$$(HOME)/gams/gams36.0_linux_x64_64_sfx
+GAMS_DISTRIB=$$(HOME)/gams/gams47.0_linux_x64_64_sfx
 ```
 
 Then perform a 'Build All' operation (Build->Build All) to build the library as well as all examples and tests. 
 Finally, the examples can be executed by triggering Run button or pressing 'Ctrl+R'.
+
+# Dependencies and Licenses
+
+| Dependency | License | Description |
+| ------ | ------ | ------ |
+| [cpr](https://github.com/libcpr/cpr) | [MIT](https://github.com/libcpr/cpr/blob/master/LICENSE) | C++ Requests is a simple wrapper around [libcurl](https://curl.se/libcurl/) inspired by the excellent [Python Requests](https://github.com/kennethreitz/requests) project. |
+| [json](https://github.com/nlohmann/json) | [MIT](https://github.com/nlohmann/json/blob/develop/LICENSE.MIT) | JSON for Modern C++ |
