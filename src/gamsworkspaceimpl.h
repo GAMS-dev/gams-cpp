@@ -137,6 +137,9 @@ public:
 
     std::string optFileExtension(int index);
 
+    bool hasError() const;
+    void setHasError(bool newHasError);
+
 private:
 
     GAMSPath mWorkingDir;
@@ -145,7 +148,8 @@ private:
     std::string mScratchFilePrefix = "_gams_cpp_";
     bool mUsingTmpWorkingDir = false;
 
-    GAMSEnum::DebugLevel mDebug = GAMSEnum::DebugLevel::Off;
+    GAMSEnum::DebugLevel mDebug = GAMSEnum::DebugLevel::KeepFilesOnError;
+    bool mHasError = false;
 
     std::set<std::string> mGamsCheckpoints;
     std::set<std::string> mGamsDatabases;

@@ -432,6 +432,14 @@ public:
     /// Get all special values related to a system.
     double* specValues() const;
 
+    /// Get error status.
+    /// \return Returns the error status.
+    bool hasError() const;
+
+    /// Set error status.
+    /// \param newHasError New error status.
+    void setHasError(bool newHasError);
+
 private:
     friend class GAMSModelInstanceImpl;
     friend class GAMSJobImpl;

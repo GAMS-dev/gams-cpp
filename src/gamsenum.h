@@ -197,6 +197,7 @@ public:
     enum DebugLevel
     {
         Off = 0,            ///< No Debug
+        KeepFilesOnError,   ///< Keep temporary files only if GamsExceptionExecution was raised in GamsJob.run() or GamsJob.run_engine()
         KeepFiles,          ///< Keep temporary files
         ShowLog,            ///< Send GAMS log to stdout and keep temporary files
         Verbose             ///< Send highly technical info and GAMS log to stdout and keep temporary file

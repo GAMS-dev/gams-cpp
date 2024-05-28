@@ -90,7 +90,7 @@ GAMSWorkspace::GAMSWorkspace(const string& workingDir, const string& systemDir, 
 }
 
 GAMSWorkspace::GAMSWorkspace(const string& workingDir, const string& systemDir)
-    : GAMSWorkspace(workingDir, systemDir, GAMSEnum::DebugLevel::Off)
+    : GAMSWorkspace(workingDir, systemDir, GAMSEnum::DebugLevel::KeepFilesOnError)
 {
 }
 
@@ -105,7 +105,7 @@ GAMSWorkspace::GAMSWorkspace(GAMSEnum::DebugLevel debug)
 }
 
 GAMSWorkspace::GAMSWorkspace()
-    : GAMSWorkspace("", "", GAMSEnum::DebugLevel::Off)
+    : GAMSWorkspace("", "", GAMSEnum::DebugLevel::KeepFilesOnError)
 {
 }
 
@@ -413,7 +413,6 @@ int GAMSWorkspace::apiGoldRelNumber()
     return GAMSWorkspaceImpl::apiGoldRel();
 }
 
-
 string GAMSWorkspace::scratchFilePrefix() const
 {
     return mImpl->scratchFilePrefix();
@@ -434,5 +433,14 @@ void GAMSWorkspace::setMyEPS(double eps)
     mImpl->specValues[GMS_SVIDX_EPS] = eps;
 }
 
+bool gams::GAMSWorkspace::hasError() const
+{
+    return mImpl->hasError();
+}
+
+void GAMSWorkspace::setHasError(bool newHasError)
+{
+    mImpl->setHasError(newHasError);
+}
 
 } // namespace gams

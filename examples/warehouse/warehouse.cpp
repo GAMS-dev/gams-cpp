@@ -196,7 +196,7 @@ int main(int argc, char* argv[])
         for (auto& t : v)
             t.join();
         if (status > 0)
-            throw GAMSExceptionExecution("Error when running GAMS: " + GAMSEnum::text((GAMSEnum::GAMSExitCode) status) + " " + statusString, status);
+            throw GAMSExceptionExecution("Error when running GAMS: " + GAMSEnum::text((GAMSEnum::GAMSExitCode) status) + " " + statusString, status, &ws);
         else if (status == -1)
             throw GAMSException("Error in GAMS API");
         else if (status == -2)

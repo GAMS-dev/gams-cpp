@@ -77,6 +77,8 @@ GAMSWorkspaceImpl::GAMSWorkspaceImpl(const string& workingDir, const string& sys
         DEB << envDebug;
         if (strcmp("off", envDebug))
             mDebug = GAMSEnum::Off;
+        else if (strcmp("keepfilesonerror", envDebug))
+            mDebug = GAMSEnum::KeepFilesOnError;
         else if (strcmp("keepfiles", envDebug))
             mDebug = GAMSEnum::KeepFiles;
         else if (strcmp("showlog", envDebug))
@@ -153,8 +155,9 @@ GAMSWorkspaceImpl::~GAMSWorkspaceImpl()
 {
     DEB << "---- Entering GAMSWorkspaceImpl destructor ----";
     GAMSWorkspacePool::unregisterWorkspacePath(mWorkingDir.toStdString());
-    if ((mDebug < GAMSEnum::DebugLevel::KeepFiles) && mUsingTmpWorkingDir) {
-        if (!mWorkingDir.rmDirRecurse()) {
+    if (mUsingTmpWorkingDir &&
+        (mDebug == GAMSEnum::DebugLevel::Off || (mDebug == GAMSEnum::DebugLevel::KeepFilesOnError && !mHasError))) {
+        if ( (mWorkingDir.rmDirRecurse())) {
             MSG << "Error on cleaning workspace.";
         }
     }
@@ -392,6 +395,16 @@ string GAMSWorkspaceImpl::optFileExtension(int optfile)
         return "o" + to_string(optfile);
     else
         return "" + to_string(optfile);
+}
+
+bool GAMSWorkspaceImpl::hasError() const
+{
+    return mHasError;
+}
+
+void GAMSWorkspaceImpl::setHasError(bool newHasError)
+{
+    mHasError = newHasError;
 }
 
 } // namespace gams

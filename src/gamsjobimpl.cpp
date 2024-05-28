@@ -185,15 +185,15 @@ void GAMSJobImpl::run(GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
         cerr << "GAMS Error code: " << exitCode << std::endl;
         cerr << "  with args: " << args << std::endl;
         cerr << "  in " << mWs.workingDirectory() << std::endl;
-        if ((mWs.debug() < GAMSEnum::DebugLevel::KeepFiles) && mWs.usingTmpWorkingDir())
+        if ((mWs.debug() < GAMSEnum::DebugLevel::KeepFilesOnError) && mWs.usingTmpWorkingDir())
             throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +
-                                         "), set GAMSWorkspace.Debug to KeepFiles or higher or define the \
+                                         "), set GAMSWorkspace.Debug to KeepFilesOnError or higher or define the \
                                          GAMSWorkspace.WorkingDirectory to receive a listing file with more details",
-                                         exitCode);
+                                         exitCode, &mWs);
         else
             throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) + "), check " +
                                          (GAMSPath(mWs.workingDirectory()) / tmpOpt.output()).toStdString() +
-                                         " for more details", exitCode);
+                                         " for more details", exitCode, &mWs);
     }
     if (tmpCP.isValid()) {
         GAMSPath implFile(checkpoint->fileName());
@@ -444,14 +444,14 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
     }
 
     if (exitCode != 0) {
-        if (mWs.debug() < GAMSEnum::KeepFiles && mWs.usingTmpWorkingDir())
+        if (mWs.debug() < GAMSEnum::KeepFilesOnError && mWs.usingTmpWorkingDir())
             throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +
-                                         "), set GAMSWorkspace.Debug to KeepFiles or higher "
+                                         "), set GAMSWorkspace.Debug to KeepFilesOnError or higher "
                                          "or define the GAMSWorkspace.workingDirectory to "
-                                         "receive a listing file with more details", exitCode);
+                                         "receive a listing file with more details", exitCode, &mWs);
         else
             throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +
-                                         "), check " +  + " for more details", exitCode);
+                                         "), check " +  + " for more details", exitCode, &mWs);
     }
     delete mEngineJob;
     mEngineJob = nullptr;

@@ -24,16 +24,23 @@
  */
 
 #include "gamsexceptionexecution.h"
+#include "gamsworkspace.h"
 
 namespace gams {
 
-GAMSExceptionExecution::GAMSExceptionExecution(const std::string& what, int exitCode)
+GAMSExceptionExecution::GAMSExceptionExecution(const std::string& what, int exitCode, GAMSWorkspace *ws)
     : GAMSException(what), mRc(exitCode)
-{}
+{
+    if (ws)
+        ws->setHasError(true);
+}
 
-GAMSExceptionExecution::GAMSExceptionExecution(const char* what, int exitCode)
+GAMSExceptionExecution::GAMSExceptionExecution(const char* what, int exitCode, GAMSWorkspace *ws)
     : GAMSException(what), mRc(exitCode)
-{}
+{
+    if (ws)
+        ws->setHasError(true);
+}
 
 int GAMSExceptionExecution::rc()
 {

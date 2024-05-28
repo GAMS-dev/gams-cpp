@@ -43,7 +43,7 @@ public:
     /// \param systemDirectory GAMS system directory (determined automatically if omitted)
     /// \param debug GAMS Debug Level.
     GAMSWorkspaceInfo(std::string workingDirectory = "", std::string systemDirectory = ""
-            , GAMSEnum::DebugLevel debug = GAMSEnum::DebugLevel::Off);
+            , GAMSEnum::DebugLevel debug = GAMSEnum::DebugLevel::KeepFilesOnError);
 
     /// Constructor.
     /// \param debug GAMS Debug Level.

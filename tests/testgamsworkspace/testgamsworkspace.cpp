@@ -36,6 +36,7 @@
 #include "gamsversion.h"
 
 #include <iostream>
+#include <filesystem>
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -48,6 +49,7 @@
 #endif
 
 using namespace gams;
+namespace fs = std::filesystem;
 
 class TestGAMSWorkspace: public TestGAMSObject
 {
@@ -65,7 +67,7 @@ TEST_F(TestGAMSWorkspace, testDefaultConstructor) {
 
         // TODO(RG): what is supposed to have happened here in between? someone should take a look at this
         TestGAMSObject::testDir( ws.workingDirectory() );
-        EXPECT_EQ(ws.debug(), GAMSEnum::DebugLevel::Off);
+        EXPECT_EQ(ws.debug(), GAMSEnum::DebugLevel::KeepFilesOnError);
 
     } catch (GAMSException &e) {
         FAIL() << e.what();
@@ -94,7 +96,7 @@ TEST_F(TestGAMSWorkspace, testConstructor_EmptyWorkspaceInfo) {
     // then
     TestGAMSObject::testDir( ws.systemDirectory() );
     TestGAMSObject::testDir( ws.workingDirectory() );
-    EXPECT_EQ( ws.debug(), GAMSEnum::DebugLevel::Off );
+    EXPECT_EQ( ws.debug(), GAMSEnum::DebugLevel::KeepFilesOnError );
 
     GAMSPath(ws.workingDirectory()).remove();
 }
@@ -109,7 +111,7 @@ TEST_F(TestGAMSWorkspace, testConstructor_WorkspaceInfo) {
     TestGAMSObject::testDir( ws.workingDirectory() );
 
     EXPECT_EQ( GAMSPath(ws.workingDirectory()), GAMSPath(ws.workingDirectory()) );
-    EXPECT_EQ( ws.debug(), GAMSEnum::DebugLevel::Off );
+    EXPECT_EQ( ws.debug(), GAMSEnum::DebugLevel::KeepFilesOnError );
 }
 
 TEST_F(TestGAMSWorkspace, testConstructor_WorkingDirSystemDirAndDebug) {
@@ -135,7 +137,7 @@ TEST_F(TestGAMSWorkspace, testConstructor_WorkingDir) {
     GAMSWorkspace ws(wdir, testSystemDir);
     // then
     TestGAMSObject::testDir( ws.workingDirectory() );
-    EXPECT_EQ(ws.debug(), GAMSEnum::DebugLevel::Off);
+    EXPECT_EQ(ws.debug(), GAMSEnum::DebugLevel::KeepFilesOnError);
 }
 
 TEST_F(TestGAMSWorkspace, testConstructor_WorkingDirSystemDir) {
@@ -151,8 +153,197 @@ TEST_F(TestGAMSWorkspace, testConstructor_WorkingDirSystemDir) {
     TestGAMSObject::testDir(ws.systemDirectory());
     EXPECT_EQ(ws.systemDirectory(), sdir);
 
-    EXPECT_EQ(ws.debug(), GAMSEnum::DebugLevel::Off);
+    EXPECT_EQ(ws.debug(), GAMSEnum::DebugLevel::KeepFilesOnError);
 }
+
+//// Test default debug level (DebugLevel.KeepFilesOnError) without error
+//TEST_F(TestGAMSWorkspace, testDebugLevelTmpDir1) {
+//    // given
+//    std::string wdir = std::filesystem::current_path().string();
+//    std::string sdir = testSystemDir;
+//    // when
+//    auto ws = new GAMSWorkspace(wdir, sdir);
+//    // then
+//    GAMSJob job = ws->addJobFromString("Set i /i1*i3/;");
+//    job.run();
+//    fs::path path = ws->workingDirectory();
+//    delete ws;
+//    ASSERT_FALSE(fs::is_directory(path)) << "does not expect tmp working directory to exist";
+//}
+//
+//// Test default debug level (DebugLevel.KeepFilesOnError) with error
+//TEST_F(TestGAMSWorkspace, testDebugLevelTmpDir2) {
+//    // given
+//    std::string wdir = std::filesystem::current_path().string();
+//    std::string sdir = testSystemDir;
+//    // when
+//    auto ws = new GAMSWorkspace(wdir, sdir);
+//    // then
+//    GAMSJob job = ws->addJobFromString("$abort");
+//    try {
+//        job.run();
+//    } catch (GAMSException &e) {
+//        // expected
+//    } catch (...) {
+//        FAIL() << "Unexpected exception.";
+//    }
+//    fs::path path = ws->workingDirectory();
+//    delete ws;
+//    ASSERT_TRUE(fs::is_directory(path)) << "does expect tmp working directory to exist";
+//}
+//
+//// Test debug=DebugLevel.Off without error
+//TEST_F(TestGAMSWorkspace, testDebugLevelTmpDir3) {
+//    // given
+//    std::string wdir = std::filesystem::current_path().string();
+//    std::string sdir = testSystemDir;
+//    // when
+//    auto ws = new GAMSWorkspace(wdir, sdir, GAMSEnum::DebugLevel::Off);
+//    // then
+//    GAMSJob job = ws->addJobFromString("Set i /i1*i3/;");
+//    job.run();
+//    fs::path path = ws->workingDirectory();
+//    delete ws;
+//    ASSERT_FALSE(fs::is_directory(path)) << "does not expect tmp working directory to exist";
+//}
+//
+//
+//// Test debug=DebugLevel.Off with error
+//TEST_F(TestGAMSWorkspace, testDebugLevelTmpDir4) {
+//    // given
+//    std::string wdir = std::filesystem::current_path().string();
+//    std::string sdir = testSystemDir;
+//    // when
+//    auto ws = new GAMSWorkspace(wdir, sdir, GAMSEnum::DebugLevel::Off);
+//    // then
+//    GAMSJob job = ws->addJobFromString("$abort");
+//    try {
+//        job.run();
+//    } catch (GAMSException &e) {
+//        // expected
+//    } catch (...) {
+//        FAIL() << "Unexpected exception.";
+//    }
+//    fs::path path = ws->workingDirectory();
+//    delete ws;
+//    ASSERT_FALSE(fs::is_directory(path)) << "does not expect tmp working directory to exist";
+//}
+//
+//// Test debug=DebugLevel.KeepFiles without error
+//TEST_F(TestGAMSWorkspace, testDebugLevelTmpDir5) {
+//    // given
+//    std::string wdir = std::filesystem::current_path().string();
+//    std::string sdir = testSystemDir;
+//    // when
+//    auto ws = new GAMSWorkspace(wdir, sdir, GAMSEnum::DebugLevel::KeepFiles);
+//    // then
+//    GAMSJob job = ws->addJobFromString("Set i /i1*i3/;");
+//    job.run();
+//    fs::path path = ws->workingDirectory();
+//    delete ws;
+//    ASSERT_TRUE(fs::is_directory(path)) << "does expect tmp working directory to exist";
+//}
+//
+//// Test debug=DebugLevel.KeepFiles with error
+//TEST_F(TestGAMSWorkspace, testDebugLevelTmpDir6) {
+//    // given
+//    std::string wdir = std::filesystem::current_path().string();
+//    std::string sdir = testSystemDir;
+//    // when
+//    auto ws = new GAMSWorkspace(wdir, sdir, GAMSEnum::DebugLevel::KeepFiles);
+//    // then
+//    GAMSJob job = ws->addJobFromString("$abort");
+//    try {
+//        job.run();
+//    } catch (GAMSException &e) {
+//        // expected
+//    } catch (...) {
+//        FAIL() << "Unexpected exception.";
+//    }
+//    fs::path path = ws->workingDirectory();
+//    delete ws;
+//    ASSERT_TRUE(fs::is_directory(path)) << "does expect tmp working directory to exist";
+//}
+//
+//// Test debug=DebugLevel.ShowLog without error
+//TEST_F(TestGAMSWorkspace, testDebugLevelTmpDir7) {
+//    // given
+//    std::string wdir = std::filesystem::current_path().string();
+//    std::string sdir = testSystemDir;
+//    // when
+//    auto ws = new GAMSWorkspace(wdir, sdir, GAMSEnum::DebugLevel::ShowLog);
+//    // then
+//    GAMSJob job = ws->addJobFromString("Set i /i1*i3/;");
+//    job.run();
+//    fs::path path = ws->workingDirectory();
+//    delete ws;
+//    ASSERT_TRUE(fs::is_directory(path)) << "does expect tmp working directory to exist";
+//}
+//
+//// Test debug=DebugLevel.ShowLog with error
+//TEST_F(TestGAMSWorkspace, testDebugLevelTmpDir8) {
+//    // given
+//    std::string wdir = std::filesystem::current_path().string();
+//    std::string sdir = testSystemDir;
+//    // when
+//    auto ws = new GAMSWorkspace(wdir, sdir, GAMSEnum::DebugLevel::ShowLog);
+//    // then
+//    GAMSJob job = ws->addJobFromString("$abort");
+//    try {
+//        job.run();
+//    } catch (GAMSException &e) {
+//        // expected
+//    } catch (...) {
+//        FAIL() << "Unexpected exception.";
+//    }
+//    fs::path path = ws->workingDirectory();
+//    delete ws;
+//    ASSERT_TRUE(fs::is_directory(path)) << "does expect tmp working directory to exist";
+//}
+//
+//// Test default debug level (DebugLevel.KeepFilesOnError) without error using RunEngine
+//TEST_F(TestGAMSWorkspace, testDebugLevelTmpDirEngine1) {
+//    // given
+//    std::string wdir = std::filesystem::current_path().string();
+//    std::string sdir = testSystemDir;
+//    // when
+//    auto ws = new GAMSWorkspace(wdir, sdir);
+//    // then
+//    GAMSJob job = ws->addJobFromGamsLib("trnsport");
+//    //GAMSEngineConfiguration engineConf = new GAMSEngineConfiguration(host: Environment.GetEnvironmentVariable("ENGINE_URL"),
+//    //                                                                        username: Environment.GetEnvironmentVariable("ENGINE_USER"),
+//    //                                                                                   password: Environment.GetEnvironmentVariable("ENGINE_PASSWORD"),
+//    //                                                                                              space: Environment.GetEnvironmentVariable("ENGINE_NAMESPACE"));
+//    //job.runEngine(engineConf);
+//    //fs::path path = ws->workingDirectory();
+//    //delete ws;
+//    //ASSERT_FALSE(fs::is_directory(path)) << "does not expect tmp working directory to exist";
+//}
+//
+//// Test default debug level (DebugLevel.KeepFilesOnError) with error using RunEngine
+//TEST_F(TestGAMSWorkspace, testDebugLevelTmpDirEngine2) {
+//    // given
+//    std::string wdir = std::filesystem::current_path().string();
+//    std::string sdir = testSystemDir;
+//    // when
+//    auto ws = new GAMSWorkspace(wdir, sdir);
+//    // then
+//    GAMSJob job = ws->addJobFromGamsLib("trnsport");
+//    //GAMSEngineConfiguration engineConf = new GAMSEngineConfiguration(host: Environment.GetEnvironmentVariable("ENGINE_URL"),
+//    //                                                                        username: Environment.GetEnvironmentVariable("ENGINE_USER"),
+//    //                                                                                   password: Environment.GetEnvironmentVariable("ENGINE_PASSWORD"),
+//    //                                                                                              space: Environment.GetEnvironmentVariable("ENGINE_NAMESPACE"));
+//    //try {
+//    //    job.runEngine(engineConf);
+//    //} catch (GAMSException &e) {
+//    //    // expected
+//    //} catch (...) {
+//    //    FAIL() << "Unexpected exception.";
+//    //}
+//    //fs::path path = ws->workingDirectory();
+//    //delete ws;
+//    //ASSERT_TRUE(fs::is_directory(path)) << "does expect tmp working directory to exist";
+//}
 
 class ParameterizedTestConstructor_DebugLevel
         : public ::testing::WithParamInterface<std::tuple<const char*, GAMSEnum::DebugLevel>>,
@@ -162,10 +353,11 @@ class ParameterizedTestConstructor_DebugLevel
 INSTANTIATE_TEST_SUITE_P(testConstructor_DebugLevel,
                         ParameterizedTestConstructor_DebugLevel,
                         ::testing::Values (
-                            std::make_tuple("Off",       GAMSEnum::DebugLevel::Off),
-                            std::make_tuple("KeepFiles", GAMSEnum::DebugLevel::KeepFiles),
-                            std::make_tuple("ShowLog",   GAMSEnum::DebugLevel::ShowLog),
-                            std::make_tuple("Verbose",   GAMSEnum::DebugLevel::Verbose)
+                            std::make_tuple("Off",              GAMSEnum::DebugLevel::Off),
+                            std::make_tuple("KeepFilesOnError", GAMSEnum::DebugLevel::KeepFilesOnError),
+                            std::make_tuple("KeepFiles",        GAMSEnum::DebugLevel::KeepFiles),
+                            std::make_tuple("ShowLog",          GAMSEnum::DebugLevel::ShowLog),
+                            std::make_tuple("Verbose",          GAMSEnum::DebugLevel::Verbose)
                         ));
 
 
@@ -185,6 +377,10 @@ TEST_P(ParameterizedTestConstructor_DebugLevel, testConstructor_DebugLevel) {
     switch(debugLevelEnum) {
        case GAMSEnum::DebugLevel::Off:
            ASSERT_FALSE( GAMSPath(dir).exists() );
+           break;
+       case GAMSEnum::DebugLevel::KeepFilesOnError:
+           ASSERT_FALSE( GAMSPath(dir).exists() );
+           /* TODO QEXPECT_FAIL("", "More tests to be implemented ", Abort); ASSERT_TRUE(false); */
            break;
        case GAMSEnum::DebugLevel::KeepFiles:
            ASSERT_TRUE( GAMSPath(dir).exists() );

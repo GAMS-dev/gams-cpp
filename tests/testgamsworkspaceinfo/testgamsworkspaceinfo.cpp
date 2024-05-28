@@ -41,7 +41,7 @@ TEST_F(TestGAMSWorkspaceInfo, testConstructorDefaultValue) {
     // then
     ASSERT_TRUE(wsInfo.systemDirectory().empty());
     ASSERT_TRUE(wsInfo.workingDirectory().empty());
-    EXPECT_EQ(wsInfo.debug(), GAMSEnum::DebugLevel::Off);
+    EXPECT_EQ(wsInfo.debug(), GAMSEnum::DebugLevel::KeepFilesOnError);
 
 }
 
@@ -74,6 +74,7 @@ INSTANTIATE_TEST_SUITE_P(testSetDebug,
                         ParameterizedTestSetDebug,
                         ::testing::Values (
                              std::make_tuple("Off", GAMSEnum::DebugLevel::Off),
+                             std::make_tuple("KeepFilesOnError", GAMSEnum::DebugLevel::KeepFilesOnError),
                              std::make_tuple("KeepFiles", GAMSEnum::DebugLevel::KeepFiles),
                              std::make_tuple("ShowLog", GAMSEnum::DebugLevel::ShowLog),
                              std::make_tuple("Verbose", GAMSEnum::DebugLevel::Verbose)
