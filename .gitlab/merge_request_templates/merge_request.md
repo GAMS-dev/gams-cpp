@@ -4,5 +4,6 @@ Closes #TICKETNUMBER
 - [ ] Code
 - [ ] CHANGELOG
 - [ ] GAMS documentation
-- [ ] test if it builds in GBS
+- [ ] Code documentation
+- [ ] Profiling
 - [ ] Unit Tests
