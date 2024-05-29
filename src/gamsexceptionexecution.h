@@ -39,11 +39,13 @@ public:
     /// Constructor.
     /// \param what Exception message.
     /// \param exitCode Exit Code.
+    /// \param ws Active GAMSWorkspace.
     GAMSExceptionExecution(const std::string& what, int exitCode, GAMSWorkspace* ws = nullptr);
 
     /// Constructor.
     /// \param what Exception message.
     /// \param exitCode Exit Code.
+    /// \param ws Active GAMSWorkspace.
     GAMSExceptionExecution(const char* what, int exitCode, GAMSWorkspace* ws = nullptr);
 
     /// Get the return code.
