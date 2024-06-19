@@ -1,7 +1,10 @@
+Version 0.20.2
+======================
+- fixed warnings
+
 Version 0.20.1
 ======================
 - updated documentation for `GAMSExceptionExecution`
-- fixed warnings
 
 Version 0.20.0
 ======================
