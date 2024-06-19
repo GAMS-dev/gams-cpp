@@ -220,7 +220,8 @@ const char* GAMSPath::c_str() const
 #endif
 }
 
-// TODO(RG): these tempdir/tempfile functions create neither in the OS' tmp folder, nor is there any automatic cleanup. so why are they called temp?
+// TODO(RG): these tempdir/tempfile functions create neither in the OS' tmp folder,
+//           nor is there any automatic cleanup. so why are they called temp?
 GAMSPath GAMSPath::tempDir(const std::string &tempPath)
 {
     if (!seedGenerated) {

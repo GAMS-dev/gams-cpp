@@ -57,7 +57,7 @@ build-dac:
 
 build-wei:
   stage: build
-  tags: [windows]
+  tags: [pond]
   needs: [fetch-ci-scripts,install-gamsdist-wei]
   image:
     name: $GAMS_CONTAINER_REGISTRY/qt-machines/wei/builder-qt6.7:latest

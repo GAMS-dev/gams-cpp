@@ -31,7 +31,7 @@ GAMSDomainImpl::GAMSDomainImpl(GAMSSet domain)
     : mSet(domain)
 {}
 
-GAMSDomainImpl::GAMSDomainImpl(std::string relaxedName)
+GAMSDomainImpl::GAMSDomainImpl(const std::string &relaxedName)
     : mDomain(relaxedName)
 {}
 

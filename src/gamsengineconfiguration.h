@@ -31,40 +31,45 @@
 
 namespace gams {
 
-class LIBSPEC GAMSEngineConfiguration
+class GAMSEngineConfiguration
 {
 public:
-    GAMSEngineConfiguration(const std::string &host, const std::string &user, const std::string &pw, const std::string &space);
+    LIBSPEC GAMSEngineConfiguration(const std::string &host,
+                                    const std::string &user,
+                                    const std::string &pw,
+                                    const std::string &space);
+
+    LIBSPEC ~GAMSEngineConfiguration();
 
     /// \brief host Base url
-    std::string host() const;
+    LIBSPEC std::string host() const;
 
     /// \brief setHost sets engine url
-    void setHost(const std::string &newHost);
+    LIBSPEC void setHost(const std::string &newHost);
 
     /// \brief username Username for HTTP basic authentication
-    std::string username() const;
+    LIBSPEC std::string username() const;
 
     /// \brief setUsername sets engine username
-    void setUsername(const std::string &newUsername);
+    LIBSPEC void setUsername(const std::string &newUsername);
 
     /// \brief password Password for HTTP basic authentication
-    std::string password() const;
+    LIBSPEC std::string password() const;
 
     /// \brief setPassword sets engine password
-    void setPassword(const std::string &newPassword);
+    LIBSPEC void setPassword(const std::string &newPassword);
 
     /// \brief jwt JWT token to use for Bearer authentication. Will only be used if username is empty.
-    std::string jwt() const;
+    LIBSPEC std::string jwt() const;
 
     /// \brief setJwt sets JWT token
-    void setJwt(const std::string &newJwt);
+    LIBSPEC void setJwt(const std::string &newJwt);
 
     /// \brief space Namespace in which the job is to be executed
-    std::string space() const;
+    LIBSPEC std::string space() const;
 
     /// \brief setSpace sets engine namespace in which the job is executed
-    void setSpace(const std::string &newSpace);
+    LIBSPEC void setSpace(const std::string &newSpace);
 
 private:
     std::string mHost;
