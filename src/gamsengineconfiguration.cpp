@@ -33,19 +33,26 @@ namespace gams {
 using namespace std;
 
 GAMSEngineConfiguration::GAMSEngineConfiguration(const string &host, const string &user,
-                                                 const string &pw, const string &space) :
-    mHost(host), mUsername(user), mPassword(pw), mSpace(space)
+                                                 const string &pw, const string &space)
+    : mHost(host)
+    , mUsername(user)
+    , mPassword(pw)
+    , mSpace(space)
 {
     if (mHost.empty())
         cerr << "host must not be null" << endl;
     if (mUsername.empty())
         cerr << "user must not be null" << endl;
-
     // TODO(RG): those two also not null?
     if (mPassword.empty())
         cerr << "password must not be null" << endl;
     if (mSpace.empty())
         cerr << "space must not be null" << endl;
+}
+
+GAMSEngineConfiguration::~GAMSEngineConfiguration()
+{
+
 }
 
 std::string GAMSEngineConfiguration::host() const

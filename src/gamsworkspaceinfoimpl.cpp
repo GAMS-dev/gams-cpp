@@ -27,7 +27,9 @@
 
 namespace gams {
 
-GAMSWorkspaceInfoImpl::GAMSWorkspaceInfoImpl(std::string workingDirectory, std::string systemDirectory, GAMSEnum::DebugLevel debug)
+GAMSWorkspaceInfoImpl::GAMSWorkspaceInfoImpl(const std::string& workingDirectory,
+                                             const std::string& systemDirectory,
+                                             GAMSEnum::DebugLevel debug)
     : mWorkingDirectory(workingDirectory), mSystemDirectory(systemDirectory), mDebug(debug)
 {}
 

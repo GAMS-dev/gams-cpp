@@ -185,7 +185,16 @@ public:
     static bool exists(const char *file);
 
 };
-    static thread_local bool seedGenerated;
+
+#ifdef _WIN32
+static thread_local bool seedGenerated;
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+static thread_local bool seedGenerated;
+#pragma GCC diagnostic pop
+#endif
+
 }
 
 #endif // GPATH_H

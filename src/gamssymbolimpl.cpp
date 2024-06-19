@@ -39,11 +39,19 @@ namespace gams {
 
 GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, void* symPtr, int dim, const string &name, const string &text,
                                GAMSEnum::SymbolType symType, GAMSEnum::VarType varType, GAMSEnum::EquType equType, GAMSEnum::SetType setType)
-    : mDatabase(database), mName(name), mDim(dim), mSymType(symType), mVarType(varType), mEquType(equType), mExplanatoryText(text), mSymPtr(symPtr)
+    : mDatabase(database)
+    , mName(name)
+    , mDim(dim)
+    , mSymType(symType)
+    , mVarType(varType)
+    , mEquType(equType)
+    , mExplanatoryText(text)
+    , mSymPtr(symPtr)
 {}
 
 GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, void* symPtr)
-    : mDatabase(database), mSymPtr(symPtr)
+    : mDatabase(database)
+    , mSymPtr(symPtr)
 {
     DEB << "---- Entering GAMSSymbolImpl constructor ----";
     if (!symPtr)
@@ -68,8 +76,14 @@ GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, int dim, const std::string
                                const std::string& text, GAMSEnum::SymbolType symType,
                                GAMSEnum::VarType varType, GAMSEnum::EquType equType,
                                GAMSEnum::SetType setType)
-    : mDatabase(database), mName(name), mDim(dim), mSymType(symType), mVarType(varType),
-      mEquType(equType), mExplanatoryText(text), mSetType(setType)
+    : mDatabase(database)
+    , mName(name)
+    , mDim(dim)
+    , mSymType(symType)
+    , mVarType(varType)
+    , mSetType(setType)
+    , mEquType(equType)
+    , mExplanatoryText(text)
 {
     if (mDim < 0 || mDim > GLOBAL_MAX_INDEX_DIM)
         throw GAMSException("Invalid dimension");
@@ -86,8 +100,14 @@ GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, std::string name, std::str
                                GAMSEnum::SymbolType symType, GAMSEnum::VarType varType,
                                GAMSEnum::EquType equType, const std::vector<GAMSDomain>& domains,
                                GAMSEnum::SetType setType)
-    : mDatabase(database), mName(name), mDim(static_cast<int>(domains.size())), mSymType(symType),
-      mVarType(varType), mEquType(equType), mExplanatoryText(text), mSetType(setType)
+    : mDatabase(database)
+    , mName(name)
+    , mDim(static_cast<int>(domains.size()))
+    , mSymType(symType)
+    , mVarType(varType)
+    , mSetType(setType)
+    , mEquType(equType)
+    , mExplanatoryText(text)
 {
     if (mDim > GLOBAL_MAX_INDEX_DIM)
         throw GAMSException("Invalid dimension");

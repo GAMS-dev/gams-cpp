@@ -6,6 +6,9 @@ include(../include.cmake)
 set(GAMSPATH ${GAMSPATH} PARENT_SCOPE) # this is needed to make this var available to siblings
 add_definitions(-DMAKELIB)
 
+add_compile_options(-Wall)
+#add_compile_options(-Wall -Wextra -pedantic -Werror)
+
 if(WIN32)
     if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         add_definitions(-EHsc -GR -c -nologo -DFNAME_UCASE_NODECOR -DF_CALLCONV=__cdecl -D_CRT_DISABLE_PERFCRIT_LOCKS)

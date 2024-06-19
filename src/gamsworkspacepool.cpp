@@ -24,7 +24,6 @@
  */
 
 #include "gamsworkspacepool.h"
-#include <algorithm>
 #include "gamsexception.h"
 #include "gamspath.h"
 
@@ -32,7 +31,7 @@ namespace gams {
 
 std::set<std::string> GAMSWorkspacePool::mWorspacePaths;
 
-void GAMSWorkspacePool::registerWorkspacePath(std::string path)
+void GAMSWorkspacePool::registerWorkspacePath(const std::string& path)
 {
     // Create unique lockfile in path (throw on missing write access).
     GAMSPath lockPath = GAMSPath(path).tempFile("gams.lock");
@@ -55,7 +54,7 @@ void GAMSWorkspacePool::registerWorkspacePath(std::string path)
     lockPath.remove();
 }
 
-void GAMSWorkspacePool::unregisterWorkspacePath(std::string path)
+void GAMSWorkspacePool::unregisterWorkspacePath(const std::string& path)
 {
     auto iPath = mWorspacePaths.find(path);
     if (iPath != mWorspacePaths.end()) {

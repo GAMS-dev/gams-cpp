@@ -34,7 +34,7 @@ class GAMSDomainImpl
 {
 public:
     GAMSDomainImpl(GAMSSet domain);
-    GAMSDomainImpl(std::string relaxedName);
+    GAMSDomainImpl(const std::string& relaxedName);
 
     bool operator==(const GAMSDomainImpl& other);
 

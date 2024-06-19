@@ -38,11 +38,11 @@ public:
 
     /// Register a GAMS workspace path.
     /// \param path A GAMS workspace path.
-    static void registerWorkspacePath(std::string path);
+    static void registerWorkspacePath(const std::string& path);
 
     /// Unregister a GAMS workspace path.
     /// \param path A GAMS workspace path.
-    static void unregisterWorkspacePath(std::string path);
+    static void unregisterWorkspacePath(const std::string& path);
 
 private:
     GAMSWorkspacePool();

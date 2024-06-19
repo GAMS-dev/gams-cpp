@@ -215,7 +215,7 @@ void GAMSJobImpl::zip(const string &zipName, const set<string> &files)
     string gmsZip = "gmszip"s + cExeSuffix;
     string zipArgs = "-j " + zipName; // -j: dont record directory names
 
-    for (const GAMSPath &f : files) {
+    for (const GAMSPath f : files) {
         if (!f.exists()) throw GAMSException("File " + f.string() + " is missing.");
         zipArgs.append(" " + f.string());
     }
