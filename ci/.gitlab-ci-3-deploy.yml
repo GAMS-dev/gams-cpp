@@ -11,3 +11,14 @@ deploy:
     - PATH="/opt/github-release:${PATH}"
     - chmod u+x ci/upload-release.sh
     - TAG_NAME=$CI_COMMIT_TAG GITHUB_TOKEN=$GITHUB_TOKEN ./ci/upload-release.sh
+
+license-update-leg:
+  stage: deploy
+  tags: [linux]
+  image:
+    name: $GAMS_CONTAINER_REGISTRY/qt-machines/deployer:latest
+    entrypoint: [""]   # prevent startup.sh
+  allow_failure: false
+  script:
+    - chmod +x ci/license-update.sh
+    - ./ci/license-update.sh
