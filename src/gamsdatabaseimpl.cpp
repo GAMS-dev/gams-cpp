@@ -330,7 +330,7 @@ std::vector<GAMSDatabaseDomainViolation> GAMSDatabaseImpl::getDatabaseDVs(const 
 GAMSSymbol GAMSDatabaseImpl::getSymbolByIndex(GAMSDatabase& database, const int pos)
 {
     void* symPtr = nullptr;
-    checkForGMDError(gmdGetSymbolByIndex(mGMD, pos, &symPtr), __FILE__, __LINE__);
+    checkForGMDError(gmdGetSymbolByIndex(mGMD, pos + 1, &symPtr), __FILE__, __LINE__);
     if (!symPtr) {
         throw GAMSException("GAMSDatabase: Cannot find symbol at position " + to_string(pos));
     }
