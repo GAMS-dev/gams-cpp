@@ -1,17 +1,19 @@
 build-leg:
   stage: build
-  tags: [puma]
-  needs: [fetch-ci-scripts,install-gamsdist-leg]
+  tags: [linux]
+  needs: [fetch-ci-scripts]
   image:
     name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-qt6.7:latest
     entrypoint: [""]   # prevent startup.sh
   script:
+    - !reference [.get-gams]
+    - !reference [.gams-folder-leg]
     - printf "GAMS_DISTRIB=/cache/gams-installs/`cat gams_folder_leg.txt`\n" > gamsinclude.txt
     - mkdir build
     - cd build
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build . 2>&1 | tee build_log.txt
-    - python3 ../ci/report_for_log.py gcc build_log.txt ../warnings.xml
+    - python3 ../ciscripts/report_for_log.py gcc build_log.txt ../warnings.xml
   artifacts:
     name: gams-cpp-leg
     expire_in: 2 hours
@@ -21,15 +23,17 @@ build-leg:
 
 build-deg:
   stage: build
-  tags: [macos]
-  needs: [fetch-ci-scripts,install-gamsdist-deg]
+  tags: [clarus] # set back to macOS once the libcpr issue on carla is fixed
+  needs: [fetch-ci-scripts]
   script:
+    - !reference [.get-gams]
+    - !reference [.gams-folder-deg]
     - printf "GAMS_DISTRIB=$HOME/cache/gams-installs/`cat gams_folder_deg.txt`\n" > gamsinclude.txt
     - mkdir build
     - cd build
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build . 2>&1 | tee build_log.txt
-    - python3 ../ci/report_for_log.py clang build_log.txt ../warnings.xml
+    - python3 ../ciscripts/report_for_log.py clang build_log.txt ../warnings.xml
   artifacts:
     name: gams-cpp-deg
     expire_in: 2 hours
@@ -40,14 +44,16 @@ build-deg:
 build-dac:
   stage: build
   tags: [macos-arm64]
-  needs: [fetch-ci-scripts,install-gamsdist-dac]
+  needs: [fetch-ci-scripts]
   script:
+    - !reference [.get-gams]
+    - !reference [.gams-folder-dac]
     - printf "GAMS_DISTRIB=$HOME/cache/gams-installs/`cat gams_folder_dac.txt`\n" > gamsinclude.txt
     - mkdir build
     - cd build
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build . 2>&1 | tee build_log.txt
-    - python3 ../ci/report_for_log.py clang build_log.txt ../warnings.xml
+    - python3 ../ciscripts/report_for_log.py clang build_log.txt ../warnings.xml
   artifacts:
     name: gams-cpp-dac
     expire_in: 2 hours
@@ -57,11 +63,13 @@ build-dac:
 
 build-wei:
   stage: build
-  tags: [pond]
-  needs: [fetch-ci-scripts,install-gamsdist-wei]
+  tags: [windows]
+  needs: [fetch-ci-scripts]
   image:
-    name: $GAMS_CONTAINER_REGISTRY/qt-machines/wei/builder-qt6.7:latest
+    name: $MACHINES_CONTAINER_REG/wei/builder-full
   script:
+    - !reference [.get-gams-wei]
+    - !reference [.gams-folder-wei]
     - $gmsdirname = Get-Content mygmsdir.tmp -Raw
     - Invoke-Expression "& 'C:\\Cache\\gams-installs\\$gmsdirname\\gams.exe'"
     - echo "GAMS_DISTRIB=C:/Cache/gams-installs/$gmsdirname" > gamsinclude.txt
@@ -70,7 +78,7 @@ build-wei:
     - cd build
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build  . --config Release | Tee-Object -FilePath 'build_log.txt'
-    - python ../ci/report_for_log.py msvc build_log.txt ../warnings.xml
+    - python ../ciscripts/report_for_log.py msvc build_log.txt ../warnings.xml
   artifacts:
     name: gams-cpp-wei
     expire_in: 2 hours

@@ -1,11 +1,13 @@
 test-leg:
   stage: test
-  tags: [puma]
+  tags: [linux]
   image:
     name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-qt6.7:latest
     entrypoint: [""]   # prevent startup.sh
-  needs: [fetch-ci-scripts,build-leg,install-gamsdist-leg]
+  needs: [fetch-ci-scripts,build-leg]
   script:
+    - !reference [.get-gams]
+    - !reference [.gams-folder-leg]
     - GAMS_PATH=/cache/gams-installs/`cat gams_folder_leg.txt`
     - cd build
     - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" gams
@@ -18,9 +20,11 @@ test-leg:
 
 test-deg:
   stage: test
-  tags: [macos]
-  needs: [fetch-ci-scripts,build-deg,install-gamsdist-deg]
+  tags: [clarus] # set back to macOS once the libcpr issue on carla is fixed
+  needs: [fetch-ci-scripts,build-deg]
   script:
+    - !reference [.get-gams]
+    - !reference [.gams-folder-deg]
     - GAMS_PATH=$HOME/cache/gams-installs/`cat gams_folder_deg.txt`
     - cd build
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib gams
@@ -34,8 +38,10 @@ test-deg:
 test-dac:
   stage: test
   tags: [macos-arm64]
-  needs: [fetch-ci-scripts,build-dac,install-gamsdist-dac]
+  needs: [fetch-ci-scripts,build-dac]
   script:
+    - !reference [.get-gams]
+    - !reference [.gams-folder-dac]
     - GAMS_PATH=$HOME/cache/gams-installs/`cat gams_folder_dac.txt`
     - cd build
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib gams
@@ -48,11 +54,13 @@ test-dac:
 
 test-wei:
   stage: test
-  tags: [pond]
+  tags: [windows]
   image:
-    name: $GAMS_CONTAINER_REGISTRY/machines/wei/builder-full:latest
-  needs: [install-gamsdist-wei,build-wei]
+    name: $MACHINES_CONTAINER_REG/wei/builder-full
+  needs: [fetch-ci-scripts,build-wei]
   script:
+    - !reference [.get-gams-wei]
+    - !reference [.gams-folder-wei]
     - $gmsdirname = Get-Content mygmsdir.tmp -Raw
     - $GAMS_PATH = "C:\Cache\gams-installs\$gmsdirname"
     - $env:Path = "$GAMS_PATH;$GAMS_PATH\gbin;$CI_PROJECT_DIR\build\bin\Release\;$CI_PROJECT_DIR\build\_deps\cpr-build\cpr\Release;$CI_PROJECT_DIR\build\_deps\curl-build\lib\Release;$CI_PROJECT_DIR\build\_deps\zlib-build\Release;" + $env:Path
