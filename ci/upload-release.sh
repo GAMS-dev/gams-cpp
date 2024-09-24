@@ -39,7 +39,7 @@ else
 fi
 
 ## create a GitHub release
-github-release release --user $GITHUB_ORGA --repo $GITHUB_REPO --tag ${TAG_NAME} --pre-release \
+github-release release --user $GITHUB_ORGA --repo $GITHUB_REPO --tag ${TAG_NAME} \
 --description "${CHANGELOG}
 
 This version of the GAMS C++ API requires GAMS ${GAMS_DISTRIB_MAJOR_VERSION} or any newer GAMS version that gets released before there is a new release of the GAMS C++ API. To download GAMS, please visit https://www.gams.com/latest/. To learn more about the GAMS C++ API, please visit https://www.gams.com/latest/docs/API_CPP_OVERVIEW.html"
