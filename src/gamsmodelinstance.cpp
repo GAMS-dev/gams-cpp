@@ -147,7 +147,9 @@ std::string GAMSModelInstance::solveStatusAsString()
 }
 
 GAMSModelInstance::GAMSModelInstance()
-{}
+{
+
+}
 
 GAMSModelInstance&GAMSModelInstance::operator=(const GAMSModelInstance& other)
 {

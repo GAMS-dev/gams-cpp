@@ -139,6 +139,7 @@ GAMSModelInstanceImpl::GAMSModelInstanceImpl(std::shared_ptr<GAMSModelInstanceIm
 
 GAMSModelInstanceImpl::~GAMSModelInstanceImpl()
 {
+    gmdCloseLicenseSession(gmd());
     if (mGMO != NULL)
         gmoFree(&mGMO);
     if (mGEV != NULL)
