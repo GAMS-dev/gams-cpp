@@ -3,7 +3,7 @@ build-leg:
   tags: [linux]
   needs: [fetch-ci-scripts]
   image:
-    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-qt6.7:latest
+    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/${IMAGE_VERSION}:latest
     entrypoint: [""]   # prevent startup.sh
   script:
     - !reference [.get-gams]
