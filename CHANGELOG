@@ -1,4 +1,8 @@
-Version 0.21.0
+Version 1.1.0
+======================
+- upgraded to cpr 1.11.1
+
+Version 1.0.0
 ======================
 - improved close license session when `GAMSModelInstance` is freed
 - updated modify `GAMSDatabaseImpl::getSymbolByIndex` to keep it in sync with recent GMD change (gmdGetSymbolByIndex expects 1-based symbol index)
