@@ -1,5 +1,6 @@
 Version 1.1.0
 ======================
+- fixed `GamsJob.run()` log output not being processed in real time when using `output=sys.stdout`.
 - upgraded to cpr 1.11.1
 - upgraded to JSON 3.11.3
 

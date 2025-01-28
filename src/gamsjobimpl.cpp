@@ -111,7 +111,7 @@ string GAMSJobImpl::prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint& tmpCP,
         if (output == nullptr)
             tmpOptions.setLogOption(0);
         else
-            tmpOptions.setLogOption(4);
+            tmpOptions.setLogOption(3);
     }
 
     if (!databases.empty()) {
