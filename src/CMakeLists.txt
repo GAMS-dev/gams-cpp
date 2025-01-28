@@ -37,11 +37,11 @@ include_directories(${CMAKE_BINARY_DIR}/inc)
 
 # add Cpr: cpr is a modern HTTP library for C++ (MIT License)
 include(FetchContent)
-FetchContent_Declare(cpr URL https://github.com/libcpr/cpr/archive/refs/tags/1.11.1.tar.gz)
+FetchContent_Declare(cpr URL https://github.com/libcpr/cpr/archive/refs/tags/1.10.4.tar.gz)
 FetchContent_MakeAvailable(cpr)
 
 # add nlohmann:json to handle json format (MIT License)
-FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
+FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
 FetchContent_MakeAvailable(json)
 
 add_library(gamscpp SHARED
