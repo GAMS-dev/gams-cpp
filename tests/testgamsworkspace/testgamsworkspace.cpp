@@ -1600,5 +1600,3 @@ TEST_P(ParameterizedTestGetSpecValues, testGetSpecValues) {
             break;
     }
 }
-
-

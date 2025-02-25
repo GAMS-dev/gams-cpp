@@ -48,4 +48,5 @@ Finally, the examples can be executed by triggering Run button or pressing 'Ctrl
 | Dependency | License | Description |
 | ------ | ------ | ------ |
 | [cpr](https://github.com/libcpr/cpr) | [MIT](https://github.com/libcpr/cpr/blob/master/LICENSE) | C++ Requests is a simple wrapper around [libcurl](https://curl.se/libcurl/) inspired by the excellent [Python Requests](https://github.com/kennethreitz/requests) project. |
+| [googletest](https://github.com/google/googletest) | [BSD-3-Clause](https://github.com/google/googletest/blob/main/LICENSE) | Google Testing and Mocking Framework |
 | [json](https://github.com/nlohmann/json) | [MIT](https://github.com/nlohmann/json/blob/develop/LICENSE.MIT) | JSON for Modern C++ |

@@ -457,5 +457,3 @@ TEST_F(TestGAMSModifier, testIsParameter_Variable_Equation) {
       ASSERT_TRUE( ! mod.isParameter() );
     }
 }
-
-

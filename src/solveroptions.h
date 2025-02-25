@@ -57,4 +57,3 @@ private:
 } // namespace gams
 
 #endif // GAMSWORKSPACE_H
-

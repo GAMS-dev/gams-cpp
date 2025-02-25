@@ -1,9 +1,9 @@
 build-leg:
   stage: build
   tags: [linux]
-  needs: [fetch-ci-scripts]
+  needs: [fetch-ci-scripts, quality-gate]
   image:
-    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/${IMAGE_VERSION}:latest
+    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-${IMAGE_VERSION}:latest
     entrypoint: [""]   # prevent startup.sh
   script:
     - !reference [.get-gams]
@@ -24,7 +24,7 @@ build-leg:
 build-deg:
   stage: build
   tags: [clarus] # set back to macOS once the libcpr issue on carla is fixed
-  needs: [fetch-ci-scripts]
+  needs: [fetch-ci-scripts, quality-gate]
   script:
     - !reference [.get-gams]
     - !reference [.gams-folder-deg]
@@ -44,7 +44,7 @@ build-deg:
 build-dac:
   stage: build
   tags: [macos-arm64]
-  needs: [fetch-ci-scripts]
+  needs: [fetch-ci-scripts, quality-gate]
   script:
     - !reference [.get-gams]
     - !reference [.gams-folder-dac]
@@ -64,7 +64,7 @@ build-dac:
 build-wei:
   stage: build
   tags: [windows]
-  needs: [fetch-ci-scripts]
+  needs: [fetch-ci-scripts, quality-gate]
   image:
     name: $MACHINES_CONTAINER_REG/wei/builder-full
   script:

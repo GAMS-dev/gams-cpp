@@ -323,5 +323,3 @@ TEST_F(TestGAMSSet, testMergeNonExistingRecord) {
     EXPECT_EQ( j.numberRecords(), numberOfRecords+1 );
     EXPECT_STREQ( rec.key(0).c_str(), "Albuquerque" );
 }
-
-

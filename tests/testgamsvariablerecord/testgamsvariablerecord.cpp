@@ -284,5 +284,3 @@ TEST_F(TestGAMSVariableRecord, testGetSetScale) {
     varz.firstRecord().setScale( 2.0 );
     ASSERT_TRUE( equals(varz.firstRecord().scale(), 2.0) );
 }
-
-

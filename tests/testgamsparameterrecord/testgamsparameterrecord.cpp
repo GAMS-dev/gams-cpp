@@ -177,5 +177,3 @@ TEST_F(TestGAMSParameterRecord, testSetValue) {
     param.addRecord("alburquerque").setValue( 4.2 );
     ASSERT_TRUE( equals(param.findRecord("alburquerque").value(), 4.2) );
 }
-
-

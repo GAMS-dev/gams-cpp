@@ -2,7 +2,7 @@ test-leg:
   stage: test
   tags: [linux]
   image:
-    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/${IMAGE_VERSION}:latest
+    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-${IMAGE_VERSION}:latest
     entrypoint: [""]   # prevent startup.sh
   needs: [fetch-ci-scripts,build-leg]
   script:
@@ -73,3 +73,6 @@ test-wei:
     paths: [build/wei-results.xml]
     reports:
       junit: build/wei-results.xml
+
+secret_detection:
+  tags: [linux]

@@ -434,4 +434,3 @@ typedef Types<int, double, MyPair<int, int> > TrimTypes;
 INSTANTIATE_TYPED_TEST_SUITE_P(My, TrimmedTest, TrimTypes);
 
 }  // namespace library2
-

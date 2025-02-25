@@ -454,5 +454,3 @@ std::string TestGAMSModelInstance::getModelText() {
            "                                                                    \n"
            "Model transport /all/ ;                                             \n";
 }
-
-

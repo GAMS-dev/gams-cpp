@@ -336,5 +336,3 @@ TEST_F(TestGAMSParameter, testMergeNonExistingRecord) {
     EXPECT_EQ( a.numberRecords(), numberOfRecords+1 );
     EXPECT_STREQ( rec.key(0).c_str(), "Albuquerque" );
 }
-
-

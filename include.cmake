@@ -102,4 +102,3 @@ else()
     set(SOURCE ${SOURCE} ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptions.cpp
                          ${GPRODUCTS_ENV}/apiexamples/C++/api/gamsoptionsimpl.cpp)
 endif()
-

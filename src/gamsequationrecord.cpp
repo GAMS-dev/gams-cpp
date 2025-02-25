@@ -122,4 +122,3 @@ void GAMSEquationRecord::setScale(const double val)
 }
 
 }
-

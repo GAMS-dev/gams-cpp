@@ -72,4 +72,3 @@ void GAMSParameterRecord::setValue(const double val)
 }
 
 }
-

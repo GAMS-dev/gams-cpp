@@ -448,5 +448,3 @@ TEST_F(TestGAMSSymbolIter, testIncrementOperator) {
         EXPECT_STREQ( (*it_demand).key(0).c_str(), "chicago");
     }
 }
-
-

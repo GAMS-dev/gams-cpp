@@ -498,5 +498,3 @@ TEST_F(TestGAMSSymbolRecord, testGetType) {
     GAMSSymbolRecord rec_z( db.getVariable("z").lastRecord() );
     EXPECT_EQ( rec_z.type(), GAMSEnum::SymbolType::SymTypeVar );
 }
-
-

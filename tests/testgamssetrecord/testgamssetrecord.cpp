@@ -160,6 +160,3 @@ TEST_F(TestGAMSSetRecord, testGetSetText) {
     j.addRecord("j1").setText("");
     ASSERT_TRUE(j.lastRecord().text().empty());
 }
-
-
-

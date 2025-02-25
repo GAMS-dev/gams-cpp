@@ -1580,4 +1580,3 @@ TEST(ActionMacro, LargeArity) {
 #  pragma warning(pop)
 #endif
 #endif
-

@@ -193,5 +193,3 @@ TEST_F(TestGAMSSymbolDomainViolation, testViolInd) {
        }
     }
 }
-
-

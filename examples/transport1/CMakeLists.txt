@@ -12,4 +12,3 @@ include_directories(${GAMS_DISTRIB_CPP_API} PUBLIC_LIBRARIES)
 add_executable(${PROJECT_NAME} "transport1.cpp")
 
 target_link_libraries(${PROJECT_NAME} gamscpp)
-

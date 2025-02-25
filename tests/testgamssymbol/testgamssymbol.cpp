@@ -1608,5 +1608,3 @@ TEST_F(TestGAMSSymbol, testGetType) {
     GAMSSymbol z( db.getVariable("z") );
     EXPECT_EQ( z.type(), GAMSEnum::SymbolType::SymTypeVar );
 }
-
-

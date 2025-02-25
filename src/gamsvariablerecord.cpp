@@ -122,4 +122,3 @@ void GAMSVariableRecord::setScale(const double val)
 }
 
 }
-

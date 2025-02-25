@@ -419,5 +419,3 @@ TEST_F(TestGAMSVariable, testGetVarType) {
     EXPECT_EQ( db.getVariable("x").varType(), GAMSEnum::VarType::Positive );
     EXPECT_EQ( db.getVariable("z").varType(), GAMSEnum::VarType::Free );
 }
-
-
