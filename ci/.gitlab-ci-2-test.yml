@@ -20,7 +20,7 @@ test-leg:
 
 test-deg:
   stage: test
-  tags: [clarus] # set back to macOS once the libcpr issue on carla is fixed
+  tags: [macos]
   needs: [fetch-ci-scripts,build-deg]
   script:
     - !reference [.get-gams]

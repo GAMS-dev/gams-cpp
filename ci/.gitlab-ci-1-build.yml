@@ -23,7 +23,7 @@ build-leg:
 
 build-deg:
   stage: build
-  tags: [clarus] # set back to macOS once the libcpr issue on carla is fixed
+  tags: [macos]
   needs: [fetch-ci-scripts, quality-gate]
   script:
     - !reference [.get-gams]

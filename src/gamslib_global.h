@@ -26,11 +26,12 @@
 #ifndef GAMSLIB_GLOBAL_H
 #define GAMSLIB_GLOBAL_H
 
-#include <string>
-#include <vector>
 #include <memory>
-#include <map>
+
+#ifdef _WIN32
+#include <string>
 #include <stdexcept>
+#endif
 
 namespace gams {
 

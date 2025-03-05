@@ -66,7 +66,7 @@ public:
 
 private:
     friend class GAMSSymbolImpl;
-    GAMSSymbolDomainViolation(const std::shared_ptr<GAMSSymbolDomainViolationImpl> impl);
+    GAMSSymbolDomainViolation(const std::shared_ptr<GAMSSymbolDomainViolationImpl> &impl);
     GAMSSymbolDomainViolation(const std::vector<bool>& violInd, const GAMSSymbolRecord& violRec);
 private:
     std::shared_ptr<GAMSSymbolDomainViolationImpl> mImpl;

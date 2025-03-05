@@ -1,0 +1,20 @@
+codechecker-leg:
+  stage: analyze
+  tags: [linux]
+  needs: [fetch-ci-scripts]
+  image:
+    name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/analyzer-${IMAGE_VERSION}:latest
+    entrypoint: [""]   # prevent startup.sh
+  allow_failure: false
+  script:
+    - !reference [.get-gams]
+    - !reference [.gams-folder-leg]
+    - printf "GAMS_DISTRIB=/cache/gams-installs/`cat gams_folder_leg.txt`\n" > gamsinclude.txt
+    - bash ci/codechecker.sh
+  after_script:
+    - cat gl-code-quality-report.json
+  artifacts:
+    reports:
+      codequality: gl-code-quality-report.json
+    paths: [gl-code-quality-report.json]
+    expire_in: '2 mos'

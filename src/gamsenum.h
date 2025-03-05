@@ -232,7 +232,7 @@ public:
     static std::string code(GAMSEnum::EAction type);
 
     /// Get a <c>GAMSEnum::EAction</c> from a <c>std::string</c>.
-    static EAction eActionFromCode(std::string str);
+    static EAction eActionFromCode(const std::string &str);
 
 };
 

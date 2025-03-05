@@ -29,7 +29,6 @@
 #include "gamsenum.h"
 #include "gamsparameter.h"
 #include "gamsmodifier.h"
-#include "gamsmodifierimpl.h"
 
 namespace gams {
 

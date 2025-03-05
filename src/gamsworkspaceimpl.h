@@ -32,7 +32,6 @@
 #include "gamsdatabase.h"
 #include "gamsjob.h"
 #include "gamsenum.h"
-#include "gclgms.h"
 #include "gamspath.h"
 #include "gamsversion.h"
 
@@ -90,30 +89,30 @@ public:
     /// Registers a GAMSDatabase at the workspace
     /// \param databaseName Database name to add (empty: generate default name)
     /// \returns Database name if all worked well, else an empty string
-    std::string registerDatabase(const std::string databaseName = "");
+    std::string registerDatabase(const std::string &databaseName = "");
     std::string nextDatabaseName();
 
     /// Registers a GAMSCheckpoint at the workspace
     /// \param checkpointName Checkpoint name to add (empty: generate default name)
     /// \returns Checkpoint name if all worked well, else an empty string
-    std::string registerCheckpoint(std::string checkpointName = "");
+    std::string registerCheckpoint(const std::string &checkpointName = "");
 
     /// Registers a GAMSModelInstance at the workspace
     /// \param modelInstanceName Model instance name to add (empty: generate default name)
     /// \returns ModelInstance name if all worked well, else an empty string
-    std::string registerModelInstance(const std::string miName = "");
+    std::string registerModelInstance(const std::string &miName = "");
 
     /// Registers a GAMSJob at the workspace
     /// \param jobName  Job name to add (empty: generate default name)
     /// \returns        Job name if all worked well, else an empty string
-    std::string registerJob(const std::string jobName = "");
+    std::string registerJob(const std::string &jobName = "");
 
     GAMSOptions addOptions(GAMSWorkspace& ws, const GAMSOptions& optFrom);
     GAMSOptions addOptions(GAMSWorkspace& ws, const std::string& optFile = "");
 
     LogId logID() { return static_cast<LogId>(this); }
 
-    void xxxLib(std::string libname, std::string model);
+    void xxxLib(const std::string &libname, const std::string &model);
 
     GAMSEnum::DebugLevel debug() { return mDebug; }
 

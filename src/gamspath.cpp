@@ -148,8 +148,9 @@ bool GAMSPath::rmDirRecurse()
         result = std::filesystem::exists(*this, ec);
     else
         result = std::filesystem::remove_all(*this, ec);
-    if (ec) std::cerr << "GAMSPath::rmDirRecurse error: " << ec.message().c_str()
-                      << "\n  For: " << c_str() << std::endl;
+    if (ec)
+        std::cerr << "GAMSPath::rmDirRecurse error: " << ec.message().c_str()
+                  << "\n  For: " << c_str() << '\n';
     return result;
 }
 
@@ -163,8 +164,8 @@ bool GAMSPath::remove()
     std::error_code ec;
     bool result = std::filesystem::remove_all(*this, ec);
     if (ec)
-        std::cerr << "GAMSPath::remove error: " << ec.message().c_str()
-                  << "\n  For: " << c_str() << std::endl;
+        std::cerr << "GAMSPath::remove error: " << ec.message().c_str() << "\n  For: " << c_str()
+                  << '\n';
     return result;
 }
 

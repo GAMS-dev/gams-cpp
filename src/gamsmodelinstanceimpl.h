@@ -51,7 +51,7 @@ public:
     /// \param modelInstanceName Identifier of GAMSModelInstance (determined automatically if omitted)
     GAMSModelInstanceImpl(GAMSCheckpoint& checkpoint, const std::string& modelInstanceName = "");
 
-    GAMSModelInstanceImpl(std::shared_ptr<GAMSModelInstanceImpl> sourceMI, const std::string& modelInstanceName = "");
+    GAMSModelInstanceImpl(std::shared_ptr<GAMSModelInstanceImpl> &sourceMI, const std::string& modelInstanceName = "");
 
     ~GAMSModelInstanceImpl();
 

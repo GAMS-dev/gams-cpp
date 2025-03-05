@@ -126,7 +126,7 @@ std::string GAMSEnum::code(GAMSEnum::EAction type)
     return res[type];
 }
 
-GAMSEnum::EAction GAMSEnum::eActionFromCode(std::string str)
+GAMSEnum::EAction GAMSEnum::eActionFromCode(const std::string &str)
 {
     for (unsigned i = RestartAfterSolve; i <= TraceReport+1; ++i) {
         EAction act = static_cast<EAction>(i);

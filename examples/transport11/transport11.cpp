@@ -88,8 +88,9 @@ string getModelText()
 void createSaveRestart(int argc, char* argv[], const string &checkpointName)
 {
     GAMSWorkspaceInfo wsInfo;
-    if (argc > 1)
+    if (argc > 1) {
         wsInfo.setSystemDirectory(argv[1]);
+    }
     wsInfo.setWorkingDirectory("." +(cPathSep+ checkpointName));
     GAMSWorkspace ws(wsInfo);
 

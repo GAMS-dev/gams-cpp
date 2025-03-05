@@ -27,8 +27,10 @@
 
 namespace gams {
 
-GAMSDatabaseDomainViolationImpl::GAMSDatabaseDomainViolationImpl(const GAMSSymbol &violSym, const std::vector<GAMSSymbolDomainViolation>& violRecList)
-    : mViolSym(violSym), mViolRecs(violRecList)
+GAMSDatabaseDomainViolationImpl::GAMSDatabaseDomainViolationImpl(const GAMSSymbol &violSym,
+                                                                 const std::vector<GAMSSymbolDomainViolation>& violRecList)
+    : mViolSym(violSym)
+    , mViolRecs(violRecList)
 {}
 
 bool GAMSDatabaseDomainViolationImpl::operator!=(const GAMSDatabaseDomainViolationImpl& /*other*/) const

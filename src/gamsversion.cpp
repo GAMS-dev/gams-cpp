@@ -25,13 +25,13 @@
 
 #include <string>
 #include <sstream>
+#include <fstream>
 #include <regex>
 #include <vector>
 
 #include "gamsversion.h"
 #include "gamsoptions.h"
 #include "gamsexception.h"
-#include "gamspath.h"
 
 using namespace std;
 namespace gams {
@@ -46,7 +46,7 @@ const char* GAMSVersion::mGamsVersion = GAMSOptions::gamsVersion();
 static const char* mApiName = "API version";
 static const char* mGamsName = "required GAMS version";
 
-static int part(const char* vString, const int index, const string typeName)
+static int part(const char* vString, const int index, const string &typeName)
 {
     vector<string> parts;
     string s;
@@ -109,20 +109,24 @@ int GAMSVersion::gamsBuild()
     return part(gamsVersion(), 2, mGamsName);
 }
 
-string GAMSVersion::systemVersion(string gamsSystemDir)
+string GAMSVersion::systemVersion(const string &gamsSystemDir)
 {
-    string gams = "gams";
-    gams.append(cExeSuffix);
+    std::string stmpStr;
+    std::ifstream stmpFile(gamsSystemDir + "/gamsstmp.txt", std::ifstream::in);
 
-    GAMSPath sys(gamsSystemDir);
+    stmpFile.seekg(0, std::ios::end);
+    stmpStr.reserve(stmpFile.tellg());
+    stmpFile.seekg(0, std::ios::beg);
+    stmpStr.assign(std::istreambuf_iterator<char>(stmpFile), std::istreambuf_iterator<char>());
+    stmpStr.erase(std::remove(stmpStr.begin(), stmpStr.end(), '\n'), stmpStr.cend());
 
-    string result;
-    GAMSPlatform::runProcess(gamsSystemDir, gams, "audit lo=3", result);
-    regex regex("[0-9]*\\.[][0-9]*\\.[0-9]*");
-    smatch match;
-    regex_match(result, match, regex);
-
-    return match.str();
+    std::smatch stmp_match;
+    const std::regex stmp_regex(R"(\w+\s+(\d+\.\d+\.\d+).*)");
+    if (std::regex_match(stmpStr, stmp_match, stmp_regex) && stmp_match.size() == 2) {
+        std::ssub_match stmp_sub_match = stmp_match[1];
+        return stmp_sub_match.str();
+    }
+    return string();
 }
 
 GAMSVersion::GAMSVersion()

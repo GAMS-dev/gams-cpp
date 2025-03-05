@@ -27,8 +27,14 @@
 
 namespace gams {
 
-GAMSModelInstanceOptImpl::GAMSModelInstanceOptImpl(std::string solver, int optfile, int noMatchLimit, bool debug)
-    : mSolver(solver), mOptFile(optfile), mNoMatchLimit(noMatchLimit), mDebug(debug)
+GAMSModelInstanceOptImpl::GAMSModelInstanceOptImpl(std::string solver,
+                                                   int optfile,
+                                                   int noMatchLimit,
+                                                   bool debug)
+    : mSolver(std::move(solver))
+    , mOptFile(optfile)
+    , mNoMatchLimit(noMatchLimit)
+    , mDebug(debug)
 {}
 
 bool GAMSModelInstanceOptImpl::operator!=(const GAMSModelInstanceOptImpl& other) const

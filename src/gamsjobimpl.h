@@ -27,10 +27,8 @@
 #define GAMSJOBIMPL_H
 
 #include <string>
-#include <memory>
 #include <vector>
 #include <set>
-#include <unordered_set>
 #include <unordered_map>
 #include <string>
 #include "gamsenginejob.h"
@@ -107,7 +105,7 @@ public:
 
     void run(GAMSOptions* gamsOpt = nullptr, const GAMSCheckpoint* checkpoint = nullptr,
              std::ostream* output = nullptr, bool createOutDb = true,
-             std::vector<GAMSDatabase> databases = {} );
+             const std::vector<GAMSDatabase> &databases = {} );
 
     void runEngine(const GAMSEngineConfiguration &engineConfiguration, GAMSOptions* gamsOptions,
                    GAMSCheckpoint *checkpoint, std::ostream *output,

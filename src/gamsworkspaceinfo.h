@@ -42,8 +42,8 @@ public:
     ///  (determined automatically if omitted, in user's temporary folder)
     /// \param systemDirectory GAMS system directory (determined automatically if omitted)
     /// \param debug GAMS Debug Level.
-    GAMSWorkspaceInfo(std::string workingDirectory = "", std::string systemDirectory = ""
-            , GAMSEnum::DebugLevel debug = GAMSEnum::DebugLevel::KeepFilesOnError);
+    GAMSWorkspaceInfo(const std::string &workingDirectory = "", const std::string &systemDirectory = ""
+                      , GAMSEnum::DebugLevel debug = GAMSEnum::DebugLevel::KeepFilesOnError);
 
     /// Constructor.
     /// \param debug GAMS Debug Level.
@@ -64,14 +64,14 @@ public:
 
     /// Set GAMS working directory, i.e. the anchor for all file-based operations.
     /// \param workingDir GAMS working directory.
-    void setWorkingDirectory(std::string workingDir);
+    void setWorkingDirectory(const std::string &workingDir);
 
     /// Get GAMS system directory, i.e. installation directory of the GAMS distribution.
     std::string systemDirectory() const;
 
     /// Set GAMS system directory, i.e. installation directory of the GAMS distribution.
     /// \param systemDir GAMS system directory.
-    void setSystemDirectory(std::string systemDir);
+    void setSystemDirectory(const std::string &systemDir);
 
     /// Get GAMS debug level.
     GAMSEnum::DebugLevel debug() const;

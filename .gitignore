@@ -11,3 +11,4 @@ gamsinclude.txt
 .vs
 cmake-build-debug
 *.autosave
+examples/inc

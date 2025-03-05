@@ -67,7 +67,8 @@ private:
     friend class GAMSDatabaseImpl;
     std::shared_ptr<GAMSDatabaseDomainViolationImpl> mImpl;
     GAMSDatabaseDomainViolation(const std::shared_ptr<GAMSDatabaseDomainViolationImpl>& impl);
-    GAMSDatabaseDomainViolation(GAMSSymbol violSym, std::vector<GAMSSymbolDomainViolation> violRecs);
+    GAMSDatabaseDomainViolation(const GAMSSymbol &violSym,
+                                const std::vector<GAMSSymbolDomainViolation> &violRecs);
 };
 
 

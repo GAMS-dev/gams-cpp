@@ -23,9 +23,7 @@
  * SOFTWARE.
  */
 
-#include "gamslog.h"
 #include "gamsdatabaseimpl.h"
-#include <iostream>
 #include "gamsset.h"
 #include "gamsparameter.h"
 #include "gamsvariable.h"
@@ -145,8 +143,12 @@ GAMSSet GAMSDatabase::addSet(const std::string& name, const std::string& explana
     return mImpl->addSet(*this, name, explanatoryText, domains, setType);
 }
 
-GAMSSet GAMSDatabase::addSet(const std::string& name, const std::string& explanatoryText
-                             , GAMSDomain domain1, GAMSDomain domain2, GAMSDomain domain3, GAMSEnum::SetType setType)
+GAMSSet GAMSDatabase::addSet(const std::string &name,
+                             const std::string &explanatoryText,
+                             const GAMSDomain &domain1,
+                             const GAMSDomain &domain2,
+                             const GAMSDomain &domain3,
+                             GAMSEnum::SetType setType)
 {
     if (!mImpl) throw GAMSException("GAMSDatabase: The database has not been initialized.");
     if (mImpl->symbolLock()) throw GAMSException("Cannot add symbols to symbol-locked database");
@@ -180,8 +182,11 @@ GAMSParameter GAMSDatabase::addParameter(const std::string& name, const std::str
     return mImpl->addParameter(*this, name, explanatoryText, domains);
 }
 
-GAMSParameter GAMSDatabase::addParameter(const std::string& name, const std::string& explanatoryText
-                                         , GAMSDomain domain1, GAMSDomain domain2, GAMSDomain domain3)
+GAMSParameter GAMSDatabase::addParameter(const std::string &name,
+                                         const std::string &explanatoryText,
+                                         const GAMSDomain &domain1,
+                                         const GAMSDomain &domain2,
+                                         const GAMSDomain &domain3)
 {
     if (!mImpl) throw GAMSException("GAMSDatabase: The database has not been initialized.");
     if (mImpl->symbolLock()) throw GAMSException("Cannot add symbols to symbol-locked database");
@@ -217,9 +222,12 @@ GAMSVariable GAMSDatabase::addVariable(const string& name, const GAMSEnum::VarTy
     return mImpl->addVariable(*this, name, varType, explanatoryText, domains);
 }
 
-GAMSVariable GAMSDatabase::addVariable(const std::string& name, const GAMSEnum::VarType varType
-                                       , const std::string& explanatoryText, GAMSDomain domain1
-                                       , GAMSDomain domain2, GAMSDomain domain3)
+GAMSVariable GAMSDatabase::addVariable(const std::string &name,
+                                       const GAMSEnum::VarType varType,
+                                       const std::string &explanatoryText,
+                                       const GAMSDomain &domain1,
+                                       const GAMSDomain &domain2,
+                                       const GAMSDomain &domain3)
 {
     if (!mImpl) throw GAMSException("GAMSDatabase: The database has not been initialized.");
     if (mImpl->symbolLock()) throw GAMSException("Cannot add symbols to symbol-locked database");
@@ -256,9 +264,12 @@ GAMSEquation GAMSDatabase::addEquation(const std::string& name, const GAMSEnum::
     return mImpl->addEquation(*this, name, equType, explanatoryText, domains);
 }
 
-GAMSEquation GAMSDatabase::addEquation(const std::string& name, const GAMSEnum::EquType equType
-                                       , const std::string& explanatoryText, GAMSDomain domain1, GAMSDomain domain2
-                                       , GAMSDomain domain3)
+GAMSEquation GAMSDatabase::addEquation(const std::string &name,
+                                       const GAMSEnum::EquType equType,
+                                       const std::string &explanatoryText,
+                                       const GAMSDomain &domain1,
+                                       const GAMSDomain &domain2,
+                                       const GAMSDomain &domain3)
 {
     if (!mImpl) throw GAMSException("GAMSDatabase: The database has not been initialized.");
     if (mImpl->symbolLock()) throw GAMSException("Cannot add symbols to symbol-locked database");

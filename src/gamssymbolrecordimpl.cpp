@@ -31,9 +31,9 @@ using namespace std;
 
 namespace gams {
 
-
-GAMSSymbolRecordImpl::GAMSSymbolRecordImpl(GAMSSymbol symbol, void* symIterPtr)
-    : mSymbol(symbol), mSymIterPtr(symIterPtr)
+GAMSSymbolRecordImpl::GAMSSymbolRecordImpl(const GAMSSymbol &symbol, void *symIterPtr)
+    : mSymbol(symbol)
+    , mSymIterPtr(symIterPtr)
 {}
 
 GAMSSymbolRecordImpl::~GAMSSymbolRecordImpl()

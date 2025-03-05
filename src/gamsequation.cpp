@@ -25,7 +25,6 @@
 
 #include "gamsequation.h"
 #include "gamsexception.h"
-#include "gmdcc.h"
 #include "gamssymbolimpl.h"
 
 namespace gams {
@@ -42,7 +41,7 @@ GAMSEquation::GAMSEquation(const GAMSSymbol& other)
 }
 
 
-GAMSEquation::GAMSEquation(GAMSDatabase& database, void* symPtr, int dim, string name, string text, GAMSEnum::EquType eqType)
+GAMSEquation::GAMSEquation(GAMSDatabase& database, void* symPtr, int dim, const string &name, const string &text, GAMSEnum::EquType eqType)
     : GAMSSymbol(database, symPtr, dim, name, text, GAMSEnum::SymTypeEqu, GAMSEnum::Unknown, eqType)
 {}
 

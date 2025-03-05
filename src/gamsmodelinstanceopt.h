@@ -43,7 +43,7 @@ public:
     /// \param optfile GAMS option file number.
     /// \param noMatchLimit Controls the maximum number of accepted unmatched scenario records before terminating the solve.
     /// \param debug Debug Flag.
-    GAMSModelInstanceOpt(std::string solver = "", int optfile = -1, int noMatchLimit = 0, bool debug = false);
+    GAMSModelInstanceOpt(const std::string &solver = "", int optfile = -1, int noMatchLimit = 0, bool debug = false);
 
     /// Destructor.
     ~GAMSModelInstanceOpt();

@@ -23,17 +23,12 @@
  * SOFTWARE.
  */
 
-#include "gamslog.h"
 #include "gamssymbolimpl.h"
 #include "gamsexception.h"
 #include "gamsdatabase.h"
 #include "gamssymbolrecord.h"
-#include "gamssetrecord.h"
 #include "gamsdomain.h"
 #include "gmdcc.h"
-
-#include <iostream>
-#include <sstream>
 
 using namespace std;
 namespace gams{
@@ -49,27 +44,45 @@ GAMSSymbol::GAMSSymbol(const GAMSSymbol &symbol)
     : mImpl(symbol.mImpl)
 { }
 
-
-GAMSSymbol::GAMSSymbol(GAMSDatabase &database, void* symPtr, int dim, string name, string text,
-                       GAMSEnum::SymbolType symType, gams::GAMSEnum::VarType varType,
-                       gams::GAMSEnum::EquType equType, gams::GAMSEnum::SetType setType)
-    : mImpl(make_shared<GAMSSymbolImpl>(database, symPtr, dim, name, text, symType, varType, equType, setType))
+GAMSSymbol::GAMSSymbol(GAMSDatabase &database,
+                       void *symPtr,
+                       int dim,
+                       const string &name,
+                       const string &text,
+                       GAMSEnum::SymbolType symType,
+                       gams::GAMSEnum::VarType varType,
+                       gams::GAMSEnum::EquType equType,
+                       gams::GAMSEnum::SetType setType)
+    : mImpl(make_shared<GAMSSymbolImpl>(
+          database, symPtr, dim, name, text, symType, varType, equType, setType))
 { }
 
 GAMSSymbol::GAMSSymbol(const gams::GAMSDatabase& database, void* symPtr)
     : mImpl(make_shared<GAMSSymbolImpl>(database, symPtr))
 { }
 
-GAMSSymbol::GAMSSymbol(GAMSDatabase& database, string name, string text, GAMSEnum::SymbolType symType,
-                       GAMSEnum::VarType varType, GAMSEnum::EquType equType,
-                       const std::vector<GAMSDomain>& domains, gams::GAMSEnum::SetType setType)
-    : mImpl(make_shared<GAMSSymbolImpl>(database, name, text, symType, varType, equType, domains, setType))
+GAMSSymbol::GAMSSymbol(GAMSDatabase &database,
+                       const string &name,
+                       const string &text,
+                       GAMSEnum::SymbolType symType,
+                       GAMSEnum::VarType varType,
+                       GAMSEnum::EquType equType,
+                       const std::vector<GAMSDomain> &domains,
+                       gams::GAMSEnum::SetType setType)
+    : mImpl(make_shared<GAMSSymbolImpl>(
+          database, name, text, symType, varType, equType, domains, setType))
 { }
 
-GAMSSymbol::GAMSSymbol(gams::GAMSDatabase& database, int dim, string name, string text,
-                       GAMSEnum::SymbolType symType, GAMSEnum::VarType varType,
-                       GAMSEnum::EquType equType, gams::GAMSEnum::SetType setType)
-    : mImpl(make_shared<GAMSSymbolImpl>(database, dim, name, text, symType, varType, equType, setType))
+GAMSSymbol::GAMSSymbol(gams::GAMSDatabase &database,
+                       int dim,
+                       const string &name,
+                       const string &text,
+                       GAMSEnum::SymbolType symType,
+                       GAMSEnum::VarType varType,
+                       GAMSEnum::EquType equType,
+                       gams::GAMSEnum::SetType setType)
+    : mImpl(
+          make_shared<GAMSSymbolImpl>(database, dim, name, text, symType, varType, equType, setType))
 { }
 
 GAMSSymbol::~GAMSSymbol()

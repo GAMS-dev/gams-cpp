@@ -31,7 +31,7 @@ using namespace std;
 namespace gams {
 
 
-GAMSModelInstanceOpt::GAMSModelInstanceOpt(string solver, int optfile, int noMatchLimit, bool debug)
+GAMSModelInstanceOpt::GAMSModelInstanceOpt(const string &solver, int optfile, int noMatchLimit, bool debug)
     : mImpl(make_shared<GAMSModelInstanceOptImpl>(solver, optfile, noMatchLimit, debug))
 {}
 

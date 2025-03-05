@@ -30,8 +30,6 @@
 
 #include <cassert>
 
-#include "gmdcc.h"
-
 namespace gams {
 
 GAMSSetRecord::GAMSSetRecord()

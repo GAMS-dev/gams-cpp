@@ -24,11 +24,8 @@
  */
 
 #include "gamsvariablerecord.h"
-#include <iostream>
 #include "gamsvariable.h"
 #include "gamssymbolimpl.h"
-
-#include "gmdcc.h"
 
 namespace gams {
 using namespace std;
@@ -49,7 +46,7 @@ GAMSVariable::GAMSVariable(const GAMSSymbol& other)
 }
 
 
-GAMSVariable::GAMSVariable(GAMSDatabase& database, void* symPtr, int dim, string name, string text, GAMSEnum::VarType varType)
+GAMSVariable::GAMSVariable(GAMSDatabase& database, void* symPtr, int dim, const string &name, const string &text, GAMSEnum::VarType varType)
     : GAMSSymbol(database, symPtr, dim, name, text, GAMSEnum::SymTypeVar, varType, GAMSEnum::E)
 {}
 
@@ -57,11 +54,6 @@ GAMSVariable::GAMSVariable(GAMSDatabase& database, void* symPtr, int dim, string
 GAMSVariable::GAMSVariable(GAMSDatabase& database, const string& name, const int dim, const string& text, GAMSEnum::VarType varType)
     : GAMSSymbol(database, dim, name, text, GAMSEnum::SymTypeVar, varType, GAMSEnum::E)
 {}
-
-
-//GAMSVariable::GAMSVariable(GAMSDatabase& database, const std::string& name, const std::string& text, const std::vector<std::string>& relaxedDomains, GAMSEnum::VarType varType)
-//    : GAMSSymbol(database, name, text, GAMSEnum::SymTypeVar, varType, GAMSEnum::E, relaxedDomains)
-//{}
 
 
 GAMSVariable::GAMSVariable(GAMSDatabase& database, const std::string& name, const std::string& text, const std::vector<GAMSDomain>& domains, GAMSEnum::VarType varType)

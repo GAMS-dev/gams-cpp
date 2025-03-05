@@ -25,9 +25,7 @@
 
 #include "gamsset.h"
 #include "gamsexception.h"
-#include "gmdcc.h"
 #include "gamssymbolimpl.h"
-#include <typeinfo>
 
 namespace gams {
 using namespace std;
@@ -49,7 +47,7 @@ GAMSSet::GAMSSet(GAMSDatabase& database, void* symPtr)
 {}
 
 
-GAMSSet::GAMSSet(GAMSDatabase& database, void* symPtr, int dim, string name, string text)
+GAMSSet::GAMSSet(GAMSDatabase& database, void* symPtr, int dim, const string &name, const string &text)
     : GAMSSymbol(database, symPtr, dim, name, text, GAMSEnum::SymTypeSet, GAMSEnum::Unknown,
                  GAMSEnum::E)
 {}

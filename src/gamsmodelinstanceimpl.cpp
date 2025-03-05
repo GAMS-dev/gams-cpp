@@ -66,7 +66,7 @@ GAMSModelInstanceImpl::GAMSModelInstanceImpl(GAMSCheckpoint& checkpoint, const s
 }
 
 
-GAMSModelInstanceImpl::GAMSModelInstanceImpl(std::shared_ptr<GAMSModelInstanceImpl> sourceMI
+GAMSModelInstanceImpl::GAMSModelInstanceImpl(std::shared_ptr<GAMSModelInstanceImpl> &sourceMI
                                              , const std::string& modelInstanceName)
     : mCheckpoint(sourceMI->mCheckpoint)
 {
@@ -242,7 +242,7 @@ void GAMSModelInstanceImpl::instantiate(const std::string& modelDefinition,
         }
         model += "/;\n";
     }
-    std::size_t pos = modelDefinition.find(" ");
+    std::size_t pos = modelDefinition.find(' ');
     std::string modelName = modelDefinition.substr(0, pos);
     model += modelName + ".justScrDir=1; \n";
 
@@ -376,11 +376,11 @@ void GAMSModelInstanceImpl::solve(GAMSEnum::SymbolUpdateType updateType, ostream
             ifstream logFile(gevGetStrOpt(mGEV, gevNameLogFile, buffer));
             string line;
             while (getline(logFile, line))
-                *output << line << endl;
+                *output << line << '\n';
             gevRestoreLogStat(mGEV, &lshandle);
         }
         else
-            *output << "No solver log available" << endl;
+            *output << "No solver log available" << '\n';
     }
 }
 }

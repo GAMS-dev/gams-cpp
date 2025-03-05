@@ -25,7 +25,6 @@
 
 #include "gamslog.h"
 #include "gamsdatabaseimpl.h"
-#include <iostream>
 #include <algorithm>
 #include "gamsset.h"
 #include "gamsparameter.h"
@@ -92,7 +91,7 @@ GAMSDatabaseImpl::GAMSDatabaseImpl(GAMSWorkspace& workspace, const double specVa
 
 
 GAMSDatabaseImpl::GAMSDatabaseImpl(GAMSWorkspace& workspace, const double specValues[]
-                                   , std::shared_ptr<GAMSDatabaseImpl> sourceDb, const string& databaseName
+                                   , const std::shared_ptr<GAMSDatabaseImpl> &sourceDb, const string& databaseName
                                    , const string& inModelName)
     : GAMSDatabaseImpl(workspace, specValues, databaseName, inModelName)
 {
