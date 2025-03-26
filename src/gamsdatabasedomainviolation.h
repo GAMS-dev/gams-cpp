@@ -35,7 +35,7 @@ namespace gams {
 class LIBSPEC GAMSDatabaseDomainViolation
 {
 public:
-    /// Standard constructor.
+    /// Default constructor.
     GAMSDatabaseDomainViolation();
 
     /// Assigns a GAMSDatabaseDomainViolation.

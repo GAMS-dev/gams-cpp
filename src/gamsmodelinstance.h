@@ -125,7 +125,7 @@ class GAMSModelInstanceImpl;
 class LIBSPEC GAMSModelInstance
 {
 public:
-    /// Standard constructor.
+    /// Default constructor.
     GAMSModelInstance();
 
     /// Assigns a GAMSModelInstance.

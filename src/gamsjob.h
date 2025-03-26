@@ -60,7 +60,7 @@ class GAMSDatabase;
 class LIBSPEC GAMSJob
 {
 public:
-    /// Standard constructor.
+    /// Default constructor.
     GAMSJob();
 
     /// Desctructor.

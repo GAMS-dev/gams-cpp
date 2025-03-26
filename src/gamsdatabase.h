@@ -174,7 +174,9 @@ class GAMSSymbolImpl;
 class LIBSPEC GAMSDatabase
 {
 public:
-    /// Standard constructor.
+    /// Default constructor, which should not be used directly.
+    ///
+    /// \remark Use <c>GAMSDatabase db = gams::GAMSWorkspace().addDatabase();</c> instead.
     GAMSDatabase();
 
     /// Assigns a GAMSDatabase.

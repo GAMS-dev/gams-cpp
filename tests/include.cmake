@@ -3,25 +3,27 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 if("$ENV{GAMS_BUILD}" STREQUAL "")
-    set(BASEPATH "${GAMSPATH}/apifiles")
     include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../C++/api"
-                        "${BASEPATH}/C/api"
+                        "${GAMSPATH}/apifiles/C/api"
                         "${gtest_SOURCE_DIR}/include")
+    if(WIN32)
+        set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
+        link_directories("${CMAKE_BINARY_DIR}/lib")
+    else()
+        link_directories("${CMAKE_BINARY_DIR}/lib")
+    endif()
 else()
     set(BASEPATH "${GAMSPATH}/apiexamples")
     include_directories("${BASEPATH}/C++/api"
                         "${BASEPATH}/../gclib"
                         "${gtest_SOURCE_DIR}/include")
-    if(UNIX)
+    if(WIN32)
+        set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
+        link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
+    else()
         add_link_options("-Wl,-rpath,$ENV{BTREE}/gmszlib/leg")
+        link_directories("${BASEPATH}/C++/lib")
     endif()
-endif()
-
-if(WIN32)
-    set(VSVERSION "vs2019" CACHE STRING "Visual Studio version")
-    link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
-else()
-    link_directories("${BASEPATH}/C++/lib")
 endif()
 
 if(UNIX) # Apple or Linux

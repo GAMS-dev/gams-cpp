@@ -39,7 +39,7 @@ public:
 
     typedef GAMSEquationRecord RecordType;
 
-    /// Standard constructor.
+    /// Default constructor.
     GAMSEquation() {}
 
     /// Constructor

@@ -21,7 +21,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 cmake_minimum_required(VERSION 3.17)
 
-project(GAMS-cpp)
+project(gams-cpp)
 
 if(NOT "$ENV{GAMS_BUILD}" STREQUAL "")
     if("${GSYS_ENV}" STREQUAL "leg")
@@ -50,7 +50,7 @@ include(FetchContent)
 
 # Add Cpr: cpr is a modern HTTP library for C++ (MIT License)
 FetchContent_Declare(cpr URL
-  https://github.com/libcpr/cpr/archive/refs/tags/1.10.5.tar.gz
+  https://github.com/libcpr/cpr/archive/refs/tags/1.11.2.tar.gz
   PATCH_COMMAND ${CPR_PATCH_COMMAND})
 FetchContent_MakeAvailable(cpr)
 

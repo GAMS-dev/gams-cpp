@@ -38,7 +38,7 @@ class LIBSPEC GAMSParameter : public GAMSSymbol
 public:
     typedef GAMSParameterRecord RecordType;
 
-    /// Standard constructor.
+    /// Default constructor.
     GAMSParameter() {}
 
     /// Copy constructor.

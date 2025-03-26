@@ -35,7 +35,7 @@ namespace gams {
 class LIBSPEC GAMSSymbolDomainViolation
 {
 public:
-    /// Standard constructor.
+    /// Default constructor.
     GAMSSymbolDomainViolation();
 
     /// Assigns a GAMSSymbolDomainViolation.

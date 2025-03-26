@@ -50,7 +50,7 @@ class LIBSPEC GAMSSymbol
 public:
     typedef GAMSSymbolRecord RecordType;
 
-    /// Standard constructor.
+    /// Default constructor.
     GAMSSymbol();
 
     /// Shallow copy constructor that creates a new frame pointing to an existing GAMSSymbol

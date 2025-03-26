@@ -1,8 +1,10 @@
-Version 1.1.1
+Version 1.1.1 *
 ======================
 - Fixed usage of outdated files when developing for gams-cpp (improved cmake config).
 - Fixed copy-by-value warnings, i.e. in some case the API used copy-by-value instead of copy-by-reference.
 - Improved performance of `GAMSWorkspace` constructor, i.e. now `gams` is not called anymore to aquire version information.
+- Improved cmake configuration, i.e. include path fixed.
+- Upgraded to [cpr 1.11.2](https://github.com/libcpr/cpr/releases/tag/1.11.2).
 
 Version 1.1.0
 ======================

@@ -49,8 +49,10 @@ namespace fs = std::filesystem;
 
 namespace gams {
 
-GAMSModelInstanceImpl::GAMSModelInstanceImpl(GAMSCheckpoint& checkpoint, const std::string& modelInstanceName)
-    : mCheckpoint(checkpoint), mModelInstanceName(modelInstanceName)
+GAMSModelInstanceImpl::GAMSModelInstanceImpl(GAMSCheckpoint& checkpoint,
+                                             const std::string& modelInstanceName)
+    : mCheckpoint(checkpoint)
+    , mModelInstanceName(modelInstanceName)
 {
     char msg[GMS_SSSIZE];
     GAMSWorkspace ws = mCheckpoint.workspace();

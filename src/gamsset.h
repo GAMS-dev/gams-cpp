@@ -38,7 +38,7 @@ class LIBSPEC GAMSSet : public GAMSSymbol
 public:
     typedef GAMSSetRecord RecordType;
 
-    /// Standard constructor.
+    /// Default constructor.
     GAMSSet();
 
     /// Construtor for a GAMSSymbol.

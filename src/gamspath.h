@@ -34,7 +34,7 @@ namespace gams {
 class GAMSPath : public std::filesystem::path
 {
 public:
-    /// Standard constructor.
+    /// Default constructor.
     GAMSPath() : std::filesystem::path() {}
 
     /// Constructs a GAMSPath based on a path or file.

@@ -7,8 +7,6 @@ endif()
 # Project file version defines
 add_definitions(-DAPI_VERSION="${VERSION}")
 
-# GAMS_CORE_PATH is Jenkins build switch
-file(TO_CMAKE_PATH "$ENV{GAMS_CORE_PATH}" GAMS_PATH)
 if(NOT EXISTS ${PWD}/gamsinclude.txt)
   if("${GAMS_PATH}" STREQUAL "")
     if(APPLE)

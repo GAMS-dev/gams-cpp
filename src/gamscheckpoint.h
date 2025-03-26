@@ -46,7 +46,7 @@ class GAMSWorkspace;
 class LIBSPEC GAMSCheckpoint
 {
 public:
-    /// Standard constructor.
+    /// Default constructor.
     GAMSCheckpoint();
 
     /// Copy constructor.
