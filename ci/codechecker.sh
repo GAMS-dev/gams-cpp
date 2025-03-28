@@ -18,6 +18,6 @@ CodeChecker analyze           \
 CodeChecker parse             \
   --trim-path-prefix $(pwd)   \
   -e codeclimate              \
-  reports > gl-code-quality-report.json
+  reports > ${CI_PROJECT_DIR}/gl-code-quality-report.json
 
 exit 0

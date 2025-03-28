@@ -27,5 +27,5 @@ variables:
       value: $CUSTOM_BRANCH
       description: "Name of custom branch, or X.Y.Z for published distribution, or 0 if version is specified in text file with lines GAMS_DISTRIB_MAJOR=X, GAMS_DISTRIB_MINOR=Y, GAMS_DISTRIB_GOLD=Z"
   IMAGE_VERSION:
-      value: qt6.8
+      value: qt6.8.3
       description: "Current Qt image version"
