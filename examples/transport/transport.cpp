@@ -33,9 +33,9 @@ using namespace std;
 /// \file transport.cpp
 /// \brief Wrapper class implementation for GAMS trnsport model
 Transport::Transport(GAMSWorkspace ws)
-    : fws(ws),
-      job(fws.addJobFromString(getModelSource())),
-      fopt(fws.addOptions())
+    : fws(ws)
+    , job(fws.addJobFromString(getModelSource()))
+    , fopt(fws.addOptions())
 {
     fws = ws;
     fopt = ws.addOptions();

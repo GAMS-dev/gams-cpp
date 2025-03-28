@@ -71,7 +71,8 @@ GAMSDatabaseDomainViolation::GAMSDatabaseDomainViolation(const std::shared_ptr<G
     : mImpl(impl)
 {}
 
-GAMSDatabaseDomainViolation::GAMSDatabaseDomainViolation(GAMSSymbol violSym, vector<GAMSSymbolDomainViolation> violRecs)
+GAMSDatabaseDomainViolation::GAMSDatabaseDomainViolation(
+    const GAMSSymbol &violSym, const vector<GAMSSymbolDomainViolation> &violRecs)
     : mImpl(make_shared<GAMSDatabaseDomainViolationImpl>(violSym, violRecs))
 {}
 

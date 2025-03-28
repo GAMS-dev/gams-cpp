@@ -71,7 +71,10 @@ struct LIBSPEC GAMSPlatform
     /// \param output Process output as string.
     /// \return Exit code.
     ///
-    static int runProcess(const std::string where, const std::string what, const std::string args, std::string& output);
+    static int runProcess(const std::string &where,
+                          const std::string &what,
+                          const std::string &args,
+                          std::string &output);
 
     ///
     /// Runs a process without waiting for it to end. Returns std::thread of started process.
@@ -79,7 +82,8 @@ struct LIBSPEC GAMSPlatform
     /// \param args Process arguments.
     /// \return thread
     ///
-    static std::thread runProcessParallel(const std::string executable, const std::string args);
+    static std::thread runProcessParallel(const std::string &executable, const std::string &args);
+
 private:
     GAMSPlatform() {}
 

@@ -1,4 +1,4 @@
-function(ReadFromFileAndSet FILEPATH)
+function(read_from_file_and_set FILEPATH)
     file(STRINGS ${FILEPATH} FileContents)
     foreach(NameAndValue ${FileContents})
 
@@ -19,9 +19,13 @@ function(ReadFromFileAndSet FILEPATH)
     endforeach()
 endfunction()
 
-ReadFromFileAndSet(${CMAKE_SOURCE_DIR}/version)
+read_from_file_and_set(${CMAKE_SOURCE_DIR}/version)
 
-set(VERSION "${GAMSCPP_MAJOR_VERSION}.${GAMSCPP_MINOR_VERSION}.${GAMSCPP_PATCH_LEVEL}")
+string(CONCAT VERSION_STR
+  "${GAMSCPP_MAJOR_VERSION}."
+  "${GAMSCPP_MINOR_VERSION}."
+  "${GAMSCPP_PATCH_LEVEL}")
+set(VERSION ${VERSION_STR})
 set(CMAKE_PROJECT_VERSION ${VERSION})
 set(CMAKE_PROJECT_VERSION_MAJOR ${GAMSCPP_MAJOR_VERSION})
 set(CMAKE_PROJECT_VERSION_MINOR ${GAMSCPP_MINOR_VERSION})

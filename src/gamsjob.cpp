@@ -85,7 +85,7 @@ void GAMSJob::run(GAMSOptions& gamsOptions, std::ostream& outstream)
     mImpl->run(&gamsOptions, nullptr, &outstream, true);
 }
 
-void GAMSJob::run(GAMSOptions& gamsOptions, GAMSDatabase db)
+void GAMSJob::run(GAMSOptions &gamsOptions, const GAMSDatabase &db)
 {
     if (!mImpl) throw GAMSException("GAMSJob: This job has not been initialized.");
     mImpl->run(&gamsOptions, nullptr, nullptr, true, vector<GAMSDatabase>{db} );

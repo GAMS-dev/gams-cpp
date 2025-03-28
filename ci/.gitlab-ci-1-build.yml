@@ -13,17 +13,14 @@ build-leg:
     - cd build
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build . 2>&1 | tee build_log.txt
-    - python3 ../ciscripts/report_for_log.py gcc build_log.txt ../warnings.xml
   artifacts:
     name: gams-cpp-leg
     expire_in: 2 hours
     paths: [gamsinclude.txt,build,build_log.txt]
-    reports:
-      junit: warnings.xml
 
 build-deg:
   stage: build
-  tags: [clarus] # set back to macOS once the libcpr issue on carla is fixed
+  tags: [macos]
   needs: [fetch-ci-scripts, quality-gate]
   script:
     - !reference [.get-gams]
@@ -33,13 +30,10 @@ build-deg:
     - cd build
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build . 2>&1 | tee build_log.txt
-    - python3 ../ciscripts/report_for_log.py clang build_log.txt ../warnings.xml
   artifacts:
     name: gams-cpp-deg
     expire_in: 2 hours
     paths: [gamsinclude.txt,build,build_log.txt]
-    reports:
-      junit: warnings.xml
 
 build-dac:
   stage: build
@@ -53,13 +47,10 @@ build-dac:
     - cd build
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build . 2>&1 | tee build_log.txt
-    - python3 ../ciscripts/report_for_log.py clang build_log.txt ../warnings.xml
   artifacts:
     name: gams-cpp-dac
     expire_in: 2 hours
     paths: [gamsinclude.txt,build,build_log.txt]
-    reports:
-      junit: warnings.xml
 
 build-wei:
   stage: build
@@ -78,10 +69,7 @@ build-wei:
     - cd build
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build  . --config Release | Tee-Object -FilePath 'build_log.txt'
-    - python ../ciscripts/report_for_log.py msvc build_log.txt ../warnings.xml
   artifacts:
     name: gams-cpp-wei
     expire_in: 2 hours
     paths: [gamsinclude.txt,build,build_log.txt]
-    reports:
-      junit: warnings.xml

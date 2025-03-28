@@ -24,9 +24,7 @@
  */
 
 #include "gamsdatabase.h"
-#include "gamsequation.h"
 #include "gamsexception.h"
-#include "gamsset.h"
 #include "gamsdatabaseiter.h"
 #include "testgamsobject.h"
 

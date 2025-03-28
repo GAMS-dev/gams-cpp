@@ -114,7 +114,8 @@ private:
     friend class GAMSSymbolIter<GAMSParameter>;
     friend class GAMSSymbolIter<GAMSVariable>;
     friend class GAMSSymbolIter<GAMSEquation>;
-    GAMSSymbolRecord(GAMSSymbol symbol, void* symIterPtr);
+    GAMSSymbolRecord(const GAMSSymbol &symbol, void *symIterPtr);
+
 private:
     std::shared_ptr<GAMSSymbolRecordImpl> mImpl;
 

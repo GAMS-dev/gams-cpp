@@ -10,8 +10,7 @@ test-leg:
     - !reference [.gams-folder-leg]
     - GAMS_PATH=/cache/gams-installs/`cat gams_folder_leg.txt`
     - cd build
-    - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" gams
-    - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" GMSPYTHONLIB="$GAMS_PATH/GMSPython/lib/libpython3.8.so" ctest --output-on-failure --output-junit leg-results.xml
+    - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" ctest --output-on-failure --output-junit leg-results.xml
   artifacts:
     name: unittest-results-leg
     paths: [build/leg-results.xml]
@@ -20,15 +19,14 @@ test-leg:
 
 test-deg:
   stage: test
-  tags: [clarus] # set back to macOS once the libcpr issue on carla is fixed
+  tags: [macos]
   needs: [fetch-ci-scripts,build-deg]
   script:
     - !reference [.get-gams]
     - !reference [.gams-folder-deg]
     - GAMS_PATH=$HOME/cache/gams-installs/`cat gams_folder_deg.txt`
     - cd build
-    - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib gams
-    - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib ctest --output-on-failure --output-junit deg-results.xml
+    - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH ctest --output-on-failure --output-junit deg-results.xml
   artifacts:
     name: unittest-results-deg
     paths: [build/deg-results.xml]
@@ -44,8 +42,7 @@ test-dac:
     - !reference [.gams-folder-dac]
     - GAMS_PATH=$HOME/cache/gams-installs/`cat gams_folder_dac.txt`
     - cd build
-    - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib gams
-    - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH GMSPYTHONLIB=$GAMS_PATH/GMSPython/lib/libpython3.8.dylib ctest --output-on-failure --output-junit deg-results.xml
+    - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH ctest --output-on-failure --output-junit deg-results.xml
   artifacts:
     name: unittest-results-dac
     paths: [build/deg-results.xml]

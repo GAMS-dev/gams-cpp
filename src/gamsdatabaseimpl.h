@@ -52,7 +52,7 @@ public:
     GAMSDatabaseImpl(GAMSWorkspace &workspace, const double specValues[], const std::string& databaseName = ""
                      , const std::string& inModelName = "", bool forceName = false);
 
-    GAMSDatabaseImpl(GAMSWorkspace &workspace, const double specValues[], std::shared_ptr<GAMSDatabaseImpl> sourceDb
+    GAMSDatabaseImpl(GAMSWorkspace &workspace, const double specValues[], const std::shared_ptr<GAMSDatabaseImpl> &sourceDb
                      , const std::string& dbName = "", const std::string& inModelName = "");
 
     GAMSDatabaseImpl(void* gmdPtr, GAMSWorkspace &workspace);

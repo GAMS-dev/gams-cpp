@@ -23,12 +23,9 @@
  * SOFTWARE.
  */
 
-#include "gamslog.h"
 #include "gamsjob.h"
 #include "gamsmodelinstanceimpl.h"
-#include "gmdcc.h"
-#include "gevmcc.h"
-#include "gmomcc.h"
+
 #include <iostream>
 #include <memory>
 #include <stdlib.h>
@@ -41,7 +38,7 @@ GAMSModelInstance::GAMSModelInstance(const std::shared_ptr<GAMSModelInstanceImpl
 {}
 
 
-GAMSModelInstance GAMSModelInstance::copyModelInstance(string modelInstanceName)
+GAMSModelInstance GAMSModelInstance::copyModelInstance(const string &modelInstanceName)
 {
     if (!mImpl) throw GAMSException("GAMSModelInstance: This model instance has not been initialized.");
     return GAMSModelInstance(make_shared<GAMSModelInstanceImpl>(mImpl, modelInstanceName));
@@ -97,14 +94,15 @@ void GAMSModelInstance::instantiate(const string& modelDefinition, const GAMSMod
     mImpl->instantiate(modelDefinition, nullptr, modifiers);
 }
 
-
-void GAMSModelInstance::solve(gams::GAMSEnum::SymbolUpdateType updateType, std::ostream& output, GAMSModelInstanceOpt miOpt)
+void GAMSModelInstance::solve(gams::GAMSEnum::SymbolUpdateType updateType,
+                              std::ostream &output,
+                              const GAMSModelInstanceOpt &miOpt)
 {
     if (!mImpl) throw GAMSException("GAMSModelInstance: This model instance has not been initialized.");
     mImpl->solve(updateType, &output, miOpt);
 }
 
-void GAMSModelInstance::solve(GAMSModelInstanceOpt miOpt)
+void GAMSModelInstance::solve(const GAMSModelInstanceOpt &miOpt)
 {
     if (!mImpl) throw GAMSException("GAMSModelInstance: This model instance has not been initialized.");
     mImpl->solve(GAMSEnum::SymbolUpdateType::BaseCase, nullptr, miOpt);

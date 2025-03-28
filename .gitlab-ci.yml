@@ -3,7 +3,8 @@ stages:
   - quality
   - build
   - test
-  - deploy # only leg, to github as new release
+  - deploy
+  - analyze
 
 include:
   - project: 'devel/ciscripts'
@@ -14,6 +15,7 @@ include:
   - 'ci/.gitlab-ci-1-build.yml'
   - 'ci/.gitlab-ci-2-test.yml'
   - 'ci/.gitlab-ci-3-deploy.yml'
+  - 'ci/.gitlab-ci-4-analyze.yml'
   - template: Security/Secret-Detection.gitlab-ci.yml
 
 variables:
@@ -25,5 +27,5 @@ variables:
       value: $CUSTOM_BRANCH
       description: "Name of custom branch, or X.Y.Z for published distribution, or 0 if version is specified in text file with lines GAMS_DISTRIB_MAJOR=X, GAMS_DISTRIB_MINOR=Y, GAMS_DISTRIB_GOLD=Z"
   IMAGE_VERSION:
-      value: qt6.8
+      value: qt6.8.3
       description: "Current Qt image version"

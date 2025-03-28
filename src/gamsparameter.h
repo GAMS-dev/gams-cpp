@@ -38,7 +38,7 @@ class LIBSPEC GAMSParameter : public GAMSSymbol
 public:
     typedef GAMSParameterRecord RecordType;
 
-    /// Standard constructor.
+    /// Default constructor.
     GAMSParameter() {}
 
     /// Copy constructor.
@@ -199,7 +199,7 @@ public:
 private:
     friend class GAMSDatabaseImpl;
     friend class GAMSSymbolIter<GAMSParameter>;
-    GAMSParameter(GAMSDatabase& database, void *symPtr, int dim, std::string name, std::string text);
+    GAMSParameter(GAMSDatabase& database, void *symPtr, int dim, const std::string &name, const std::string &text);
     GAMSParameter(GAMSDatabase& database, const std::string& name, const int dim, const std::string& text);
     GAMSParameter(GAMSDatabase& database, const std::string& name, const std::string& text, const std::vector<GAMSDomain>& domains);
 

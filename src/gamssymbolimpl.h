@@ -28,10 +28,8 @@
 
 #include "gamsenum.h"
 #include <string>
-#include <memory>
 #include <vector>
 #include <cstring>
-#include "gamspath.h"
 #include "gclgms.h"
 #include "gmdcc.h"
 #include "gamslib_global.h"
@@ -79,16 +77,35 @@ public:
     /// Constructor that gathers missing data from GMD.
     /// \param database Corresponding GAMSDatabase</param>
     /// \param symPtr Symbol Pointer</param>
-    GAMSSymbolImpl(GAMSDatabase database, void* symPtr);
+    GAMSSymbolImpl(const GAMSDatabase &database, void *symPtr);
 
-    GAMSSymbolImpl(GAMSDatabase database, int dim, const std::string& name, const std::string& text,
-                   GAMSEnum::SymbolType symType, GAMSEnum::VarType varType, GAMSEnum::EquType equType, GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
+    GAMSSymbolImpl(const GAMSDatabase &database,
+                   int dim,
+                   const std::string &name,
+                   const std::string &text,
+                   GAMSEnum::SymbolType symType,
+                   GAMSEnum::VarType varType,
+                   GAMSEnum::EquType equType,
+                   GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
-    GAMSSymbolImpl(GAMSDatabase database, std::string name, std::string text, GAMSEnum::SymbolType symType,
-                   GAMSEnum::VarType varType, GAMSEnum::EquType equType, const std::vector<GAMSDomain>& domains, GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
+    GAMSSymbolImpl(const GAMSDatabase &database,
+                   std::string name,
+                   std::string text,
+                   GAMSEnum::SymbolType symType,
+                   GAMSEnum::VarType varType,
+                   GAMSEnum::EquType equType,
+                   const std::vector<GAMSDomain> &domains,
+                   GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
-    GAMSSymbolImpl(GAMSDatabase database, void *symPtr, int dim, const std::string& name, const std::string& text,
-                   GAMSEnum::SymbolType symType, GAMSEnum::VarType varType, GAMSEnum::EquType equType, GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
+    GAMSSymbolImpl(const GAMSDatabase &database,
+                   void *symPtr,
+                   int dim,
+                   const std::string &name,
+                   const std::string &text,
+                   GAMSEnum::SymbolType symType,
+                   GAMSEnum::VarType varType,
+                   GAMSEnum::EquType equType,
+                   GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
     /// Destructor
     virtual ~GAMSSymbolImpl();
@@ -144,8 +161,6 @@ private:
 
     void checkKeys(const std::vector<std::string>& keys);
     GAMSSymbolRecord checkAndReturnRecord(const GAMSSymbol &sym, void* sumIterPtr);
-    void vStrToCharArr(const std::vector<std::string>& input, gdxStrIndex_t& indexC);
-
 };
 
 } // namespace gams

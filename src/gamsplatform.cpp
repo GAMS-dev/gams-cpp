@@ -163,8 +163,10 @@ string GAMSPlatform::findGamsOnUnix(LogId logId)
     if (gamsDir.empty())
         return gamsDirLD;
     else if (!gamsDirLD.empty() && gamsDir != gamsDirLD) {
-        DEB_S(logId) << "--- Warning: Found GAMS system directory " << gamsDir << " in PATH and a different one" << endl
-                     << "---          in (DY)LD_LIBRARY_PATH (" << gamsDirLD << "). The latter is ignored.";
+        DEB_S(logId) << "--- Warning: Found GAMS system directory " << gamsDir
+                     << " in PATH and a different one" << '\n'
+                     << "---          in (DY)LD_LIBRARY_PATH (" << gamsDirLD
+                     << "). The latter is ignored.";
     }
     return gamsDir;
 }
@@ -281,7 +283,10 @@ bool GAMSPlatform::interruptOnWindows(long pid)
 /// \param output output
 /// \return exit code of called executable
 ///
-int GAMSPlatform::runProcess(const string where, const string what, const string args, string& output)
+int GAMSPlatform::runProcess(const string &where,
+                             const string &what,
+                             const string &args,
+                             string &output)
 {
     ostringstream ssp;
     string result;
@@ -300,7 +305,7 @@ int GAMSPlatform::runProcess(const string where, const string what, const string
     out = popen(ssp.str().c_str(), "r");
 #endif
     if (!out) {
-        std::cerr << "Couldn't start command: " << ssp.str() << std::endl;
+        std::cerr << "Couldn't start command: " << ssp.str() << '\n';
         return -1;
     }
     std::array<char, 128> buffer;
@@ -318,7 +323,8 @@ int GAMSPlatform::runProcess(const string where, const string what, const string
     return exitCode;
 }
 
-thread GAMSPlatform::runProcessParallel(const string executable, const string args) {
+thread GAMSPlatform::runProcessParallel(const string &executable, const string &args)
+{
     string call = executable;
     if (!args.empty()) call += " " + args;
 

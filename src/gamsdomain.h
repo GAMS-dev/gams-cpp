@@ -37,7 +37,7 @@ class GAMSDomainImpl;
 class LIBSPEC GAMSDomain
 {
 public:
-    /// Standard constructor.
+    /// Default constructor.
     GAMSDomain();
 
     /// Construtor for a GAMSSet.

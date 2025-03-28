@@ -27,7 +27,7 @@
 
 namespace gams {
 
-GAMSDomainImpl::GAMSDomainImpl(GAMSSet domain)
+GAMSDomainImpl::GAMSDomainImpl(const GAMSSet &domain)
     : mSet(domain)
 {}
 

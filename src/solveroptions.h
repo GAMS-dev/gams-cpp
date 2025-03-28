@@ -33,7 +33,7 @@ namespace gams{
 class SolverOptions
 {
 public:
-    /// Standard constructor.
+    /// Default constructor.
     SolverOptions();
 
     /// Destructor.

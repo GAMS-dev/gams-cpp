@@ -33,7 +33,7 @@ namespace gams {
 class GAMSSymbolRecordImpl
 {
 public:
-    GAMSSymbolRecordImpl(GAMSSymbol symbol, void* symIterPtr);
+    GAMSSymbolRecordImpl(const GAMSSymbol &symbol, void *symIterPtr);
     ~GAMSSymbolRecordImpl();
     bool isValid() const;
     bool operator!=(const GAMSSymbolRecordImpl& other) const;

@@ -33,7 +33,7 @@ using namespace std;
 
 namespace gams {
 
-GAMSDatabaseIter::GAMSDatabaseIter(shared_ptr<GAMSDatabaseImpl> database, int pos)
+GAMSDatabaseIter::GAMSDatabaseIter(shared_ptr<GAMSDatabaseImpl> &database, int pos)
     :mDatabase(database), pos(pos)
 {
     if (!mDatabase) throw GAMSException("GAMSDatabaseIter: The database has not been initialized.");

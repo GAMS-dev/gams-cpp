@@ -42,7 +42,7 @@ public:
     /// Constructs a GAMSDatabaseIter.
     /// \param database Iterator related GAMSDatabase.
     /// \param pos Position the iterator is related to.
-    GAMSDatabaseIter(std::shared_ptr<GAMSDatabaseImpl> database, int pos=0);
+    GAMSDatabaseIter(std::shared_ptr<GAMSDatabaseImpl> &database, int pos=0);
 
     /// Compares two GAMSDatabaseIter<T> objects.
     /// \param other Another GAMSDatabaseIter<T> to compare to.

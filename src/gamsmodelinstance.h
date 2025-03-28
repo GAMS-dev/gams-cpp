@@ -125,7 +125,7 @@ class GAMSModelInstanceImpl;
 class LIBSPEC GAMSModelInstance
 {
 public:
-    /// Standard constructor.
+    /// Default constructor.
     GAMSModelInstance();
 
     /// Assigns a GAMSModelInstance.
@@ -184,11 +184,13 @@ public:
     /// \param updateType Update type.
     /// \param output Stream to capture GAMS log.
     /// \param miOpt GAMSModelInstance options.
-    void solve(GAMSEnum::SymbolUpdateType updateType, std::ostream& output, GAMSModelInstanceOpt miOpt);
+    void solve(GAMSEnum::SymbolUpdateType updateType,
+               std::ostream &output,
+               const GAMSModelInstanceOpt &miOpt);
 
     /// Solve model instance.
     /// \param miOpt GAMSModelInstance options.
-    void solve(GAMSModelInstanceOpt miOpt);
+    void solve(const GAMSModelInstanceOpt &miOpt);
 
     /// Solve model instance.
     /// \param output Stream to capture GAMS log.
@@ -213,7 +215,7 @@ public:
     /// Copies this ModelInstance to a new ModelInstance.
     /// \param modelInstanceName Identifier of GAMSModelInstance (determined automatically if omitted).
     /// \return Returns the new ModelInstance.
-    GAMSModelInstance copyModelInstance(std::string modelInstanceName = "");
+    GAMSModelInstance copyModelInstance(const std::string &modelInstanceName = "");
 
     /// Send interrupt signal to running GAMSModelInstance.
     void interrupt();

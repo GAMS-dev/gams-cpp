@@ -30,7 +30,6 @@
 #include "gamsparameter.h"
 #include "gamssymbolimpl.h"
 #include "gamssymbolrecord.h"
-#include "gamssymbolrecordimpl.h"
 
 namespace gams {
 

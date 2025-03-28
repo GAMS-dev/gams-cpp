@@ -29,9 +29,7 @@
 #include "gamssymbol.h"
 #include "gamsparameter.h"
 #include "gamsvariable.h"
-#include "gamsset.h"
 #include "gamsequation.h"
-#include <iostream>
 
 using namespace std;
 

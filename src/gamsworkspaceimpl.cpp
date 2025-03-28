@@ -25,7 +25,6 @@
 
 #define NOMINMAX // we need this in ordre for numerical_limits<double>::min() to work
 
-#include <iostream>
 #include <cstdlib>
 #include <sstream>
 #include <fstream>
@@ -34,7 +33,6 @@
 #include <string>
 #include <algorithm>
 #include <limits>
-#include <stdio.h>
 #include <string.h>
 #include <array>
 
@@ -43,6 +41,7 @@
 #include "gamsplatform.h"
 #include "gamsoptions.h"
 #include "gamsworkspacepool.h"
+#include "gclgms.h"
 
 using namespace std;
 
@@ -175,7 +174,7 @@ bool GAMSWorkspaceImpl::operator!=(const GAMSWorkspaceImpl& other) const
 }
 
 
-string GAMSWorkspaceImpl::registerCheckpoint(string checkpointName)
+string GAMSWorkspaceImpl::registerCheckpoint(const string &checkpointName)
 {
     lock_guard<std::mutex> lck(mCheckpointLock);
     string name = "";
@@ -195,7 +194,7 @@ string GAMSWorkspaceImpl::registerCheckpoint(string checkpointName)
 }
 
 
-string GAMSWorkspaceImpl::registerModelInstance(const string miName)
+string GAMSWorkspaceImpl::registerModelInstance(const string &miName)
 {
     lock_guard<std::mutex> lck(mModelInstanceLock);
     string name;
@@ -215,7 +214,7 @@ string GAMSWorkspaceImpl::registerModelInstance(const string miName)
 }
 
 
-string GAMSWorkspaceImpl::registerJob(const string jobName)
+string GAMSWorkspaceImpl::registerJob(const string &jobName)
 {
     lock_guard<std::mutex> lck(mJobLock);
     string name;
@@ -341,7 +340,7 @@ GAMSDatabase GAMSWorkspaceImpl::addDatabaseFromGMD(GAMSWorkspace& ws, void* gmdP
     return GAMSDatabase(gmdPtr, ws);
 }
 
-void GAMSWorkspaceImpl::xxxLib(string libname, string model)
+void GAMSWorkspaceImpl::xxxLib(const string &libname, const string &model)
 {
     string lib = libname + "lib" + cExeSuffix;
     GAMSPath libPath(mSystemDir / lib);
@@ -360,7 +359,7 @@ void GAMSWorkspaceImpl::setScratchFilePrefix(const string& scratchFilePrefix)
 }
 
 
-string GAMSWorkspaceImpl::registerDatabase(const string databaseName)
+string GAMSWorkspaceImpl::registerDatabase(const string &databaseName)
 {
     lock_guard<std::mutex> lck(mRegisterDatabaseLock);
     string name;

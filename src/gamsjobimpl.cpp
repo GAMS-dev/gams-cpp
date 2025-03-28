@@ -151,7 +151,7 @@ string GAMSJobImpl::prepareRun(GAMSOptions& tmpOptions, GAMSCheckpoint& tmpCP,
 }
 
 void GAMSJobImpl::run(GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
-                      ostream* output, bool createOutDb, vector<GAMSDatabase> databases)
+                      ostream* output, bool createOutDb, const vector<GAMSDatabase> &databases)
 {
     GAMSOptions tmpOpt(mWs, gamsOpt);
     GAMSCheckpoint tmpCP;
@@ -182,9 +182,9 @@ void GAMSJobImpl::run(GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
     else if (output)
         *output << result;
     if (exitCode != 0) {
-        cerr << "GAMS Error code: " << exitCode << std::endl;
-        cerr << "  with args: " << args << std::endl;
-        cerr << "  in " << mWs.workingDirectory() << std::endl;
+        cerr << "GAMS Error code: " << exitCode << '\n';
+        cerr << "  with args: " << args << '\n';
+        cerr << "  in " << mWs.workingDirectory() << '\n';
         if ((mWs.debug() < GAMSEnum::DebugLevel::KeepFilesOnError) && mWs.usingTmpWorkingDir())
             throw GAMSExceptionExecution("GAMS return code not 0 (" + to_string(exitCode) +
                                          "), set GAMSWorkspace.Debug to KeepFilesOnError or higher or define the \
@@ -210,7 +210,7 @@ void GAMSJobImpl::run(GAMSOptions *gamsOpt, const GAMSCheckpoint *checkpoint,
 
 void GAMSJobImpl::zip(const string &zipName, const set<string> &files)
 {
-    cout << "zipping: " << zipName << endl;
+    cout << "zipping: " << zipName << '\n';
 
     string gmsZip = "gmszip"s + cExeSuffix;
     string zipArgs = "-j " + zipName; // -j: dont record directory names
@@ -223,14 +223,14 @@ void GAMSJobImpl::zip(const string &zipName, const set<string> &files)
     string output;
     int errorCode = GAMSPlatform::runProcess(mWs.systemDirectory(), gmsZip, zipArgs, output);
     if (errorCode){
-        cerr << "Error while zipping " << zipName << ". ErrorCode: " << errorCode << endl;
-        cout << output << endl;
+        cerr << "Error while zipping " << zipName << ". ErrorCode: " << errorCode << '\n';
+        cout << output << '\n';
     }
 }
 
 void GAMSJobImpl::unzip(const string &zipName, const string &destination)
 {
-    cout << "unzipping " << zipName << " to " << destination << endl;
+    cout << "unzipping " << zipName << " to " << destination << '\n';
     string gmsUnzip = "gmsunzip"s + cExeSuffix;
     string unzipArgs = "-o " + zipName; // -o: overwrite existing without asking
 
@@ -240,8 +240,9 @@ void GAMSJobImpl::unzip(const string &zipName, const string &destination)
     string output;
     int errorCode = GAMSPlatform::runProcess(mWs.systemDirectory(), gmsUnzip, unzipArgs, output);
     if (errorCode) {
-        cerr << "Error while unzipping " << zipName << " to " << destination << ". ErrorCode: " << errorCode << endl;
-        cout << output << endl;
+        cerr << "Error while unzipping " << zipName << " to " << destination
+             << ". ErrorCode: " << errorCode << '\n';
+        cout << output << '\n';
     }
 }
 
@@ -347,7 +348,7 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
     try {
         json = nlohmann::json::parse(response.text);
     } catch (nlohmann::json::parse_error &ex) {
-        std::cerr << "Error parsing json: " << ex.byte << "\n" << ex.what() << endl;
+        std::cerr << "Error parsing json: " << ex.byte << "\n" << ex.what() << '\n';
         return;
     }
 
@@ -361,7 +362,7 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
                                                  cpr::AuthMode::BASIC});
 
         if (response.status_code == 403) { // job still in queue
-            cout << "job in queue. waiting..." << endl;
+            cout << "job in queue. waiting..." << '\n';
             this_thread::sleep_for(1000ms);
             continue;
         }
@@ -373,23 +374,23 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
             try {
                 json = nlohmann::json::parse(response.text);
             } catch (nlohmann::json::parse_error &ex) {
-                std::cerr << "Error parsing json: " << ex.byte << "\n" << ex.what() << endl;
+                std::cerr << "Error parsing json: " << ex.byte << "\n" << ex.what() << '\n';
                 return;
             }
             string stdOutData = json.at("message").get<string>();
 
             if (mWs.debug() >= GAMSEnum::DebugLevel::ShowLog) {
                 if (!stdOutData.empty())
-                    cout << stdOutData << endl;
+                    cout << stdOutData << '\n';
             } else if (output && !stdOutData.empty()) {
-                *output << stdOutData << endl;
+                *output << stdOutData << '\n';
             }
         }
 
         try {
             json = nlohmann::json::parse(response.text);
         } catch (nlohmann::json::parse_error &ex) {
-            std::cerr << "Error parsing json: " << ex.byte << "\n" << ex.what() << endl;
+            std::cerr << "Error parsing json: " << ex.byte << "\n" << ex.what() << '\n';
             return;
         }
         if (json.at("queue_finished").get<bool>()) {
@@ -510,7 +511,7 @@ int GAMSJobImpl::runProcess(const string &what, const string &args, string& outp
     out = popen(ssp.str().c_str(), "r");
 #endif
     if (!out) {
-        std::cerr << "Couldn't start command: " << ssp.str() << std::endl;
+        std::cerr << "Couldn't start command: " << ssp.str() << '\n';
         return -1;
     }
     std::array<char, 128> buffer;

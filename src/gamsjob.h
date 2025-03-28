@@ -60,7 +60,7 @@ class GAMSDatabase;
 class LIBSPEC GAMSJob
 {
 public:
-    /// Standard constructor.
+    /// Default constructor.
     GAMSJob();
 
     /// Desctructor.
@@ -106,7 +106,7 @@ public:
     /// Run GAMSJob.
     /// \param gamsOptions GAMSOptions to control the GAMSJob.
     /// \param db GAMSDatabase read by the GAMSJob.
-    void run(GAMSOptions& gamsOptions, GAMSDatabase db);
+    void run(GAMSOptions &gamsOptions, const GAMSDatabase &db);
 
     /// Run GAMSJob.
     /// \param gamsCheckpoint GAMSCheckpoint to be created by GAMSJob.

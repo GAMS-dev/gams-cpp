@@ -28,7 +28,7 @@
 
 namespace gams {
 
-GAMSWorkspaceInfo::GAMSWorkspaceInfo(std::string workingDirectory, std::string systemDirectory, GAMSEnum::DebugLevel debug)
+GAMSWorkspaceInfo::GAMSWorkspaceInfo(const std::string &workingDirectory, const std::string &systemDirectory, GAMSEnum::DebugLevel debug)
     : mImpl(std::make_shared<GAMSWorkspaceInfoImpl>(workingDirectory, systemDirectory, debug))
 { }
 
@@ -53,7 +53,7 @@ std::string GAMSWorkspaceInfo::workingDirectory() const
     return mImpl->mWorkingDirectory;
 }
 
-void GAMSWorkspaceInfo::setWorkingDirectory(std::string workingDir)
+void GAMSWorkspaceInfo::setWorkingDirectory(const std::string &workingDir)
 {
     mImpl->mWorkingDirectory = workingDir;
 }
@@ -63,7 +63,7 @@ std::string GAMSWorkspaceInfo::systemDirectory() const
     return mImpl->mSystemDirectory;
 }
 
-void GAMSWorkspaceInfo::setSystemDirectory(std::string systemDir)
+void GAMSWorkspaceInfo::setSystemDirectory(const std::string &systemDir)
 {
     mImpl->mSystemDirectory = systemDir;
 }

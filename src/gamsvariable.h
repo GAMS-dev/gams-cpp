@@ -38,7 +38,7 @@ class LIBSPEC GAMSVariable : public GAMSSymbol
 public:
     typedef GAMSVariableRecord RecordType;
 
-    /// Standard constructor.
+    /// Default constructor.
     GAMSVariable();
 
     /// Constructor based on GAMSSymbol.
@@ -202,7 +202,7 @@ public:
 private:
     friend class GAMSDatabaseImpl;
     friend class GAMSSymbolIter<GAMSVariable>;
-    GAMSVariable(GAMSDatabase& database, void* symPtr, int dim, std::string name, std::string text, GAMSEnum::VarType varType);
+    GAMSVariable(GAMSDatabase& database, void* symPtr, int dim, const std::string &name, const std::string &text, GAMSEnum::VarType varType);
     GAMSVariable(GAMSDatabase& database, const std::string& name, const int dim, const std::string& text, GAMSEnum::VarType varType);
     GAMSVariable(GAMSDatabase& database, const std::string& name, const std::string& text, const std::vector<GAMSDomain>& domains, GAMSEnum::VarType varType);
 };

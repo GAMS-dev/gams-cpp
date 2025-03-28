@@ -27,9 +27,7 @@
 #include "gamssymbolrecordimpl.h"
 #include "gamssymbolimpl.h"
 
-#include <stdio.h>
 #include <vector>
-#include "gmdcc.h"
 
 using namespace std;
 namespace gams {
@@ -57,7 +55,7 @@ bool GAMSSymbolRecord::operator==(const GAMSSymbolRecord& other) const
     return mImpl == other.mImpl || (mImpl && other.mImpl && *mImpl.get() == *other.mImpl.get());
 }
 
-GAMSSymbolRecord::GAMSSymbolRecord(GAMSSymbol symbol, void* symIterPtr)
+GAMSSymbolRecord::GAMSSymbolRecord(const GAMSSymbol &symbol, void *symIterPtr)
     : mImpl(make_shared<GAMSSymbolRecordImpl>(symbol, symIterPtr))
 {}
 

@@ -28,9 +28,6 @@
 #include "gamsmodelinstance.h"
 #include "gamsworkspace.h"
 #include "gamsjob.h"
-#include "gamsplatform.h"
-#include "gamsoptions.h"
-#include "gamsversion.h"
 
 using namespace gams;
 

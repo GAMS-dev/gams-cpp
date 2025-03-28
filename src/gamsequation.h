@@ -39,7 +39,7 @@ public:
 
     typedef GAMSEquationRecord RecordType;
 
-    /// Standard constructor.
+    /// Default constructor.
     GAMSEquation() {}
 
     /// Constructor
@@ -204,7 +204,7 @@ private:
     friend class GAMSDatabaseImpl;
     friend class GAMSSymbolIter<GAMSEquation>;
 
-    GAMSEquation(GAMSDatabase& database, void *symPtr, int dim, std::string name, std::string text
+    GAMSEquation(GAMSDatabase& database, void *symPtr, int dim, const std::string &name, const std::string &text
                  , GAMSEnum::EquType eqType);
 
     GAMSEquation(GAMSDatabase& database, const std::string& name, const int dim, const std::string& text

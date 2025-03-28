@@ -24,9 +24,9 @@
  */
 
 #include "gamssymbolimpl.h"
+
 #include "gamssymbol.h"
 #include "gamslog.h"
-#include "gamsvariable.h"
 #include "gamsexception.h"
 #include "gamsdatabase.h"
 #include "gamssymbolrecord.h"
@@ -37,8 +37,15 @@ using namespace std;
 
 namespace gams {
 
-GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, void* symPtr, int dim, const string &name, const string &text,
-                               GAMSEnum::SymbolType symType, GAMSEnum::VarType varType, GAMSEnum::EquType equType, GAMSEnum::SetType setType)
+GAMSSymbolImpl::GAMSSymbolImpl(const GAMSDatabase &database,
+                               void *symPtr,
+                               int dim,
+                               const string &name,
+                               const string &text,
+                               GAMSEnum::SymbolType symType,
+                               GAMSEnum::VarType varType,
+                               GAMSEnum::EquType equType,
+                               GAMSEnum::SetType setType)
     : mDatabase(database)
     , mName(name)
     , mDim(dim)
@@ -49,7 +56,7 @@ GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, void* symPtr, int dim, con
     , mSymPtr(symPtr)
 {}
 
-GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, void* symPtr)
+GAMSSymbolImpl::GAMSSymbolImpl(const GAMSDatabase &database, void *symPtr)
     : mDatabase(database)
     , mSymPtr(symPtr)
 {
@@ -72,9 +79,13 @@ GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, void* symPtr)
     mExplanatoryText = string(sval);
 }
 
-GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, int dim, const std::string& name,
-                               const std::string& text, GAMSEnum::SymbolType symType,
-                               GAMSEnum::VarType varType, GAMSEnum::EquType equType,
+GAMSSymbolImpl::GAMSSymbolImpl(const GAMSDatabase &database,
+                               int dim,
+                               const std::string &name,
+                               const std::string &text,
+                               GAMSEnum::SymbolType symType,
+                               GAMSEnum::VarType varType,
+                               GAMSEnum::EquType equType,
                                GAMSEnum::SetType setType)
     : mDatabase(database)
     , mName(name)
@@ -96,18 +107,22 @@ GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, int dim, const std::string
                                   varEquType, mExplanatoryText.c_str(), &mSymPtr), __FILE__, __LINE__);
 }
 
-GAMSSymbolImpl::GAMSSymbolImpl(GAMSDatabase database, std::string name, std::string text,
-                               GAMSEnum::SymbolType symType, GAMSEnum::VarType varType,
-                               GAMSEnum::EquType equType, const std::vector<GAMSDomain>& domains,
+GAMSSymbolImpl::GAMSSymbolImpl(const GAMSDatabase &database,
+                               std::string name,
+                               std::string text,
+                               GAMSEnum::SymbolType symType,
+                               GAMSEnum::VarType varType,
+                               GAMSEnum::EquType equType,
+                               const std::vector<GAMSDomain> &domains,
                                GAMSEnum::SetType setType)
     : mDatabase(database)
-    , mName(name)
+    , mName(std::move(name))
     , mDim(static_cast<int>(domains.size()))
     , mSymType(symType)
     , mVarType(varType)
     , mSetType(setType)
     , mEquType(equType)
-    , mExplanatoryText(text)
+    , mExplanatoryText(std::move(text))
 {
     if (mDim > GLOBAL_MAX_INDEX_DIM)
         throw GAMSException("Invalid dimension");
@@ -216,7 +231,6 @@ GAMSSymbolRecord GAMSSymbolImpl::firstRecord(const GAMSSymbol& sym, const std::v
     void *symIterPtr = 0;
     checkForGMDError(gmdFindFirstRecordSlice(gmd(), mSymPtr, mIndexC.set(slice).cPtrs(), &symIterPtr), __FILE__, __LINE__);
     return checkAndReturnRecord(sym, symIterPtr);
-
 }
 
 GAMSSymbolRecord GAMSSymbolImpl::lastRecord(const GAMSSymbol& sym)
@@ -313,15 +327,6 @@ std::vector<GAMSDomain> GAMSSymbolImpl::domains()
         }
     }
     return *mDomains;
-}
-
-
-/// converts a vector of strings to an array of char arrays
-void GAMSSymbolImpl::vStrToCharArr(const vector<string>& input, gdxStrIndex_t &indexC)
-{
-    for (int i = 0; i < int(input.size()); i++) {
-        strcpy(indexC[i], input[i].c_str());
-    };
 }
 
 std::vector<GAMSSymbolDomainViolation> GAMSSymbolImpl::getSymbolDVs(GAMSSymbol& sym, bool skipCleanup, int maxViol)

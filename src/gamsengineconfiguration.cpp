@@ -40,14 +40,14 @@ GAMSEngineConfiguration::GAMSEngineConfiguration(const string &host, const strin
     , mSpace(space)
 {
     if (mHost.empty())
-        cerr << "host must not be null" << endl;
+        cerr << "host must not be null" << '\n';
     if (mUsername.empty())
-        cerr << "user must not be null" << endl;
+        cerr << "user must not be null" << '\n';
     // TODO(RG): those two also not null?
     if (mPassword.empty())
-        cerr << "password must not be null" << endl;
+        cerr << "password must not be null" << '\n';
     if (mSpace.empty())
-        cerr << "space must not be null" << endl;
+        cerr << "space must not be null" << '\n';
 }
 
 GAMSEngineConfiguration::~GAMSEngineConfiguration()

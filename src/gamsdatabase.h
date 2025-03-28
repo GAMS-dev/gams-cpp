@@ -174,7 +174,9 @@ class GAMSSymbolImpl;
 class LIBSPEC GAMSDatabase
 {
 public:
-    /// Standard constructor.
+    /// Default constructor, which should not be used directly.
+    ///
+    /// \remark Use <c>GAMSDatabase db = gams::GAMSWorkspace().addDatabase();</c> instead.
     GAMSDatabase();
 
     /// Assigns a GAMSDatabase.
@@ -281,8 +283,12 @@ public:
     /// \param setType set subtype
     /// \returns Returns the GAMSSet.
     /// \see addEquation, addParameter, addVariable
-    GAMSSet addSet(const std::string& name, const std::string& explanatoryText
-                   , GAMSDomain domain1, GAMSDomain domain2 = GAMSDomain(), GAMSDomain domain3 = GAMSDomain(), GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
+    GAMSSet addSet(const std::string &name,
+                   const std::string &explanatoryText,
+                   const GAMSDomain &domain1,
+                   const GAMSDomain &domain2 = GAMSDomain(),
+                   const GAMSDomain &domain3 = GAMSDomain(),
+                   GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
 
     /// Add parameter symbol to database.
     /// \param name Parameter name.
@@ -309,8 +315,11 @@ public:
     /// \param domain3 Set domain for third index position.
     /// \returns Returns the GAMSParameter.
     /// \see addSet, addEquation, addVariable
-    GAMSParameter addParameter(const std::string& name, const std::string& explanatoryText, GAMSDomain domain1
-                               , GAMSDomain domain2 = GAMSDomain(), GAMSDomain domain3 = GAMSDomain());
+    GAMSParameter addParameter(const std::string &name,
+                               const std::string &explanatoryText,
+                               const GAMSDomain &domain1,
+                               const GAMSDomain &domain2 = GAMSDomain(),
+                               const GAMSDomain &domain3 = GAMSDomain());
 
     /// Add variable symbol to database.
     /// \param name Variable name.
@@ -341,8 +350,12 @@ public:
     /// \param domain3 Set domain for third index position.
     /// \returns Returns the GAMSVariable.
     /// \see addSet, addEquation, addParameter
-    GAMSVariable addVariable(const std::string& name, const GAMSEnum::VarType varType, const std::string& explanatoryText
-                             , GAMSDomain domain1, GAMSDomain domain2 = GAMSDomain(), GAMSDomain domain3 = GAMSDomain());
+    GAMSVariable addVariable(const std::string &name,
+                             const GAMSEnum::VarType varType,
+                             const std::string &explanatoryText,
+                             const GAMSDomain &domain1,
+                             const GAMSDomain &domain2 = GAMSDomain(),
+                             const GAMSDomain &domain3 = GAMSDomain());
 
     /// Add equation symbol to database.
     /// \param name Equation name.
@@ -373,8 +386,12 @@ public:
     /// \param domain3 Set domain for third index position.
     /// \returns Returns the GAMSEquation.
     /// \see addSet, addVariable, GAMSParameter
-    GAMSEquation addEquation(const std::string& name, const GAMSEnum::EquType equType, const std::string& explanatoryText
-                             , GAMSDomain domain1, GAMSDomain domain2 = GAMSDomain(), GAMSDomain domain3 = GAMSDomain());
+    GAMSEquation addEquation(const std::string &name,
+                             const GAMSEnum::EquType equType,
+                             const std::string &explanatoryText,
+                             const GAMSDomain &domain1,
+                             const GAMSDomain &domain2 = GAMSDomain(),
+                             const GAMSDomain &domain3 = GAMSDomain());
 
     /// Get all <c>GAMSDatabaseDomainViolation</c>'s.
     /// \param maxViol The maximum number of domain violations which should be stored (0 for no limit).

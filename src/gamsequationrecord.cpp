@@ -27,7 +27,6 @@
 #include "gamssymbolrecordimpl.h"
 #include "gamssymbolimpl.h"
 #include "gamsequation.h"
-#include "gmdcc.h"
 
 namespace gams {
 

@@ -6,10 +6,12 @@ repos:
   - id: check-added-large-files
     args: ['--maxkb=1000']
   - id: fix-byte-order-marker
-#- repo: https://github.com/cmake-lint/cmake-lint
-#  rev: 1.4.3
-#  hooks:
-#  - id: cmakelint
+- repo: https://github.com/cmake-lint/cmake-lint
+  rev: 1.4.3
+  hooks:
+  - id: cmakelint
+    args: ['--filter=-readability/wonkycase']
+    exclude: '^tests/googletest/'
 - repo: https://github.com/Yelp/detect-secrets
   rev: v1.5.0
   hooks:

@@ -92,7 +92,6 @@ public:
 private:
     friend class GAMSSymbolIter<GAMSVariable>;
     GAMSVariableRecord(const GAMSVariable &symbol, void* symIterPtr);
-
 };
 
 }

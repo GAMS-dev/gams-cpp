@@ -25,25 +25,20 @@
 
 #define NOMINMAX // we need this in order  for numerical_limits<double>::min() to work
 
-#include <iostream>
 #include <cstdlib>
-#include <sstream>
-#include <fstream>
-#include <vector>
 #include <string>
-#include <limits>
-#include <stdio.h>
 #include "gamslog.h"
 #include "gamsworkspace.h"
 #include "gamsworkspaceimpl.h"
 #include "gamsoptions.h"
 #include "gamsjob.h"
+#include "gclgms.h"
 
 using namespace std;
 
 namespace gams {
 
-GAMSDatabase GAMSWorkspace::addDatabaseFromGDXForcedName(string gdxFileName, string databaseName, string inModelName)
+GAMSDatabase GAMSWorkspace::addDatabaseFromGDXForcedName(const string &gdxFileName, const string &databaseName, const string &inModelName)
 {
     return mImpl->addDatabaseFromGDXForcedName(*this, gdxFileName, databaseName, inModelName);
 }
@@ -53,7 +48,7 @@ bool GAMSWorkspace::usingTmpWorkingDir() const
     return mImpl->usingTmpWorkingDir();
 }
 
-std::string GAMSWorkspace::registerDatabase(const string databaseName) const
+std::string GAMSWorkspace::registerDatabase(const string &databaseName) const
 {
     return mImpl->registerDatabase(databaseName);
 }
@@ -302,48 +297,48 @@ string GAMSWorkspace::optFileExtension(int optfile)
     return mImpl->optFileExtension(optfile);
 }
 
-string GAMSWorkspace::registerModelInstance(const string modelInstanceName)
+string GAMSWorkspace::registerModelInstance(const string &modelInstanceName)
 {
     return mImpl->registerModelInstance(modelInstanceName);
 }
 
 
-void GAMSWorkspace::gamsLib(string model)
+void GAMSWorkspace::gamsLib(const string &model)
 {
     mImpl->xxxLib("gams", model);
 }
 
-void GAMSWorkspace::testLib(string model)
+void GAMSWorkspace::testLib(const string &model)
 {
     mImpl->xxxLib("test", model);
 }
 
-void GAMSWorkspace::empLib(string model)
+void GAMSWorkspace::empLib(const string &model)
 {
     mImpl->xxxLib("emp", model);
 }
 
-void GAMSWorkspace::dataLib(string model)
+void GAMSWorkspace::dataLib(const std::string &model)
 {
     mImpl->xxxLib("data", model);
 }
 
-void GAMSWorkspace::apiLib(string model)
+void GAMSWorkspace::apiLib(const std::string &model)
 {
     mImpl->xxxLib("api", model);
 }
 
-void GAMSWorkspace::finLib(string model)
+void GAMSWorkspace::finLib(const std::string &model)
 {
     mImpl->xxxLib("fin", model);
 }
 
-void GAMSWorkspace::noaLib(string model)
+void GAMSWorkspace::noaLib(const std::string &model)
 {
     mImpl->xxxLib("noa", model);
 }
 
-void GAMSWorkspace::psoptLib(string model)
+void GAMSWorkspace::psoptLib(const std::string &model)
 {
     mImpl->xxxLib("psopt", model);
 }
@@ -418,7 +413,7 @@ string GAMSWorkspace::scratchFilePrefix() const
     return mImpl->scratchFilePrefix();
 }
 
-void GAMSWorkspace::setScratchFilePrefix(string prefix)
+void GAMSWorkspace::setScratchFilePrefix(const string &prefix)
 {
     mImpl->setScratchFilePrefix(prefix);
 }

@@ -26,10 +26,6 @@
 #include "gamsparameter.h"
 #include "gamssymbolimpl.h"
 
-#include "gmdcc.h"
-#include <memory>
-#include <iostream>
-
 namespace gams{
 using namespace std;
 
@@ -41,8 +37,15 @@ GAMSParameter::GAMSParameter(const GAMSSymbol &other)
     }
 }
 
-GAMSParameter::GAMSParameter(GAMSDatabase& database, void* symPtr, int dim, string name, string text)
-    : GAMSSymbol(database, symPtr, dim, name, text, GAMSEnum::SymTypePar, GAMSEnum::Unknown, GAMSEnum::E)
+GAMSParameter::GAMSParameter(GAMSDatabase &database, void *symPtr, int dim, const string &name, const string &text)
+    : GAMSSymbol(database,
+                 symPtr,
+                 dim,
+                 name,
+                 text,
+                 GAMSEnum::SymTypePar,
+                 GAMSEnum::Unknown,
+                 GAMSEnum::E)
 {}
 
 

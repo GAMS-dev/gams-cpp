@@ -25,7 +25,6 @@
 
 #include "gamsequation.h"
 #include "gamsparameter.h"
-#include "gamsset.h"
 #include "gamsvariable.h"
 #include "gamsequationrecord.h"
 #include "testgamsobject.h"

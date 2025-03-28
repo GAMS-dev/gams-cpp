@@ -65,7 +65,7 @@ std::vector<bool> GAMSSymbolDomainViolation::violInd()
     return mImpl->mViolInd;
 }
 
-GAMSSymbolDomainViolation::GAMSSymbolDomainViolation(const std::shared_ptr<GAMSSymbolDomainViolationImpl> impl)
+GAMSSymbolDomainViolation::GAMSSymbolDomainViolation(const std::shared_ptr<GAMSSymbolDomainViolationImpl> &impl)
     : mImpl(impl)
 {}
 

@@ -26,6 +26,7 @@
 #ifndef GAMSLOG_H
 #define GAMSLOG_H
 
+#include <map>
 #include <sstream>
 #include <unordered_set>
 #include "gamsenum.h"

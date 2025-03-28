@@ -24,7 +24,6 @@
  */
 #include <fstream>
 #include <sstream>
-#include <iostream>
 
 #include "testgamsobject.h"
 #include "gamscheckpoint.h"

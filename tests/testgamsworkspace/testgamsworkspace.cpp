@@ -33,7 +33,6 @@
 #include "gamsworkspaceinfo.h"
 #include "gamsexception.h"
 #include "gamspath.h"
-#include "gamsversion.h"
 
 #include <iostream>
 #include <filesystem>

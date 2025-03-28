@@ -166,7 +166,7 @@ public:
 
     /// Set the string used to prefix automatically generated files.
     /// \param prefix String used to prefix automatically generated files.
-    void setScratchFilePrefix(std::string prefix);
+    void setScratchFilePrefix(const std::string &prefix);
 
     /// Get value to be stored in and read from GAMSDatabase for Epsilon.
     /// \remark Default is numeric_limits<double>::min().
@@ -374,35 +374,35 @@ public:
 
     /// Retrieves model from GAMS Model Library.
     /// \param model Model name.
-    void gamsLib(std::string model);
+    void gamsLib(const std::string &model);
 
     /// Retrieves model from GAMS Test Library.
     /// \param model Model name.
-    void testLib(std::string model);
+    void testLib(const std::string &model);
 
     /// Retrieves model from Extended Math Programming Library.
     /// \param model Model name.
-    void empLib(std::string model);
+    void empLib(const std::string &model);
 
     /// Retrieves model from GAMS Data Utilities Library.
     /// \param model Model name.
-    void dataLib(std::string model);
+    void dataLib(const std::string &model);
 
     /// Retrieves model from GAMS API Library.
     /// \param model Model name.
-    void apiLib(std::string model);
+    void apiLib(const std::string &model);
 
     /// Retrieves model from Practical Financial Optimization Library.
     /// \param model Model name.
-    void finLib(std::string model);
+    void finLib(const std::string &model);
 
     /// Retrieves model from Nonlinear Optimization Applications Library.
     /// \param model Model name.
-    void noaLib(std::string model);
+    void noaLib(const std::string &model);
 
     /// Retrieves model from Power System Optimization Modelling Library.
     /// \param model Model name.
-    void psoptLib(std::string model);
+    void psoptLib(const std::string &model);
 
     /// Get GAMS working directory, anchor for all file-based operations.
     /// \returns GAMS working directory.
@@ -446,14 +446,14 @@ private:
     friend class GAMSDatabaseImpl;
     friend class GAMSCheckpointImpl;
 
-    GAMSDatabase addDatabaseFromGDXForcedName(std::string gdxFileName, std::string databaseName, std::string inModelName = "");
+    GAMSDatabase addDatabaseFromGDXForcedName(const std::string &gdxFileName, const std::string &databaseName, const std::string &inModelName = "");
 
     bool usingTmpWorkingDir() const;
 
     /// Add GAMSDatabase with given name to workspace
     /// \param databaseName Database name to add
     /// \returns True if everything worked, else false
-    std::string registerDatabase(const std::string databaseName = "") const;
+    std::string registerDatabase(const std::string &databaseName = "") const;
     std::string nextDatabaseName() const;
 
     /// Registers a GAMSCheckpoint at the workspace
@@ -464,7 +464,7 @@ private:
     /// Registers a ModelInstance to workspace
     /// \param databaseName Database name to add
     /// \returns True if everything worked, else false
-    std::string registerModelInstance(const std::string modelInstanceName = "");
+    std::string registerModelInstance(const std::string &modelInstanceName = "");
 
     std::string optFileExtension(int optfile); // TODO(JM) check if this method can stay here
 

@@ -38,7 +38,7 @@ class LIBSPEC GAMSSet : public GAMSSymbol
 public:
     typedef GAMSSetRecord RecordType;
 
-    /// Standard constructor.
+    /// Default constructor.
     GAMSSet();
 
     /// Construtor for a GAMSSymbol.
@@ -206,7 +206,7 @@ private:
     friend class GAMSSymbolImpl;
     friend class GAMSSymbolIter<GAMSSet>;
     GAMSSet(GAMSDatabase& database, void* symPtr);
-    GAMSSet(GAMSDatabase& database, void* symPtr, int dim, std::string name, std::string text);
+    GAMSSet(GAMSDatabase& database, void* symPtr, int dim, const std::string &name, const std::string &text);
     GAMSSet(GAMSDatabase& database, const std::string& name, const int dim, const std::string& text,
             GAMSEnum::SetType setType = GAMSEnum::SetType::Multi);
     GAMSSet(GAMSDatabase& database, const std::string& name, const std::string& text,
