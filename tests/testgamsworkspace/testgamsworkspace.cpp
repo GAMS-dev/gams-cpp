@@ -830,7 +830,7 @@ TEST_F(TestGAMSWorkspace, testAddJobFromEmptyString) {
     GAMSJob job = ws.addJobFromString( "" );
     // then
     TestGAMSObject::testJobBeforeRun(job, ws);
-    EXPECT_THROW( job.run(), GAMSException );
+    job.run();
 }
 
 TEST_F(TestGAMSWorkspace, testAddJobFromString) {

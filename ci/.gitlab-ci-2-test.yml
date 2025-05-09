@@ -9,6 +9,7 @@ test-leg:
     - !reference [.get-gams]
     - !reference [.gams-folder-leg]
     - GAMS_PATH=/cache/gams-installs/`cat gams_folder_leg.txt`
+    - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH gams
     - cd build
     - PATH=$GAMS_PATH:$PATH LD_LIBRARY_PATH="$GAMS_PATH" ctest --output-on-failure --output-junit leg-results.xml
   artifacts:
@@ -25,6 +26,7 @@ test-deg:
     - !reference [.get-gams]
     - !reference [.gams-folder-deg]
     - GAMS_PATH=$HOME/cache/gams-installs/`cat gams_folder_deg.txt`
+    - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH gams
     - cd build
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH ctest --output-on-failure --output-junit deg-results.xml
   artifacts:
@@ -41,6 +43,7 @@ test-dac:
     - !reference [.get-gams]
     - !reference [.gams-folder-dac]
     - GAMS_PATH=$HOME/cache/gams-installs/`cat gams_folder_dac.txt`
+    - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH gams
     - cd build
     - PATH=$GAMS_PATH:$PATH DYLD_LIBRARY_PATH=$(pwd)/lib:$GAMS_PATH ctest --output-on-failure --output-junit deg-results.xml
   artifacts:
@@ -63,6 +66,7 @@ test-wei:
     - $env:Path = "$GAMS_PATH;$GAMS_PATH\gbin;$CI_PROJECT_DIR\build\bin\Release\;$CI_PROJECT_DIR\build\_deps\cpr-build\cpr\Release;$CI_PROJECT_DIR\build\_deps\curl-build\lib\Release;$CI_PROJECT_DIR\build\_deps\zlib-build\Release;" + $env:Path
     - $env:GAMSDIR = "$GAMS_PATH;$GAMS_PATH\gbin"
     - findthisgams -q
+    - gams
     - cd build
     - ctest -V --output-on-failure --output-junit wei-results.xml
   artifacts:

@@ -1,3 +1,8 @@
+# Avoid warning about DOWNLOAD_EXTRACT_TIMESTAMP
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+  cmake_policy(SET CMP0135 NEW)
+endif()
+
 set(GSYS_ENV $ENV{GSYS})
 set(MACOS_LEGACY_ENV $ENV{MACOS_LEGACY})
 if("${GSYS_ENV}" STREQUAL "deg")
@@ -31,18 +36,6 @@ if(NOT "$ENV{GAMS_BUILD}" STREQUAL "")
       # work around for caching issue in OpenSSL checks
       set(CPR_PATCH_COMMAND sed -i
         -e /cmake_minimum_required/s/3.15/3.17/ CMakeLists.txt)
-    endif()
-    if(NOT "${MACOS_LEGACY_ENV}" STREQUAL "")
-      # switch to OpenSSL, because macOS 12 headers do not compile with GCC
-      # (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93082)
-      set(CPR_FORCE_OPENSSL_BACKEND ON)
-      set(CMAKE_USE_SECTRANSP OFF)
-      # overwrite wrong detection of __builtin_available by curl
-      set(HAVE_BUILTIN_AVAILABLE 0)
-      # allow warnings in libcpr: remove -Werror, or just the whole line
-      # (cpr-src/cpr/util.cpp:20:
-      # error: "__STDC_WANT_LIB_EXT1__" redefined [-Werror])
-      set(CPR_PATCH_COMMAND sed -i -e /Werror/d CMakeLists.txt)
     endif()
 endif()
 

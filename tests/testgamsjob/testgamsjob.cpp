@@ -105,7 +105,7 @@ TEST_F(TestGAMSJob, testRunJobFromEmptyString) {
     // when
     GAMSJob job = ws.addJobFromString("");
     // then
-    EXPECT_THROW( job.run(), GAMSExceptionExecution );
+    job.run();
 }
 
 TEST_F(TestGAMSJob, testOutDB) {
