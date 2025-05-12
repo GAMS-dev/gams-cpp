@@ -534,8 +534,7 @@ TEST_P(ParameterizedTestAddDatabaseFromGDX1, testAddDatabaseFromGDX1) {
     GAMSWorkspaceInfo wsInfo("", testSystemDir);
     GAMSWorkspace ws(wsInfo);
     if (valid) {
-        std::string s = fromDataLib;
-        ws.dataLib(s);
+        ws.dataLib(fromDataLib);
         // when
         try {
             GAMSDatabase db = ws.addDatabaseFromGDX(gdxfilename );
