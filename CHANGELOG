@@ -1,12 +1,13 @@
-Version 1.2.0 *
+Version 1.2.0
 ======================
 - Fixed usage of outdated files when developing for gams-cpp (improved cmake config).
-- Fixed copy-by-value warnings, i.e. in some case the API used copy-by-value instead of copy-by-reference.
+- Fixed copy-by-value warnings, i.e. in some cases the API used copy-by-value instead of copy-by-reference.
 - Fixed unit tests for GAMS fix `Do not raise an error when running an empty file.`
-- Improved performance of `GAMSWorkspace` constructor, i.e. now `gams` is not called anymore to aquire version information.
-- Improved cmake configuration, i.e. include path fixed.
+- Improved performance of `GAMSWorkspace` constructor, i.e. now `gams` is not called anymore to acquire version information.
+- Improved cmake configuration, i.e. the include path has been fixed.
 - Upgraded to [cpr 1.11.2](https://github.com/libcpr/cpr/releases/tag/1.11.2).
 - Upgraded to [GoogleTest 1.17.0](https://github.com/google/googletest/releases/tag/v1.17.0).
+- Upgraded to [JSON 3.12.0](https://github.com/nlohmann/json).
 
 Version 1.1.0
 ======================
