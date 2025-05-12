@@ -47,7 +47,7 @@ FetchContent_MakeAvailable(cpr)
 
 # add nlohmann:json to handle json format (MIT License)
 FetchContent_Declare(json URL
-  https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
+  https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz)
 FetchContent_MakeAvailable(json)
 
 add_library(gamscpp SHARED
