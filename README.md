@@ -8,7 +8,7 @@ gams-cpp uses [GoogleTest](https://github.com/google/googletest) which is licens
 
 ## 0. Minimum Requirements ##
 
-- GAMS 49
+- GAMS 50
 - CMake 3.8
 - any C++17 compiler with std::filesystem support (e.g. GCC 8, MSVC2017 15.7, Apple Clang 11)
 
@@ -33,11 +33,11 @@ The path of the 'gamsinclude.txt' file may have to be updated to the correct GAM
 
 On Windows the file contains:
 ```
-GAMS_DISTRIB=C:/GAMS/49
+GAMS_DISTRIB=C:/GAMS/50
 ```
 On Unix it will look like:
 ```
-GAMS_DISTRIB=$$(HOME)/gams/gams49.0_linux_x64_64_sfx
+GAMS_DISTRIB=$$(HOME)/gams/gams50.0_linux_x64_64_sfx
 ```
 
 Then perform a 'Build All' operation (Build->Build All) to build the library as well as all examples and tests. 
