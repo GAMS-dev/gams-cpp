@@ -43,7 +43,7 @@ include(FetchContent)
 
 # Add Cpr: cpr is a modern HTTP library for C++ (MIT License)
 FetchContent_Declare(cpr URL
-  https://github.com/libcpr/cpr/archive/refs/tags/1.11.2.tar.gz
+  https://github.com/libcpr/cpr/archive/refs/tags/1.11.1.tar.gz
   PATCH_COMMAND ${CPR_PATCH_COMMAND})
 FetchContent_MakeAvailable(cpr)
 
