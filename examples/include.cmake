@@ -47,22 +47,6 @@ else()
         set(BASEPATH "${GAMSPATH}/apifiles")
     endif()
 
-    # check if run from distrib
-    if(NOT EXISTS "${CMAKE_SOURCE_DIR}/src")
-        if(WIN32)
-            set(VSVERSION "vs2022" CACHE STRING "Visual Studio version")
-            link_directories("${BASEPATH}/C++/lib/${VSVERSION}")
-        elseif(APPLE)
-            if(USE-GCC STREQUAL "ON" OR "$ENV{GSYS}" STREQUAL "dac")
-                link_directories("${BASEPATH}/C++/lib")
-            else()
-                link_directories("${BASEPATH}/C++/lib/clang")
-            endif()
-        else()
-            link_directories("${BASEPATH}/C++/lib")
-        endif()
-    endif()
-
     configure_file(${BASEPATH}/C++/api/gamsoptionsimpl.cpp
       ${PROJECT_SOURCE_DIR}/inc/gamsoptionsimpl.cpp COPYONLY)
     configure_file(${BASEPATH}/C++/api/gamsoptionsimpl.h
@@ -85,4 +69,5 @@ if(UNIX) # Apple or Linux
         link_libraries(stdc++fs pthread)
     endif()
 endif()
-add_link_options("-Wl,-rpath-link,${BASEPATH}/..")
+message("#### ${BASEPATH}")
+add_link_options("-Wl,-rpath,${BASEPATH}/..")
