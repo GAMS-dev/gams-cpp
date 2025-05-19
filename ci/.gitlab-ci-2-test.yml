@@ -4,7 +4,8 @@ test-leg:
   image:
     name: $GAMS_CONTAINER_REGISTRY/qt-machines/leg/builder-${IMAGE_VERSION}:latest
     entrypoint: [""]   # prevent startup.sh
-  needs: [fetch-ci-scripts,build-leg]
+  #needs: [fetch-ci-scripts,build-leg]
+  dependencies: [fetch-ci-scripts, build-leg]
   script:
     - !reference [.get-gams]
     - !reference [.gams-folder-leg]
@@ -21,7 +22,8 @@ test-leg:
 test-deg:
   stage: test
   tags: [macos]
-  needs: [fetch-ci-scripts,build-deg]
+  #needs: [fetch-ci-scripts,build-deg]
+  dependencies: [fetch-ci-scripts, build-deg]
   script:
     - !reference [.get-gams]
     - !reference [.gams-folder-deg]
@@ -38,7 +40,8 @@ test-deg:
 test-dac:
   stage: test
   tags: [macos-arm64]
-  needs: [fetch-ci-scripts,build-dac]
+  #needs: [fetch-ci-scripts,build-dac]
+  dependencies: [fetch-ci-scripts, build-dac]
   script:
     - !reference [.get-gams]
     - !reference [.gams-folder-dac]
@@ -57,7 +60,8 @@ test-wei:
   tags: [windows]
   image:
     name: $MACHINES_CONTAINER_REG/wei/builder-full
-  needs: [fetch-ci-scripts,build-wei]
+  #needs: [fetch-ci-scripts,build-wei]
+  dependencies: [fetch-ci-scripts, build-wei]
   script:
     - !reference [.get-gams-wei]
     - !reference [.gams-folder-wei]
