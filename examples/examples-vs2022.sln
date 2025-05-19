@@ -1,7 +1,6 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36109.1 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Transport1-vs2022", "Transport1\Transport1-vs2022.vcxproj", "{A53DE2F6-6674-40A4-8650-39DB5F6021BA}"
 EndProject
@@ -60,6 +59,10 @@ Global
 		{F46AF2AB-09F5-4A3D-A3FB-DB3B95132519}.Release|x64.Build.0 = Release|x64
 		{C226F7F6-CB62-4191-965A-E791A7814002}.Release|x64.ActiveCfg = Release|x64
 		{C226F7F6-CB62-4191-965A-E791A7814002}.Release|x64.Build.0 = Release|x64
+		{B6A01BEE-5E89-44AB-BCDD-052260C38398}.Release|x64.ActiveCfg = Release|x64
+		{B6A01BEE-5E89-44AB-BCDD-052260C38398}.Release|x64.Build.0 = Release|x64
+		{0274DCB0-BDD8-4ECC-AF23-03285217BB92}.Release|x64.ActiveCfg = Release|x64
+		{0274DCB0-BDD8-4ECC-AF23-03285217BB92}.Release|x64.Build.0 = Release|x64
 		{66E916B1-A55A-4526-A7C6-C5576F20293F}.Release|x64.ActiveCfg = Release|x64
 		{66E916B1-A55A-4526-A7C6-C5576F20293F}.Release|x64.Build.0 = Release|x64
 		{06DDF61F-DA88-448E-8E83-DD4CFAE7496F}.Release|x64.ActiveCfg = Release|x64
@@ -74,6 +77,8 @@ Global
 		{5DA5AD19-1D4C-4695-AA8F-346F02C1EDB7}.Release|x64.Build.0 = Release|x64
 		{B4B7BB66-3456-4A7F-966F-8C25E0AEEC13}.Release|x64.ActiveCfg = Release|x64
 		{B4B7BB66-3456-4A7F-966F-8C25E0AEEC13}.Release|x64.Build.0 = Release|x64
+		{D6942445-1503-451C-A282-225A25EA4E9D}.Release|x64.ActiveCfg = Release|x64
+		{D6942445-1503-451C-A282-225A25EA4E9D}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
