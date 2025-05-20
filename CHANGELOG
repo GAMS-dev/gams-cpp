@@ -8,6 +8,7 @@ Version 1.2.0
 - Upgraded to [cpr 1.11.2](https://github.com/libcpr/cpr/releases/tag/1.11.2).
 - Upgraded to [GoogleTest 1.17.0](https://github.com/google/googletest/releases/tag/v1.17.0).
 - Upgraded to [JSON 3.12.0](https://github.com/nlohmann/json).
+- Upgraded the Visual Studio Example projects to VS2022, i.e. VS2017 and 2019 have been dropped.
 
 Version 1.1.0
 ======================
