@@ -136,7 +136,8 @@ string GAMSPlatform::findGamsOnUnix(LogId logId)
     string gamsDirLD;
 
     string s;
-    stringstream ss(getenv("PATH"));
+    const char* envPath = getenv("PATH");
+    stringstream ss(envPath ? envPath : "");
     while (getline(ss, s, cEnvSep)) {
         GAMSPath g(s + "/gams");
         if (g.exists() && filesystem::is_regular_file(g)) {
