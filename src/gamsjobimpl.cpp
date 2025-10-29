@@ -359,7 +359,7 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
         response = cpr::Delete(cpr::Url{ engineConfiguration.host() + "/jobs/" + mEngineJob->token() + "/unread-logs" },
                                cpr::Authentication{engineConfiguration.username(),
                                                  engineConfiguration.password(),
-                                                 cpr::AuthMode::BASIC});
+                                                 cpr::AuthMode::BASIC}, sslOpts);
 
         if (response.status_code == 403) { // job still in queue
             cout << "job in queue. waiting..." << '\n';
@@ -413,7 +413,7 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
     response = cpr::Download(of, cpr::Url{ engineConfiguration.host() + "/jobs/" + mEngineJob->token() + "/result" },
                              cpr::Authentication{engineConfiguration.username(),
                                            engineConfiguration.password(),
-                                           cpr::AuthMode::BASIC});
+                                           cpr::AuthMode::BASIC}, sslOpts);
     of.close();
 
     if (!cpr::status::is_success(response.status_code)) {
@@ -428,7 +428,7 @@ void GAMSJobImpl::runEngine(const GAMSEngineConfiguration &engineConfiguration, 
         response = cpr::Delete(cpr::Url{engineConfiguration.host() + "/jobs/" + mEngineJob->token() + "/result" },
                                cpr::Authentication{engineConfiguration.username(),
                                                  engineConfiguration.password(),
-                                                 cpr::AuthMode::BASIC});
+                                                 cpr::AuthMode::BASIC}, sslOpts);
 
         if (!cpr::status::is_success(response.status_code)) {
             throw GAMSException("Removing job result failed with status code: " + to_string(response.status_code) + "."
@@ -477,11 +477,12 @@ bool GAMSJobImpl::interrupt()
 {
     // running on Engine
     if (mEngineJob) {
+        cpr::SslOptions sslOpts = cpr::Ssl(cpr::ssl::TLSv1_2{});
         cpr::Response response = cpr::Delete(cpr::Url{mEngineJob->config().host() + "/jobs/" +
                                                       mEngineJob->token() + "?hard_kill=false"},
                                                       cpr::Authentication(mEngineJob->config().username(),
                                                                           mEngineJob->config().password(),
-                                                                          cpr::AuthMode::BASIC));
+                                                                          cpr::AuthMode::BASIC), sslOpts);
         if (!cpr::status::is_success(response.status_code))
              throw GAMSException("Interrupting Engine job failed with status code: " +
                                 to_string(response.status_code) + ". Message: " + response.text);
