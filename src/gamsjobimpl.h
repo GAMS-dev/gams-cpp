@@ -123,7 +123,7 @@ public:
     std::string mJobName;
 
     void zip(const std::string &zipName, const std::set<std::string> &files);
-    void unzip(const std::string &zipName, const std::string &destination = nullptr);
+    void unzip(const std::string &zipName, const std::string &destination = "");
 
 private:
     int runProcess(const std::string &what, const std::string &args, std::string &output);
