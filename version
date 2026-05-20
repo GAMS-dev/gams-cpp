@@ -5,6 +5,6 @@ GAMSCPP_PATCH_LEVEL=2
 
 # Minimum required GAMS Distribution version, which
 # is the latest official GAMS release.
-GAMS_DISTRIB_MAJOR=53
-GAMS_DISTRIB_MINOR=5
+GAMS_DISTRIB_MAJOR=50
+GAMS_DISTRIB_MINOR=4
 GAMS_DISTRIB_GOLD=0
