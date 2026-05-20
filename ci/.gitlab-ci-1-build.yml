@@ -47,6 +47,8 @@ build-dac:
     - cd build
     - cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
     - cmake --build . 2>&1 | tee build_log.txt
+    - cp _deps/cpr-build/cpr/libcpr*.dylib lib # dirty hack as for some reason cpr dylib doesn't end up in lib dir
+    - cp _deps/curl-build/lib/libcurl*.dylib lib # dirty hack as for some reason libcurl dylib doesn't end up in lib dir
   artifacts:
     name: gams-cpp-dac
     expire_in: 2 hours
