@@ -1,3 +1,7 @@
+Version 1.2.3
+======================
+- Fixed platform switch in examples/include.cmake.
+
 Version 1.2.2
 ======================
 - Fixed compiler warning.
